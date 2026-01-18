@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BackTrack - Never lose track of what matters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background-color: #0a0a0a;
+            border-bottom: 1px solid transparent;
+            height: 70px;
+            position: relative;
+            z-index: 100;
+            transition: border-color 0.3s ease;
+        }
+
+        body.nav-scrolled nav {
+            border-bottom-color: #1a1a1a;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 100%;
+        }
+
+        .nav-left img {
+            height: 70px;
+            width: auto;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #a0a0a0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .sign-in-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
+            color: #f3f4f6;
+            border: 1px solid #3f3f3f;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.35s ease, background 0.6s ease;
+            letter-spacing: 0.4px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .sign-in-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -120%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-20deg);
+            opacity: 0;
+            transition: left 0.8s ease, opacity 0.4s ease;
+        }
+
+        .sign-in-btn:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
+            color: #1a1a1a;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .sign-in-btn:hover::before {
+            left: 120%;
+            opacity: 1;
+        }
+
+        .sign-in-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        /* Hero Section */
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: calc(100vh - 70px);
+            padding: 60px 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: 76px;
+            font-weight: 800;
+            line-height: 1.0;
+            margin-bottom: 32px;
+            letter-spacing: -3px;
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: #888888;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .hero-description:last-of-type {
+            margin-bottom: 40px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(180deg, #3a3a3a 0%, #252525 100%);
+            color: #ffffff;
+            border: 1px solid #4a4a4a;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(180deg, #4a4a4a 0%, #353535 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: none;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            color: #a0a0a0;
+        }
+
+        /* 3D Visual Container */
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 600px;
+            perspective: 1200px;
+        }
+
+        /* Ambient glow */
+        .glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.015) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* 3D Scene Container */
+        .scene {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            transform-style: preserve-3d;
+        }
+
+        /* The main cube wrapper */
+        .cube-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(-20deg) rotateY(-25deg);
+        }
+
+        /* Slow rotation */
+        .cube-rotator {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: cubeRotate 30s linear infinite;
+        }
+
+        @keyframes cubeRotate {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        /* The cube itself */
+        .cube {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            transform-style: preserve-3d;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Cube faces */
+        .face {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            backface-visibility: visible;
+        }
+
+        /* Glass-like face styling */
+        .face-inner {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,
+                rgba(20, 20, 20, 0.95) 0%,
+                rgba(10, 10, 10, 0.98) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Shine effect on faces */
+        .face-inner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg,
+                rgba(255, 255, 255, 0.06) 0%,
+                transparent 100%);
+            pointer-events: none;
+        }
+
+        /* Edge highlight */
+        .face-inner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+        }
+
+        /* Face positions */
+        .front { transform: translateZ(90px); }
+        .back { transform: rotateY(180deg) translateZ(90px); }
+        .right { transform: rotateY(90deg) translateZ(90px); }
+        .left { transform: rotateY(-90deg) translateZ(90px); }
+        .top { transform: rotateX(90deg) translateZ(90px); }
+        .bottom { transform: rotateX(-90deg) translateZ(90px); }
+
+        /* Top face - lighter for visibility */
+        .top .face-inner {
+            background: linear-gradient(135deg,
+                rgba(30, 30, 30, 0.95) 0%,
+                rgba(18, 18, 18, 0.98) 100%);
+        }
+
+        /* Front face content - Minimal location icon */
+        .icon-location {
+            position: relative;
+            width: 48px;
+            height: 48px;
+        }
+
+        .icon-location::before {
+            content: '';
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+        }
+
+        .icon-location::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            width: 14px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+        }
+
+        /* Right face - Grid pattern */
+        .grid-pattern {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .grid-cell {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .grid-cell:nth-child(5) {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Left face - Checkmark */
+        .icon-check {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+        }
+
+        .icon-check::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 22px;
+            height: 11px;
+            border-left: 2.5px solid rgba(255, 255, 255, 0.9);
+            border-bottom: 2.5px solid rgba(255, 255, 255, 0.9);
+            transform: translate(-50%, -60%) rotate(-45deg);
+        }
+
+        /* Back face - Search icon */
+        .icon-search {
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+
+        .icon-search::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border: 2.5px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+        }
+
+        .icon-search::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 14px;
+            height: 2.5px;
+            background: rgba(255, 255, 255, 0.7);
+            transform: rotate(45deg);
+            border-radius: 2px;
+        }
+
+        /* Top face - Logo text */
+        .logo-text {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+        }
+
+        /* Reflection/shadow under cube */
+        .cube-shadow {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) rotateX(90deg);
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(ellipse at center,
+                rgba(255, 255, 255, 0.025) 0%,
+                transparent 60%);
+            filter: blur(30px);
+            pointer-events: none;
+        }
+
+        /* Subtle particles */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: particleFloat 12s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            top: 15%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            top: 70%;
+            right: 25%;
+            animation-delay: -4s;
+            width: 2px;
+            height: 2px;
+        }
+
+        .particle:nth-child(3) {
+            bottom: 20%;
+            left: 30%;
+            animation-delay: -8s;
+            width: 2px;
+            height: 2px;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-10px) translateX(-5px);
+                opacity: 0.3;
+            }
+            75% {
+                transform: translateY(-30px) translateX(5px);
+                opacity: 0.4;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-container {
+                flex-direction: column;
+                padding: 40px 40px;
+                text-align: center;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                margin-bottom: 40px;
+            }
+
+            .hero-title {
+                font-size: 56px;
+            }
+
+            .button-group {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                height: 400px;
+            }
+
+            .scene {
+                width: 280px;
+                height: 280px;
+            }
+
+            .cube {
+                width: 150px;
+                height: 150px;
+            }
+
+            .face {
+                width: 150px;
+                height: 150px;
+            }
+
+            .front { transform: translateZ(75px); }
+            .back { transform: rotateY(180deg) translateZ(75px); }
+            .right { transform: rotateY(90deg) translateZ(75px); }
+            .left { transform: rotateY(-90deg) translateZ(75px); }
+            .top { transform: rotateX(90deg) translateZ(75px); }
+            .bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+            .particle { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .hero-container {
+                padding: 30px 20px;
+            }
+
+            .hero-title {
+                font-size: 42px;
+                letter-spacing: -2px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-visual {
+                height: 350px;
+            }
+
+            .scene {
+                width: 220px;
+                height: 220px;
+            }
+
+            .cube {
+                width: 120px;
+                height: 120px;
+            }
+
+            .face {
+                width: 120px;
+                height: 120px;
+            }
+
+            .front { transform: translateZ(60px); }
+            .back { transform: rotateY(180deg) translateZ(60px); }
+            .right { transform: rotateY(90deg) translateZ(60px); }
+            .left { transform: rotateY(-90deg) translateZ(60px); }
+            .top { transform: rotateX(90deg) translateZ(60px); }
+            .bottom { transform: rotateX(-90deg) translateZ(60px); }
+
+            .grid-cell {
+                width: 24px;
+                height: 24px;
+            }
+
+            .grid-pattern {
+                gap: 8px;
+            }
+
+            .icon-location {
+                width: 36px;
+                height: 36px;
+            }
+
+            .icon-location::before {
+                width: 36px;
+                height: 36px;
+            }
+
+            .icon-location::after {
+                width: 10px;
+                height: 10px;
+            }
+
+            .icon-check {
+                width: 38px;
+                height: 38px;
+            }
+
+            .icon-search {
+                width: 32px;
+                height: 32px;
+            }
+
+            .icon-search::before {
+                width: 24px;
+                height: 24px;
+            }
+
+            .logo-text {
+                font-size: 10px;
+                letter-spacing: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="nav-left">
+            <img src="logo.png" alt="BackTrack">
+        </a>
+
+        <div class="nav-center">
+            <a href="browse.html" class="nav-link">Browse</a>
+            <a href="map.html" class="nav-link">Map</a>
+            <a href="submit.html" class="nav-link">Submit</a>
+            <a href="features.html" class="nav-link">Features</a>
+        </div>
+
+        <div class="nav-right">
+            <button class="sign-in-btn">Log In</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="hero-container">
+        <div class="hero-content">
+            <h1 class="hero-title">Never lose track<br>of what matters.</h1>
+            <p class="hero-description">BackTrack is a centralized lost-and-found system for students and staff.</p>
+            <p class="hero-description">A smarter way to reconnect people with their belongings.</p>
+
+            <div class="button-group">
+                <a href="browse.html" class="btn-primary">Browse items</a>
+                <a href="submit.html" class="btn-secondary">Submit an item</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <!-- Ambient glow -->
+            <div class="glow"></div>
+
+            <!-- Floating particles -->
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+
+            <!-- 3D Scene -->
+            <div class="scene">
+                <div class="cube-wrapper">
+                    <div class="cube-rotator">
+                        <div class="cube">
+                            <!-- Front - Location Icon -->
+                            <div class="face front">
+                                <div class="face-inner">
+                                    <div class="icon-location"></div>
+                                </div>
+                            </div>
+
+                            <!-- Back - Search Icon -->
+                            <div class="face back">
+                                <div class="face-inner">
+                                    <div class="icon-search"></div>
+                                </div>
+                            </div>
+
+                            <!-- Right - Grid -->
+                            <div class="face right">
+                                <div class="face-inner">
+                                    <div class="grid-pattern">
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Left - Checkmark -->
+                            <div class="face left">
+                                <div class="face-inner">
+                                    <div class="icon-check"></div>
+                                </div>
+                            </div>
+
+                            <!-- Top - Logo -->
+                            <div class="face top">
+                                <div class="face-inner">
+                                    <span class="logo-text">BackTrack</span>
+                                </div>
+                            </div>
+
+                            <!-- Bottom -->
+                            <div class="face bottom">
+                                <div class="face-inner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shadow -->
+            <div class="cube-shadow"></div>
+        </div>
+    </main>
+
+    <script>
+        function updateNavBorder() {
+            document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
+        }
+
+        updateNavBorder();
+        window.addEventListener('scroll', updateNavBorder, { passive: true });
+
+        // Interactive 3D Cube
+        const cubeWrapper = document.querySelector('.cube-wrapper');
+        const cubeRotator = document.querySelector('.cube-rotator');
+        const visual = document.querySelector('.hero-visual');
+        const scene = document.querySelector('.scene');
+
+        // State
+        let isDragging = false;
+        let previousMouseX = 0;
+        let previousMouseY = 0;
+        let rotationX = -20;
+        let rotationY = -25;
+        let targetRotationX = -20;
+        let targetRotationY = -25;
+        let velocityX = 0;
+        let velocityY = 0;
+        let autoRotate = true;
+        let autoRotateSpeed = 0.15;
+        let floatOffset = 0;
+
+        // Stop CSS animation - we'll control rotation with JS
+        cubeRotator.style.animation = 'none';
+
+        // Mouse down - start dragging
+        scene.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            autoRotate = false;
+            previousMouseX = e.clientX;
+            previousMouseY = e.clientY;
+            scene.style.cursor = 'grabbing';
+            velocityX = 0;
+            velocityY = 0;
+        });
+
+        // Mouse move - rotate cube
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const deltaX = e.clientX - previousMouseX;
+            const deltaY = e.clientY - previousMouseY;
+
+            // Update velocities for momentum
+            velocityX = deltaY * 0.5;
+            velocityY = deltaX * 0.5;
+
+            // Update target rotation
+            targetRotationX += deltaY * 0.5;
+            targetRotationY += deltaX * 0.5;
+
+            previousMouseX = e.clientX;
+            previousMouseY = e.clientY;
+        });
+
+        // Mouse up - stop dragging, enable momentum
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                scene.style.cursor = 'grab';
+
+                // Resume auto-rotate after a delay if velocity is low
+                setTimeout(() => {
+                    if (Math.abs(velocityX) < 0.1 && Math.abs(velocityY) < 0.1) {
+                        autoRotate = true;
+                    }
+                }, 3000);
+            }
+        });
+
+        // Mouse leave scene
+        scene.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+                scene.style.cursor = 'grab';
+            }
+        });
+
+        // Set initial cursor
+        scene.style.cursor = 'grab';
+
+        // Animation loop
+        function animate() {
+            // Floating animation
+            floatOffset = Math.sin(Date.now() / 1000) * 12;
+
+            // Auto rotation when not interacting
+            if (autoRotate && !isDragging) {
+                targetRotationY += autoRotateSpeed;
+            }
+
+            // Apply momentum when not dragging
+            if (!isDragging) {
+                targetRotationX += velocityX;
+                targetRotationY += velocityY;
+
+                // Dampen velocity
+                velocityX *= 0.95;
+                velocityY *= 0.95;
+
+                // Gradually return X rotation to neutral
+                if (Math.abs(velocityX) < 0.1 && Math.abs(velocityY) < 0.1) {
+                    targetRotationX += (-20 - targetRotationX) * 0.02;
+                }
+            }
+
+            // Smooth interpolation
+            rotationX += (targetRotationX - rotationX) * 0.1;
+            rotationY += (targetRotationY - rotationY) * 0.1;
+
+            // Apply transforms
+            cubeWrapper.style.transform = `translateY(${floatOffset}px)`;
+            cubeRotator.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Touch support for mobile
+        scene.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            autoRotate = false;
+            previousMouseX = e.touches[0].clientX;
+            previousMouseY = e.touches[0].clientY;
+            velocityX = 0;
+            velocityY = 0;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+
+            const deltaX = e.touches[0].clientX - previousMouseX;
+            const deltaY = e.touches[0].clientY - previousMouseY;
+
+            velocityX = deltaY * 0.5;
+            velocityY = deltaX * 0.5;
+
+            targetRotationX += deltaY * 0.5;
+            targetRotationY += deltaX * 0.5;
+
+            previousMouseX = e.touches[0].clientX;
+            previousMouseY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+            setTimeout(() => {
+                if (Math.abs(velocityX) < 0.1 && Math.abs(velocityY) < 0.1) {
+                    autoRotate = true;
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

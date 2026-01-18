@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Items - BackTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background-color: #0a0a0a;
+            border-bottom: 1px solid transparent;
+            height: 70px;
+            transition: border-color 0.3s ease;
+        }
+
+        body.nav-scrolled nav {
+            border-bottom-color: #1a1a1a;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 100%;
+        }
+
+        .nav-left img {
+            height: 70px;
+            width: auto;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #a0a0a0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .sign-in-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
+            color: #f3f4f6;
+            border: 1px solid #3f3f3f;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.35s ease, background 0.6s ease;
+            letter-spacing: 0.4px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .sign-in-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -120%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-20deg);
+            opacity: 0;
+            transition: left 0.8s ease, opacity 0.4s ease;
+        }
+
+        .sign-in-btn:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
+            color: #1a1a1a;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .sign-in-btn:hover::before {
+            left: 120%;
+            opacity: 1;
+        }
+
+        .sign-in-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            padding: 24px;
+            border-right: 1px solid #1a1a1a;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #888888;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-section {
+            margin-bottom: 28px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-box {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #444444;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background-color: transparent;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .checkbox-box {
+            background-color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        .checkbox-box svg {
+            display: none;
+            width: 12px;
+            height: 12px;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .checkbox-box svg {
+            display: block;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .date-picker-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #888888;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .date-picker-btn:hover {
+            border-color: #444444;
+        }
+
+        .date-picker-btn svg {
+            width: 18px;
+            height: 18px;
+            color: #888888;
+        }
+
+        .location-dropdown {
+            position: relative;
+        }
+
+        .location-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .location-btn:hover {
+            border-color: #444444;
+        }
+
+        .location-btn svg {
+            width: 16px;
+            height: 16px;
+            color: #888888;
+        }
+
+        .location-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            margin-top: 4px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .location-item {
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .location-item:hover {
+            background-color: #2a2a2a;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 24px 32px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-bar {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 14px 18px;
+            gap: 12px;
+        }
+
+        .search-bar svg {
+            width: 20px;
+            height: 20px;
+            color: #666666;
+            flex-shrink: 0;
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: #666666;
+        }
+
+        .upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f5c518;
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: #e6b800;
+        }
+
+        .upload-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .view-toggle span {
+            color: #666666;
+        }
+
+        .view-toggle a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .view-toggle a.active {
+            font-weight: 700;
+        }
+
+        .view-toggle .separator {
+            color: #666666;
+            margin: 0 4px;
+        }
+
+        /* Items Grid */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .item-card {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .item-image {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            background-color: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ai-match-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f5c518;
+            color: #000000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .item-info {
+            padding: 14px;
+        }
+
+        .item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .item-date {
+            font-size: 13px;
+            color: #888888;
+            margin-bottom: 2px;
+        }
+
+        .item-location {
+            font-size: 13px;
+            color: #666666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .items-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .items-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="nav-left">
+            <img src="logo.png" alt="BackTrack">
+        </a>
+
+        <div class="nav-center">
+            <a href="browse.html" class="nav-link">Browse</a>
+            <a href="map.html" class="nav-link">Map</a>
+            <a href="submit.html" class="nav-link">Submit</a>
+            <a href="features.html" class="nav-link">Features</a>
+        </div>
+
+        <div class="nav-right">
+            <button class="sign-in-btn">Log In</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="sidebar-title">FILTERS</h2>
+
+            <div class="filter-section">
+                <h3 class="filter-label">Category</h3>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked>
+                        <span class="checkbox-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="checkbox-label">Electronics</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="checkbox-label">Clothing</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="checkbox-label">Bottles</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="checkbox-label">Books</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-label">Date Lost</h3>
+                <button class="date-picker-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Select Date Range
+                </button>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-label">Location</h3>
+                <div class="location-dropdown">
+                    <button class="location-btn">
+                        All Locations
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="location-menu">
+                        <div class="location-item">Gym</div>
+                        <div class="location-item">Library</div>
+                        <div class="location-item">Cafeteria</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="content">
+            <div class="search-container">
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" placeholder="Search items or upload image for AI match...">
+                </div>
+                <button class="upload-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Upload Image
+                </button>
+            </div>
+
+            <div class="view-toggle">
+                <span>[</span>
+                <a href="#" class="active">Grid</a>
+                <span class="separator">|</span>
+                <a href="map.html">Map</a>
+                <span>]</span>
+            </div>
+
+            <div class="items-grid">
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400" alt="Water bottle">
+                        <span class="ai-match-badge">98% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">Water bottle</h3>
+                        <p class="item-date">Jun 25, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400" alt="Hoodie">
+                        <span class="ai-match-badge">98% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">Hoodie</h3>
+                        <p class="item-date">Jun 25, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=400" alt="AirPods">
+                        <span class="ai-match-badge">85% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">AirPods</h3>
+                        <p class="item-date">Jun 25, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?w=400" alt="Keys">
+                        <span class="ai-match-badge">82% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">Keys</h3>
+                        <p class="item-date">Jun 25, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400" alt="Sweet hoodie">
+                        <span class="ai-match-badge">85% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">Sweet hoodie</h3>
+                        <p class="item-date">Jun 23, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400" alt="Hooks">
+                        <span class="ai-match-badge">85% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">Hooks</h3>
+                        <p class="item-date">Jun 23, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=400" alt="Catender non">
+                        <span class="ai-match-badge">85% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">Catender non</h3>
+                        <p class="item-date">Jun 23, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=400" alt="Myromaing invector">
+                        <span class="ai-match-badge">85% AI MATCH</span>
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">Myromaing invector</h3>
+                        <p class="item-date">Jun 23, 2023</p>
+                        <p class="item-location">Location</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        // DOM Elements
+        const itemsGrid = document.querySelector('.items-grid');
+        const searchInput = document.querySelector('.search-bar input');
+        const categoryCheckboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
+        const locationBtn = document.querySelector('.location-btn');
+        const locationMenu = document.querySelector('.location-menu');
+        const locationItems = document.querySelectorAll('.location-item');
+        const pageBody = document.body;
+
+        function updateNavBorder() {
+            pageBody.classList.toggle('nav-scrolled', window.scrollY > 4);
+        }
+
+        // Current filters state
+        let currentFilters = {
+            category: [],
+            location: 'All Locations',
+            search: ''
+        };
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Create item card HTML
+        function createItemCard(item) {
+            const placeholderImage = 'https://via.placeholder.com/400x400?text=No+Image';
+            return `
+                <div class="item-card" data-id="${item.id}">
+                    <div class="item-image">
+                        <img src="${item.image_url || placeholderImage}" alt="${item.name}">
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-name">${item.name}</h3>
+                        <p class="item-date">${formatDate(item.date_lost)}</p>
+                        <p class="item-location">${item.location}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render items to grid
+        function renderItems(items) {
+            if (items.length === 0) {
+                itemsGrid.innerHTML = '<p style="color: #888; grid-column: 1/-1; text-align: center; padding: 40px;">No items found</p>';
+                return;
+            }
+            itemsGrid.innerHTML = items.map(createItemCard).join('');
+        }
+
+        // Fetch and display items
+        async function loadItems() {
+            const items = await BackTrackDB.getItems(currentFilters);
+            renderItems(items);
+        }
+
+        // Location dropdown toggle
+        let locationMenuOpen = false;
+        locationBtn.addEventListener('click', () => {
+            locationMenuOpen = !locationMenuOpen;
+            locationMenu.style.display = locationMenuOpen ? 'block' : 'none';
+        });
+
+        // Location selection
+        locationItems.forEach(item => {
+            item.addEventListener('click', () => {
+                currentFilters.location = item.textContent;
+                locationBtn.childNodes[0].textContent = item.textContent + ' ';
+                locationMenu.style.display = 'none';
+                locationMenuOpen = false;
+                loadItems();
+            });
+        });
+
+        // Close location menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.location-dropdown')) {
+                locationMenu.style.display = 'none';
+                locationMenuOpen = false;
+            }
+        });
+
+        // Category filter
+        categoryCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const label = checkbox.parentElement.querySelector('.checkbox-label').textContent;
+                if (checkbox.checked) {
+                    currentFilters.category.push(label);
+                } else {
+                    currentFilters.category = currentFilters.category.filter(c => c !== label);
+                }
+                loadItems();
+            });
+        });
+
+        // Search functionality
+        let searchTimeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentFilters.search = searchInput.value;
+                loadItems();
+            }, 300);
+        });
+
+        // Initialize - check if Supabase is configured
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hide location menu by default
+            locationMenu.style.display = 'none';
+
+            updateNavBorder();
+            window.addEventListener('scroll', updateNavBorder, { passive: true });
+
+            // Check if Supabase is configured
+            if (typeof BackTrackDB !== 'undefined' &&
+                !BackTrackDB.supabase.supabaseUrl.includes('YOUR_SUPABASE')) {
+                loadItems();
+            } else {
+                console.log('Supabase not configured - showing demo items');
+                // Demo items are already in HTML
+            }
+        });
+    </script>
+</body>
+</html>
