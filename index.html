@@ -20,6 +20,40 @@
             color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
+            animation: pageLoadFadeIn 0.8s ease-out;
+        }
+
+        @keyframes pageLoadFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Page transition overlay */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Smooth transitions for all interactive elements */
+        a, button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Navigation */
@@ -28,16 +62,41 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
-            background-color: #0a0a0a;
-            border-bottom: 1px solid transparent;
+            background-color: transparent;
             height: 70px;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
-            transition: border-color 0.3s ease;
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         body.nav-scrolled nav {
-            border-bottom-color: #1a1a1a;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        body.nav-scrolled nav::after {
+            opacity: 1;
+        }
+
+        /* Spacer for fixed nav */
+        .nav-spacer {
+            height: 70px;
         }
 
         .nav-left {
@@ -58,15 +117,19 @@
         }
 
         .nav-link {
-            color: #ffffff;
+            color: rgba(255, 255, 255, 0.5);
             text-decoration: none;
             font-size: 15px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-link:hover {
-            color: #a0a0a0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
         }
 
         .nav-right {
@@ -128,7 +191,7 @@
             align-items: center;
             justify-content: space-between;
             min-height: calc(100vh - 70px);
-            padding: 60px 80px;
+            padding: 40px 80px 60px;
             position: relative;
         }
 
@@ -148,6 +211,18 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-description {
@@ -156,6 +231,18 @@
             line-height: 1.6;
             margin-bottom: 8px;
             font-weight: 400;
+            animation: slideInUp 0.8s ease-out 0.1s backwards;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-description:last-of-type {
@@ -167,6 +254,7 @@
             display: flex;
             gap: 16px;
             align-items: center;
+            animation: slideInUp 0.8s ease-out 0.2s backwards;
         }
 
         .btn-primary {
@@ -178,14 +266,31 @@
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
         }
 
         .btn-primary:hover {
             background: linear-gradient(180deg, #4a4a4a 0%, #353535 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
         }
 
         .btn-secondary {
@@ -196,12 +301,29 @@
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: color 0.2s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
+            position: relative;
+        }
+
+        .btn-secondary::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffffff;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .btn-secondary:hover {
             color: #a0a0a0;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:hover::after {
+            width: 100%;
         }
 
         /* Chatbot widget */
@@ -214,18 +336,45 @@
         }
 
         .chatbot-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            border-radius: 999px;
-            background: linear-gradient(180deg, #f5f5f5 0%, #cfcfcf 100%);
-            color: #111111;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
             border: none;
-            font-size: 14px;
-            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, background 0.4s ease;
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1s backwards;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #f5f5f5 0%, #d9d9d9 100%);
+        }
+
+        .chatbot-toggle:active {
+            transform: scale(0.92);
+        }
+
+        .chatbot-toggle svg {
+            width: 26px;
+            height: 26px;
+            fill: #1a1a1a;
         }
 
         .chatbot-panel {
@@ -241,10 +390,15 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .chatbot-panel.open {
             display: flex;
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
 
         .chatbot-header {
@@ -308,6 +462,14 @@
             color: #ffffff;
             padding: 10px 12px;
             font-size: 13px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chatbot-input:focus {
+            outline: none;
+            border-color: #404040;
+            background: #161616;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
         }
 
         .chatbot-send {
@@ -319,6 +481,16 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .chatbot-send:hover {
+            background: #e8e8e8;
+            transform: scale(1.05);
+        }
+
+        .chatbot-send:active {
+            transform: scale(0.95);
         }
 
         .chatbot-hint {
@@ -347,6 +519,18 @@
             position: relative;
             height: 600px;
             perspective: 1200px;
+            animation: slideInRight 0.8s ease-out 0.1s backwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* Ambient glow */
@@ -801,6 +985,9 @@
     </style>
 </head>
 <body>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+
     <!-- Navigation -->
     <nav>
         <a href="index.html" class="nav-left">
@@ -818,6 +1005,7 @@
             <a class="sign-in-btn" href="login.html">Log In</a>
         </div>
     </nav>
+    <div class="nav-spacer"></div>
 
     <!-- Hero Section -->
     <main class="hero-container">
@@ -906,7 +1094,12 @@
     </main>
 
     <div class="chatbot-widget">
-        <button class="chatbot-toggle" id="chatbotToggle">Ask BackTrack</button>
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+                <path d="M7 9h10v2H7zm0-3h10v2H7z"/>
+            </svg>
+        </button>
         <div class="chatbot-panel" id="chatbotPanel">
             <div class="chatbot-header">
                 <div class="chatbot-title">BackTrack Assistant</div>
@@ -1172,6 +1365,25 @@
             if (event.key === 'Enter') {
                 sendChat();
             }
+        });
+
+        // Page transitions
+        const pageTransition = document.getElementById('pageTransition');
+        const transitionLinks = document.querySelectorAll('a[href$=".html"]');
+
+        transitionLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                // Skip if it's the current page or external link
+                if (href === window.location.pathname.split('/').pop() || href.startsWith('http')) return;
+
+                e.preventDefault();
+                pageTransition.classList.add('active');
+
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 400);
+            });
         });
     </script>
 </body>

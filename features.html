@@ -6,7 +6,7 @@
     <title>Features - BackTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,10 +15,44 @@
         }
 
         body {
-            font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #000000;
             color: #ffffff;
             min-height: 100vh;
+            overflow-x: hidden;
+            animation: pageLoadFadeIn 0.8s ease-out;
+        }
+
+        @keyframes pageLoadFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Page transition overlay */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        a, button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Navigation */
@@ -27,14 +61,40 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
-            background-color: #0a0a0a;
-            border-bottom: 1px solid transparent;
+            background-color: transparent;
             height: 70px;
-            transition: border-color 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         body.nav-scrolled nav {
-            border-bottom-color: #1a1a1a;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        body.nav-scrolled nav::after {
+            opacity: 1;
+        }
+
+        .nav-spacer {
+            height: 70px;
         }
 
         .nav-left {
@@ -55,15 +115,19 @@
         }
 
         .nav-link {
-            color: #ffffff;
+            color: rgba(255, 255, 255, 0.5);
             text-decoration: none;
             font-size: 15px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-link:hover {
-            color: #a0a0a0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
         }
 
         .nav-right {
@@ -82,112 +146,651 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.35s ease, background 0.6s ease;
+            transition: all 0.2s ease;
             letter-spacing: 0.4px;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
             text-decoration: none;
-            display: inline-block;
-        }
-
-        .sign-in-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -120%;
-            width: 60%;
-            height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-            transform: skewX(-20deg);
-            opacity: 0;
-            transition: left 0.8s ease, opacity 0.4s ease;
         }
 
         .sign-in-btn:hover {
             transform: translateY(-1px);
             background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
             color: #1a1a1a;
-            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
         }
 
-        .sign-in-btn:hover::before {
-            left: 120%;
-            opacity: 1;
-        }
-
-        .sign-in-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-        }
-
-        /* Main Content */
-        .features-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 60px 24px 80px;
-        }
-
-        .page-title {
-            font-family: 'Instrument Serif', 'Times New Roman', serif;
-            font-size: 44px;
-            font-weight: 400;
-            margin-bottom: 12px;
+        /* Hero Section */
+        .hero {
             text-align: center;
-            letter-spacing: -0.4px;
+            padding: 80px 24px 60px;
+            position: relative;
         }
 
-        .page-description {
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
             color: #888888;
-            font-size: 16px;
-            margin-bottom: 40px;
-            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -2.5px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #ffffff 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: #666666;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Features Grid */
+        .features-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
 
+        /* Feature Card - Glass Morphism */
         .feature-card {
-            background: #0d0d0d;
-            border: 1px solid #1a1a1a;
-            border-radius: 16px;
-            padding: 22px;
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            position: relative;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.03) 0%,
+                rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 32px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .feature-card:hover {
-            transform: translateY(-2px);
-            border-color: #2a2a2a;
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
         }
 
-        .feature-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
+        .feature-card:hover .feature-visual {
+            transform: scale(1.04);
         }
 
-        .feature-text {
-            color: #a0a0a0;
-            font-size: 14px;
-            line-height: 1.5;
+        /* Feature Visual Container */
+        .feature-visual {
+            height: 200px;
+            margin-bottom: 28px;
+            border-radius: 16px;
+            background: linear-gradient(135deg,
+                rgba(20, 20, 20, 0.8) 0%,
+                rgba(10, 10, 10, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .feature-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg,
+                rgba(255, 255, 255, 0.02) 0%,
+                transparent 100%);
+            pointer-events: none;
+        }
+
+        .feature-content {
+            position: relative;
+            z-index: 2;
         }
 
         .feature-tag {
-            margin-top: 18px;
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
             font-size: 11px;
+            font-weight: 600;
             letter-spacing: 1px;
-            color: #bfbfbf;
             text-transform: uppercase;
+            color: #666666;
+            margin-bottom: 16px;
         }
 
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .feature-text {
+            font-size: 15px;
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           ANIMATED VISUALS FOR EACH FEATURE
+           ============================================ */
+
+        /* 1. Browse - Animated Cards Stack */
+        .visual-browse {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            perspective: 800px;
+        }
+
+        .browse-card {
+            position: absolute;
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            gap: 10px;
+            transition: all 0.5s ease;
+        }
+
+        .browse-card:nth-child(1) {
+            transform: translateY(-30px) translateX(-20px) rotateY(-5deg);
+            animation: cardFloat1 4s ease-in-out infinite;
+        }
+
+        .browse-card:nth-child(2) {
+            transform: translateY(0px) translateX(0px);
+            z-index: 2;
+            animation: cardFloat2 4s ease-in-out infinite 0.5s;
+        }
+
+        .browse-card:nth-child(3) {
+            transform: translateY(30px) translateX(20px) rotateY(5deg);
+            animation: cardFloat3 4s ease-in-out infinite 1s;
+        }
+
+        @keyframes cardFloat1 {
+            0%, 100% { transform: translateY(-30px) translateX(-20px) rotateY(-5deg); }
+            50% { transform: translateY(-35px) translateX(-25px) rotateY(-8deg); }
+        }
+
+        @keyframes cardFloat2 {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-5px) translateX(0px); }
+        }
+
+        @keyframes cardFloat3 {
+            0%, 100% { transform: translateY(30px) translateX(20px) rotateY(5deg); }
+            50% { transform: translateY(25px) translateX(25px) rotateY(8deg); }
+        }
+
+        .browse-card-img {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .browse-card-lines {
+            flex: 1;
+        }
+
+        .browse-card-line {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 6px;
+        }
+
+        .browse-card-line:last-child {
+            width: 60%;
+            margin-bottom: 0;
+        }
+
+        /* 2. Filters - Animated Filter Pills */
+        .visual-filters {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 12px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-pill {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            font-size: 12px;
+            color: #555555;
+            transition: all 0.3s ease;
+        }
+
+        .filter-pill.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            animation: pillPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pillPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1); }
+            50% { box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.05); }
+        }
+
+        .filter-pill:nth-child(1) { animation-delay: 0s; }
+        .filter-pill:nth-child(2) { animation-delay: 0.5s; }
+        .filter-pill:nth-child(3) { animation-delay: 1s; }
+
+        /* 3. Map - Animated Location Pins */
+        .visual-map {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-grid {
+            width: 160px;
+            height: 120px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .map-pin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+        }
+
+        .map-pin::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            animation: pinBounce 2s ease-in-out infinite;
+        }
+
+        .map-pin::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 6px;
+            background: radial-gradient(ellipse, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .map-pin:nth-child(1) { top: 20%; left: 25%; animation-delay: 0s; }
+        .map-pin:nth-child(2) { top: 50%; left: 60%; animation-delay: 0.3s; }
+        .map-pin:nth-child(3) { top: 70%; left: 30%; animation-delay: 0.6s; }
+
+        .map-pin:nth-child(1)::before { animation-delay: 0s; }
+        .map-pin:nth-child(2)::before { animation-delay: 0.3s; }
+        .map-pin:nth-child(3)::before { animation-delay: 0.6s; }
+
+        @keyframes pinBounce {
+            0%, 100% { transform: rotate(-45deg) translateY(0); }
+            50% { transform: rotate(-45deg) translateY(-8px); }
+        }
+
+        /* 4. Submit - Animated Upload */
+        .visual-submit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .upload-box {
+            width: 140px;
+            height: 100px;
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-icon {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            animation: uploadFloat 2s ease-in-out infinite;
+        }
+
+        .upload-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .upload-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 14px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .upload-arrow {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes uploadFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .upload-text {
+            font-size: 11px;
+            color: #444444;
+        }
+
+        .upload-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+            animation: progressBar 3s ease-in-out infinite;
+        }
+
+        @keyframes progressBar {
+            0% { width: 0%; }
+            50% { width: 100%; }
+            100% { width: 0%; }
+        }
+
+        /* 5. Photos - Animated Image Gallery */
+        .visual-photos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 8px;
+        }
+
+        .photo-frame {
+            width: 60px;
+            height: 70px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .photo-frame:nth-child(1) {
+            transform: rotate(-8deg);
+            animation: photoTilt1 4s ease-in-out infinite;
+        }
+
+        .photo-frame:nth-child(2) {
+            transform: scale(1.1);
+            z-index: 2;
+            animation: photoScale 4s ease-in-out infinite 0.5s;
+        }
+
+        .photo-frame:nth-child(3) {
+            transform: rotate(8deg);
+            animation: photoTilt2 4s ease-in-out infinite 1s;
+        }
+
+        @keyframes photoTilt1 {
+            0%, 100% { transform: rotate(-8deg) translateY(0); }
+            50% { transform: rotate(-10deg) translateY(-5px); }
+        }
+
+        @keyframes photoScale {
+            0%, 100% { transform: scale(1.1) translateY(0); }
+            50% { transform: scale(1.15) translateY(-5px); }
+        }
+
+        @keyframes photoTilt2 {
+            0%, 100% { transform: rotate(8deg) translateY(0); }
+            50% { transform: rotate(10deg) translateY(-5px); }
+        }
+
+        .photo-placeholder {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .photo-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .photo-frame:nth-child(1) .photo-shimmer { animation-delay: 0s; }
+        .photo-frame:nth-child(2) .photo-shimmer { animation-delay: 0.5s; }
+        .photo-frame:nth-child(3) .photo-shimmer { animation-delay: 1s; }
+
+        /* 6. Database - Animated Sync */
+        .visual-database {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 24px;
+        }
+
+        .db-node {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .db-node::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .db-connection {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .db-dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        .db-dot:nth-child(1) { animation-delay: 0s; }
+        .db-dot:nth-child(2) { animation-delay: 0.2s; }
+        .db-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .db-server {
+            width: 60px;
+            height: 70px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px;
+        }
+
+        .db-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .db-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            animation: dbSync 2s ease-in-out infinite;
+        }
+
+        .db-bar:nth-child(1)::after { animation-delay: 0s; width: 70%; }
+        .db-bar:nth-child(2)::after { animation-delay: 0.3s; width: 50%; }
+        .db-bar:nth-child(3)::after { animation-delay: 0.6s; width: 85%; }
+
+        @keyframes dbSync {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* Large Feature Card */
+        .feature-card.large {
+            grid-column: span 2;
+        }
+
+        .feature-card.large .feature-visual {
+            height: 240px;
+        }
+
+        /* Responsive */
         @media (max-width: 900px) {
+            .hero-title {
+                font-size: 48px;
+            }
+
             .features-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card.large {
+                grid-column: span 1;
+            }
+
+            .feature-card.large .feature-visual {
+                height: 200px;
             }
         }
 
@@ -200,21 +803,46 @@
                 display: none;
             }
 
-            .features-container {
-                padding: 40px 20px 60px;
+            .hero {
+                padding: 50px 20px 40px;
             }
 
-            .page-title {
-                font-size: 30px;
+            .hero-title {
+                font-size: 36px;
+                letter-spacing: -1.5px;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .features-section {
+                padding: 0 16px 60px;
+            }
+
+            .feature-card {
+                padding: 24px;
+            }
+
+            .feature-visual {
+                height: 160px;
+                margin-bottom: 20px;
+            }
+
+            .feature-title {
+                font-size: 20px;
+            }
+
+            .feature-text {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+
     <!-- Navigation -->
     <nav>
         <a href="index.html" class="nav-left">
@@ -225,76 +853,230 @@
             <a href="browse.html" class="nav-link">Browse</a>
             <a href="map.html" class="nav-link">Map</a>
             <a href="submit.html" class="nav-link">Submit</a>
-            <a href="features.html" class="nav-link">Features</a>
+            <a href="features.html" class="nav-link active">Features</a>
         </div>
 
         <div class="nav-right">
             <a class="sign-in-btn" href="login.html">Log In</a>
         </div>
     </nav>
+    <div class="nav-spacer"></div>
 
-    <main class="features-container">
-        <h1 class="page-title">Everything BackTrack Does</h1>
-        <p class="page-description">A fast, focused toolkit for getting lost items back to their owners.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <span class="hero-label">Platform Features</span>
+        <h1 class="hero-title">Built for speed.<br>Designed for clarity.</h1>
+        <p class="hero-description">Everything you need to reconnect people with their lost belongings, nothing you don't.</p>
+    </section>
 
-        <section class="features-grid">
+    <!-- Features Grid -->
+    <section class="features-section">
+        <div class="features-grid">
+
+            <!-- Feature 1: Browse -->
             <article class="feature-card">
-                <div>
+                <div class="feature-visual">
+                    <div class="visual-browse">
+                        <div class="browse-card">
+                            <div class="browse-card-img"></div>
+                            <div class="browse-card-lines">
+                                <div class="browse-card-line"></div>
+                                <div class="browse-card-line"></div>
+                            </div>
+                        </div>
+                        <div class="browse-card">
+                            <div class="browse-card-img"></div>
+                            <div class="browse-card-lines">
+                                <div class="browse-card-line"></div>
+                                <div class="browse-card-line"></div>
+                            </div>
+                        </div>
+                        <div class="browse-card">
+                            <div class="browse-card-img"></div>
+                            <div class="browse-card-lines">
+                                <div class="browse-card-line"></div>
+                                <div class="browse-card-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Browse</span>
                     <h2 class="feature-title">Browse Verified Listings</h2>
-                    <p class="feature-text">Scan recent finds with clean cards, photos, and clear details.</p>
+                    <p class="feature-text">Scan recent finds with clean cards, photos, and clear details. Every listing is verified and organized.</p>
                 </div>
-                <span class="feature-tag">Browse</span>
             </article>
 
+            <!-- Feature 2: Smart Filters -->
             <article class="feature-card">
-                <div>
+                <div class="feature-visual">
+                    <div class="visual-filters">
+                        <div class="filter-row">
+                            <span class="filter-pill active">Electronics</span>
+                            <span class="filter-pill">Clothing</span>
+                            <span class="filter-pill">Books</span>
+                        </div>
+                        <div class="filter-row">
+                            <span class="filter-pill">Today</span>
+                            <span class="filter-pill active">This Week</span>
+                        </div>
+                        <div class="filter-row">
+                            <span class="filter-pill">Found</span>
+                            <span class="filter-pill active">Claimed</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Filters</span>
                     <h2 class="feature-title">Smart Filters</h2>
-                    <p class="feature-text">Narrow by category, date, or status to spot matches quickly.</p>
+                    <p class="feature-text">Narrow by category, date, or status to spot matches quickly. Find what you're looking for in seconds.</p>
                 </div>
-                <span class="feature-tag">Filters</span>
             </article>
 
-            <article class="feature-card">
-                <div>
-                    <h2 class="feature-title">Map Discovery</h2>
-                    <p class="feature-text">Pinpoint items by area to focus on the right neighborhood.</p>
+            <!-- Feature 3: Map Discovery (Large) -->
+            <article class="feature-card large">
+                <div class="feature-visual">
+                    <div class="visual-map">
+                        <div class="map-grid">
+                            <div class="map-pin"></div>
+                            <div class="map-pin"></div>
+                            <div class="map-pin"></div>
+                        </div>
+                    </div>
                 </div>
-                <span class="feature-tag">Map</span>
+                <div class="feature-content">
+                    <span class="feature-tag">Map</span>
+                    <h2 class="feature-title">Interactive Map Discovery</h2>
+                    <p class="feature-text">Pinpoint items by location across campus. See exactly where items were found with our interactive floor plans and building maps. Navigate between floors and zoom into specific areas.</p>
+                </div>
             </article>
 
+            <!-- Feature 4: Submit -->
             <article class="feature-card">
-                <div>
+                <div class="feature-visual">
+                    <div class="visual-submit">
+                        <div class="upload-box">
+                            <div class="upload-icon">
+                                <div class="upload-arrow"></div>
+                            </div>
+                            <span class="upload-text">Drop to upload</span>
+                            <div class="upload-progress"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Submit</span>
                     <h2 class="feature-title">One-Tap Submissions</h2>
-                    <p class="feature-text">Share a found item with photos, location, and time in minutes.</p>
+                    <p class="feature-text">Share a found item with photos, location, and time in under a minute. Simple form, instant posting.</p>
                 </div>
-                <span class="feature-tag">Submit</span>
             </article>
 
+            <!-- Feature 5: Photos -->
             <article class="feature-card">
-                <div>
+                <div class="feature-visual">
+                    <div class="visual-photos">
+                        <div class="photo-frame">
+                            <div class="photo-placeholder"></div>
+                            <div class="photo-shimmer"></div>
+                        </div>
+                        <div class="photo-frame">
+                            <div class="photo-placeholder"></div>
+                            <div class="photo-shimmer"></div>
+                        </div>
+                        <div class="photo-frame">
+                            <div class="photo-placeholder"></div>
+                            <div class="photo-shimmer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Photos</span>
                     <h2 class="feature-title">Image-First Records</h2>
-                    <p class="feature-text">Upload photos to improve matching accuracy and reduce confusion.</p>
+                    <p class="feature-text">Upload photos to improve matching accuracy. Visual identification makes finding items faster and reduces confusion.</p>
                 </div>
-                <span class="feature-tag">Photos</span>
             </article>
 
-            <article class="feature-card">
-                <div>
-                    <h2 class="feature-title">Live Data Ready</h2>
-                    <p class="feature-text">Connect Supabase to sync listings and updates in real time.</p>
+            <!-- Feature 6: Database (Large) -->
+            <article class="feature-card large">
+                <div class="feature-visual">
+                    <div class="visual-database">
+                        <div class="db-node"></div>
+                        <div class="db-connection">
+                            <div class="db-dot"></div>
+                            <div class="db-dot"></div>
+                            <div class="db-dot"></div>
+                        </div>
+                        <div class="db-server">
+                            <div class="db-bar"></div>
+                            <div class="db-bar"></div>
+                            <div class="db-bar"></div>
+                        </div>
+                        <div class="db-connection">
+                            <div class="db-dot"></div>
+                            <div class="db-dot"></div>
+                            <div class="db-dot"></div>
+                        </div>
+                        <div class="db-node"></div>
+                    </div>
                 </div>
-                <span class="feature-tag">Database</span>
+                <div class="feature-content">
+                    <span class="feature-tag">Real-time</span>
+                    <h2 class="feature-title">Live Data Sync</h2>
+                    <p class="feature-text">Powered by Supabase for instant updates across all devices. When someone posts a found item or claims a listing, everyone sees it immediately. No refreshing needed.</p>
+                </div>
             </article>
-        </section>
-    </main>
+
+        </div>
+    </section>
 
     <script>
+        // Nav border on scroll
         function updateNavBorder() {
             document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
         }
-
         updateNavBorder();
         window.addEventListener('scroll', updateNavBorder, { passive: true });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Add initial styles and observe feature cards
+        document.querySelectorAll('.feature-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+
+        // Page transitions
+        const pageTransition = document.getElementById('pageTransition');
+        const transitionLinks = document.querySelectorAll('a[href$=".html"]');
+
+        transitionLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href === window.location.pathname.split('/').pop() || href.startsWith('http')) return;
+
+                e.preventDefault();
+                pageTransition.classList.add('active');
+
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 400);
+            });
+        });
     </script>
 </body>
 </html>
