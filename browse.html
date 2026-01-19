@@ -412,6 +412,16 @@
             height: 20px;
         }
 
+        .upload-status {
+            margin-top: 12px;
+            color: #a0a0a0;
+            font-size: 13px;
+        }
+
+        .upload-status.error {
+            color: #fca5a5;
+        }
+
         /* View Toggle */
         .view-toggle {
             display: flex;
@@ -684,7 +694,9 @@
                     </svg>
                     Upload Image
                 </button>
+                <input type="file" id="imageUploadInput" accept="image/*" hidden>
             </div>
+            <div class="upload-status" id="uploadStatus"></div>
 
             <div class="view-toggle">
                 <span>[</span>
@@ -802,6 +814,9 @@
         const itemsGrid = document.querySelector('.items-grid');
         const initialItemsMarkup = itemsGrid.innerHTML;
         const searchInput = document.querySelector('.search-bar input');
+        const uploadBtn = document.querySelector('.upload-btn');
+        const uploadInput = document.getElementById('imageUploadInput');
+        const uploadStatus = document.getElementById('uploadStatus');
         const categoryCheckboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
         const locationBtn = document.querySelector('.location-btn');
         const locationMenu = document.querySelector('.location-menu');
@@ -822,6 +837,25 @@
         const allCategories = Array.from(categoryCheckboxes).map((checkbox) => {
             return checkbox.parentElement.querySelector('.checkbox-label').textContent;
         });
+
+        const demoItems = Array.from(itemsGrid.querySelectorAll('.item-card')).map((card, index) => {
+            const image = card.querySelector('img');
+            const name = card.querySelector('.item-name');
+            const date = card.querySelector('.item-date');
+            const location = card.querySelector('.item-location');
+            return {
+                id: `demo-${index}`,
+                name: name ? name.textContent.trim() : 'Item',
+                date_lost: date ? date.textContent.trim() : new Date().toISOString(),
+                location: location ? location.textContent.trim() : 'Location',
+                image_url: image ? image.getAttribute('src') : null
+            };
+        });
+
+        function isSupabaseConfigured() {
+            return window.BackTrackDB && window.BackTrackDB.config &&
+                !window.BackTrackDB.config.url.includes('YOUR_SUPABASE');
+        }
 
         // Format date for display
         function formatDate(dateString) {
@@ -860,6 +894,16 @@
             itemsGrid.innerHTML = items.map(createItemCard).join('');
         }
 
+        function renderDemoItems() {
+            const query = (currentFilters.search || '').trim().toLowerCase();
+            if (!query) {
+                renderItems(demoItems);
+                return;
+            }
+            const filtered = demoItems.filter((item) => item.name.toLowerCase().includes(query));
+            renderItems(filtered);
+        }
+
         function syncCategoryFiltersFromUI() {
             const selectedCategories = [];
             categoryCheckboxes.forEach(checkbox => {
@@ -873,7 +917,8 @@
 
         // Fetch and display items
         async function loadItems() {
-            if (!window.BackTrackDB || typeof window.BackTrackDB.getItems !== 'function') {
+            if (!isSupabaseConfigured() || typeof window.BackTrackDB.getItems !== 'function') {
+                renderDemoItems();
                 return;
             }
             const items = await window.BackTrackDB.getItems(currentFilters);
@@ -925,8 +970,48 @@
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 currentFilters.search = searchInput.value;
-                loadItems();
+                if (isSupabaseConfigured()) {
+                    loadItems();
+                } else {
+                    renderDemoItems();
+                }
             }, 300);
+        });
+
+        function setUploadStatus(text, isError = false) {
+            if (!text) {
+                uploadStatus.textContent = '';
+                uploadStatus.classList.remove('error');
+                return;
+            }
+            uploadStatus.textContent = text;
+            uploadStatus.classList.toggle('error', isError);
+        }
+
+        uploadBtn.addEventListener('click', () => {
+            uploadInput.click();
+        });
+
+        uploadInput.addEventListener('change', async () => {
+            const file = uploadInput.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                setUploadStatus('Please choose an image file.', true);
+                return;
+            }
+
+            if (isSupabaseConfigured() && window.BackTrackDB.uploadImage) {
+                try {
+                    setUploadStatus('Uploading image for AI match...');
+                    await window.BackTrackDB.uploadImage(file);
+                    setUploadStatus('Image uploaded. AI match is a demo right now.');
+                } catch (error) {
+                    setUploadStatus('Upload failed. Please try again.', true);
+                }
+            } else {
+                setUploadStatus('Image selected. AI match is a demo right now.');
+            }
         });
 
         // Initialize - check if Supabase is configured
@@ -943,13 +1028,12 @@
             syncCategoryFiltersFromUI();
 
             // Check if Supabase is configured
-            if (window.BackTrackDB && window.BackTrackDB.config &&
-                !window.BackTrackDB.config.url.includes('YOUR_SUPABASE')) {
+            if (isSupabaseConfigured()) {
                 loadItems();
                 setInterval(loadItems, 20000);
             } else {
                 console.log('Supabase not configured - showing demo items');
-                // Demo items are already in HTML
+                renderDemoItems();
             }
         });
 
