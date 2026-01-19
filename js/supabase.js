@@ -6,6 +6,11 @@ const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5c
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const supabaseConfig = {
+    url: SUPABASE_URL,
+    anonKey: SUPABASE_ANON_KEY
+};
+
 function isSupabaseConfigured() {
     return !supabase.supabaseUrl.includes('YOUR_SUPABASE');
 }
@@ -278,5 +283,8 @@ window.BackTrackDB = {
     isSupabaseConfigured,
 
     // Direct Supabase access if needed
-    supabase
+    supabase,
+
+    // Config for non-Supabase JS usage
+    config: supabaseConfig
 };

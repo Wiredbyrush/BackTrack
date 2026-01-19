@@ -327,6 +327,17 @@
             padding: 0 16px 14px;
         }
 
+        .chatbot-status {
+            min-height: 16px;
+            padding: 0 16px 10px;
+            font-size: 12px;
+            color: #6f6f6f;
+        }
+
+        .chatbot-status.error {
+            color: #fca5a5;
+        }
+
         /* 3D Visual Container */
         .hero-visual {
             flex: 1;
@@ -905,6 +916,7 @@
                 <div class="chatbot-message">Ask me about BackTrack's features, how to submit items, or how browsing works.</div>
             </div>
             <div class="chatbot-hint">Questions outside the website won't be answered.</div>
+            <div class="chatbot-status" id="chatbotStatus"></div>
             <div class="chatbot-footer">
                 <input class="chatbot-input" id="chatbotInput" type="text" placeholder="Ask about BackTrack..." />
                 <button class="chatbot-send" id="chatbotSend">Send</button>
@@ -1080,6 +1092,17 @@
         const chatbotMessages = document.getElementById('chatbotMessages');
         const chatbotInput = document.getElementById('chatbotInput');
         const chatbotSend = document.getElementById('chatbotSend');
+        const chatbotStatus = document.getElementById('chatbotStatus');
+
+        function setChatStatus(text, type) {
+            if (!text) {
+                chatbotStatus.textContent = '';
+                chatbotStatus.className = 'chatbot-status';
+                return;
+            }
+            chatbotStatus.textContent = text;
+            chatbotStatus.className = `chatbot-status ${type || ''}`.trim();
+        }
 
         function addChatMessage(text, role) {
             const message = document.createElement('div');
@@ -1096,26 +1119,51 @@
         chatbotToggle.addEventListener('click', () => toggleChat(true));
         chatbotClose.addEventListener('click', () => toggleChat(false));
 
+        async function fetchChatbotReply(message) {
+            if (!BackTrackDB || !BackTrackDB.config) {
+                throw new Error('Supabase config not available.');
+            }
+            const { url, anonKey } = BackTrackDB.config;
+            if (!url || !anonKey || url.includes('YOUR_SUPABASE')) {
+                throw new Error('Supabase is not configured.');
+            }
+
+            const response = await fetch(`${url}/functions/v1/chatbot`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    apikey: anonKey,
+                    Authorization: `Bearer ${anonKey}`
+                },
+                body: JSON.stringify({ message })
+            });
+
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                const errorDetail = payload.error || `HTTP ${response.status}`;
+                throw new Error(errorDetail);
+            }
+            return payload.reply || '';
+        }
+
         async function sendChat() {
             const text = chatbotInput.value.trim();
             if (!text) return;
             chatbotInput.value = '';
             addChatMessage(text, 'user');
-
-            if (!BackTrackDB || !BackTrackDB.isSupabaseConfigured()) {
-                addChatMessage('Supabase is not configured yet. Add your project keys to enable the chatbot.');
-                return;
-            }
+            setChatStatus('');
 
             addChatMessage('Thinking...');
             const thinkingMessage = chatbotMessages.lastElementChild;
 
-            const response = await BackTrackDB.sendChatMessage(text);
-            if (response?.error) {
+            try {
+                const reply = await fetchChatbotReply(text);
+                thinkingMessage.textContent = reply || 'No response received.';
+                setChatStatus('');
+            } catch (error) {
+                setChatStatus('Chatbot error: ' + String(error), 'error');
                 thinkingMessage.textContent = 'Sorry, something went wrong. Please try again.';
-                return;
             }
-            thinkingMessage.textContent = response?.reply || 'No response received.';
         }
 
         chatbotSend.addEventListener('click', sendChat);
