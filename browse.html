@@ -720,6 +720,7 @@
     <script>
         // DOM Elements
         const itemsGrid = document.querySelector('.items-grid');
+        const initialItemsMarkup = itemsGrid.innerHTML;
         const searchInput = document.querySelector('.search-bar input');
         const categoryCheckboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
         const locationBtn = document.querySelector('.location-btn');
@@ -737,6 +738,10 @@
             location: 'All Locations',
             search: ''
         };
+
+        const allCategories = Array.from(categoryCheckboxes).map((checkbox) => {
+            return checkbox.parentElement.querySelector('.checkbox-label').textContent;
+        });
 
         // Format date for display
         function formatDate(dateString) {
@@ -764,6 +769,16 @@
         // Render items to grid
         function renderItems(items) {
             if (items.length === 0) {
+                const hasActiveFilters =
+                    (currentFilters.search && currentFilters.search.trim().length > 0) ||
+                    (currentFilters.location && currentFilters.location !== 'All Locations') ||
+                    (currentFilters.category && currentFilters.category.length > 0);
+
+                if (!hasActiveFilters && initialItemsMarkup.trim().length > 0) {
+                    itemsGrid.innerHTML = initialItemsMarkup;
+                    return;
+                }
+
                 itemsGrid.innerHTML = '<p style="color: #888; grid-column: 1/-1; text-align: center; padding: 40px;">No items found</p>';
                 return;
             }
@@ -771,13 +786,14 @@
         }
 
         function syncCategoryFiltersFromUI() {
-            currentFilters.category = [];
+            const selectedCategories = [];
             categoryCheckboxes.forEach(checkbox => {
                 if (checkbox.checked) {
                     const label = checkbox.parentElement.querySelector('.checkbox-label').textContent;
-                    currentFilters.category.push(label);
+                    selectedCategories.push(label);
                 }
             });
+            currentFilters.category = selectedCategories.length === allCategories.length ? [] : selectedCategories;
         }
 
         // Fetch and display items
@@ -846,6 +862,9 @@
             updateNavBorder();
             window.addEventListener('scroll', updateNavBorder, { passive: true });
 
+            categoryCheckboxes.forEach((checkbox) => {
+                checkbox.checked = true;
+            });
             syncCategoryFiltersFromUI();
 
             // Check if Supabase is configured
