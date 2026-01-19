@@ -204,6 +204,129 @@
             color: #a0a0a0;
         }
 
+        /* Chatbot widget */
+        .chatbot-widget {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 200;
+            font-family: inherit;
+        }
+
+        .chatbot-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #f5f5f5 0%, #cfcfcf 100%);
+            color: #111111;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .chatbot-panel {
+            position: absolute;
+            right: 0;
+            bottom: 58px;
+            width: 320px;
+            max-height: 440px;
+            display: none;
+            flex-direction: column;
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .chatbot-panel.open {
+            display: flex;
+        }
+
+        .chatbot-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: #8a8a8a;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .chatbot-messages {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            max-height: 280px;
+        }
+
+        .chatbot-message {
+            font-size: 13px;
+            line-height: 1.4;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #141414;
+            color: #e5e5e5;
+        }
+
+        .chatbot-message.user {
+            align-self: flex-end;
+            background: #202020;
+            color: #ffffff;
+        }
+
+        .chatbot-footer {
+            border-top: 1px solid #1a1a1a;
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            background: #0f0f0f;
+            border: 1px solid #262626;
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 10px 12px;
+            font-size: 13px;
+        }
+
+        .chatbot-send {
+            background: #ffffff;
+            color: #111111;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .chatbot-hint {
+            color: #7a7a7a;
+            font-size: 12px;
+            padding: 0 16px 14px;
+        }
+
         /* 3D Visual Container */
         .hero-visual {
             flex: 1;
@@ -654,6 +777,15 @@
                 font-size: 10px;
                 letter-spacing: 2px;
             }
+
+            .chatbot-widget {
+                right: 16px;
+                bottom: 16px;
+            }
+
+            .chatbot-panel {
+                width: 280px;
+            }
         }
     </style>
 </head>
@@ -762,6 +894,26 @@
         </div>
     </main>
 
+    <div class="chatbot-widget">
+        <button class="chatbot-toggle" id="chatbotToggle">Ask BackTrack</button>
+        <div class="chatbot-panel" id="chatbotPanel">
+            <div class="chatbot-header">
+                <div class="chatbot-title">BackTrack Assistant</div>
+                <button class="chatbot-close" id="chatbotClose">&times;</button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chatbot-message">Ask me about BackTrack's features, how to submit items, or how browsing works.</div>
+            </div>
+            <div class="chatbot-hint">Questions outside the website won't be answered.</div>
+            <div class="chatbot-footer">
+                <input class="chatbot-input" id="chatbotInput" type="text" placeholder="Ask about BackTrack..." />
+                <button class="chatbot-send" id="chatbotSend">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script>
         function updateNavBorder() {
             document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
@@ -920,6 +1072,57 @@
                     autoRotate = true;
                 }
             }, 3000);
+        });
+
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotPanel = document.getElementById('chatbotPanel');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSend = document.getElementById('chatbotSend');
+
+        function addChatMessage(text, role) {
+            const message = document.createElement('div');
+            message.className = `chatbot-message ${role || ''}`.trim();
+            message.textContent = text;
+            chatbotMessages.appendChild(message);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function toggleChat(open) {
+            chatbotPanel.classList.toggle('open', open);
+        }
+
+        chatbotToggle.addEventListener('click', () => toggleChat(true));
+        chatbotClose.addEventListener('click', () => toggleChat(false));
+
+        async function sendChat() {
+            const text = chatbotInput.value.trim();
+            if (!text) return;
+            chatbotInput.value = '';
+            addChatMessage(text, 'user');
+
+            if (!BackTrackDB || !BackTrackDB.isSupabaseConfigured()) {
+                addChatMessage('Supabase is not configured yet. Add your project keys to enable the chatbot.');
+                return;
+            }
+
+            addChatMessage('Thinking...');
+            const thinkingMessage = chatbotMessages.lastElementChild;
+
+            const response = await BackTrackDB.sendChatMessage(text);
+            if (response?.error) {
+                thinkingMessage.textContent = 'Sorry, something went wrong. Please try again.';
+                return;
+            }
+            thinkingMessage.textContent = response?.reply || 'No response received.';
+        }
+
+        chatbotSend.addEventListener('click', sendChat);
+        chatbotInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendChat();
+            }
         });
     </script>
 </body>
