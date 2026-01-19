@@ -377,6 +377,12 @@
             fill: #1a1a1a;
         }
 
+        .chatbot-logo {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
         .chatbot-panel {
             position: absolute;
             right: 0;
@@ -1095,10 +1101,8 @@
 
     <div class="chatbot-widget">
         <button class="chatbot-toggle" id="chatbotToggle">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
-                <path d="M7 9h10v2H7zm0-3h10v2H7z"/>
-            </svg>
+            <img class="chatbot-logo" src="logo.png" alt="BackTrack logo">
+            Ask BackTrack
         </button>
         <div class="chatbot-panel" id="chatbotPanel">
             <div class="chatbot-header">
