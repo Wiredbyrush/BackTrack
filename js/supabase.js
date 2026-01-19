@@ -1,10 +1,14 @@
 // Supabase Configuration
 // Replace these with your actual Supabase project credentials
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = window.SUPABASE_URL || 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
 
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function isSupabaseConfigured() {
+    return !supabase.supabaseUrl.includes('YOUR_SUPABASE');
+}
 
 // ============================================
 // ITEMS FUNCTIONS
@@ -173,6 +177,25 @@ async function signIn(email, password) {
     return { user: data.user };
 }
 
+// Sign in with Google OAuth
+async function signInWithGoogle() {
+    const options = {};
+    if (window.location && window.location.origin && window.location.origin !== 'null') {
+        options.redirectTo = `${window.location.origin}/login.html`;
+    }
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options
+    });
+
+    if (error) {
+        console.error('Error signing in with Google:', error);
+        return { error: error.message };
+    }
+
+    return { data };
+}
+
 // Sign out
 async function signOut() {
     const { error } = await supabase.auth.signOut();
@@ -198,6 +221,32 @@ function onAuthStateChange(callback) {
     });
 }
 
+async function getSession() {
+    const { data } = await supabase.auth.getSession();
+    return data.session;
+}
+
+// ============================================
+// MAP + CHATBOT HOOKS (SUPABASE)
+// ============================================
+
+async function getMapItems(filters = {}) {
+    return getItems(filters);
+}
+
+async function sendChatMessage(message) {
+    const { data, error } = await supabase.functions.invoke('chatbot', {
+        body: { message }
+    });
+
+    if (error) {
+        console.error('Error invoking chatbot function:', error);
+        return { error: error.message };
+    }
+
+    return data;
+}
+
 // ============================================
 // EXPORT FOR USE IN OTHER FILES
 // ============================================
@@ -216,9 +265,17 @@ window.BackTrackDB = {
     // Auth
     signUp,
     signIn,
+    signInWithGoogle,
     signOut,
     getCurrentUser,
     onAuthStateChange,
+    getSession,
+
+    // Map + chatbot
+    getMapItems,
+    sendChatMessage,
+
+    isSupabaseConfigured,
 
     // Direct Supabase access if needed
     supabase

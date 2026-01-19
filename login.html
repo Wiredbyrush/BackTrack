@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - BackTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background-color: #0a0a0a;
+            border-bottom: 1px solid #1a1a1a;
+            height: 70px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 100%;
+        }
+
+        .nav-left img {
+            height: 70px;
+            width: auto;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .sign-in-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
+            color: #f3f4f6;
+            border: 1px solid #3f3f3f;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-decoration: none;
+        }
+
+        .login-container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 80px 24px 120px;
+        }
+
+        .login-card {
+            border: 1px solid #1a1a1a;
+            border-radius: 18px;
+            padding: 36px;
+            background: #0d0d0d;
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: #9a9a9a;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
+
+        .google-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #ffffff;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .status {
+            margin-top: 18px;
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+
+        .status strong {
+            color: #ffffff;
+        }
+
+        .logout-btn {
+            margin-top: 16px;
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid #3f3f3f;
+            background: transparent;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .warning {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f5b453;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .login-container {
+                padding: 50px 20px 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-left">
+            <img src="logo.png" alt="BackTrack">
+        </a>
+        <div class="nav-center">
+            <a href="browse.html" class="nav-link">Browse</a>
+            <a href="map.html" class="nav-link">Map</a>
+            <a href="submit.html" class="nav-link">Submit</a>
+            <a href="features.html" class="nav-link">Features</a>
+        </div>
+        <a href="login.html" class="sign-in-btn">Log In</a>
+    </nav>
+
+    <main class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">Log in to BackTrack</h1>
+            <p class="login-subtitle">Use Google to access your account and sync your items, map features, and more.</p>
+
+            <button class="google-btn" id="googleBtn">Continue with Google</button>
+            <p class="status" id="statusText">Not signed in.</p>
+            <button class="logout-btn" id="logoutBtn" style="display: none;">Sign out</button>
+            <div class="warning" id="configWarning" style="display: none;">
+                Supabase isn’t configured yet. Add your `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `js/supabase.js`.
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        const googleBtn = document.getElementById('googleBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const statusText = document.getElementById('statusText');
+        const configWarning = document.getElementById('configWarning');
+
+        function showUser(user) {
+            if (!user) {
+                statusText.textContent = 'Not signed in.';
+                logoutBtn.style.display = 'none';
+                return;
+            }
+            statusText.innerHTML = `Signed in as <strong>${user.email || 'Google user'}</strong>.`;
+            logoutBtn.style.display = 'block';
+        }
+
+        async function refreshSession() {
+            if (!BackTrackDB.isSupabaseConfigured()) {
+                configWarning.style.display = 'block';
+                googleBtn.disabled = true;
+                return;
+            }
+            const session = await BackTrackDB.getSession();
+            showUser(session?.user || null);
+        }
+
+        googleBtn.addEventListener('click', async () => {
+            if (!BackTrackDB.isSupabaseConfigured()) {
+                configWarning.style.display = 'block';
+                return;
+            }
+            await BackTrackDB.signInWithGoogle();
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            await BackTrackDB.signOut();
+            showUser(null);
+        });
+
+        BackTrackDB.onAuthStateChange((_event, user) => {
+            showUser(user);
+        });
+
+        refreshSession();
+    </script>
+</body>
+</html>
