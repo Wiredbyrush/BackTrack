@@ -1119,21 +1119,22 @@
         chatbotToggle.addEventListener('click', () => toggleChat(true));
         chatbotClose.addEventListener('click', () => toggleChat(false));
 
+        const CHAT_SUPABASE_URL = window.SUPABASE_URL || 'https://mzzcwukenxzuelgpuiap.supabase.co';
+        const CHAT_SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16emN3dWtlbnh6dWVsZ3B1aWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3OTQzMTUsImV4cCI6MjA4NDM3MDMxNX0.1JqsDG1585d9QhspNoFcBzqiaSD59ceiKQBhWJKOcdw';
+
         async function fetchChatbotReply(message) {
-            if (!BackTrackDB || !BackTrackDB.config) {
-                throw new Error('Supabase config not available.');
-            }
-            const { url, anonKey } = BackTrackDB.config;
-            if (!url || !anonKey || url.includes('YOUR_SUPABASE')) {
+            if (!CHAT_SUPABASE_URL || !CHAT_SUPABASE_ANON_KEY ||
+                CHAT_SUPABASE_URL.includes('YOUR_SUPABASE') ||
+                CHAT_SUPABASE_ANON_KEY.includes('YOUR_SUPABASE')) {
                 throw new Error('Supabase is not configured.');
             }
 
-            const response = await fetch(`${url}/functions/v1/chatbot`, {
+            const response = await fetch(`${CHAT_SUPABASE_URL}/functions/v1/chatbot`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    apikey: anonKey,
-                    Authorization: `Bearer ${anonKey}`
+                    apikey: CHAT_SUPABASE_ANON_KEY,
+                    Authorization: `Bearer ${CHAT_SUPABASE_ANON_KEY}`
                 },
                 body: JSON.stringify({ message })
             });

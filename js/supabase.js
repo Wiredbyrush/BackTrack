@@ -1,15 +1,17 @@
-// Supabase Configuration
-// Replace these with your actual Supabase project credentials
-const SUPABASE_URL = window.SUPABASE_URL || 'https://mzzcwukenxzuelgpuiap.supabase.co';
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16emN3dWtlbnh6dWVsZ3B1aWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3OTQzMTUsImV4cCI6MjA4NDM3MDMxNX0.1JqsDG1585d9QhspNoFcBzqiaSD59ceiKQBhWJKOcdw';
+// Avoid re-defining Supabase client if the script is loaded twice.
+if (!window.BackTrackDB) {
+    // Supabase Configuration
+    // Replace these with your actual Supabase project credentials
+    const SUPABASE_URL = window.SUPABASE_URL || 'https://mzzcwukenxzuelgpuiap.supabase.co';
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16emN3dWtlbnh6dWVsZ3B1aWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3OTQzMTUsImV4cCI6MjA4NDM3MDMxNX0.1JqsDG1585d9QhspNoFcBzqiaSD59ceiKQBhWJKOcdw';
 
-// Initialize Supabase client
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Initialize Supabase client
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const supabaseConfig = {
-    url: SUPABASE_URL,
-    anonKey: SUPABASE_ANON_KEY
-};
+    const supabaseConfig = {
+        url: SUPABASE_URL,
+        anonKey: SUPABASE_ANON_KEY
+    };
 
 function isSupabaseConfigured() {
     return !supabase.supabaseUrl.includes('YOUR_SUPABASE');
@@ -256,7 +258,7 @@ async function sendChatMessage(message) {
 // EXPORT FOR USE IN OTHER FILES
 // ============================================
 
-window.BackTrackDB = {
+    window.BackTrackDB = {
     // Items
     getItems,
     getItemById,
@@ -286,5 +288,6 @@ window.BackTrackDB = {
     supabase,
 
     // Config for non-Supabase JS usage
-    config: supabaseConfig
-};
+        config: supabaseConfig
+    };
+}
