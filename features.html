@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - BackTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background-color: #0a0a0a;
+            border-bottom: 1px solid transparent;
+            height: 70px;
+            transition: border-color 0.3s ease;
+        }
+
+        body.nav-scrolled nav {
+            border-bottom-color: #1a1a1a;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 100%;
+        }
+
+        .nav-left img {
+            height: 70px;
+            width: auto;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #a0a0a0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .sign-in-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
+            color: #f3f4f6;
+            border: 1px solid #3f3f3f;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.35s ease, background 0.6s ease;
+            letter-spacing: 0.4px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .sign-in-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -120%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-20deg);
+            opacity: 0;
+            transition: left 0.8s ease, opacity 0.4s ease;
+        }
+
+        .sign-in-btn:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
+            color: #1a1a1a;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .sign-in-btn:hover::before {
+            left: 120%;
+            opacity: 1;
+        }
+
+        .sign-in-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        /* Main Content */
+        .features-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 24px 80px;
+        }
+
+        .page-title {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+            letter-spacing: -1px;
+        }
+
+        .page-description {
+            color: #888888;
+            font-size: 16px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .feature-card {
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 22px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            border-color: #2a2a2a;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-text {
+            color: #a0a0a0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .feature-tag {
+            margin-top: 18px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #bfbfbf;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .features-container {
+                padding: 40px 20px 60px;
+            }
+
+            .page-title {
+                font-size: 30px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="nav-left">
+            <img src="logo.png" alt="BackTrack">
+        </a>
+
+        <div class="nav-center">
+            <a href="browse.html" class="nav-link">Browse</a>
+            <a href="map.html" class="nav-link">Map</a>
+            <a href="submit.html" class="nav-link">Submit</a>
+            <a href="features.html" class="nav-link">Features</a>
+        </div>
+
+        <div class="nav-right">
+            <button class="sign-in-btn">Log In</button>
+        </div>
+    </nav>
+
+    <main class="features-container">
+        <h1 class="page-title">Everything BackTrack Does</h1>
+        <p class="page-description">A fast, focused toolkit for getting lost items back to their owners.</p>
+
+        <section class="features-grid">
+            <article class="feature-card">
+                <div>
+                    <h2 class="feature-title">Browse Verified Listings</h2>
+                    <p class="feature-text">Scan recent finds with clean cards, photos, and clear details.</p>
+                </div>
+                <span class="feature-tag">Browse</span>
+            </article>
+
+            <article class="feature-card">
+                <div>
+                    <h2 class="feature-title">Smart Filters</h2>
+                    <p class="feature-text">Narrow by category, date, or status to spot matches quickly.</p>
+                </div>
+                <span class="feature-tag">Filters</span>
+            </article>
+
+            <article class="feature-card">
+                <div>
+                    <h2 class="feature-title">Map Discovery</h2>
+                    <p class="feature-text">Pinpoint items by area to focus on the right neighborhood.</p>
+                </div>
+                <span class="feature-tag">Map</span>
+            </article>
+
+            <article class="feature-card">
+                <div>
+                    <h2 class="feature-title">One-Tap Submissions</h2>
+                    <p class="feature-text">Share a found item with photos, location, and time in minutes.</p>
+                </div>
+                <span class="feature-tag">Submit</span>
+            </article>
+
+            <article class="feature-card">
+                <div>
+                    <h2 class="feature-title">Image-First Records</h2>
+                    <p class="feature-text">Upload photos to improve matching accuracy and reduce confusion.</p>
+                </div>
+                <span class="feature-tag">Photos</span>
+            </article>
+
+            <article class="feature-card">
+                <div>
+                    <h2 class="feature-title">Live Data Ready</h2>
+                    <p class="feature-text">Connect Supabase to sync listings and updates in real time.</p>
+                </div>
+                <span class="feature-tag">Database</span>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        function updateNavBorder() {
+            document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
+        }
+
+        updateNavBorder();
+        window.addEventListener('scroll', updateNavBorder, { passive: true });
+    </script>
+</body>
+</html>
