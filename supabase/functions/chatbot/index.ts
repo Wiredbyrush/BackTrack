@@ -12,6 +12,32 @@ Key features: browse items with filters, submit found items with photos, image u
 The map feature is not implemented yet.
 `.trim();
 
+const refusalMessage =
+  "I can help with BackTrack and general guidance, but I can't go deep on unrelated topics.";
+
+function isBackTrackRelated(message: string) {
+  const normalized = message.toLowerCase();
+  const keywords = [
+    "backtrack",
+    "lost and found",
+    "lost",
+    "found",
+    "item",
+    "items",
+    "submit",
+    "browse",
+    "feature",
+    "features",
+    "login",
+    "log in",
+    "sign in",
+    "account",
+    "map",
+  ];
+
+  return keywords.some((keyword) => normalized.includes(keyword));
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -35,7 +61,10 @@ Deno.serve(async (req) => {
     }
 
     const systemPrompt =
-      "You are a helpful assistant. Use the provided BackTrack context when it is relevant.";
+      "You are the BackTrack assistant. Always prioritize questions about BackTrack. " +
+      "If the question is unrelated, give a brief, high-level answer (1-3 sentences), " +
+      "then invite the user back to BackTrack topics. For deep unrelated requests, reply with: " +
+      `"${refusalMessage}"`;
 
     const openAiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -49,7 +78,13 @@ Deno.serve(async (req) => {
         max_tokens: 250,
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "system", content: `Website context (optional):\n${siteContext}` },
+          { role: "system", content: `BackTrack context:\n${siteContext}` },
+          {
+            role: "system",
+            content: isBackTrackRelated(message)
+              ? "The user's question is related to BackTrack."
+              : "The user's question appears unrelated to BackTrack. Keep the answer brief and redirect."
+          },
           { role: "user", content: message },
         ],
       }),
