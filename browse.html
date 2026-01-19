@@ -769,12 +769,7 @@
         // Render items to grid
         function renderItems(items) {
             if (items.length === 0) {
-                const hasActiveFilters =
-                    (currentFilters.search && currentFilters.search.trim().length > 0) ||
-                    (currentFilters.location && currentFilters.location !== 'All Locations') ||
-                    (currentFilters.category && currentFilters.category.length > 0);
-
-                if (!hasActiveFilters && initialItemsMarkup.trim().length > 0) {
+                if (initialItemsMarkup.trim().length > 0) {
                     itemsGrid.innerHTML = initialItemsMarkup;
                     return;
                 }
