@@ -988,6 +988,28 @@
             uploadStatus.classList.toggle('error', isError);
         }
 
+        const MATCH_SUPABASE_URL = window.SUPABASE_URL || 'https://mzzcwukenxzuelgpuiap.supabase.co';
+        const MATCH_SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16emN3dWtlbnh6dWVsZ3B1aWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3OTQzMTUsImV4cCI6MjA4NDM3MDMxNX0.1JqsDG1585d9QhspNoFcBzqiaSD59ceiKQBhWJKOcdw';
+
+        async function requestImageMatch(base64DataUrl) {
+            const response = await fetch(`${MATCH_SUPABASE_URL}/functions/v1/image-match`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    apikey: MATCH_SUPABASE_ANON_KEY,
+                    Authorization: `Bearer ${MATCH_SUPABASE_ANON_KEY}`
+                },
+                body: JSON.stringify({ imageBase64: base64DataUrl })
+            });
+
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                const errorDetail = payload.error || `HTTP ${response.status}`;
+                throw new Error(errorDetail);
+            }
+            return payload;
+        }
+
         uploadBtn.addEventListener('click', () => {
             uploadInput.click();
         });
@@ -1001,17 +1023,29 @@
                 return;
             }
 
-            if (isSupabaseConfigured() && window.BackTrackDB.uploadImage) {
+            setUploadStatus('Analyzing image for AI match...');
+            const reader = new FileReader();
+            reader.onload = async (event) => {
                 try {
-                    setUploadStatus('Uploading image for AI match...');
-                    await window.BackTrackDB.uploadImage(file);
-                    setUploadStatus('Image uploaded. AI match is a demo right now.');
+                    const base64 = event.target.result;
+                    const result = await requestImageMatch(base64);
+                    const keywords = Array.isArray(result.keywords) ? result.keywords : [];
+                    const query = result.query || keywords.join(' ');
+                    if (query) {
+                        searchInput.value = query;
+                        currentFilters.search = query;
+                        loadItems();
+                    }
+                    const keywordLabel = keywords.length ? `Keywords: ${keywords.join(', ')}` : 'AI match ready.';
+                    setUploadStatus(keywordLabel);
                 } catch (error) {
-                    setUploadStatus('Upload failed. Please try again.', true);
+                    setUploadStatus('AI match failed. Please try again.', true);
                 }
-            } else {
-                setUploadStatus('Image selected. AI match is a demo right now.');
-            }
+            };
+            reader.onerror = () => {
+                setUploadStatus('Could not read that file. Try another image.', true);
+            };
+            reader.readAsDataURL(file);
         });
 
         // Initialize - check if Supabase is configured
