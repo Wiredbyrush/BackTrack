@@ -770,9 +770,22 @@
             itemsGrid.innerHTML = items.map(createItemCard).join('');
         }
 
+        function syncCategoryFiltersFromUI() {
+            currentFilters.category = [];
+            categoryCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const label = checkbox.parentElement.querySelector('.checkbox-label').textContent;
+                    currentFilters.category.push(label);
+                }
+            });
+        }
+
         // Fetch and display items
         async function loadItems() {
-            const items = await BackTrackDB.getItems(currentFilters);
+            if (!window.BackTrackDB || typeof window.BackTrackDB.getItems !== 'function') {
+                return;
+            }
+            const items = await window.BackTrackDB.getItems(currentFilters);
             renderItems(items);
         }
 
@@ -833,10 +846,13 @@
             updateNavBorder();
             window.addEventListener('scroll', updateNavBorder, { passive: true });
 
+            syncCategoryFiltersFromUI();
+
             // Check if Supabase is configured
-            if (typeof BackTrackDB !== 'undefined' &&
-                !BackTrackDB.supabase.supabaseUrl.includes('YOUR_SUPABASE')) {
+            if (window.BackTrackDB && window.BackTrackDB.config &&
+                !window.BackTrackDB.config.url.includes('YOUR_SUPABASE')) {
                 loadItems();
+                setInterval(loadItems, 20000);
             } else {
                 console.log('Supabase not configured - showing demo items');
                 // Demo items are already in HTML
