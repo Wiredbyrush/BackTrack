@@ -1036,6 +1036,10 @@
         function buildImageCandidates(imageUrl) {
             if (!imageUrl) return [];
 
+            if (imageUrl.startsWith('data:') || imageUrl.startsWith('blob:')) {
+                return [imageUrl];
+            }
+
             if (imageUrl.startsWith('http')) {
                 const candidates = [imageUrl];
                 const fixedBucket = imageUrl.replace(/\/storage\/v1\/object\/public\/[^/]+\//, '/storage/v1/object/public/images/');

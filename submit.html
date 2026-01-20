@@ -686,8 +686,13 @@
                 let imageUrl = null;
 
                 // Upload image if selected
-                if (selectedFile && typeof BackTrackDB !== 'undefined') {
-                    imageUrl = await BackTrackDB.uploadImage(selectedFile);
+                if (selectedFile) {
+                    if (typeof BackTrackDB !== 'undefined') {
+                        imageUrl = await BackTrackDB.uploadImage(selectedFile);
+                    }
+                    if (!imageUrl && previewImg.src) {
+                        imageUrl = previewImg.src;
+                    }
                 }
 
                 // Create item object
