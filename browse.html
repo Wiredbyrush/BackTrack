@@ -981,6 +981,8 @@
             return checkbox.parentElement.querySelector('.checkbox-label').textContent;
         });
 
+        let activeMatchContext = null;
+
         const demoItems = Array.from(itemsGrid.querySelectorAll('.item-card')).map((card, index) => {
             const image = card.querySelector('img');
             const name = card.querySelector('.item-name');
@@ -1008,16 +1010,39 @@
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
+        function computeMatchScore(item, keywords) {
+            if (!keywords || keywords.length === 0) return null;
+            const haystack = [
+                item.name,
+                item.description,
+                item.category,
+                item.location
+            ]
+                .filter(Boolean)
+                .join(' ')
+                .toLowerCase();
+
+            const uniqueKeywords = Array.from(new Set(keywords.map((keyword) => keyword.toLowerCase())));
+            const hits = uniqueKeywords.filter((keyword) => haystack.includes(keyword));
+            const rawScore = Math.round((hits.length / uniqueKeywords.length) * 100);
+            return Math.max(rawScore, hits.length > 0 ? 35 : 0);
+        }
+
         // Create item card HTML
-        function createItemCard(item) {
+        function createItemCard(item, matchPercent = null) {
             const placeholderImage = 'https://via.placeholder.com/400x400?text=No+Image';
-            const hasSimilarity = typeof item.similarity === 'number';
-            const matchScore = hasSimilarity ? Math.min(99, Math.max(70, Math.round(item.similarity * 100))) : null;
+            const similarityScore = typeof item.similarity === 'number'
+                ? Math.min(99, Math.max(70, Math.round(item.similarity * 100)))
+                : null;
+            const resolvedMatch = matchPercent !== null ? matchPercent : similarityScore;
+            const badge = resolvedMatch !== null
+                ? `<span class="ai-match-badge">${resolvedMatch}% AI MATCH</span>`
+                : '';
             return `
                 <div class="item-card" data-id="${item.id}">
                     <div class="item-image">
                         <img src="${item.image_url || placeholderImage}" alt="${item.name}">
-                        ${hasSimilarity ? `<span class="ai-match-badge">${matchScore}% AI MATCH</span>` : ''}
+                        ${badge}
                     </div>
                     <div class="item-info">
                         <h3 class="item-name">${item.name}</h3>
@@ -1041,8 +1066,21 @@
                 updateResultsCount(0);
                 return;
             }
-            itemsGrid.innerHTML = items.map(createItemCard).join('');
-            updateResultsCount(items.length);
+            if (activeMatchContext && Array.isArray(activeMatchContext.keywords)) {
+                const scored = items.map((item) => {
+                    const score = computeMatchScore(item, activeMatchContext.keywords);
+                    return { item, score: score ?? 0 };
+                });
+                scored.sort((a, b) => b.score - a.score);
+                itemsGrid.innerHTML = scored
+                    .map(({ item, score }) => createItemCard(item, score))
+                    .join('');
+                updateResultsCount(scored.length, showDemoFallback);
+                return;
+            }
+
+            itemsGrid.innerHTML = items.map((item) => createItemCard(item)).join('');
+            updateResultsCount(items.length, showDemoFallback);
         }
 
         function updateResultsCount(count, isDemo = false) {
@@ -1092,6 +1130,11 @@
         }
 
         function renderDemoItems() {
+            if (activeMatchContext) {
+                renderItems(demoItems);
+                return;
+            }
+
             const query = (currentFilters.search || '').trim().toLowerCase();
             if (!query) {
                 renderItems(demoItems, true);
@@ -1134,6 +1177,7 @@
         // Location selection
         locationItems.forEach(item => {
             item.addEventListener('click', () => {
+                activeMatchContext = null;
                 currentFilters.location = item.textContent;
                 locationBtn.childNodes[0].textContent = item.textContent + ' ';
                 locationMenu.style.display = 'none';
@@ -1154,6 +1198,7 @@
         // Category filter
         categoryCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', () => {
+                activeMatchContext = null;
                 const label = checkbox.parentElement.querySelector('.checkbox-label').textContent;
                 if (checkbox.checked) {
                     currentFilters.category.push(label);
@@ -1170,6 +1215,7 @@
         searchInput.addEventListener('input', () => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
+                activeMatchContext = null;
                 currentFilters.search = searchInput.value;
                 updateActiveFilters();
                 if (isSupabaseConfigured()) {
@@ -1236,15 +1282,22 @@
                     const base64 = event.target.result;
                     const result = await requestImageMatch(base64);
                     const keywords = Array.isArray(result.keywords) ? result.keywords : [];
-                    const query = result.query || keywords.join(' ');
-                    lastImageQuery = query;
+                    activeMatchContext = {
+                        keywords,
+                        description: result.description || ''
+                    };
+                    searchInput.value = '';
+                    currentFilters.search = '';
+                    lastImageQuery = result.description || '';
                     lastImageKeywords = keywords;
-                    if (query) {
-                        searchInput.value = query;
-                        currentFilters.search = query;
+                    if (isSupabaseConfigured()) {
                         loadItems();
+                    } else {
+                        renderDemoItems();
                     }
-                    const keywordLabel = keywords.length ? `Keywords: ${keywords.join(', ')}` : 'AI match ready.';
+                    const keywordLabel = keywords.length
+                        ? `Top matches based on: ${keywords.join(', ')}`
+                        : 'AI match ready.';
                     setUploadStatus(keywordLabel);
                     updateActiveFilters();
                 } catch (error) {
@@ -1263,6 +1316,7 @@
             currentFilters.category = [];
             lastImageQuery = '';
             lastImageKeywords = [];
+            activeMatchContext = null;
             searchInput.value = '';
             locationBtn.childNodes[0].textContent = 'All Locations ';
             categoryCheckboxes.forEach((checkbox) => {
@@ -1285,6 +1339,7 @@
                 checkbox.checked = true;
             });
             syncCategoryFiltersFromUI();
+            activeMatchContext = null;
 
             // Check if Supabase is configured
             if (isSupabaseConfigured()) {
