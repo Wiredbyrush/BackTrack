@@ -612,6 +612,7 @@
         }
 
         let selectedFile = null;
+        let selectedImageDataUrl = '';
 
         // Set default date to today
         const today = new Date();
@@ -656,6 +657,7 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 previewImg.src = e.target.result;
+                selectedImageDataUrl = e.target.result;
                 uploadArea.style.display = 'none';
                 imagePreview.style.display = 'block';
             };
@@ -665,6 +667,7 @@
         // Remove image
         removeImage.addEventListener('click', () => {
             selectedFile = null;
+            selectedImageDataUrl = '';
             imageInput.value = '';
             previewImg.src = '';
             uploadArea.style.display = 'flex';
@@ -700,11 +703,13 @@
                         imageUrl = await BackTrackDB.uploadImage(selectedFile);
                     }
                     if (!imageUrl) {
-                        imageUrl = previewImg.src;
+                        imageUrl = selectedImageDataUrl || previewImg.src;
                     }
                     if (!imageUrl) {
                         imageUrl = await readFileAsDataUrl(selectedFile);
                     }
+                } else if (selectedImageDataUrl) {
+                    imageUrl = selectedImageDataUrl;
                 }
 
                 // Create item object
