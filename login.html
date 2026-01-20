@@ -507,6 +507,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script>
+        if (location.hostname === 'wiredbyrush.github.io' && !location.pathname.startsWith('/backtrack-fbla/')) {
+            const targetPath = location.pathname === '/' ? '/index.html' : location.pathname;
+            location.replace(`/backtrack-fbla${targetPath}${location.search}${location.hash}`);
+        }
+
         const googleBtn = document.getElementById('googleBtn');
         const loginForm = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
@@ -514,6 +519,24 @@
         const togglePassword = document.getElementById('togglePassword');
         const statusMsg = document.getElementById('statusMsg');
         const configWarning = document.getElementById('configWarning');
+        const allowedEmails = [
+            'surdeep.thota@gmail.com',
+            'rushwanthmahendran1@gmail.com'
+        ];
+
+        function isAllowedEmail(email) {
+            return allowedEmails.includes(String(email || '').toLowerCase());
+        }
+
+        async function handleAuthenticatedUser(user) {
+            if (!user || isAllowedEmail(user.email)) {
+                return true;
+            }
+
+            await BackTrackDB.signOut();
+            showStatus('This account is not authorized for access.', 'error');
+            return false;
+        }
 
         // Toggle password visibility
         togglePassword.addEventListener('click', () => {
@@ -580,10 +603,14 @@
                 if (error) {
                     showStatus(error.message, 'error');
                 } else {
-                    showStatus('Signed in successfully! Redirecting...', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
+                    const user = data?.user || data?.session?.user;
+                    const allowed = await handleAuthenticatedUser(user);
+                    if (allowed) {
+                        showStatus('Signed in successfully! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1000);
+                    }
                 }
             } catch (err) {
                 showStatus('An error occurred. Please try again.', 'error');
@@ -592,12 +619,15 @@
 
         // Check auth state on load
         if (typeof BackTrackDB !== 'undefined') {
-            BackTrackDB.onAuthStateChange((event, user) => {
+            BackTrackDB.onAuthStateChange(async (event, user) => {
                 if (user) {
-                    showStatus('Signed in! Redirecting...', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
+                    const allowed = await handleAuthenticatedUser(user);
+                    if (allowed) {
+                        showStatus('Signed in! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1000);
+                    }
                 }
             });
         }
