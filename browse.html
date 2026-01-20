@@ -182,6 +182,27 @@
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
 
+        /* User Avatar */
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
         /* Main Layout */
         .main-container {
             display: flex;
@@ -366,6 +387,7 @@
             border-radius: 12px;
             padding: 14px 18px;
             gap: 12px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .search-bar svg {
@@ -386,6 +408,11 @@
 
         .search-bar input::placeholder {
             color: #666666;
+        }
+
+        .search-bar:focus-within {
+            border-color: rgba(245, 197, 24, 0.6);
+            box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.15);
         }
 
         .upload-btn {
@@ -428,6 +455,62 @@
 
         .upload-status.error {
             color: #fca5a5;
+        }
+
+        .search-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .results-count {
+            font-size: 13px;
+            color: #c2c2c2;
+            letter-spacing: 0.2px;
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e6e6e6;
+            font-size: 12px;
+        }
+
+        .filter-chip span {
+            color: #f5c518;
+            font-weight: 700;
+        }
+
+        .clear-filters-btn {
+            margin-left: auto;
+            background: transparent;
+            color: #f5c518;
+            border: 1px solid rgba(245, 197, 24, 0.4);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .clear-filters-btn:hover {
+            background: rgba(245, 197, 24, 0.12);
+            border-color: rgba(245, 197, 24, 0.75);
         }
 
         /* View Toggle */
@@ -520,6 +603,44 @@
             letter-spacing: 0.5px;
         }
 
+        .skeleton-card {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skeleton-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(110deg, #1a1a1a 20%, #2a2a2a 50%, #1a1a1a 80%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease infinite;
+        }
+
+        .skeleton-body {
+            padding: 14px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .skeleton-line {
+            height: 10px;
+            background: linear-gradient(110deg, #232323 20%, #2f2f2f 50%, #232323 80%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease infinite;
+            border-radius: 999px;
+        }
+
+        .skeleton-line.short {
+            width: 50%;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
         .item-info {
             padding: 14px;
         }
@@ -579,6 +700,10 @@
 
             .search-container {
                 flex-direction: column;
+            }
+
+            .clear-filters-btn {
+                margin-left: 0;
             }
         }
     </style>
@@ -692,7 +817,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <input type="text" placeholder="Search items or upload image for AI match...">
+                    <input type="text" placeholder="Search smart (earbuds, AirPods, headphones)...">
                 </div>
                 <input type="file" id="imageUploadInput" accept="image/*" class="file-input">
                 <button class="upload-btn" type="button">
@@ -705,6 +830,11 @@
                 </button>
             </div>
             <div class="upload-status" id="uploadStatus"></div>
+            <div class="search-meta">
+                <div class="results-count" id="resultsCount">Showing all items</div>
+                <div class="active-filters" id="activeFilters"></div>
+                <button class="clear-filters-btn" type="button" id="clearFiltersBtn">Clear filters</button>
+            </div>
 
             <div class="view-toggle">
                 <span>[</span>
@@ -825,11 +955,16 @@
         const uploadBtn = document.querySelector('.upload-btn');
         const uploadInput = document.getElementById('imageUploadInput');
         const uploadStatus = document.getElementById('uploadStatus');
+        const resultsCount = document.getElementById('resultsCount');
+        const activeFilters = document.getElementById('activeFilters');
+        const clearFiltersBtn = document.getElementById('clearFiltersBtn');
         const categoryCheckboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
         const locationBtn = document.querySelector('.location-btn');
         const locationMenu = document.querySelector('.location-menu');
         const locationItems = document.querySelectorAll('.location-item');
         const pageBody = document.body;
+        let lastImageQuery = '';
+        let lastImageKeywords = [];
 
         function updateNavBorder() {
             pageBody.classList.toggle('nav-scrolled', window.scrollY > 4);
@@ -851,12 +986,14 @@
             const name = card.querySelector('.item-name');
             const date = card.querySelector('.item-date');
             const location = card.querySelector('.item-location');
+            const badge = card.querySelector('.ai-match-badge');
             return {
                 id: `demo-${index}`,
                 name: name ? name.textContent.trim() : 'Item',
                 date_lost: date ? date.textContent.trim() : new Date().toISOString(),
                 location: location ? location.textContent.trim() : 'Location',
-                image_url: image ? image.getAttribute('src') : null
+                image_url: image ? image.getAttribute('src') : null,
+                similarity: badge ? 0.9 : null
             };
         });
 
@@ -874,10 +1011,13 @@
         // Create item card HTML
         function createItemCard(item) {
             const placeholderImage = 'https://via.placeholder.com/400x400?text=No+Image';
+            const hasSimilarity = typeof item.similarity === 'number';
+            const matchScore = hasSimilarity ? Math.min(99, Math.max(70, Math.round(item.similarity * 100))) : null;
             return `
                 <div class="item-card" data-id="${item.id}">
                     <div class="item-image">
                         <img src="${item.image_url || placeholderImage}" alt="${item.name}">
+                        ${hasSimilarity ? `<span class="ai-match-badge">${matchScore}% AI MATCH</span>` : ''}
                     </div>
                     <div class="item-info">
                         <h3 class="item-name">${item.name}</h3>
@@ -889,27 +1029,76 @@
         }
 
         // Render items to grid
-        function renderItems(items) {
+        function renderItems(items, showDemoFallback = false) {
             if (items.length === 0) {
-                if (initialItemsMarkup.trim().length > 0) {
+                if (showDemoFallback && initialItemsMarkup.trim().length > 0) {
                     itemsGrid.innerHTML = initialItemsMarkup;
+                    updateResultsCount(demoItems.length, true);
                     return;
                 }
 
-                itemsGrid.innerHTML = '<p style="color: #888; grid-column: 1/-1; text-align: center; padding: 40px;">No items found</p>';
+                itemsGrid.innerHTML = '<p style="color: #888; grid-column: 1/-1; text-align: center; padding: 40px;">No items found. Be the first to <a href="submit.html" style="color: #fff; text-decoration: underline;">submit an item</a>!</p>';
+                updateResultsCount(0);
                 return;
             }
             itemsGrid.innerHTML = items.map(createItemCard).join('');
+            updateResultsCount(items.length);
+        }
+
+        function updateResultsCount(count, isDemo = false) {
+            if (!resultsCount) return;
+            const label = isDemo ? 'Showing demo items' : 'Showing items';
+            resultsCount.textContent = `${label}: ${count}`;
+        }
+
+        function updateActiveFilters() {
+            if (!activeFilters || !clearFiltersBtn) return;
+            const chips = [];
+
+            if (currentFilters.search && currentFilters.search.trim()) {
+                chips.push(`<div class="filter-chip"><span>Query</span>${currentFilters.search.trim()}</div>`);
+            }
+
+            if (currentFilters.category.length > 0 && currentFilters.category.length < allCategories.length) {
+                chips.push(`<div class="filter-chip"><span>Category</span>${currentFilters.category.join(', ')}</div>`);
+            }
+
+            if (currentFilters.location && currentFilters.location !== 'All Locations') {
+                chips.push(`<div class="filter-chip"><span>Location</span>${currentFilters.location}</div>`);
+            }
+
+            if (lastImageQuery) {
+                chips.push(`<div class="filter-chip"><span>AI</span>${lastImageQuery}</div>`);
+            } else if (lastImageKeywords.length) {
+                chips.push(`<div class="filter-chip"><span>AI</span>${lastImageKeywords.join(', ')}</div>`);
+            }
+
+            activeFilters.innerHTML = chips.join('');
+            clearFiltersBtn.style.display = chips.length ? 'inline-flex' : 'none';
+        }
+
+        function renderLoadingState() {
+            const placeholders = Array.from({ length: 8 }, () => (
+                `<div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>`
+            )).join('');
+            itemsGrid.innerHTML = placeholders;
         }
 
         function renderDemoItems() {
             const query = (currentFilters.search || '').trim().toLowerCase();
             if (!query) {
-                renderItems(demoItems);
+                renderItems(demoItems, true);
                 return;
             }
             const filtered = demoItems.filter((item) => item.name.toLowerCase().includes(query));
-            renderItems(filtered);
+            renderItems(filtered, true);
         }
 
         function syncCategoryFiltersFromUI() {
@@ -921,6 +1110,7 @@
                 }
             });
             currentFilters.category = selectedCategories.length === allCategories.length ? [] : selectedCategories;
+            updateActiveFilters();
         }
 
         // Fetch and display items
@@ -929,6 +1119,7 @@
                 renderDemoItems();
                 return;
             }
+            renderLoadingState();
             const items = await window.BackTrackDB.getItems(currentFilters);
             renderItems(items);
         }
@@ -947,6 +1138,7 @@
                 locationBtn.childNodes[0].textContent = item.textContent + ' ';
                 locationMenu.style.display = 'none';
                 locationMenuOpen = false;
+                updateActiveFilters();
                 loadItems();
             });
         });
@@ -968,6 +1160,7 @@
                 } else {
                     currentFilters.category = currentFilters.category.filter(c => c !== label);
                 }
+                updateActiveFilters();
                 loadItems();
             });
         });
@@ -978,6 +1171,7 @@
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 currentFilters.search = searchInput.value;
+                updateActiveFilters();
                 if (isSupabaseConfigured()) {
                     loadItems();
                 } else {
@@ -996,8 +1190,9 @@
             uploadStatus.classList.toggle('error', isError);
         }
 
-        const MATCH_SUPABASE_URL = window.SUPABASE_URL || 'https://mzzcwukenxzuelgpuiap.supabase.co';
-        const MATCH_SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16emN3dWtlbnh6dWVsZ3B1aWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3OTQzMTUsImV4cCI6MjA4NDM3MDMxNX0.1JqsDG1585d9QhspNoFcBzqiaSD59ceiKQBhWJKOcdw';
+        // Uses credentials from supabase.js
+        const MATCH_SUPABASE_URL = window.BackTrackDB?.config?.url || 'YOUR_SUPABASE_PROJECT_URL';
+        const MATCH_SUPABASE_ANON_KEY = window.BackTrackDB?.config?.anonKey || 'YOUR_SUPABASE_ANON_KEY';
 
         async function requestImageMatch(base64DataUrl) {
             const response = await fetch(`${MATCH_SUPABASE_URL}/functions/v1/image-match`, {
@@ -1032,6 +1227,9 @@
             }
 
             setUploadStatus('Analyzing image for AI match...');
+            lastImageQuery = '';
+            lastImageKeywords = [];
+            updateActiveFilters();
             const reader = new FileReader();
             reader.onload = async (event) => {
                 try {
@@ -1039,6 +1237,8 @@
                     const result = await requestImageMatch(base64);
                     const keywords = Array.isArray(result.keywords) ? result.keywords : [];
                     const query = result.query || keywords.join(' ');
+                    lastImageQuery = query;
+                    lastImageKeywords = keywords;
                     if (query) {
                         searchInput.value = query;
                         currentFilters.search = query;
@@ -1046,6 +1246,7 @@
                     }
                     const keywordLabel = keywords.length ? `Keywords: ${keywords.join(', ')}` : 'AI match ready.';
                     setUploadStatus(keywordLabel);
+                    updateActiveFilters();
                 } catch (error) {
                     setUploadStatus('AI match failed. Please try again.', true);
                 }
@@ -1054,6 +1255,22 @@
                 setUploadStatus('Could not read that file. Try another image.', true);
             };
             reader.readAsDataURL(file);
+        });
+
+        clearFiltersBtn.addEventListener('click', () => {
+            currentFilters.search = '';
+            currentFilters.location = 'All Locations';
+            currentFilters.category = [];
+            lastImageQuery = '';
+            lastImageKeywords = [];
+            searchInput.value = '';
+            locationBtn.childNodes[0].textContent = 'All Locations ';
+            categoryCheckboxes.forEach((checkbox) => {
+                checkbox.checked = true;
+            });
+            syncCategoryFiltersFromUI();
+            updateActiveFilters();
+            loadItems();
         });
 
         // Initialize - check if Supabase is configured
@@ -1078,6 +1295,43 @@
                 renderDemoItems();
             }
         });
+
+        // Auth state - update nav bar
+        const signInBtn = document.querySelector('.sign-in-btn');
+        const avatarColors = {
+            'A': '#e91e63', 'B': '#9c27b0', 'C': '#673ab7', 'D': '#3f51b5',
+            'E': '#2196f3', 'F': '#03a9f4', 'G': '#00bcd4', 'H': '#009688',
+            'I': '#4caf50', 'J': '#8bc34a', 'K': '#cddc39', 'L': '#ffc107',
+            'M': '#ff9800', 'N': '#ff5722', 'O': '#795548', 'P': '#607d8b',
+            'Q': '#e91e63', 'R': '#9c27b0', 'S': '#673ab7', 'T': '#3f51b5',
+            'U': '#2196f3', 'V': '#03a9f4', 'W': '#00bcd4', 'X': '#009688',
+            'Y': '#4caf50', 'Z': '#8bc34a'
+        };
+
+        if (typeof BackTrackDB !== 'undefined') {
+            BackTrackDB.onAuthStateChange((event, user) => {
+                if (user) {
+                    const name = user.user_metadata?.full_name || user.email || 'U';
+                    const initial = name.charAt(0).toUpperCase();
+                    const bgColor = avatarColors[initial] || '#6366f1';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'user-avatar';
+                    avatar.textContent = initial;
+                    avatar.style.backgroundColor = bgColor;
+                    avatar.title = 'Click to sign out';
+
+                    avatar.addEventListener('click', async () => {
+                        if (confirm('Sign out?')) {
+                            await BackTrackDB.signOut();
+                            window.location.reload();
+                        }
+                    });
+
+                    signInBtn.replaceWith(avatar);
+                }
+            });
+        }
 
         // Page transitions
         const pageTransition = document.getElementById('pageTransition');

@@ -2,6 +2,12 @@
 -- Run this SQL in your Supabase SQL Editor
 
 -- ============================================
+-- EXTENSIONS
+-- ============================================
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "vector";
+
+-- ============================================
 -- ITEMS TABLE
 -- ============================================
 CREATE TABLE items (
@@ -15,7 +21,11 @@ CREATE TABLE items (
     status VARCHAR(20) DEFAULT 'lost' CHECK (status IN ('lost', 'found', 'claimed')),
     contact_email VARCHAR(255),
     contact_phone VARCHAR(20),
+    finder_name VARCHAR(255),
     submitted_by UUID REFERENCES auth.users(id),
+    ai_tags TEXT[],
+    ai_caption TEXT,
+    embedding VECTOR(1536),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -120,6 +130,67 @@ CREATE INDEX idx_items_location ON items(location);
 CREATE INDEX idx_items_date_lost ON items(date_lost);
 CREATE INDEX idx_items_status ON items(status);
 CREATE INDEX idx_items_created_at ON items(created_at DESC);
+CREATE INDEX idx_items_embedding ON items USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+
+-- ============================================
+-- SEMANTIC SEARCH FUNCTION (VECTOR)
+-- ============================================
+CREATE OR REPLACE FUNCTION search_items(
+    query_embedding VECTOR(1536),
+    match_count INT DEFAULT 30,
+    filter_category TEXT[] DEFAULT NULL,
+    filter_location TEXT DEFAULT NULL,
+    filter_start_date DATE DEFAULT NULL,
+    filter_end_date DATE DEFAULT NULL
+)
+RETURNS TABLE (
+    id UUID,
+    name VARCHAR,
+    description TEXT,
+    category VARCHAR,
+    location VARCHAR,
+    date_lost DATE,
+    image_url TEXT,
+    status VARCHAR,
+    contact_email VARCHAR,
+    contact_phone VARCHAR,
+    finder_name VARCHAR,
+    submitted_by UUID,
+    ai_tags TEXT[],
+    ai_caption TEXT,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ,
+    similarity FLOAT
+)
+LANGUAGE SQL STABLE
+AS $$
+    SELECT
+        items.id,
+        items.name,
+        items.description,
+        items.category,
+        items.location,
+        items.date_lost,
+        items.image_url,
+        items.status,
+        items.contact_email,
+        items.contact_phone,
+        items.finder_name,
+        items.submitted_by,
+        items.ai_tags,
+        items.ai_caption,
+        items.created_at,
+        items.updated_at,
+        1 - (items.embedding <=> query_embedding) AS similarity
+    FROM items
+    WHERE items.embedding IS NOT NULL
+      AND (filter_category IS NULL OR items.category = ANY(filter_category))
+      AND (filter_location IS NULL OR filter_location = 'All Locations' OR items.location = filter_location)
+      AND (filter_start_date IS NULL OR items.date_lost >= filter_start_date)
+      AND (filter_end_date IS NULL OR items.date_lost <= filter_end_date)
+    ORDER BY items.embedding <=> query_embedding
+    LIMIT match_count;
+$$;
 
 -- ============================================
 -- UPDATED_AT TRIGGER

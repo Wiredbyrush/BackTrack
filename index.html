@@ -185,6 +185,27 @@
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
 
+        /* User Avatar */
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
         /* Hero Section */
         .hero-container {
             display: flex;
@@ -1128,6 +1149,16 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer style="padding: 40px 80px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+        <div style="color: #666666; font-size: 13px;">Built for FBLA</div>
+        <div style="display: flex; gap: 32px;">
+            <a href="features.html" style="color: #666666; text-decoration: none; font-size: 13px; transition: color 0.2s;">Features</a>
+            <a href="browse.html" style="color: #666666; text-decoration: none; font-size: 13px; transition: color 0.2s;">Browse</a>
+            <a href="submit.html" style="color: #666666; text-decoration: none; font-size: 13px; transition: color 0.2s;">Submit</a>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script>
@@ -1323,8 +1354,9 @@
         chatbotToggle.addEventListener('click', () => toggleChat(true));
         chatbotClose.addEventListener('click', () => toggleChat(false));
 
-        const CHAT_SUPABASE_URL = window.SUPABASE_URL || 'https://mzzcwukenxzuelgpuiap.supabase.co';
-        const CHAT_SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16emN3dWtlbnh6dWVsZ3B1aWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3OTQzMTUsImV4cCI6MjA4NDM3MDMxNX0.1JqsDG1585d9QhspNoFcBzqiaSD59ceiKQBhWJKOcdw';
+        // Uses credentials from supabase.js
+        const CHAT_SUPABASE_URL = window.BackTrackDB?.config?.url || 'YOUR_SUPABASE_PROJECT_URL';
+        const CHAT_SUPABASE_ANON_KEY = window.BackTrackDB?.config?.anonKey || 'YOUR_SUPABASE_ANON_KEY';
 
         async function fetchChatbotReply(message) {
             if (!CHAT_SUPABASE_URL || !CHAT_SUPABASE_ANON_KEY ||
@@ -1377,6 +1409,48 @@
                 sendChat();
             }
         });
+
+        // Auth state - update nav bar
+        const signInBtn = document.querySelector('.sign-in-btn');
+        const navRight = document.querySelector('.nav-right');
+
+        // Avatar colors based on first letter
+        const avatarColors = {
+            'A': '#e91e63', 'B': '#9c27b0', 'C': '#673ab7', 'D': '#3f51b5',
+            'E': '#2196f3', 'F': '#03a9f4', 'G': '#00bcd4', 'H': '#009688',
+            'I': '#4caf50', 'J': '#8bc34a', 'K': '#cddc39', 'L': '#ffc107',
+            'M': '#ff9800', 'N': '#ff5722', 'O': '#795548', 'P': '#607d8b',
+            'Q': '#e91e63', 'R': '#9c27b0', 'S': '#673ab7', 'T': '#3f51b5',
+            'U': '#2196f3', 'V': '#03a9f4', 'W': '#00bcd4', 'X': '#009688',
+            'Y': '#4caf50', 'Z': '#8bc34a'
+        };
+
+        if (typeof BackTrackDB !== 'undefined') {
+            BackTrackDB.onAuthStateChange((event, user) => {
+                if (user) {
+                    // Get first letter of name or email
+                    const name = user.user_metadata?.full_name || user.email || 'U';
+                    const initial = name.charAt(0).toUpperCase();
+                    const bgColor = avatarColors[initial] || '#6366f1';
+
+                    // Replace button with avatar
+                    const avatar = document.createElement('div');
+                    avatar.className = 'user-avatar';
+                    avatar.textContent = initial;
+                    avatar.style.backgroundColor = bgColor;
+                    avatar.title = 'Click to sign out';
+
+                    avatar.addEventListener('click', async () => {
+                        if (confirm('Sign out?')) {
+                            await BackTrackDB.signOut();
+                            window.location.reload();
+                        }
+                    });
+
+                    signInBtn.replaceWith(avatar);
+                }
+            });
+        }
 
         // Page transitions
         const pageTransition = document.getElementById('pageTransition');

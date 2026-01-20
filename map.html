@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map - BackTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: pageLoadFadeIn 0.8s ease-out;
+        }
+
+        @keyframes pageLoadFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Page transition overlay */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        a, button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background-color: transparent;
+            height: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        body.nav-scrolled nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        body.nav-scrolled nav::after {
+            opacity: 1;
+        }
+
+        .nav-spacer {
+            height: 70px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 100%;
+        }
+
+        .nav-left img {
+            height: 70px;
+            width: auto;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .sign-in-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
+            color: #f3f4f6;
+            border: 1px solid #3f3f3f;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.35s ease, background 0.6s ease;
+            letter-spacing: 0.4px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .sign-in-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -120%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-20deg);
+            opacity: 0;
+            transition: left 0.8s ease, opacity 0.4s ease;
+        }
+
+        .sign-in-btn:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
+            color: #1a1a1a;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .sign-in-btn:hover::before {
+            left: 120%;
+            opacity: 1;
+        }
+
+        /* User Avatar */
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            padding: 24px;
+            border-right: 1px solid #1a1a1a;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 70px);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #888888;
+            letter-spacing: 0.5px;
+        }
+
+        .item-count {
+            font-size: 12px;
+            color: #666666;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+
+        /* Location Selector */
+        .location-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .location-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #888888;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+        }
+
+        .location-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }
+
+        .location-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .location-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+
+        .location-btn.active svg {
+            opacity: 1;
+        }
+
+        .location-info {
+            flex: 1;
+        }
+
+        .location-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .location-items {
+            font-size: 12px;
+            color: #666666;
+        }
+
+        .location-btn.active .location-items {
+            color: #888888;
+        }
+
+        /* Items List in Sidebar */
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .item-mini-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .item-mini-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateX(4px);
+        }
+
+        .item-mini-card.active {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .item-mini-img {
+            width: 48px;
+            height: 48px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .item-mini-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-mini-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-mini-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-mini-location {
+            font-size: 12px;
+            color: #666666;
+        }
+
+        /* Map Container */
+        .map-container {
+            flex: 1;
+            position: relative;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        /* Map Controls */
+        .map-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .map-control-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .map-control-btn:hover {
+            background: rgba(30, 30, 30, 0.95);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .map-control-btn svg {
+            width: 20px;
+            height: 20px;
+            color: #888888;
+        }
+
+        .map-control-btn:hover svg {
+            color: #ffffff;
+        }
+
+        /* Floor Selector */
+        .floor-selector {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 6px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .floor-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: #666666;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .floor-btn:hover {
+            color: #888888;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .floor-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        /* Map Visual */
+        .map-visual {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* School Map SVG Container */
+        .school-map {
+            width: 90%;
+            max-width: 900px;
+            height: auto;
+            position: relative;
+        }
+
+        .school-map svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Map Pin Markers */
+        .map-pin {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 5;
+        }
+
+        .map-pin:hover {
+            transform: scale(1.2) translateY(-4px);
+            z-index: 10;
+        }
+
+        .map-pin.active {
+            transform: scale(1.3) translateY(-6px);
+            z-index: 10;
+        }
+
+        .pin-icon {
+            width: 36px;
+            height: 44px;
+            position: relative;
+        }
+
+        .pin-icon::before {
+            content: '';
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #ffffff 0%, #d0d0d0 100%);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .pin-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 8px;
+            background: radial-gradient(ellipse, rgba(0, 0, 0, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .pin-count {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 20px;
+            height: 20px;
+            background: #000000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* Pin Popup */
+        .pin-popup {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 12px;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .map-pin:hover .pin-popup,
+        .map-pin.active .pin-popup {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pin-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: rgba(20, 20, 20, 0.95);
+        }
+
+        .popup-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .popup-count {
+            font-size: 12px;
+            color: #888888;
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 8px 14px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .view-toggle span {
+            color: #666666;
+        }
+
+        .view-toggle a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .view-toggle a.active {
+            font-weight: 700;
+        }
+
+        .view-toggle .separator {
+            color: #666666;
+            margin: 0 4px;
+        }
+
+        /* Item Detail Panel */
+        .item-detail-panel {
+            position: absolute;
+            top: 20px;
+            right: 80px;
+            width: 320px;
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            z-index: 15;
+        }
+
+        .item-detail-panel.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .detail-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 5;
+        }
+
+        .detail-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .detail-close svg {
+            width: 16px;
+            height: 16px;
+            color: #ffffff;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 200px;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detail-content {
+            padding: 20px;
+        }
+
+        .detail-category {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #888888;
+            margin-bottom: 12px;
+        }
+
+        .detail-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .detail-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .detail-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #888888;
+        }
+
+        .detail-meta-item svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0.6;
+        }
+
+        .detail-description {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .detail-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+            border: none;
+            border-radius: 12px;
+            color: #000000;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .detail-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #666666;
+            text-align: center;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.3;
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .item-detail-panel {
+                width: 280px;
+                right: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .map-controls {
+                top: 12px;
+                right: 12px;
+            }
+
+            .floor-selector {
+                bottom: 12px;
+            }
+
+            .view-toggle {
+                top: 12px;
+                left: 12px;
+            }
+
+            .item-detail-panel {
+                top: auto;
+                bottom: 80px;
+                right: 12px;
+                left: 12px;
+                width: auto;
+                max-height: 60vh;
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="nav-left">
+            <img src="logo.png" alt="BackTrack">
+        </a>
+
+        <div class="nav-center">
+            <a href="browse.html" class="nav-link">Browse</a>
+            <a href="map.html" class="nav-link active">Map</a>
+            <a href="submit.html" class="nav-link">Submit</a>
+            <a href="features.html" class="nav-link">Features</a>
+        </div>
+
+        <div class="nav-right">
+            <a class="sign-in-btn" href="login.html">Log In</a>
+        </div>
+    </nav>
+    <div class="nav-spacer"></div>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">LOCATIONS</h2>
+                <span class="item-count" id="totalCount">0 items</span>
+            </div>
+
+            <div class="location-selector" id="locationSelector">
+                <button class="location-btn active" data-location="all">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">All Locations</div>
+                        <div class="location-items" id="allLocationCount">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Gym">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6.5 6.5h11v11h-11z"/>
+                        <path d="M6.5 1v5.5M17.5 1v5.5M6.5 17.5V23M17.5 17.5V23M1 6.5h5.5M1 17.5h5.5M17.5 6.5H23M17.5 17.5H23"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Gym</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Library">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Library</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Cafeteria">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                        <line x1="6" y1="1" x2="6" y2="4"/>
+                        <line x1="10" y1="1" x2="10" y2="4"/>
+                        <line x1="14" y1="1" x2="14" y2="4"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Cafeteria</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Main Office">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Main Office</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Science Lab">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 3h6v4H9z"/>
+                        <path d="M7 7h10l3 14H4L7 7z"/>
+                        <path d="M8 15h8"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Science Lab</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Computer Lab">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Computer Lab</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Parking Lot">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Parking Lot</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+                <button class="location-btn" data-location="Auditorium">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+                    </svg>
+                    <div class="location-info">
+                        <div class="location-name">Auditorium</div>
+                        <div class="location-items">0 items</div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="sidebar-header" style="margin-top: 12px;">
+                <h2 class="sidebar-title">RECENT ITEMS</h2>
+            </div>
+
+            <div class="items-list" id="itemsList">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <p>No items in this location</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Map Area -->
+        <div class="map-container">
+            <!-- View Toggle -->
+            <div class="view-toggle">
+                <span>[</span>
+                <a href="browse.html">Grid</a>
+                <span class="separator">|</span>
+                <a href="map.html" class="active">Map</a>
+                <span>]</span>
+            </div>
+
+            <!-- Map Controls -->
+            <div class="map-controls">
+                <button class="map-control-btn" id="zoomIn" title="Zoom In">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <button class="map-control-btn" id="zoomOut" title="Zoom Out">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <button class="map-control-btn" id="resetView" title="Reset View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Map Visual -->
+            <div class="map-visual" id="mapVisual">
+                <div class="school-map" id="schoolMap">
+                    <!-- SVG School Map -->
+                    <svg viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background Grid -->
+                        <defs>
+                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="800" height="500" fill="url(#grid)"/>
+
+                        <!-- Main Building Outline -->
+                        <rect x="100" y="80" width="600" height="340" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+
+                        <!-- Left Wing - Gym -->
+                        <rect x="100" y="80" width="180" height="160" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="190" y="165" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">GYM</text>
+
+                        <!-- Cafeteria -->
+                        <rect x="100" y="260" width="180" height="160" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="190" y="345" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">CAFETERIA</text>
+
+                        <!-- Center - Main Office -->
+                        <rect x="300" y="80" width="200" height="100" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="400" y="135" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">MAIN OFFICE</text>
+
+                        <!-- Library -->
+                        <rect x="300" y="200" width="200" height="110" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="400" y="260" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">LIBRARY</text>
+
+                        <!-- Auditorium -->
+                        <rect x="300" y="330" width="200" height="90" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="400" y="380" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">AUDITORIUM</text>
+
+                        <!-- Right Wing - Science Lab -->
+                        <rect x="520" y="80" width="180" height="130" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="610" y="150" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">SCIENCE LAB</text>
+
+                        <!-- Computer Lab -->
+                        <rect x="520" y="230" width="180" height="100" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="610" y="285" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">COMPUTER LAB</text>
+
+                        <!-- Parking Lot -->
+                        <rect x="520" y="350" width="180" height="70" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                        <text x="610" y="390" fill="rgba(255,255,255,0.3)" font-size="14" text-anchor="middle" font-weight="600">PARKING</text>
+
+                        <!-- Hallways -->
+                        <rect x="280" y="80" width="20" height="340" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <rect x="500" y="80" width="20" height="340" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        <rect x="100" y="240" width="600" height="20" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                    </svg>
+
+                    <!-- Map Pins Container -->
+                    <div id="pinsContainer">
+                        <!-- Pins will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floor Selector -->
+            <div class="floor-selector">
+                <button class="floor-btn" data-floor="B1">B1</button>
+                <button class="floor-btn active" data-floor="1">Floor 1</button>
+                <button class="floor-btn" data-floor="2">Floor 2</button>
+                <button class="floor-btn" data-floor="3">Floor 3</button>
+            </div>
+
+            <!-- Item Detail Panel -->
+            <div class="item-detail-panel" id="itemDetailPanel">
+                <button class="detail-close" id="detailClose">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+                <div class="detail-image">
+                    <img id="detailImage" src="https://via.placeholder.com/320x200" alt="Item">
+                </div>
+                <div class="detail-content">
+                    <span class="detail-category" id="detailCategory">Electronics</span>
+                    <h3 class="detail-name" id="detailName">Item Name</h3>
+                    <div class="detail-meta">
+                        <div class="detail-meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <span id="detailLocation">Location</span>
+                        </div>
+                        <div class="detail-meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <span id="detailDate">Date found</span>
+                        </div>
+                    </div>
+                    <p class="detail-description" id="detailDescription">Item description will appear here.</p>
+                    <button class="detail-btn">Claim This Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        // DOM Elements
+        const locationBtns = document.querySelectorAll('.location-btn');
+        const floorBtns = document.querySelectorAll('.floor-btn');
+        const itemsList = document.getElementById('itemsList');
+        const pinsContainer = document.getElementById('pinsContainer');
+        const itemDetailPanel = document.getElementById('itemDetailPanel');
+        const detailClose = document.getElementById('detailClose');
+        const totalCount = document.getElementById('totalCount');
+        const allLocationCount = document.getElementById('allLocationCount');
+        const mapVisual = document.getElementById('mapVisual');
+        const schoolMap = document.getElementById('schoolMap');
+
+        // State
+        let currentLocation = 'all';
+        let currentFloor = '1';
+        let allItems = [];
+        let mapScale = 1;
+        let mapTranslateX = 0;
+        let mapTranslateY = 0;
+
+        // Location coordinates on the map (percentages)
+        const locationCoords = {
+            'Gym': { x: 23, y: 32 },
+            'Cafeteria': { x: 23, y: 68 },
+            'Main Office': { x: 50, y: 26 },
+            'Library': { x: 50, y: 50 },
+            'Auditorium': { x: 50, y: 75 },
+            'Science Lab': { x: 76, y: 29 },
+            'Computer Lab': { x: 76, y: 56 },
+            'Parking Lot': { x: 76, y: 77 }
+        };
+
+        // Demo items for when Supabase is not configured
+        const demoItems = [
+            { id: 1, name: 'Blue Water Bottle', location: 'Gym', category: 'Bottles', date_lost: '2024-01-15', description: 'Hydro Flask blue bottle with stickers', image_url: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400' },
+            { id: 2, name: 'AirPods Pro', location: 'Library', category: 'Electronics', date_lost: '2024-01-14', description: 'White AirPods Pro case, slightly scratched', image_url: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=400' },
+            { id: 3, name: 'Black Hoodie', location: 'Cafeteria', category: 'Clothing', date_lost: '2024-01-13', description: 'Nike hoodie size M, black with white logo', image_url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400' },
+            { id: 4, name: 'Car Keys', location: 'Parking Lot', category: 'Keys', date_lost: '2024-01-12', description: 'Toyota key fob with house key attached', image_url: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=400' },
+            { id: 5, name: 'Calculator', location: 'Science Lab', category: 'Electronics', date_lost: '2024-01-11', description: 'TI-84 Plus graphing calculator', image_url: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400' },
+            { id: 6, name: 'USB Drive', location: 'Computer Lab', category: 'Electronics', date_lost: '2024-01-10', description: 'SanDisk 32GB USB flash drive', image_url: 'https://images.unsplash.com/photo-1597673030062-0a0f1a801a31?w=400' },
+            { id: 7, name: 'Textbook', location: 'Library', category: 'Books', date_lost: '2024-01-09', description: 'AP Chemistry textbook, 10th edition', image_url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400' },
+            { id: 8, name: 'Sunglasses', location: 'Main Office', category: 'Accessories', date_lost: '2024-01-08', description: 'Ray-Ban aviator sunglasses', image_url: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400' },
+            { id: 9, name: 'Earbuds', location: 'Gym', category: 'Electronics', date_lost: '2024-01-07', description: 'Wireless earbuds with charging case', image_url: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400' },
+            { id: 10, name: 'Jacket', location: 'Auditorium', category: 'Clothing', date_lost: '2024-01-06', description: 'Denim jacket with patches', image_url: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400' }
+        ];
+
+        // Initialize nav border
+        function updateNavBorder() {
+            document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
+        }
+        updateNavBorder();
+        window.addEventListener('scroll', updateNavBorder, { passive: true });
+
+        // Check if Supabase is configured
+        function isSupabaseConfigured() {
+            return window.BackTrackDB && window.BackTrackDB.config &&
+                !window.BackTrackDB.config.url.includes('YOUR_SUPABASE');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Load items
+        async function loadItems() {
+            if (isSupabaseConfigured() && typeof window.BackTrackDB.getMapItems === 'function') {
+                allItems = await window.BackTrackDB.getMapItems();
+            } else {
+                allItems = demoItems;
+            }
+            updateLocationCounts();
+            renderMap();
+            renderItemsList();
+        }
+
+        // Update location counts
+        function updateLocationCounts() {
+            const counts = {};
+            allItems.forEach(item => {
+                counts[item.location] = (counts[item.location] || 0) + 1;
+            });
+
+            totalCount.textContent = `${allItems.length} items`;
+            allLocationCount.textContent = `${allItems.length} items`;
+
+            locationBtns.forEach(btn => {
+                const location = btn.dataset.location;
+                if (location !== 'all') {
+                    const countEl = btn.querySelector('.location-items');
+                    const count = counts[location] || 0;
+                    countEl.textContent = `${count} item${count !== 1 ? 's' : ''}`;
+                }
+            });
+        }
+
+        // Render map pins
+        function renderMap() {
+            pinsContainer.innerHTML = '';
+
+            const itemsByLocation = {};
+            const filteredItems = currentLocation === 'all'
+                ? allItems
+                : allItems.filter(item => item.location === currentLocation);
+
+            filteredItems.forEach(item => {
+                if (!itemsByLocation[item.location]) {
+                    itemsByLocation[item.location] = [];
+                }
+                itemsByLocation[item.location].push(item);
+            });
+
+            Object.entries(itemsByLocation).forEach(([location, items]) => {
+                const coords = locationCoords[location];
+                if (!coords) return;
+
+                const pin = document.createElement('div');
+                pin.className = 'map-pin';
+                pin.style.left = `${coords.x}%`;
+                pin.style.top = `${coords.y}%`;
+                pin.dataset.location = location;
+
+                pin.innerHTML = `
+                    <div class="pin-icon">
+                        <span class="pin-count">${items.length}</span>
+                    </div>
+                    <div class="pin-popup">
+                        <div class="popup-title">${location}</div>
+                        <div class="popup-count">${items.length} item${items.length !== 1 ? 's' : ''} found</div>
+                    </div>
+                `;
+
+                pin.addEventListener('click', () => {
+                    selectLocation(location);
+                    if (items.length === 1) {
+                        showItemDetail(items[0]);
+                    }
+                });
+
+                pinsContainer.appendChild(pin);
+            });
+        }
+
+        // Render items list in sidebar
+        function renderItemsList() {
+            const filteredItems = currentLocation === 'all'
+                ? allItems
+                : allItems.filter(item => item.location === currentLocation);
+
+            if (filteredItems.length === 0) {
+                itemsList.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <p>No items in this location</p>
+                    </div>
+                `;
+                return;
+            }
+
+            itemsList.innerHTML = filteredItems.slice(0, 10).map(item => `
+                <div class="item-mini-card" data-id="${item.id}">
+                    <div class="item-mini-img">
+                        <img src="${item.image_url || 'https://via.placeholder.com/48'}" alt="${item.name}">
+                    </div>
+                    <div class="item-mini-info">
+                        <div class="item-mini-name">${item.name}</div>
+                        <div class="item-mini-location">${item.location}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            itemsList.querySelectorAll('.item-mini-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const item = filteredItems.find(i => String(i.id) === card.dataset.id);
+                    if (item) showItemDetail(item);
+                });
+            });
+        }
+
+        // Select location
+        function selectLocation(location) {
+            currentLocation = location;
+
+            locationBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.location === location);
+            });
+
+            document.querySelectorAll('.map-pin').forEach(pin => {
+                pin.classList.toggle('active', pin.dataset.location === location);
+            });
+
+            renderItemsList();
+            renderMap();
+        }
+
+        // Show item detail panel
+        function showItemDetail(item) {
+            document.getElementById('detailImage').src = item.image_url || 'https://via.placeholder.com/320x200';
+            document.getElementById('detailCategory').textContent = item.category || 'Other';
+            document.getElementById('detailName').textContent = item.name;
+            document.getElementById('detailLocation').textContent = item.location;
+            document.getElementById('detailDate').textContent = formatDate(item.date_lost);
+            document.getElementById('detailDescription').textContent = item.description || 'No description available.';
+
+            itemDetailPanel.classList.add('open');
+        }
+
+        // Close detail panel
+        detailClose.addEventListener('click', () => {
+            itemDetailPanel.classList.remove('open');
+        });
+
+        // Location button handlers
+        locationBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectLocation(btn.dataset.location);
+            });
+        });
+
+        // Floor button handlers
+        floorBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentFloor = btn.dataset.floor;
+                floorBtns.forEach(b => b.classList.toggle('active', b === btn));
+            });
+        });
+
+        // Map zoom controls
+        document.getElementById('zoomIn').addEventListener('click', () => {
+            mapScale = Math.min(mapScale + 0.2, 2);
+            updateMapTransform();
+        });
+
+        document.getElementById('zoomOut').addEventListener('click', () => {
+            mapScale = Math.max(mapScale - 0.2, 0.5);
+            updateMapTransform();
+        });
+
+        document.getElementById('resetView').addEventListener('click', () => {
+            mapScale = 1;
+            mapTranslateX = 0;
+            mapTranslateY = 0;
+            updateMapTransform();
+        });
+
+        function updateMapTransform() {
+            schoolMap.style.transform = `scale(${mapScale}) translate(${mapTranslateX}px, ${mapTranslateY}px)`;
+        }
+
+        // Map drag
+        let isDragging = false;
+        let startX, startY;
+
+        mapVisual.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.map-pin')) return;
+            isDragging = true;
+            startX = e.clientX - mapTranslateX;
+            startY = e.clientY - mapTranslateY;
+            mapVisual.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            mapTranslateX = (e.clientX - startX) / mapScale;
+            mapTranslateY = (e.clientY - startY) / mapScale;
+            updateMapTransform();
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            mapVisual.style.cursor = 'grab';
+        });
+
+        mapVisual.style.cursor = 'grab';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadItems();
+
+            // Auto-refresh every 30 seconds if Supabase is configured
+            if (isSupabaseConfigured()) {
+                setInterval(loadItems, 30000);
+            }
+        });
+
+        // Auth state - update nav bar
+        const signInBtn = document.querySelector('.sign-in-btn');
+        const avatarColors = {
+            'A': '#e91e63', 'B': '#9c27b0', 'C': '#673ab7', 'D': '#3f51b5',
+            'E': '#2196f3', 'F': '#03a9f4', 'G': '#00bcd4', 'H': '#009688',
+            'I': '#4caf50', 'J': '#8bc34a', 'K': '#cddc39', 'L': '#ffc107',
+            'M': '#ff9800', 'N': '#ff5722', 'O': '#795548', 'P': '#607d8b',
+            'Q': '#e91e63', 'R': '#9c27b0', 'S': '#673ab7', 'T': '#3f51b5',
+            'U': '#2196f3', 'V': '#03a9f4', 'W': '#00bcd4', 'X': '#009688',
+            'Y': '#4caf50', 'Z': '#8bc34a'
+        };
+
+        if (typeof BackTrackDB !== 'undefined') {
+            BackTrackDB.onAuthStateChange((event, user) => {
+                if (user) {
+                    const name = user.user_metadata?.full_name || user.email || 'U';
+                    const initial = name.charAt(0).toUpperCase();
+                    const bgColor = avatarColors[initial] || '#6366f1';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'user-avatar';
+                    avatar.textContent = initial;
+                    avatar.style.backgroundColor = bgColor;
+                    avatar.title = 'Click to sign out';
+
+                    avatar.addEventListener('click', async () => {
+                        if (confirm('Sign out?')) {
+                            await BackTrackDB.signOut();
+                            window.location.reload();
+                        }
+                    });
+
+                    signInBtn.replaceWith(avatar);
+                }
+            });
+        }
+
+        // Page transitions
+        const pageTransition = document.getElementById('pageTransition');
+        const transitionLinks = document.querySelectorAll('a[href$=".html"]');
+
+        transitionLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href === window.location.pathname.split('/').pop() || href.startsWith('http')) return;
+
+                e.preventDefault();
+                pageTransition.classList.add('active');
+
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 400);
+            });
+        });
+    </script>
+</body>
+</html>

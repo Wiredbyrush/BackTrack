@@ -592,9 +592,9 @@
 
         // Check auth state on load
         if (typeof BackTrackDB !== 'undefined') {
-            BackTrackDB.onAuthStateChange((event, session) => {
-                if (session?.user) {
-                    showStatus('Already signed in! Redirecting...', 'success');
+            BackTrackDB.onAuthStateChange((event, user) => {
+                if (user) {
+                    showStatus('Signed in! Redirecting...', 'success');
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);

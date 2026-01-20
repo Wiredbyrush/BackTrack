@@ -1,9 +1,8 @@
 // Avoid re-defining Supabase client if the script is loaded twice.
 if (!window.BackTrackDB) {
     // Supabase Configuration
-    // Replace these with your actual Supabase project credentials
-    const SUPABASE_URL = window.SUPABASE_URL || 'https://mzzcwukenxzuelgpuiap.supabase.co';
-    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16emN3dWtlbnh6dWVsZ3B1aWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3OTQzMTUsImV4cCI6MjA4NDM3MDMxNX0.1JqsDG1585d9QhspNoFcBzqiaSD59ceiKQBhWJKOcdw';
+    const SUPABASE_URL = 'https://imdumigrlvujbyvczbpm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltZHVtaWdybHZ1amJ5dmN6YnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NjcwMTQsImV4cCI6MjA4NDQ0MzAxNH0.cm68e3sGIolEqIl-H4vlJGhE7YISe1vKqAoQncKWYsE';
 
     // Initialize Supabase client
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -23,6 +22,10 @@ function isSupabaseConfigured() {
 
 // Get all items (with optional filters)
 async function getItems(filters = {}) {
+    if (filters.search && filters.search.trim().length > 0) {
+        return searchItems(filters.search, filters);
+    }
+
     let query = supabase
         .from('items')
         .select('*')
@@ -89,7 +92,7 @@ async function addItem(item) {
         return null;
     }
 
-    return data[0];
+    return data?.[0] || null;
 }
 
 // Update item
@@ -255,6 +258,26 @@ async function sendChatMessage(message) {
 }
 
 // ============================================
+// SEMANTIC SEARCH (EMBEDDINGS)
+// ============================================
+
+async function searchItems(query, filters = {}) {
+    const { data, error } = await supabase.functions.invoke('search-items', {
+        body: {
+            query,
+            filters
+        }
+    });
+
+    if (error) {
+        console.error('Error searching items:', error);
+        return [];
+    }
+
+    return data?.items || [];
+}
+
+// ============================================
 // EXPORT FOR USE IN OTHER FILES
 // ============================================
 
@@ -281,6 +304,7 @@ async function sendChatMessage(message) {
     // Map + chatbot
     getMapItems,
     sendChatMessage,
+    searchItems,
 
     isSupabaseConfigured,
 
