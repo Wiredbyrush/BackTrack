@@ -1010,6 +1010,14 @@
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
+        function getImageUrl(imageUrl) {
+            if (!imageUrl) return null;
+            if (imageUrl.startsWith('http')) return imageUrl;
+            const baseUrl = window.BackTrackDB?.config?.url || 'https://mzzcwukenxzuelgpuiap.supabase.co';
+            const cleanPath = imageUrl.replace(/^\/+/, '');
+            return `${baseUrl}/storage/v1/object/public/images/${cleanPath}`;
+        }
+
         function computeMatchScore(item, keywords) {
             if (!keywords || keywords.length === 0) return null;
             const haystack = [
@@ -1031,6 +1039,7 @@
         // Create item card HTML
         function createItemCard(item, matchPercent = null) {
             const placeholderImage = 'https://via.placeholder.com/400x400?text=No+Image';
+            const resolvedImage = getImageUrl(item.image_url) || placeholderImage;
             const similarityScore = typeof item.similarity === 'number'
                 ? Math.min(99, Math.max(70, Math.round(item.similarity * 100)))
                 : null;
@@ -1041,7 +1050,7 @@
             return `
                 <div class="item-card" data-id="${item.id}">
                     <div class="item-image">
-                        <img src="${item.image_url || placeholderImage}" alt="${item.name}">
+                        <img src="${resolvedImage}" alt="${item.name}" onerror="this.onerror=null;this.src='${placeholderImage}';">
                         ${badge}
                     </div>
                     <div class="item-info">
