@@ -663,6 +663,29 @@
             color: #666666;
         }
 
+        .image-debug {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #888888;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .image-debug button {
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            color: #bdbdbd;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+
+        .image-debug span {
+            word-break: break-all;
+        }
+
         /* Responsive */
         @media (max-width: 1200px) {
             .items-grid {
@@ -1070,6 +1093,10 @@
                         <h3 class="item-name">${item.name}</h3>
                         <p class="item-date">${formatDate(item.date_lost)}</p>
                         <p class="item-location">${item.location}</p>
+                        <div class="image-debug">
+                            <button type="button" class="debug-toggle" data-image-path="${item.image_url || ''}">Show image URL</button>
+                            <span class="debug-value" hidden></span>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1094,6 +1121,26 @@
                 };
                 img.onerror = () => tryNext();
                 tryNext();
+            });
+
+            const toggles = itemsGrid.querySelectorAll('.debug-toggle');
+            toggles.forEach((toggle) => {
+                toggle.addEventListener('click', () => {
+                    const value = toggle.getAttribute('data-image-path') || '(empty)';
+                    const container = toggle.parentElement;
+                    const label = container.querySelector('.debug-value');
+                    if (!label) return;
+                    const isHidden = label.hasAttribute('hidden');
+                    if (isHidden) {
+                        label.textContent = value;
+                        label.removeAttribute('hidden');
+                        toggle.textContent = 'Hide image URL';
+                    } else {
+                        label.textContent = '';
+                        label.setAttribute('hidden', '');
+                        toggle.textContent = 'Show image URL';
+                    }
+                });
             });
         }
 
