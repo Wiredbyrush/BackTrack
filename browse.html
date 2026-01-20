@@ -1010,19 +1010,26 @@
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
-        function getImageUrl(imageUrl) {
-            if (!imageUrl) return null;
-            if (imageUrl.startsWith('http')) return imageUrl;
-            const cleanPath = imageUrl.replace(/^\/+/, '');
-            if (window.BackTrackDB?.supabase?.storage) {
-                const { data } = window.BackTrackDB.supabase
-                    .storage
-                    .from('images')
-                    .getPublicUrl(cleanPath);
-                return data?.publicUrl || null;
+        function buildImageCandidates(imageUrl) {
+            if (!imageUrl) return [];
+
+            if (imageUrl.startsWith('http')) {
+                const candidates = [imageUrl];
+                const fixedBucket = imageUrl.replace(/\/storage\/v1\/object\/public\/[^/]+\//, '/storage/v1/object/public/images/');
+                if (fixedBucket !== imageUrl) {
+                    candidates.push(fixedBucket);
+                }
+                return candidates;
             }
+
+            const cleanPath = imageUrl.replace(/^\/+/, '');
             const baseUrl = window.BackTrackDB?.config?.url || 'https://mzzcwukenxzuelgpuiap.supabase.co';
-            return `${baseUrl}/storage/v1/object/public/images/${encodeURI(cleanPath)}`;
+            const paths = [];
+            if (!cleanPath.startsWith('items/')) {
+                paths.push(`items/${cleanPath}`);
+            }
+            paths.push(cleanPath);
+            return paths.map((path) => `${baseUrl}/storage/v1/object/public/images/${encodeURI(path)}`);
         }
 
         function computeMatchScore(item, keywords) {
@@ -1045,7 +1052,7 @@
 
         // Create item card HTML
         function createItemCard(item, matchPercent = null) {
-            const placeholderImage = 'https://via.placeholder.com/400x400?text=No+Image';
+            const placeholderImage = 'logo.png';
             const similarityScore = typeof item.similarity === 'number'
                 ? Math.min(99, Math.max(70, Math.round(item.similarity * 100)))
                 : null;
@@ -1070,16 +1077,23 @@
 
         // Render items to grid
         function hydrateItemImages() {
-            const placeholder = 'https://via.placeholder.com/400x400?text=No+Image';
+            const placeholder = 'logo.png';
             const images = itemsGrid.querySelectorAll('.item-image-img');
             images.forEach((img) => {
                 const path = img.getAttribute('data-image-path');
-                const resolved = getImageUrl(path);
-                img.src = resolved || placeholder;
-                img.onerror = () => {
-                    img.onerror = null;
-                    img.src = placeholder;
+                const candidates = buildImageCandidates(path);
+                let index = 0;
+                const tryNext = () => {
+                    if (index >= candidates.length) {
+                        img.src = placeholder;
+                        img.onerror = null;
+                        return;
+                    }
+                    img.src = candidates[index];
+                    index += 1;
                 };
+                img.onerror = () => tryNext();
+                tryNext();
             });
         }
 
