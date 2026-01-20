@@ -671,6 +671,15 @@
             imagePreview.style.display = 'none';
         });
 
+        function readFileAsDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read file'));
+                reader.readAsDataURL(file);
+            });
+        }
+
         // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -690,8 +699,11 @@
                     if (typeof BackTrackDB !== 'undefined') {
                         imageUrl = await BackTrackDB.uploadImage(selectedFile);
                     }
-                    if (!imageUrl && previewImg.src) {
+                    if (!imageUrl) {
                         imageUrl = previewImg.src;
+                    }
+                    if (!imageUrl) {
+                        imageUrl = await readFileAsDataUrl(selectedFile);
                     }
                 }
 
