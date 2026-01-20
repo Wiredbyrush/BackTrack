@@ -1036,20 +1036,21 @@
         function buildImageCandidates(imageUrl) {
             if (!imageUrl) return [];
 
-            if (imageUrl.startsWith('data:') || imageUrl.startsWith('blob:')) {
-                return [imageUrl];
+            const trimmed = imageUrl.trim();
+            if (trimmed.startsWith('data:') || trimmed.startsWith('blob:')) {
+                return [trimmed.replace(/\s+/g, '')];
             }
 
-            if (imageUrl.startsWith('http')) {
-                const candidates = [imageUrl];
-                const fixedBucket = imageUrl.replace(/\/storage\/v1\/object\/public\/[^/]+\//, '/storage/v1/object/public/images/');
-                if (fixedBucket !== imageUrl) {
+            if (trimmed.startsWith('http')) {
+                const candidates = [trimmed];
+                const fixedBucket = trimmed.replace(/\/storage\/v1\/object\/public\/[^/]+\//, '/storage/v1/object/public/images/');
+                if (fixedBucket !== trimmed) {
                     candidates.push(fixedBucket);
                 }
                 return candidates;
             }
 
-            const cleanPath = imageUrl.replace(/^\/+/, '');
+            const cleanPath = trimmed.replace(/^\/+/, '');
             const baseUrl = window.BackTrackDB?.config?.url || 'https://mzzcwukenxzuelgpuiap.supabase.co';
             const paths = [];
             if (!cleanPath.startsWith('items/')) {
@@ -1080,6 +1081,15 @@
         // Create item card HTML
         function createItemCard(item, matchPercent = null) {
             const placeholderImage = 'logo.png';
+            const rawImage = item.image_url || '';
+            const immediateCandidates = buildImageCandidates(rawImage);
+            const initialSrc = immediateCandidates.length &&
+                (rawImage.startsWith('data:') || rawImage.startsWith('blob:') || rawImage.startsWith('http'))
+                ? immediateCandidates[0]
+                : placeholderImage;
+            const dataPath = (rawImage.startsWith('data:') || rawImage.startsWith('blob:') || rawImage.startsWith('http'))
+                ? ''
+                : rawImage;
             const similarityScore = typeof item.similarity === 'number'
                 ? Math.min(99, Math.max(70, Math.round(item.similarity * 100)))
                 : null;
@@ -1090,7 +1100,7 @@
             return `
                 <div class="item-card" data-id="${item.id}">
                     <div class="item-image">
-                        <img class="item-image-img" src="${placeholderImage}" data-image-path="${item.image_url || ''}" alt="${item.name}">
+                        <img class="item-image-img" src="${initialSrc}" data-image-path="${dataPath}" data-image-raw="${rawImage}" alt="${item.name}">
                         ${badge}
                     </div>
                     <div class="item-info">
@@ -1098,7 +1108,7 @@
                         <p class="item-date">${formatDate(item.date_lost)}</p>
                         <p class="item-location">${item.location}</p>
                         <div class="image-debug">
-                            <button type="button" class="debug-toggle" data-image-path="${item.image_url || ''}">Show image URL</button>
+                            <button type="button" class="debug-toggle" data-image-path="${rawImage}">Show image URL</button>
                             <span class="debug-value" hidden></span>
                         </div>
                     </div>
@@ -1112,6 +1122,9 @@
             const images = itemsGrid.querySelectorAll('.item-image-img');
             images.forEach((img) => {
                 const path = img.getAttribute('data-image-path');
+                if (!path) {
+                    return;
+                }
                 const candidates = buildImageCandidates(path);
                 let index = 0;
                 const tryNext = () => {
