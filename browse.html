@@ -340,17 +340,6 @@
             font-size: 12px;
         }
 
-        .date-apply {
-            margin-top: 6px;
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            border-radius: 999px;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
 
         .location-dropdown {
             position: relative;
@@ -858,7 +847,6 @@
                     <input type="date" class="date-input" id="startDate">
                     <label class="date-label">End date</label>
                     <input type="date" class="date-input" id="endDate">
-                    <button class="date-apply" type="button" id="applyDateBtn">Apply</button>
                 </div>
             </div>
 
@@ -1035,7 +1023,6 @@
         const dateRangePanel = document.getElementById('dateRangePanel');
         const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
-        const applyDateBtn = document.getElementById('applyDateBtn');
         const resultsCount = document.getElementById('resultsCount');
         const activeFilters = document.getElementById('activeFilters');
         const clearFiltersBtn = document.getElementById('clearFiltersBtn');
@@ -1389,14 +1376,16 @@
             dateRangePanel.classList.toggle('active');
         });
 
-        applyDateBtn.addEventListener('click', () => {
+        function applyDateRange() {
             activeMatchContext = null;
             currentFilters.startDate = startDateInput.value;
             currentFilters.endDate = endDateInput.value;
             updateActiveFilters();
             loadItems();
-            dateRangePanel.classList.remove('active');
-        });
+        }
+
+        startDateInput.addEventListener('change', applyDateRange);
+        endDateInput.addEventListener('change', applyDateRange);
 
         // Search functionality
         let searchTimeout;
