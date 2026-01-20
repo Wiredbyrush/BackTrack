@@ -214,6 +214,21 @@
             min-height: calc(100vh - 70px);
             padding: 40px 80px 60px;
             position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+            mask-image: radial-gradient(circle at 35% 20%, rgba(0, 0, 0, 0.9), transparent 70%);
         }
 
         .hero-content {
@@ -546,6 +561,7 @@
             position: relative;
             height: 600px;
             perspective: 1200px;
+            z-index: 2;
             animation: slideInRight 0.8s ease-out 0.1s backwards;
         }
 
