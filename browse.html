@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
     <title>Browse Items - BackTrack</title>
+        <script>
+            // Disable pulsing/flashing animations site-wide
+            window.__DISABLE_ANIMATIONS__ = true;
+        </script>
+        <style>
+            /* Disable CSS animations (stops pulsing/flashing indicators) but keep final states visible */
+            * { animation: none !important; -webkit-animation: none !important; }
+        </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
     <style>
         * {
             margin: 0;
@@ -50,6 +63,13 @@
         .page-transition.active {
             opacity: 1;
             pointer-events: all;
+        }
+
+        /* Focus styles for keyboard navigation (Accessibility) */
+        *:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            outline-offset: 3px;
+            border-radius: 4px;
         }
 
         a, button {
@@ -615,6 +635,26 @@
             overflow: hidden;
         }
 
+        .save-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+
+        .item-card[data-saved="true"] .save-btn {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+        }
+
         .item-image img {
             width: 100%;
             height: 100%;
@@ -694,6 +734,28 @@
             color: #666666;
         }
 
+        .claim-card-btn {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px 0;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+        .claim-card-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
         .image-debug {
             margin-top: 8px;
             font-size: 11px;
@@ -761,33 +823,39 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="css/nav-auth.css">
+    <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
+    <!-- Skip to Content (Accessibility) -->
+    <a href="#main-content" style="position: absolute; top: -100px; left: 0; background: #ffffff; color: #000000; padding: 12px 24px; z-index: 10000; font-weight: 600; font-size: 14px; transition: top 0.2s;" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Skip to main content</a>
+
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition"></div>
 
     <!-- Navigation -->
-    <nav>
-        <a href="index.html" class="nav-left">
-            <img src="logo.png" alt="BackTrack">
+    <nav aria-label="Main navigation" role="navigation">
+        <a href="index.html" class="nav-left" aria-label="BackTrack Home">
+            <img src="logo.png" alt="BackTrack - Lost and Found System">
         </a>
 
-        <div class="nav-center">
-            <a href="browse.html" class="nav-link active">Browse</a>
-            <a href="map.html" class="nav-link">Map</a>
-            <a href="submit.html" class="nav-link">Submit</a>
-            <a href="features.html" class="nav-link">Features</a>
+        <div class="nav-center" role="menubar">
+            <a href="browse.html" class="nav-link active" role="menuitem" aria-current="page">Browse</a>
+            <a href="map.html" class="nav-link" role="menuitem">Map</a>
+            <a href="submit.html" class="nav-link" role="menuitem">Submit</a>
+            <a href="features.html" class="nav-link" role="menuitem">Features</a>
+            <a href="sources.html" class="nav-link" role="menuitem">Sources</a>
         </div>
 
         <div class="nav-right">
-            <a class="sign-in-btn" href="login.html">Log In</a>
+            <a class="sign-in-btn" href="login.html" aria-label="Log in to your account">Log In</a>
         </div>
     </nav>
     <div class="nav-spacer"></div>
 
-    <div class="main-container">
+    <div class="main-container" role="main" id="main-content">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" aria-label="Filter options">
             <h2 class="sidebar-title">FILTERS</h2>
 
             <div class="filter-section">
@@ -872,6 +940,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="filter-section">
+                <h3 class="filter-label">Saved</h3>
+                <label class="checkbox-item">
+                    <input type="checkbox" id="savedToggle">
+                    <span class="checkbox-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </span>
+                    <span class="checkbox-label">Saved items only</span>
+                </label>
+            </div>
         </aside>
 
         <!-- Content -->
@@ -882,10 +963,10 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <input type="text" placeholder="Search smart (earbuds, AirPods, headphones)...">
+                    <input type="text" placeholder="Search smart (earbuds, AirPods, headphones)..." aria-label="Search found items">
                 </div>
-                <input type="file" id="imageUploadInput" accept="image/*" class="file-input">
-                <button class="upload-btn" type="button">
+                <input type="file" id="imageUploadInput" accept="image/*" class="file-input" aria-label="Upload an image for matching">
+                <button class="upload-btn" type="button" aria-label="Upload image for AI matching">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                         <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -1057,6 +1138,7 @@
             border-radius: 50%;
             box-shadow: 0 0 8px rgba(245, 197, 24, 0.5);
             animation: pulse 2s ease-in-out infinite;
+            display: none;
         }
 
         @keyframes pulse {
@@ -1198,26 +1280,9 @@
 
     <div class="chatbot-widget">
         <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat assistant">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="4" y="6" width="16" height="12" rx="3" fill="url(#robotGradB)" stroke="#ffffff" stroke-width="1.5"/>
-                <circle cx="9" cy="11" r="2" fill="#0a0a0a"/>
-                <circle cx="15" cy="11" r="2" fill="#0a0a0a"/>
-                <circle cx="9.5" cy="10.5" r="0.8" fill="#ffffff"/>
-                <circle cx="15.5" cy="10.5" r="0.8" fill="#ffffff"/>
-                <rect x="8" y="14" width="8" height="2" rx="1" fill="#0a0a0a"/>
-                <rect x="9" y="14.5" width="1.5" height="1" rx="0.5" fill="#f5c518"/>
-                <rect x="11.25" y="14.5" width="1.5" height="1" rx="0.5" fill="#f5c518"/>
-                <rect x="13.5" y="14.5" width="1.5" height="1" rx="0.5" fill="#f5c518"/>
-                <line x1="12" y1="6" x2="12" y2="3" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
-                <circle cx="12" cy="2.5" r="1.5" fill="#f5c518"/>
-                <rect x="1" y="9" width="3" height="6" rx="1" fill="#ffffff"/>
-                <rect x="20" y="9" width="3" height="6" rx="1" fill="#ffffff"/>
-                <defs>
-                    <linearGradient id="robotGradB" x1="4" y1="6" x2="20" y2="18" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ffffff"/>
-                        <stop offset="1" stop-color="#d0d0d0"/>
-                    </linearGradient>
-                </defs>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                <circle cx="9" cy="10" r="1" fill="#ffffff"/><circle cx="12" cy="10" r="1" fill="#ffffff"/><circle cx="15" cy="10" r="1" fill="#ffffff"/>
             </svg>
         </button>
         <div class="chatbot-panel" id="chatbotPanel">
@@ -1237,6 +1302,44 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer style="padding: 60px 80px 40px; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;">
+            <div>
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
+                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized lost-and-found system for students and staff. Built for FBLA Coding & Programming.</p>
+            </div>
+            <div>
+                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Product</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse Items</a>
+                    <a href="submit.html" style="color: #777777; text-decoration: none; font-size: 14px;">Submit Item</a>
+                    <a href="claim.html" style="color: #777777; text-decoration: none; font-size: 14px;">Claim Item</a>
+                    <a href="map.html" style="color: #777777; text-decoration: none; font-size: 14px;">Campus Map</a>
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Resources</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <a href="features.html" style="color: #777777; text-decoration: none; font-size: 14px;">Features</a>
+                    <a href="sources.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sources</a>
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Account</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <a href="login.html" style="color: #777777; text-decoration: none; font-size: 14px;">Log In</a>
+                    <a href="signup.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sign Up</a>
+                    <a href="profile.html" style="color: #777777; text-decoration: none; font-size: 14px;">Profile</a>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
+            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Coding &amp; Programming.</div>
+            <div style="color: #444444; font-size: 13px;">Made by BackTrack Team</div>
+        </div>
+    </footer>
+
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
@@ -1244,6 +1347,30 @@
         // DOM Elements
         const itemsGrid = document.querySelector('.items-grid');
         const initialItemsMarkup = itemsGrid.innerHTML;
+
+        itemsGrid.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.closest('.debug-toggle')) return;
+            const saveBtn = target.closest('.save-btn');
+            if (saveBtn) {
+                event.stopPropagation();
+                const card = saveBtn.closest('.item-card');
+                const id = card ? card.dataset.id : null;
+                if (id) {
+                    const saved = toggleSavedItem(id);
+                    card.dataset.saved = saved;
+                    saveBtn.textContent = saved ? 'Saved' : 'Save';
+                    saveBtn.setAttribute('aria-pressed', saved ? 'true' : 'false');
+                }
+                return;
+            }
+            const card = target.closest('.item-card');
+            if (!card) return;
+            const id = card.dataset.id;
+            if (id) {
+                window.location.href = `claim.html?item=${id}`;
+            }
+        });
         const searchInput = document.querySelector('.search-bar input');
         const uploadBtn = document.querySelector('.upload-btn');
         const uploadInput = document.getElementById('imageUploadInput');
@@ -1256,6 +1383,7 @@
         const activeFilters = document.getElementById('activeFilters');
         const clearFiltersBtn = document.getElementById('clearFiltersBtn');
         const categoryCheckboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
+        const savedToggle = document.getElementById('savedToggle');
         const locationBtn = document.querySelector('.location-btn');
         const locationMenu = document.querySelector('.location-menu');
         const locationItems = document.querySelectorAll('.location-item');
@@ -1273,7 +1401,8 @@
             location: 'All Locations',
             search: '',
             startDate: '',
-            endDate: ''
+            endDate: '',
+            savedOnly: false
         };
 
         const allCategories = Array.from(categoryCheckboxes).map((checkbox) => {
@@ -1307,6 +1436,33 @@
         function formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function getSavedItems() {
+            try {
+                return new Set(JSON.parse(localStorage.getItem('savedItems') || '[]'));
+            } catch (err) {
+                return new Set();
+            }
+        }
+
+        function setSavedItems(ids) {
+            localStorage.setItem('savedItems', JSON.stringify(Array.from(ids)));
+        }
+
+        function isSavedItem(id) {
+            return getSavedItems().has(id);
+        }
+
+        function toggleSavedItem(id) {
+            const saved = getSavedItems();
+            if (saved.has(id)) {
+                saved.delete(id);
+            } else {
+                saved.add(id);
+            }
+            setSavedItems(saved);
+            return saved.has(id);
         }
 
         function buildImageCandidates(imageUrl) {
@@ -1373,20 +1529,21 @@
             const badge = resolvedMatch !== null
                 ? `<span class="ai-match-badge">${resolvedMatch}% AI MATCH</span>`
                 : '';
+            const saved = isSavedItem(item.id);
             return `
-                <div class="item-card" data-id="${item.id}">
+                <div class="item-card" data-id="${item.id}" data-saved="${saved}">
                     <div class="item-image">
                         <img class="item-image-img" src="${initialSrc}" data-image-path="${dataPath}" data-image-raw="${rawImage}" alt="${item.name}">
                         ${badge}
+                        <button class="save-btn" type="button" aria-pressed="${saved}" aria-label="Save item">
+                            ${saved ? 'Saved' : 'Save'}
+                        </button>
                     </div>
                     <div class="item-info">
                         <h3 class="item-name">${item.name}</h3>
                         <p class="item-date">${formatDate(item.date_lost)}</p>
                         <p class="item-location">${item.location}</p>
-                        <div class="image-debug">
-                            <button type="button" class="debug-toggle" data-image-path="${rawImage}">Show image URL</button>
-                            <span class="debug-value" hidden></span>
-                        </div>
+                        <button type="button" class="claim-card-btn" onclick="event.stopPropagation(); window.location.href='claim.html?item=${item.id}'">Claim Item</button>
                     </div>
                 </div>
             `;
@@ -1438,7 +1595,13 @@
         }
 
         function renderItems(items, showDemoFallback = false) {
-            if (items.length === 0) {
+            let visibleItems = items;
+            if (currentFilters.savedOnly) {
+                const saved = getSavedItems();
+                visibleItems = items.filter(item => saved.has(item.id));
+            }
+
+            if (visibleItems.length === 0) {
                 if (showDemoFallback && initialItemsMarkup.trim().length > 0) {
                     itemsGrid.innerHTML = initialItemsMarkup;
                     updateResultsCount(demoItems.length, true);
@@ -1450,7 +1613,7 @@
                 return;
             }
             if (activeMatchContext && Array.isArray(activeMatchContext.keywords)) {
-                const scored = items.map((item) => {
+                const scored = visibleItems.map((item) => {
                     const score = computeMatchScore(item, activeMatchContext.keywords);
                     return { item, score: score ?? 0 };
                 });
@@ -1463,9 +1626,9 @@
                 return;
             }
 
-            itemsGrid.innerHTML = items.map((item) => createItemCard(item)).join('');
+            itemsGrid.innerHTML = visibleItems.map((item) => createItemCard(item)).join('');
             hydrateItemImages();
-            updateResultsCount(items.length, showDemoFallback);
+            updateResultsCount(visibleItems.length, showDemoFallback);
         }
 
         function updateResultsCount(count, isDemo = false) {
@@ -1494,6 +1657,10 @@
                 const startLabel = currentFilters.startDate || 'Any';
                 const endLabel = currentFilters.endDate || 'Any';
                 chips.push(`<div class="filter-chip"><span>Date</span>${startLabel} → ${endLabel}</div>`);
+            }
+
+            if (currentFilters.savedOnly) {
+                chips.push('<div class="filter-chip"><span>Saved</span>Only</div>');
             }
 
             if (lastImageQuery) {
@@ -1600,6 +1767,14 @@
                 loadItems();
             });
         });
+
+        if (savedToggle) {
+            savedToggle.addEventListener('change', () => {
+                currentFilters.savedOnly = savedToggle.checked;
+                updateActiveFilters();
+                loadItems();
+            });
+        }
 
         datePickerBtn.addEventListener('click', () => {
             dateRangePanel.classList.toggle('active');
@@ -1722,6 +1897,7 @@
             currentFilters.category = [];
             currentFilters.startDate = '';
             currentFilters.endDate = '';
+            currentFilters.savedOnly = false;
             lastImageQuery = '';
             lastImageKeywords = [];
             activeMatchContext = null;
@@ -1732,6 +1908,7 @@
             categoryCheckboxes.forEach((checkbox) => {
                 checkbox.checked = true;
             });
+            if (savedToggle) savedToggle.checked = false;
             syncCategoryFiltersFromUI();
             updateActiveFilters();
             loadItems();
@@ -1762,42 +1939,6 @@
             }
         });
 
-        // Auth state - update nav bar
-        const signInBtn = document.querySelector('.sign-in-btn');
-        const avatarColors = {
-            'A': '#e91e63', 'B': '#9c27b0', 'C': '#673ab7', 'D': '#3f51b5',
-            'E': '#2196f3', 'F': '#03a9f4', 'G': '#00bcd4', 'H': '#009688',
-            'I': '#4caf50', 'J': '#8bc34a', 'K': '#cddc39', 'L': '#ffc107',
-            'M': '#ff9800', 'N': '#ff5722', 'O': '#795548', 'P': '#607d8b',
-            'Q': '#e91e63', 'R': '#9c27b0', 'S': '#673ab7', 'T': '#3f51b5',
-            'U': '#2196f3', 'V': '#03a9f4', 'W': '#00bcd4', 'X': '#009688',
-            'Y': '#4caf50', 'Z': '#8bc34a'
-        };
-
-        if (typeof BackTrackDB !== 'undefined') {
-            BackTrackDB.onAuthStateChange((event, user) => {
-                if (user) {
-                    const name = user.user_metadata?.full_name || user.email || 'U';
-                    const initial = name.charAt(0).toUpperCase();
-                    const bgColor = avatarColors[initial] || '#6366f1';
-
-                    const avatar = document.createElement('div');
-                    avatar.className = 'user-avatar';
-                    avatar.textContent = initial;
-                    avatar.style.backgroundColor = bgColor;
-                    avatar.title = 'Click to sign out';
-
-                    avatar.addEventListener('click', async () => {
-                        if (confirm('Sign out?')) {
-                            await BackTrackDB.signOut();
-                            window.location.reload();
-                        }
-                    });
-
-                    signInBtn.replaceWith(avatar);
-                }
-            });
-        }
 
         // Chatbot
         const chatbotToggle = document.getElementById('chatbotToggle');
@@ -1882,5 +2023,7 @@
             });
         });
     </script>
+    <script src="js/nav-auth.js"></script>
+    <script src="js/accessibility.js"></script>
 </body>
 </html>

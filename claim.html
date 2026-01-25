@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
+    <title>Claim Item - BackTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/nav-auth.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            height: 70px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 100;
+        }
+        .nav-spacer { height: 70px; }
+        .nav-left { display: flex; align-items: center; text-decoration: none; }
+        .nav-left img { height: 60px; width: auto; }
+        .nav-center { display: flex; gap: 40px; }
+        .nav-link {
+            color: rgba(255, 255, 255, 0.45);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: rgba(255, 255, 255, 0.8); }
+        .nav-right { display: flex; align-items: center; }
+        .sign-in-btn {
+            background: linear-gradient(180deg, #2e2e2e 0%, #1a1a1a 100%);
+            color: #f3f4f6;
+            border: 1px solid #3f3f3f;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #777;
+            font-size: 13px;
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #fff; }
+
+        .page-header { margin-bottom: 32px; }
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+        .page-header p { color: #777; font-size: 14px; }
+
+        .item-detail {
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .item-image-wrap {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #050505;
+        }
+        .item-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .item-body { padding: 24px; }
+        .item-name { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+        .item-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .tag {
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #aaa;
+            font-weight: 500;
+        }
+        .item-description { color: #888; font-size: 14px; line-height: 1.6; }
+
+        .form-card {
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 28px;
+        }
+        .form-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-label { font-size: 13px; font-weight: 600; color: #ccc; }
+        .form-input, .form-textarea {
+            background: #050505;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        .form-input::placeholder, .form-textarea::placeholder { color: #444; }
+        .form-textarea { min-height: 120px; resize: vertical; }
+        .full { grid-column: 1 / -1; }
+        .helper { color: #555; font-size: 12px; }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .submit-btn:hover { opacity: 0.9; }
+        .submit-btn:active { transform: scale(0.99); }
+        .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .form-status {
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+        .form-status.success {
+            display: block;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+        .form-status.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        .auth-notice {
+            text-align: center;
+            padding: 32px;
+            color: #777;
+            font-size: 14px;
+        }
+        .auth-notice a { color: #fff; text-decoration: underline; }
+
+        /* Share & QR Code Section */
+        .share-section {
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .share-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .share-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .share-title svg {
+            width: 18px;
+            height: 18px;
+            color: #888;
+        }
+        .share-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #151515;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: #ccc;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .share-btn:hover {
+            background: #1a1a1a;
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+        .share-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+        .share-content {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+        .qr-wrapper {
+            background: #fff;
+            padding: 12px;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            display: block;
+        }
+        .share-info {
+            flex: 1;
+        }
+        .share-url {
+            background: #050505;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            margin-bottom: 12px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        .share-hint {
+            color: #555;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            nav, .form-card, .auth-notice, .back-link, .share-actions { display: none !important; }
+            .nav-spacer { height: 0 !important; }
+            .container { max-width: 100% !important; padding: 20px !important; }
+            .item-detail, .share-section {
+                background: #fff !important;
+                border: 2px solid #000 !important;
+                break-inside: avoid;
+            }
+            .item-detail * , .share-section * { color: #000 !important; }
+            .tag { border: 1px solid #000 !important; background: transparent !important; }
+            .qr-wrapper { border: 1px solid #000; }
+            .share-url { border: 1px solid #000 !important; background: #f5f5f5 !important; }
+            .page-header h1 { -webkit-text-fill-color: #000 !important; }
+            .share-section { margin-top: 24px; }
+        }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            nav { padding: 0 20px; }
+            .share-content { flex-direction: column; align-items: center; text-align: center; }
+            .share-actions { justify-content: center; }
+        }
+    </style>
+    <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+    <nav>
+        <a class="nav-left" href="index.html"><img src="logo.png" alt="BackTrack"></a>
+        <div class="nav-center">
+            <a class="nav-link" href="browse.html">Browse</a>
+            <a class="nav-link" href="map.html">Map</a>
+            <a class="nav-link" href="submit.html">Submit</a>
+            <a class="nav-link" href="features.html">Features</a>
+            <a class="nav-link" href="sources.html">Sources</a>
+        </div>
+        <div class="nav-right">
+            <a class="sign-in-btn" href="login.html">Sign In</a>
+        </div>
+    </nav>
+    <div class="nav-spacer"></div>
+
+    <div class="container">
+        <a href="browse.html" class="back-link">&larr; Back to Browse</a>
+
+        <div class="page-header">
+            <h1>Claim This Item</h1>
+            <p>Provide details so we can verify this item belongs to you.</p>
+        </div>
+
+        <div class="item-detail" id="itemDetail">
+            <div class="item-image-wrap">
+                <img id="itemImage" src="logo.png" alt="Item">
+            </div>
+            <div class="item-body">
+                <h2 class="item-name" id="itemName">Loading item...</h2>
+                <div class="item-tags" id="itemTags"></div>
+                <div class="item-description" id="itemDesc"></div>
+            </div>
+        </div>
+
+        <!-- Share & QR Code Section -->
+        <div class="share-section" id="shareSection">
+            <div class="share-header">
+                <div class="share-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                    Share This Item
+                </div>
+                <div class="share-actions">
+                    <button class="share-btn" id="copyLinkBtn" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        Copy Link
+                    </button>
+                    <button class="share-btn" id="printBtn" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                        Print Flyer
+                    </button>
+                    <button class="share-btn" id="downloadQrBtn" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download QR
+                    </button>
+                </div>
+            </div>
+            <div class="share-content">
+                <div class="qr-wrapper">
+                    <img class="qr-code" id="qrCode" src="" alt="QR Code for this item">
+                </div>
+                <div class="share-info">
+                    <div class="share-url" id="shareUrl">Loading...</div>
+                    <p class="share-hint">Scan the QR code to view this item, or share the link with someone who might recognize it. Print the flyer to post around campus.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-card" id="formSection">
+            <h3 class="form-title">Ownership Verification</h3>
+            <form id="claimForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="claimerName">Full Name</label>
+                        <input class="form-input" id="claimerName" type="text" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="claimerEmail">Email</label>
+                        <input class="form-input" id="claimerEmail" type="email" placeholder="you@school.edu" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="claimerPhone">Phone (optional)</label>
+                        <input class="form-input" id="claimerPhone" type="tel" placeholder="(555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Item ID</label>
+                        <input class="form-input" id="itemId" type="text" readonly style="color: #555; font-size: 12px;">
+                    </div>
+                    <div class="form-group full">
+                        <label class="form-label" for="proof">Proof of Ownership</label>
+                        <textarea class="form-textarea" id="proof" required placeholder="Describe unique details, markings, contents, or anything only the true owner would know..."></textarea>
+                        <span class="helper">The more specific you are, the faster we can verify your claim.</span>
+                    </div>
+                </div>
+                <button class="submit-btn" type="submit" id="submitBtn">Submit Claim</button>
+                <div class="form-status" id="formStatus"></div>
+            </form>
+        </div>
+
+        <div class="auth-notice" id="authNotice" style="display: none;">
+            <p>You need to <a href="login.html">sign in</a> to submit a claim.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const itemId = params.get('item');
+
+        const itemImage = document.getElementById('itemImage');
+        const itemName = document.getElementById('itemName');
+        const itemTags = document.getElementById('itemTags');
+        const itemDesc = document.getElementById('itemDesc');
+        const itemIdInput = document.getElementById('itemId');
+        const claimForm = document.getElementById('claimForm');
+        const formStatus = document.getElementById('formStatus');
+        const submitBtn = document.getElementById('submitBtn');
+        const formSection = document.getElementById('formSection');
+        const authNotice = document.getElementById('authNotice');
+
+        function setStatus(msg, type) {
+            formStatus.textContent = msg;
+            formStatus.className = 'form-status ' + (type || '');
+        }
+
+        async function loadItem() {
+            if (!itemId || typeof BackTrackDB === 'undefined') {
+                itemName.textContent = 'No item selected';
+                itemDesc.textContent = 'Go to the Browse page and click on an item to claim it.';
+                submitBtn.disabled = true;
+                return;
+            }
+            itemIdInput.value = itemId;
+            const item = await BackTrackDB.getItemById(itemId);
+            if (!item) {
+                itemName.textContent = 'Item not found';
+                itemDesc.textContent = 'This item may have been removed or already claimed.';
+                submitBtn.disabled = true;
+                return;
+            }
+            itemImage.src = item.image_url || 'logo.png';
+            itemImage.onerror = () => { itemImage.src = 'logo.png'; };
+            itemName.textContent = item.name;
+            const tags = [];
+            if (item.category) tags.push(item.category);
+            if (item.location) tags.push(item.location);
+            if (item.date_lost) tags.push(new Date(item.date_lost).toLocaleDateString());
+            itemTags.innerHTML = tags.map(t => `<span class="tag">${t}</span>`).join('');
+            if (item.description) itemDesc.textContent = item.description;
+        }
+
+        async function checkAuth() {
+            if (typeof BackTrackDB === 'undefined') return;
+            const user = await BackTrackDB.getCurrentUser();
+            if (!user) {
+                formSection.style.display = 'none';
+                authNotice.style.display = 'block';
+            } else {
+                document.getElementById('claimerEmail').value = user.email || '';
+                const name = user.user_metadata?.full_name || '';
+                if (name) document.getElementById('claimerName').value = name;
+            }
+        }
+
+        claimForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            setStatus('', '');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            try {
+                const claim = {
+                    item_id: itemIdInput.value,
+                    claimer_name: document.getElementById('claimerName').value,
+                    claimer_email: document.getElementById('claimerEmail').value,
+                    claimer_phone: document.getElementById('claimerPhone').value || null,
+                    proof_description: document.getElementById('proof').value,
+                    status: 'pending'
+                };
+                const result = await BackTrackDB.addClaim(claim);
+                if (!result) throw new Error('Failed');
+                setStatus('Claim submitted! An admin will review it soon.', 'success');
+                // Celebrate with confetti!
+                if (window.BackTrackConfetti) {
+                    window.BackTrackConfetti();
+                }
+                claimForm.reset();
+                itemIdInput.value = itemId;
+            } catch (err) {
+                setStatus('Something went wrong. Please try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Claim';
+            }
+        });
+
+        loadItem();
+        checkAuth();
+
+        // QR Code & Share functionality
+        const shareUrl = document.getElementById('shareUrl');
+        const qrCode = document.getElementById('qrCode');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const printBtn = document.getElementById('printBtn');
+        const downloadQrBtn = document.getElementById('downloadQrBtn');
+
+        function generateShareUrl() {
+            return window.location.href;
+        }
+
+        function generateQRCode(url) {
+            // Using QR Server API (free, no API key needed)
+            const size = 200;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(url)}&bgcolor=ffffff&color=000000&margin=10`;
+            return qrUrl;
+        }
+
+        function initShareSection() {
+            const url = generateShareUrl();
+            shareUrl.textContent = url;
+            qrCode.src = generateQRCode(url);
+        }
+
+        copyLinkBtn.addEventListener('click', async () => {
+            const url = generateShareUrl();
+            try {
+                await navigator.clipboard.writeText(url);
+                if (window.BackTrackToast) {
+                    window.BackTrackToast('Link copied to clipboard!', 'success');
+                } else {
+                    alert('Link copied!');
+                }
+                copyLinkBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Copied!
+                `;
+                setTimeout(() => {
+                    copyLinkBtn.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        Copy Link
+                    `;
+                }, 2000);
+            } catch {
+                alert('Failed to copy. URL: ' + url);
+            }
+        });
+
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        downloadQrBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch(qrCode.src);
+                const blob = await response.blob();
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `backtrack-item-${itemId || 'qr'}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+                if (window.BackTrackToast) {
+                    window.BackTrackToast('QR code downloaded!', 'success');
+                }
+            } catch {
+                // Fallback: open in new tab
+                window.open(qrCode.src, '_blank');
+            }
+        });
+
+        // Initialize share section when item loads
+        initShareSection();
+    </script>
+    <script src="js/nav-auth.js"></script>
+    <script src="js/accessibility.js"></script>
+</body>
+</html>

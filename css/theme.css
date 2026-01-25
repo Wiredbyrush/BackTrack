@@ -1,0 +1,172 @@
+:root {
+  --accent-primary: #a3b3ff;
+}
+
+body {
+  background: #000000;
+  color: #f5f5f5;
+}
+
+nav {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.nav-link.active {
+  color: #ffffff;
+}
+
+.hero-title,
+.features-title,
+.section-title {
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  color: #f5f5f5 !important;
+}
+
+.hero-tag,
+.features-label,
+.filter-label {
+  color: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.ai-match-badge,
+.stat-number,
+.stat-label {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.btn-primary,
+.primary-btn,
+.primaryBtn,
+.upload-btn {
+  background: #1f1f1f !important;
+  border: 1px solid #2f2f2f !important;
+  color: #ffffff !important;
+}
+
+.btn-secondary,
+.secondary-btn {
+  border: none !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none !important;
+}
+
+.btn-secondary:hover,
+.secondary-btn:hover {
+  color: #ffffff !important;
+  text-decoration: underline !important;
+}
+
+.sign-in-btn {
+  background: #1f1f1f;
+  border-color: #2f2f2f;
+  color: #f7f7f7;
+}
+
+.hero-visual {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background: #f6f6f6 !important;
+    color: #111111 !important;
+  }
+
+  nav {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .nav-link {
+    color: rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .nav-link.active {
+    color: #111111 !important;
+  }
+
+  .nav-left img {
+    filter: invert(1) grayscale(1) contrast(1.1);
+  }
+
+  .sign-in-btn {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border-color: #111111 !important;
+  }
+
+  .hero-visual {
+    background: radial-gradient(circle at 30% 20%, rgba(0, 0, 0, 0.04), transparent 45%), #111111 !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+  }
+
+  .hero-title,
+  .features-title,
+  .section-title {
+    color: #111111 !important;
+  }
+
+  .hero-tag,
+  .features-label,
+  .filter-label {
+    color: rgba(0, 0, 0, 0.6) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    background: rgba(0, 0, 0, 0.04) !important;
+  }
+
+  .ai-match-badge,
+  .stat-number,
+  .stat-label {
+    color: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .card,
+  .source-card,
+  .item-card,
+  .feature-card,
+  .stat-card {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .btn-primary,
+  .primary-btn,
+  .primaryBtn,
+  .upload-btn {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border-color: #111111 !important;
+  }
+
+  .btn-secondary,
+  .secondary-btn {
+    border: none !important;
+    color: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .btn-secondary:hover,
+  .secondary-btn:hover {
+    color: #111111 !important;
+    text-decoration: underline !important;
+  }
+
+  .page-subtitle,
+  .source-note,
+  .card-meta,
+  .stat-label,
+  .filter-label {
+    color: rgba(0, 0, 0, 0.6) !important;
+  }
+}

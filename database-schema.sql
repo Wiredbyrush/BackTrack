@@ -18,7 +18,7 @@ CREATE TABLE items (
     location VARCHAR(100) NOT NULL,
     date_lost DATE NOT NULL,
     image_url TEXT,
-    status VARCHAR(20) DEFAULT 'lost' CHECK (status IN ('lost', 'found', 'claimed')),
+    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'lost', 'found', 'claimed')),
     contact_email VARCHAR(255),
     contact_phone VARCHAR(20),
     finder_name VARCHAR(255),
@@ -82,11 +82,27 @@ CREATE TABLE claims (
     claimer_id UUID REFERENCES auth.users(id),
     claimer_email VARCHAR(255) NOT NULL,
     claimer_name VARCHAR(255),
+    claimer_phone VARCHAR(20),
     proof_description TEXT,
     status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- ============================================
+-- ADMINS TABLE (for moderating items/claims)
+-- ============================================
+CREATE TABLE admins (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    email VARCHAR(255) UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admins can view own row" ON admins
+    FOR SELECT USING (auth.uid() = user_id);
 
 -- ============================================
 -- ROW LEVEL SECURITY (RLS)
@@ -107,6 +123,10 @@ CREATE POLICY "Authenticated users can insert items" ON items
 CREATE POLICY "Users can update own items" ON items
     FOR UPDATE USING (auth.uid() = submitted_by);
 
+-- Allow admins to update any items
+CREATE POLICY "Admins can update items" ON items
+    FOR UPDATE USING (auth.uid() IN (SELECT user_id FROM admins));
+
 -- Allow users to delete their own items
 CREATE POLICY "Users can delete own items" ON items
     FOR DELETE USING (auth.uid() = submitted_by);
@@ -118,9 +138,17 @@ ALTER TABLE claims ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view own claims" ON claims
     FOR SELECT USING (auth.uid() = claimer_id);
 
+-- Allow admins to view all claims
+CREATE POLICY "Admins can view claims" ON claims
+    FOR SELECT USING (auth.uid() IN (SELECT user_id FROM admins));
+
 -- Allow authenticated users to create claims
 CREATE POLICY "Authenticated users can create claims" ON claims
     FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+-- Allow admins to update claims
+CREATE POLICY "Admins can update claims" ON claims
+    FOR UPDATE USING (auth.uid() IN (SELECT user_id FROM admins));
 
 -- ============================================
 -- INDEXES FOR PERFORMANCE
@@ -141,7 +169,8 @@ CREATE OR REPLACE FUNCTION search_items(
     filter_category TEXT[] DEFAULT NULL,
     filter_location TEXT DEFAULT NULL,
     filter_start_date DATE DEFAULT NULL,
-    filter_end_date DATE DEFAULT NULL
+    filter_end_date DATE DEFAULT NULL,
+    filter_status TEXT[] DEFAULT '{"found", "claimed"}'
 )
 RETURNS TABLE (
     id UUID,
@@ -188,6 +217,7 @@ AS $$
       AND (filter_location IS NULL OR filter_location = 'All Locations' OR items.location = filter_location)
       AND (filter_start_date IS NULL OR items.date_lost >= filter_start_date)
       AND (filter_end_date IS NULL OR items.date_lost <= filter_end_date)
+      AND (filter_status IS NULL OR items.status = ANY(filter_status))
     ORDER BY items.embedding <=> query_embedding
     LIMIT match_count;
 $$;

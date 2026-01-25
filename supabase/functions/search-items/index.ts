@@ -38,6 +38,10 @@ Deno.serve(async (req) => {
           : null,
       filter_start_date: filters.startDate || null,
       filter_end_date: filters.endDate || null,
+      filter_status:
+        Array.isArray(filters.status) && filters.status.length > 0
+          ? filters.status
+          : null,
     });
 
     if (error) {

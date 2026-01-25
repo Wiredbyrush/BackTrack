@@ -1,0 +1,42 @@
+{
+  "name": "BackTrack - School Lost & Found",
+  "short_name": "BackTrack",
+  "description": "AI-powered lost and found system for your school community",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "education"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Browse Items",
+      "short_name": "Browse",
+      "description": "Search for lost items",
+      "url": "/browse.html",
+      "icons": [{ "src": "logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Report Found Item",
+      "short_name": "Report",
+      "description": "Submit a found item",
+      "url": "/submit.html",
+      "icons": [{ "src": "logo.png", "sizes": "96x96" }]
+    }
+  ]
+}

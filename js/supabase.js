@@ -23,6 +23,9 @@ function isSupabaseConfigured() {
 // Get all items (with optional filters)
 async function getItems(filters = {}) {
     if (filters.search && filters.search.trim().length > 0) {
+        if (!filters.status) {
+            filters.status = ['found', 'claimed'];
+        }
         return searchItems(filters.search, filters);
     }
 
@@ -30,6 +33,17 @@ async function getItems(filters = {}) {
         .from('items')
         .select('*')
         .order('created_at', { ascending: false });
+
+    // Apply status filter (default hides pending items)
+    if (filters.status) {
+        if (Array.isArray(filters.status)) {
+            query = query.in('status', filters.status);
+        } else {
+            query = query.eq('status', filters.status);
+        }
+    } else {
+        query = query.in('status', ['found', 'claimed']);
+    }
 
     // Apply category filter
     if (filters.category && filters.category.length > 0) {
@@ -111,6 +125,10 @@ async function updateItem(id, updates) {
     return data[0];
 }
 
+async function setItemStatus(id, status) {
+    return updateItem(id, { status });
+}
+
 // Delete item
 async function deleteItem(id) {
     const { error } = await supabase
@@ -124,6 +142,87 @@ async function deleteItem(id) {
     }
 
     return true;
+}
+
+// ============================================
+// CLAIMS + ADMIN FUNCTIONS
+// ============================================
+
+async function addClaim(claim) {
+    const { data, error } = await supabase
+        .from('claims')
+        .insert([claim])
+        .select();
+
+    if (error) {
+        console.error('Error adding claim:', error);
+        return null;
+    }
+
+    return data?.[0] || null;
+}
+
+async function getPendingItems() {
+    const { data, error } = await supabase
+        .from('items')
+        .select('*')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching pending items:', error);
+        return [];
+    }
+
+    return data || [];
+}
+
+async function getPendingClaims() {
+    const { data, error } = await supabase
+        .from('claims')
+        .select('*, items (id, name, location, category, image_url, status)')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching pending claims:', error);
+        return [];
+    }
+
+    return data || [];
+}
+
+async function updateClaimStatus(id, status) {
+    const { data, error } = await supabase
+        .from('claims')
+        .update({ status })
+        .eq('id', id)
+        .select();
+
+    if (error) {
+        console.error('Error updating claim:', error);
+        return null;
+    }
+
+    return data?.[0] || null;
+}
+
+async function isAdmin() {
+    const user = await getCurrentUser();
+    if (!user) return false;
+
+    const { data, error } = await supabase
+        .from('admins')
+        .select('id')
+        .or(`user_id.eq.${user.id},email.eq.${user.email}`)
+        .limit(1);
+
+    if (error) {
+        console.error('Error checking admin:', error);
+        return false;
+    }
+
+    return Array.isArray(data) && data.length > 0;
 }
 
 // ============================================
@@ -287,10 +386,18 @@ async function searchItems(query, filters = {}) {
     getItemById,
     addItem,
     updateItem,
+    setItemStatus,
     deleteItem,
 
     // Images
     uploadImage,
+
+    // Claims + admin
+    addClaim,
+    getPendingItems,
+    getPendingClaims,
+    updateClaimStatus,
+    isAdmin,
 
     // Auth
     signUp,

@@ -3,10 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BackTrack is a centralized lost-and-found system for students and staff. Report, browse, and claim lost items on campus.">
+    <meta name="keywords" content="lost and found, school, campus, FBLA, lost items, found items, BackTrack">
+    <meta name="author" content="BackTrack Team">
+    <meta property="og:title" content="BackTrack - Never lose track of what matters">
+    <meta property="og:description" content="A centralized lost-and-found system for students and staff. Report, browse, and claim lost items.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BackTrack">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
     <title>BackTrack - Never lose track of what matters</title>
+    <script>
+        // Allow hero motion while keeping the rest of the site subtle.
+        window.__DISABLE_ANIMATIONS__ = false;
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
     <style>
         * {
             margin: 0;
@@ -51,6 +68,13 @@
         .page-transition.active {
             opacity: 1;
             pointer-events: all;
+        }
+
+        /* Focus styles for keyboard navigation (Accessibility) */
+        *:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            outline-offset: 3px;
+            border-radius: 4px;
         }
 
         /* Smooth transitions for all interactive elements */
@@ -230,7 +254,7 @@
             line-height: 1.0;
             margin-bottom: 32px;
             letter-spacing: -3px;
-            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -281,18 +305,19 @@
         }
 
         .btn-primary {
-            background: linear-gradient(180deg, #3a3a3a 0%, #252525 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: #ffffff;
-            border: 1px solid #4a4a4a;
+            border: none;
             padding: 16px 32px;
             border-radius: 30px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-decoration: none;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
         }
 
         .btn-primary::before {
@@ -302,14 +327,14 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(180deg, #4a4a4a 0%, #353535 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.4);
         }
 
         .btn-primary:hover::before {
@@ -362,10 +387,10 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(145deg, #2563eb 0%, #1d4ed8 100%);
+            border: 1px solid rgba(37, 99, 235, 0.3);
             cursor: pointer;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -380,26 +405,8 @@
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
             pointer-events: none;
-        }
-
-        .chatbot-toggle::after {
-            content: '';
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 10px;
-            height: 10px;
-            background: radial-gradient(circle, #ffffff 0%, #cfcfcf 70%, transparent 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
         }
 
         @keyframes popIn {
@@ -415,8 +422,8 @@
 
         .chatbot-toggle:hover {
             transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+            border-color: rgba(37, 99, 235, 0.5);
         }
 
         .chatbot-toggle:active {
@@ -530,8 +537,8 @@
         }
 
         .chatbot-send {
-            background: #ffffff;
-            color: #111111;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
             border: none;
             padding: 10px 12px;
             border-radius: 10px;
@@ -542,7 +549,7 @@
         }
 
         .chatbot-send:hover {
-            background: #e8e8e8;
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             transform: scale(1.05);
         }
 
@@ -567,17 +574,22 @@
             color: #fca5a5;
         }
 
-        /* 3D Visual Container */
+        /* 3D Visual Container - blends into page */
         .hero-visual {
-            flex: 1;
+            flex: 1.2;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            height: 600px;
-            perspective: 1500px;
+            height: 620px;
             z-index: 2;
             animation: slideInRight 1s ease-out 0.2s backwards;
+            perspective: 1200px;
+            border-radius: 0;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
         }
 
         @keyframes slideInRight {
@@ -588,519 +600,6 @@
             to {
                 opacity: 1;
                 transform: translateX(0);
-            }
-        }
-
-        /* Main glow container */
-        .glow-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        /* Primary ambient glow - large soft */
-        .glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle,
-                rgba(255, 255, 255, 0.08) 0%,
-                rgba(255, 255, 255, 0.03) 30%,
-                transparent 70%);
-            border-radius: 50%;
-            animation: glowPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.7; }
-        }
-
-        /* Secondary glow - smaller, brighter */
-        .glow-inner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle,
-                rgba(255, 255, 255, 0.12) 0%,
-                rgba(255, 255, 255, 0.04) 40%,
-                transparent 70%);
-            border-radius: 50%;
-            animation: glowPulseInner 3s ease-in-out infinite 0.5s;
-        }
-
-        @keyframes glowPulseInner {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.5; }
-        }
-
-        /* Shine beam - Resend style diagonal light */
-        .shine-beam {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 800px;
-            height: 2px;
-            background: linear-gradient(90deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.03) 20%,
-                rgba(255, 255, 255, 0.15) 50%,
-                rgba(255, 255, 255, 0.03) 80%,
-                transparent 100%);
-            transform: translate(-50%, -50%) rotate(-35deg);
-            animation: shineBeamMove 8s ease-in-out infinite;
-            filter: blur(1px);
-        }
-
-        .shine-beam:nth-child(2) {
-            animation-delay: -4s;
-            opacity: 0.5;
-            transform: translate(-50%, -50%) rotate(-35deg) translateY(-80px);
-        }
-
-        .shine-beam:nth-child(3) {
-            animation-delay: -2s;
-            opacity: 0.3;
-            transform: translate(-50%, -50%) rotate(-35deg) translateY(80px);
-        }
-
-        @keyframes shineBeamMove {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        /* Rotating shine ring */
-        .shine-ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 380px;
-            height: 380px;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 0deg,
-                rgba(255, 255, 255, 0.08) 10deg,
-                transparent 20deg,
-                transparent 180deg,
-                rgba(255, 255, 255, 0.06) 190deg,
-                transparent 200deg
-            );
-            animation: shineRingRotate 20s linear infinite;
-        }
-
-        @keyframes shineRingRotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Floating orbs */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%,
-                rgba(255, 255, 255, 0.4) 0%,
-                rgba(255, 255, 255, 0.1) 40%,
-                transparent 70%);
-            animation: orbFloat 6s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 8px;
-            height: 8px;
-            top: 15%;
-            left: 25%;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 5px;
-            height: 5px;
-            top: 25%;
-            right: 20%;
-            animation-delay: -2s;
-        }
-
-        .orb-3 {
-            width: 6px;
-            height: 6px;
-            bottom: 30%;
-            left: 20%;
-            animation-delay: -4s;
-        }
-
-        .orb-4 {
-            width: 4px;
-            height: 4px;
-            bottom: 20%;
-            right: 25%;
-            animation-delay: -1s;
-        }
-
-        .orb-5 {
-            width: 7px;
-            height: 7px;
-            top: 50%;
-            left: 10%;
-            animation-delay: -3s;
-        }
-
-        .orb-6 {
-            width: 3px;
-            height: 3px;
-            top: 35%;
-            right: 15%;
-            animation-delay: -5s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% {
-                transform: translateY(0) translateX(0) scale(1);
-                opacity: 0.6;
-            }
-            25% {
-                transform: translateY(-15px) translateX(8px) scale(1.2);
-                opacity: 1;
-            }
-            50% {
-                transform: translateY(-5px) translateX(-5px) scale(0.9);
-                opacity: 0.4;
-            }
-            75% {
-                transform: translateY(-20px) translateX(3px) scale(1.1);
-                opacity: 0.8;
-            }
-        }
-
-        /* 3D Scene Container */
-        .scene {
-            position: relative;
-            width: 340px;
-            height: 340px;
-            transform-style: preserve-3d;
-        }
-
-        /* The main cube wrapper */
-        .cube-wrapper {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transform: rotateX(-15deg) rotateY(-25deg);
-        }
-
-        /* Slow rotation */
-        .cube-rotator {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            animation: cubeRotate 25s linear infinite;
-        }
-
-        @keyframes cubeRotate {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-        }
-
-        /* The cube itself */
-        .cube {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 200px;
-            height: 200px;
-            transform-style: preserve-3d;
-            transform: translate(-50%, -50%);
-        }
-
-        /* Cube faces */
-        .face {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            backface-visibility: visible;
-        }
-
-        /* Glass-like face styling with enhanced shine */
-        .face-inner {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg,
-                rgba(25, 25, 25, 0.95) 0%,
-                rgba(10, 10, 10, 0.98) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-                0 0 40px rgba(255, 255, 255, 0.03);
-        }
-
-        /* Top shine gradient on faces */
-        .face-inner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60%;
-            background: linear-gradient(180deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.03) 40%,
-                transparent 100%);
-            pointer-events: none;
-            border-radius: 16px 16px 0 0;
-        }
-
-        /* Moving shine effect */
-        .face-inner::after {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 40%,
-                rgba(255, 255, 255, 0.08) 50%,
-                transparent 60%
-            );
-            animation: faceShine 6s ease-in-out infinite;
-        }
-
-        @keyframes faceShine {
-            0%, 100% { transform: translateX(-50%) translateY(-50%); }
-            50% { transform: translateX(50%) translateY(50%); }
-        }
-
-        /* Face positions */
-        .front { transform: translateZ(100px); }
-        .back { transform: rotateY(180deg) translateZ(100px); }
-        .right { transform: rotateY(90deg) translateZ(100px); }
-        .left { transform: rotateY(-90deg) translateZ(100px); }
-        .top { transform: rotateX(90deg) translateZ(100px); }
-        .bottom { transform: rotateX(-90deg) translateZ(100px); }
-
-        /* Top face - lighter for visibility */
-        .top .face-inner {
-            background: linear-gradient(135deg,
-                rgba(40, 40, 40, 0.95) 0%,
-                rgba(20, 20, 20, 0.98) 100%);
-        }
-
-        /* Front face content - Minimal location icon */
-        .icon-location {
-            position: relative;
-            width: 56px;
-            height: 56px;
-        }
-
-        .icon-location::before {
-            content: '';
-            position: absolute;
-            width: 56px;
-            height: 56px;
-            border: 2.5px solid rgba(255, 255, 255, 0.8);
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .icon-location::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            width: 18px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Right face - Grid pattern */
-        .grid-pattern {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-        }
-
-        .grid-cell {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .grid-cell:nth-child(5) {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Left face - Checkmark */
-        .icon-check {
-            position: relative;
-            width: 56px;
-            height: 56px;
-            border: 2.5px solid rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .icon-check::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 26px;
-            height: 13px;
-            border-left: 3px solid rgba(255, 255, 255, 0.95);
-            border-bottom: 3px solid rgba(255, 255, 255, 0.95);
-            transform: translate(-50%, -60%) rotate(-45deg);
-        }
-
-        /* Back face - Search icon */
-        .icon-search {
-            position: relative;
-            width: 48px;
-            height: 48px;
-        }
-
-        .icon-search::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 34px;
-            height: 34px;
-            border: 2.5px solid rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .icon-search::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            width: 16px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.8);
-            transform: rotate(45deg);
-            border-radius: 2px;
-        }
-
-        /* Top face - Logo text */
-        .logo-text {
-            font-size: 14px;
-            font-weight: 800;
-            letter-spacing: 4px;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Enhanced reflection/shadow under cube */
-        .cube-shadow {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) rotateX(90deg);
-            width: 220px;
-            height: 220px;
-            background: radial-gradient(ellipse at center,
-                rgba(255, 255, 255, 0.06) 0%,
-                rgba(255, 255, 255, 0.02) 40%,
-                transparent 70%);
-            filter: blur(40px);
-            pointer-events: none;
-            animation: shadowPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes shadowPulse {
-            0%, 100% { opacity: 0.6; transform: translateX(-50%) rotateX(90deg) scale(1); }
-            50% { opacity: 0.4; transform: translateX(-50%) rotateX(90deg) scale(1.1); }
-        }
-
-        /* Sparkle effects */
-        .sparkle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            animation: sparkle 3s ease-in-out infinite;
-        }
-
-        .sparkle::before,
-        .sparkle::after {
-            content: '';
-            position: absolute;
-            background: white;
-        }
-
-        .sparkle::before {
-            width: 12px;
-            height: 2px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .sparkle::after {
-            width: 2px;
-            height: 12px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .sparkle-1 {
-            top: 20%;
-            right: 30%;
-            animation-delay: 0s;
-        }
-
-        .sparkle-2 {
-            bottom: 25%;
-            left: 25%;
-            animation-delay: -1.5s;
-            transform: scale(0.6);
-        }
-
-        .sparkle-3 {
-            top: 45%;
-            right: 15%;
-            animation-delay: -0.8s;
-            transform: scale(0.4);
-        }
-
-        @keyframes sparkle {
-            0%, 100% {
-                opacity: 0;
-                transform: scale(0) rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1) rotate(180deg);
             }
         }
 
@@ -1120,7 +619,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #666666;
+            color: #2563eb;
             margin-bottom: 16px;
         }
 
@@ -1128,7 +627,7 @@
             font-size: 48px;
             font-weight: 700;
             letter-spacing: -1.5px;
-            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1178,7 +677,7 @@
         .feature-number {
             font-size: 12px;
             font-weight: 700;
-            color: #444444;
+            color: #2563eb;
             margin-bottom: 16px;
             letter-spacing: 1px;
         }
@@ -1744,6 +1243,68 @@
             .particle { display: none; }
         }
 
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 201;
+        }
+
+        .hamburger span {
+            width: 22px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(5px) translateX(5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-5px) translateX(5px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 200;
+            padding: 40px 24px;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
         @media (max-width: 768px) {
             nav {
                 padding: 0 20px;
@@ -1751,6 +1312,14 @@
 
             .nav-center {
                 display: none;
+            }
+
+            .nav-right .sign-in-btn {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
             }
 
             .hero-container {
@@ -1778,72 +1347,6 @@
 
             .hero-visual {
                 height: 350px;
-            }
-
-            .scene {
-                width: 220px;
-                height: 220px;
-            }
-
-            .cube {
-                width: 120px;
-                height: 120px;
-            }
-
-            .face {
-                width: 120px;
-                height: 120px;
-            }
-
-            .front { transform: translateZ(60px); }
-            .back { transform: rotateY(180deg) translateZ(60px); }
-            .right { transform: rotateY(90deg) translateZ(60px); }
-            .left { transform: rotateY(-90deg) translateZ(60px); }
-            .top { transform: rotateX(90deg) translateZ(60px); }
-            .bottom { transform: rotateX(-90deg) translateZ(60px); }
-
-            .grid-cell {
-                width: 24px;
-                height: 24px;
-            }
-
-            .grid-pattern {
-                gap: 8px;
-            }
-
-            .icon-location {
-                width: 36px;
-                height: 36px;
-            }
-
-            .icon-location::before {
-                width: 36px;
-                height: 36px;
-            }
-
-            .icon-location::after {
-                width: 10px;
-                height: 10px;
-            }
-
-            .icon-check {
-                width: 38px;
-                height: 38px;
-            }
-
-            .icon-search {
-                width: 32px;
-                height: 32px;
-            }
-
-            .icon-search::before {
-                width: 24px;
-                height: 24px;
-            }
-
-            .logo-text {
-                font-size: 10px;
-                letter-spacing: 2px;
             }
 
             .chatbot-widget {
@@ -1896,142 +1399,85 @@
             .mockup-results {
                 grid-template-columns: 1fr;
             }
+
+            footer > div:first-child {
+                grid-template-columns: 1fr !important;
+                gap: 32px !important;
+            }
+
+            footer {
+                padding: 40px 20px 30px !important;
+            }
         }
     </style>
+    <link rel="stylesheet" href="css/nav-auth.css">
+    <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
+    <!-- Skip to Content (Accessibility) -->
+    <a href="#main-content" style="position: absolute; top: -100px; left: 0; background: #ffffff; color: #000000; padding: 12px 24px; z-index: 10000; font-weight: 600; font-size: 14px; transition: top 0.2s;" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Skip to main content</a>
+
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition"></div>
 
     <!-- Navigation -->
-    <nav>
-        <a href="index.html" class="nav-left">
-            <img src="logo.png" alt="BackTrack">
+    <nav aria-label="Main navigation" role="navigation">
+        <a href="index.html" class="nav-left" aria-label="BackTrack Home">
+            <img src="logo.png" alt="BackTrack - Lost and Found System">
         </a>
 
-        <div class="nav-center">
-            <a href="browse.html" class="nav-link">Browse</a>
-            <a href="map.html" class="nav-link">Map</a>
-            <a href="submit.html" class="nav-link">Submit</a>
-            <a href="features.html" class="nav-link">Features</a>
+        <div class="nav-center" role="menubar">
+            <a href="browse.html" class="nav-link" role="menuitem">Browse</a>
+            <a href="map.html" class="nav-link" role="menuitem">Map</a>
+            <a href="submit.html" class="nav-link" role="menuitem">Submit</a>
+            <a href="features.html" class="nav-link" role="menuitem">Features</a>
+            <a href="sources.html" class="nav-link" role="menuitem">Sources</a>
         </div>
 
         <div class="nav-right">
-            <a class="sign-in-btn" href="login.html">Log In</a>
+            <a class="sign-in-btn" href="login.html" aria-label="Log in to your account">Log In</a>
+            <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+        <a href="browse.html">Browse</a>
+        <a href="map.html">Map</a>
+        <a href="submit.html">Submit</a>
+        <a href="claim.html">Claim</a>
+        <a href="features.html">Features</a>
+        <a href="sources.html">Sources</a>
+        <a href="login.html">Log In</a>
+    </div>
     <div class="nav-spacer"></div>
 
     <!-- Hero Section -->
-    <main class="hero-container">
+    <main class="hero-container" role="main" id="main-content">
         <div class="hero-content">
             <h1 class="hero-title">Never lose track<br>of what matters.</h1>
             <p class="hero-description">BackTrack is a centralized lost-and-found system for students and staff.</p>
             <p class="hero-description">A smarter way to reconnect people with their belongings.</p>
 
-            <div class="button-group">
-                <a href="browse.html" class="btn-primary">Browse items</a>
-                <a href="submit.html" class="btn-secondary">Submit an item</a>
+            <div class="button-group" role="group" aria-label="Get started actions">
+                <a href="browse.html" class="btn-primary" aria-label="Browse lost items">Browse items</a>
+                <a href="submit.html" class="btn-secondary" aria-label="Submit a found item">Submit an item</a>
             </div>
         </div>
 
-        <div class="hero-visual">
-            <!-- Glow effects container -->
-            <div class="glow-container">
-                <!-- Primary ambient glow -->
-                <div class="glow"></div>
-                <!-- Inner brighter glow -->
-                <div class="glow-inner"></div>
-                <!-- Shine beams - Resend style -->
-                <div class="shine-beam"></div>
-                <div class="shine-beam"></div>
-                <div class="shine-beam"></div>
-                <!-- Rotating shine ring -->
-                <div class="shine-ring"></div>
-            </div>
-
-            <!-- Floating orbs -->
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
-            <div class="orb orb-4"></div>
-            <div class="orb orb-5"></div>
-            <div class="orb orb-6"></div>
-
-            <!-- Sparkle effects -->
-            <div class="sparkle sparkle-1"></div>
-            <div class="sparkle sparkle-2"></div>
-            <div class="sparkle sparkle-3"></div>
-
-            <!-- 3D Scene -->
-            <div class="scene">
-                <div class="cube-wrapper">
-                    <div class="cube-rotator">
-                        <div class="cube">
-                            <!-- Front - Location Icon -->
-                            <div class="face front">
-                                <div class="face-inner">
-                                    <div class="icon-location"></div>
-                                </div>
-                            </div>
-
-                            <!-- Back - Search Icon -->
-                            <div class="face back">
-                                <div class="face-inner">
-                                    <div class="icon-search"></div>
-                                </div>
-                            </div>
-
-                            <!-- Right - Grid -->
-                            <div class="face right">
-                                <div class="face-inner">
-                                    <div class="grid-pattern">
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                        <div class="grid-cell"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Left - Checkmark -->
-                            <div class="face left">
-                                <div class="face-inner">
-                                    <div class="icon-check"></div>
-                                </div>
-                            </div>
-
-                            <!-- Top - Logo -->
-                            <div class="face top">
-                                <div class="face-inner">
-                                    <span class="logo-text">BackTrack</span>
-                                </div>
-                            </div>
-
-                            <!-- Bottom -->
-                            <div class="face bottom">
-                                <div class="face-inner"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Enhanced shadow -->
-            <div class="cube-shadow"></div>
-        </div>
+        <!-- 3D Animation Container -->
+        <div class="hero-visual" aria-hidden="true" role="presentation"></div>
     </main>
 
     <!-- Features Showcase Section -->
-    <section class="features-showcase">
+    <section class="features-showcase" aria-labelledby="features-title">
         <div class="features-header">
             <p class="features-label">How it works</p>
-            <h2 class="features-title">Everything you need to find what's lost</h2>
+            <h2 class="features-title" id="features-title">Everything you need to find what's lost</h2>
             <p class="features-subtitle">A modern lost-and-found system designed for students and staff. Simple, fast, and smart.</p>
         </div>
 
@@ -2273,16 +1719,161 @@
         </div>
     </section>
 
+    <!-- Statistics Section -->
+    <section class="stats-section" aria-labelledby="stats-title">
+        <div class="stats-container">
+            <div class="stats-header">
+                <h2 class="stats-title" id="stats-title">Making a difference, one item at a time</h2>
+                <p class="stats-subtitle">Real-time statistics from our lost-and-found community</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value" data-target="1247">0</div>
+                    <div class="stat-label">Items Reported</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: #22c55e;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value" data-target="892">0</div>
+                    <div class="stat-label">Items Returned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: #f5c518;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value" data-target="2156">0</div>
+                    <div class="stat-label">Happy Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: #a855f7;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value" data-target="4" data-suffix="hrs">0</div>
+                    <div class="stat-label">Avg. Return Time</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Statistics Section */
+        .stats-section {
+            padding: 100px 80px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .stats-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .stats-title {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        .stats-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        .stat-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,255,255,0.12);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 20px;
+            color: #fff;
+        }
+        .stat-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: #fff;
+            margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+            font-weight: 500;
+        }
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .stats-section {
+                padding: 60px 20px;
+            }
+            .stats-title {
+                font-size: 28px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            .stat-card {
+                padding: 24px 16px;
+            }
+            .stat-value {
+                font-size: 36px;
+            }
+        }
+    </style>
+
     <div class="chatbot-widget">
         <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat assistant">
-            <svg class="chatbot-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <g stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
-                    <path d="M8 6h8a4 4 0 0 1 4 4v3.5a4 4 0 0 1-4 4h-2.8L17 21v-3.5H8a4 4 0 0 1-4-4V10a4 4 0 0 1 4-4z"/>
-                    <line x1="12" y1="6" x2="12" y2="3"/>
-                    <circle cx="12" cy="2.5" r="1.5"/>
-                </g>
-                <circle cx="9.5" cy="12" r="1.3" fill="#ffffff"/>
-                <circle cx="14.5" cy="12" r="1.3" fill="#ffffff"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                <circle cx="9" cy="10" r="1" fill="#ffffff"/><circle cx="12" cy="10" r="1" fill="#ffffff"/><circle cx="15" cy="10" r="1" fill="#ffffff"/>
             </svg>
         </button>
         <div class="chatbot-panel" id="chatbotPanel">
@@ -2303,18 +1894,63 @@
     </div>
 
     <!-- Footer -->
-    <footer style="padding: 40px 80px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-        <div style="color: #666666; font-size: 13px;">Built for FBLA</div>
-        <div style="display: flex; gap: 32px;">
-            <a href="features.html" style="color: #666666; text-decoration: none; font-size: 13px; transition: color 0.2s;">Features</a>
-            <a href="browse.html" style="color: #666666; text-decoration: none; font-size: 13px; transition: color 0.2s;">Browse</a>
-            <a href="submit.html" style="color: #666666; text-decoration: none; font-size: 13px; transition: color 0.2s;">Submit</a>
+    <footer style="padding: 60px 80px 40px; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;">
+            <div>
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
+                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized lost-and-found system for students and staff. Built for FBLA Coding & Programming.</p>
+            </div>
+            <div>
+                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Product</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse Items</a>
+                    <a href="submit.html" style="color: #777777; text-decoration: none; font-size: 14px;">Submit Item</a>
+                    <a href="claim.html" style="color: #777777; text-decoration: none; font-size: 14px;">Claim Item</a>
+                    <a href="map.html" style="color: #777777; text-decoration: none; font-size: 14px;">Campus Map</a>
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Resources</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <a href="features.html" style="color: #777777; text-decoration: none; font-size: 14px;">Features</a>
+                    <a href="sources.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sources</a>
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Account</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <a href="login.html" style="color: #777777; text-decoration: none; font-size: 14px;">Log In</a>
+                    <a href="signup.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sign Up</a>
+                    <a href="profile.html" style="color: #777777; text-decoration: none; font-size: 14px;">Profile</a>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
+            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Coding &amp; Programming.</div>
+            <div style="color: #444444; font-size: 13px;">Made by BackTrack Team</div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script>
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+        });
+
+        hamburger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                hamburger.click();
+            }
+        });
+
         function updateNavBorder() {
             document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
         }
@@ -2339,158 +1975,6 @@
         }, observerOptions);
 
         featureRows.forEach(row => featureObserver.observe(row));
-
-        // Interactive 3D Cube
-        const cubeWrapper = document.querySelector('.cube-wrapper');
-        const cubeRotator = document.querySelector('.cube-rotator');
-        const visual = document.querySelector('.hero-visual');
-        const scene = document.querySelector('.scene');
-
-        // State
-        let isDragging = false;
-        let previousMouseX = 0;
-        let previousMouseY = 0;
-        let rotationX = -20;
-        let rotationY = -25;
-        let targetRotationX = -20;
-        let targetRotationY = -25;
-        let velocityX = 0;
-        let velocityY = 0;
-        let autoRotate = true;
-        let autoRotateSpeed = 0.15;
-        let floatOffset = 0;
-
-        // Stop CSS animation - we'll control rotation with JS
-        cubeRotator.style.animation = 'none';
-
-        // Mouse down - start dragging
-        scene.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            autoRotate = false;
-            previousMouseX = e.clientX;
-            previousMouseY = e.clientY;
-            scene.style.cursor = 'grabbing';
-            velocityX = 0;
-            velocityY = 0;
-        });
-
-        // Mouse move - rotate cube
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-
-            const deltaX = e.clientX - previousMouseX;
-            const deltaY = e.clientY - previousMouseY;
-
-            // Update velocities for momentum
-            velocityX = deltaY * 0.5;
-            velocityY = deltaX * 0.5;
-
-            // Update target rotation
-            targetRotationX += deltaY * 0.5;
-            targetRotationY += deltaX * 0.5;
-
-            previousMouseX = e.clientX;
-            previousMouseY = e.clientY;
-        });
-
-        // Mouse up - stop dragging, enable momentum
-        document.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false;
-                scene.style.cursor = 'grab';
-
-                // Resume auto-rotate after a delay if velocity is low
-                setTimeout(() => {
-                    if (Math.abs(velocityX) < 0.1 && Math.abs(velocityY) < 0.1) {
-                        autoRotate = true;
-                    }
-                }, 3000);
-            }
-        });
-
-        // Mouse leave scene
-        scene.addEventListener('mouseleave', () => {
-            if (isDragging) {
-                isDragging = false;
-                scene.style.cursor = 'grab';
-            }
-        });
-
-        // Set initial cursor
-        scene.style.cursor = 'grab';
-
-        // Animation loop
-        function animate() {
-            // Floating animation
-            floatOffset = Math.sin(Date.now() / 1000) * 12;
-
-            // Auto rotation when not interacting
-            if (autoRotate && !isDragging) {
-                targetRotationY += autoRotateSpeed;
-            }
-
-            // Apply momentum when not dragging
-            if (!isDragging) {
-                targetRotationX += velocityX;
-                targetRotationY += velocityY;
-
-                // Dampen velocity
-                velocityX *= 0.95;
-                velocityY *= 0.95;
-
-                // Gradually return X rotation to neutral
-                if (Math.abs(velocityX) < 0.1 && Math.abs(velocityY) < 0.1) {
-                    targetRotationX += (-20 - targetRotationX) * 0.02;
-                }
-            }
-
-            // Smooth interpolation
-            rotationX += (targetRotationX - rotationX) * 0.1;
-            rotationY += (targetRotationY - rotationY) * 0.1;
-
-            // Apply transforms
-            cubeWrapper.style.transform = `translateY(${floatOffset}px)`;
-            cubeRotator.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        // Touch support for mobile
-        scene.addEventListener('touchstart', (e) => {
-            isDragging = true;
-            autoRotate = false;
-            previousMouseX = e.touches[0].clientX;
-            previousMouseY = e.touches[0].clientY;
-            velocityX = 0;
-            velocityY = 0;
-        }, { passive: true });
-
-        document.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-
-            const deltaX = e.touches[0].clientX - previousMouseX;
-            const deltaY = e.touches[0].clientY - previousMouseY;
-
-            velocityX = deltaY * 0.5;
-            velocityY = deltaX * 0.5;
-
-            targetRotationX += deltaY * 0.5;
-            targetRotationY += deltaX * 0.5;
-
-            previousMouseX = e.touches[0].clientX;
-            previousMouseY = e.touches[0].clientY;
-        }, { passive: true });
-
-        document.addEventListener('touchend', () => {
-            isDragging = false;
-            setTimeout(() => {
-                if (Math.abs(velocityX) < 0.1 && Math.abs(velocityY) < 0.1) {
-                    autoRotate = true;
-                }
-            }, 3000);
-        });
 
         const chatbotToggle = document.getElementById('chatbotToggle');
         const chatbotPanel = document.getElementById('chatbotPanel');
@@ -2581,9 +2065,6 @@
             }
         });
 
-        // Auth state - update nav bar
-        const signInBtn = document.querySelector('.sign-in-btn');
-        const navRight = document.querySelector('.nav-right');
 
         // Avatar colors based on first letter
         const avatarColors = {
@@ -2641,6 +2122,58 @@
                 }, 400);
             });
         });
+
+    </script>
+
+    <!-- Hero Animation -->
+    <script src="js/3d-animation.js"></script>
+    <script src="js/nav-auth.js"></script>
+    <script src="js/accessibility.js"></script>
+
+    <!-- Animated Statistics Counter -->
+    <script>
+        (function() {
+            const statValues = document.querySelectorAll('.stat-value');
+            let animated = false;
+
+            function animateCounters() {
+                if (animated) return;
+                animated = true;
+
+                statValues.forEach(stat => {
+                    const target = parseInt(stat.dataset.target, 10);
+                    const suffix = stat.dataset.suffix || '';
+                    const duration = 2000;
+                    const step = target / (duration / 16);
+                    let current = 0;
+
+                    function update() {
+                        current += step;
+                        if (current < target) {
+                            stat.textContent = Math.floor(current).toLocaleString() + suffix;
+                            requestAnimationFrame(update);
+                        } else {
+                            stat.textContent = target.toLocaleString() + suffix;
+                        }
+                    }
+                    requestAnimationFrame(update);
+                });
+            }
+
+            // Observe stats section
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateCounters();
+                            observer.disconnect();
+                        }
+                    });
+                }, { threshold: 0.3 });
+                observer.observe(statsSection);
+            }
+        })();
     </script>
 </body>
 </html>

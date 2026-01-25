@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
+    <title>Profile - BackTrack</title>
+    <script>
+        // Disable pulsing/flashing animations site-wide
+        window.__DISABLE_ANIMATIONS__ = true;
+    </script>
+    <style>
+        /* Disable CSS animations (stops pulsing/flashing indicators) but keep final states visible */
+        * { animation: none !important; -webkit-animation: none !important; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            animation: pageLoadFadeIn 0.8s ease-out;
+        }
+
+        @keyframes pageLoadFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        a, button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background-color: transparent;
+            height: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        body.nav-scrolled nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+        }
+
+        body.nav-scrolled nav::after {
+            opacity: 1;
+        }
+
+        .nav-spacer {
+            height: 70px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 100%;
+        }
+
+        .nav-left img {
+            height: 70px;
+            width: auto;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 48px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.4s;
+        }
+
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sign-out-btn {
+            background: transparent;
+            color: #888888;
+            border: 1px solid #333333;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .sign-out-btn:hover {
+            color: #ffffff;
+            border-color: #555555;
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            margin-bottom: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            border: 3px solid #333333;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            color: #666666;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .profile-joined {
+            color: #444444;
+            font-size: 14px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, #ffffff 0%, #888888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #666666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .profile-section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .section-action {
+            color: #666666;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .section-action:hover {
+            color: #ffffff;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            border-color: #333333;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 160px;
+            background: #111111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333333;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-image svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .item-content {
+            padding: 20px;
+        }
+
+        .item-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666666;
+            font-size: 13px;
+        }
+
+        .item-status {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .item-status.active {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+
+        .item-status.claimed {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+
+        .item-status.returned {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a78bfa;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #444444;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .settings-form {
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 15px;
+            color: #ffffff;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #555555;
+            background: #121212;
+        }
+
+        .form-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-save {
+            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
+            color: #ffffff;
+            border: 1px solid #3f3f3f;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
+            color: #1a1a1a;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 16px;
+        }
+
+        .tab {
+            background: transparent;
+            border: none;
+            color: #666666;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: #ffffff;
+            background: #1a1a1a;
+        }
+
+        .tab.active {
+            color: #ffffff;
+            background: #1a1a1a;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .danger-zone {
+            margin-top: 48px;
+            padding-top: 48px;
+            border-top: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .danger-title {
+            color: #f87171;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .danger-text {
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #1a1a1a;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .not-logged-in {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .not-logged-in h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .not-logged-in p {
+            color: #666666;
+            margin-bottom: 24px;
+        }
+
+        .not-logged-in a {
+            display: inline-block;
+            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
+            color: #ffffff;
+            border: 1px solid #3f3f3f;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .not-logged-in a:hover {
+            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
+            color: #1a1a1a;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .profile-container {
+                padding: 40px 20px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/nav-auth.css">
+    <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+    <div class="page-transition" id="pageTransition"></div>
+
+    <nav>
+        <a href="index.html" class="nav-left">
+            <img src="logo.png" alt="BackTrack">
+        </a>
+        <div class="nav-center">
+            <a href="browse.html" class="nav-link">Browse</a>
+            <a href="map.html" class="nav-link">Map</a>
+            <a href="submit.html" class="nav-link">Submit</a>
+            <a href="features.html" class="nav-link">Features</a>
+            <a href="sources.html" class="nav-link">Sources</a>
+        </div>
+        <div class="nav-right">
+            <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
+        </div>
+    </nav>
+    <div class="nav-spacer"></div>
+
+    <main class="profile-container">
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Not Logged In State -->
+        <div class="not-logged-in" id="notLoggedIn" style="display: none;">
+            <h2>Sign in to view your profile</h2>
+            <p>You need to be logged in to access your profile and manage your items.</p>
+            <a href="login.html">Sign In</a>
+        </div>
+
+        <!-- Profile Content -->
+        <div id="profileContent" style="display: none;">
+            <header class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">
+                    <span id="avatarInitials"></span>
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name" id="profileName">Loading...</h1>
+                    <p class="profile-email" id="profileEmail"></p>
+                    <p class="profile-joined" id="profileJoined"></p>
+                </div>
+            </header>
+
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="statSubmitted">0</div>
+                    <div class="stat-label">Items Submitted</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statClaimed">0</div>
+                    <div class="stat-label">Items Claimed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statReturned">0</div>
+                    <div class="stat-label">Items Returned</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="items">My Items</button>
+                <button class="tab" data-tab="claims">My Claims</button>
+                <button class="tab" data-tab="settings">Settings</button>
+            </div>
+
+            <!-- My Items Tab -->
+            <div class="tab-content active" id="itemsTab">
+                <div class="section-header">
+                    <h2 class="section-title">Items I've Submitted</h2>
+                    <a href="submit.html" class="section-action">+ Submit New Item</a>
+                </div>
+                <div class="items-grid" id="myItemsGrid">
+                    <!-- Items loaded dynamically -->
+                </div>
+                <div class="empty-state" id="noItems" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    <p>You haven't submitted any items yet.</p>
+                    <a href="submit.html">Submit your first item</a>
+                </div>
+            </div>
+
+            <!-- My Claims Tab -->
+            <div class="tab-content" id="claimsTab">
+                <div class="section-header">
+                    <h2 class="section-title">Items I've Claimed</h2>
+                </div>
+                <div class="items-grid" id="myClaimsGrid">
+                    <!-- Claims loaded dynamically -->
+                </div>
+                <div class="empty-state" id="noClaims" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <p>You haven't claimed any items yet.</p>
+                    <a href="browse.html">Browse lost items</a>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settingsTab">
+                <div class="section-header">
+                    <h2 class="section-title">Account Settings</h2>
+                </div>
+                <form class="settings-form" id="settingsForm">
+                    <div class="form-group">
+                        <label class="form-label" for="settingsName">Display Name</label>
+                        <input type="text" id="settingsName" class="form-input" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="settingsEmail">Email</label>
+                        <input type="email" id="settingsEmail" class="form-input" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="settingsPhone">Phone (optional)</label>
+                        <input type="tel" id="settingsPhone" class="form-input" placeholder="For item pickup notifications">
+                    </div>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </form>
+
+                <div class="danger-zone">
+                    <h3 class="danger-title">Danger Zone</h3>
+                    <p class="danger-text">Once you delete your account, there is no going back. Please be certain.</p>
+                    <button class="btn-danger" id="deleteAccountBtn">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Coding &amp; Programming.</div>
+        <div style="display: flex; gap: 24px;">
+            <a href="features.html" style="color: #555555; text-decoration: none; font-size: 13px;">Features</a>
+            <a href="sources.html" style="color: #555555; text-decoration: none; font-size: 13px;">Sources</a>
+            <a href="index.html" style="color: #555555; text-decoration: none; font-size: 13px;">Home</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        // GitHub Pages redirect
+        if (location.hostname === 'wiredbyrush.github.io' && !location.pathname.startsWith('/backtrack-fbla/')) {
+            const targetPath = location.pathname === '/' ? '/index.html' : location.pathname;
+            location.replace(`/backtrack-fbla${targetPath}${location.search}${location.hash}`);
+        }
+
+        const loadingState = document.getElementById('loadingState');
+        const notLoggedIn = document.getElementById('notLoggedIn');
+        const profileContent = document.getElementById('profileContent');
+        const signOutBtn = document.getElementById('signOutBtn');
+
+        let currentUser = null;
+
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        function activateTab(tabName) {
+            const target = Array.from(tabs).find(t => t.dataset.tab === tabName);
+            if (!target) return;
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            target.classList.add('active');
+            document.getElementById(target.dataset.tab + 'Tab').classList.add('active');
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                activateTab(tab.dataset.tab);
+            });
+        });
+
+        const initialTab = new URLSearchParams(window.location.search).get('tab');
+        if (initialTab) {
+            activateTab(initialTab);
+        }
+
+        // Load user profile
+        async function loadProfile() {
+            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured()) {
+                loadingState.style.display = 'none';
+                notLoggedIn.style.display = 'block';
+                return;
+            }
+
+            const user = await BackTrackDB.getCurrentUser();
+
+            if (!user) {
+                loadingState.style.display = 'none';
+                notLoggedIn.style.display = 'block';
+                return;
+            }
+
+            currentUser = user;
+            displayProfile(user);
+            loadUserItems(user.id);
+            loadUserClaims(user.id);
+
+            loadingState.style.display = 'none';
+            profileContent.style.display = 'block';
+        }
+
+        function displayProfile(user) {
+            const metadata = user.user_metadata || {};
+            const name = metadata.full_name || metadata.name || user.email.split('@')[0];
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('profileName').textContent = name;
+            document.getElementById('profileEmail').textContent = user.email;
+            document.getElementById('avatarInitials').textContent = initials;
+
+            if (metadata.avatar_url) {
+                document.getElementById('profileAvatar').innerHTML = `<img src="${metadata.avatar_url}" alt="${name}">`;
+            }
+
+            const createdAt = new Date(user.created_at);
+            document.getElementById('profileJoined').textContent = `Joined ${createdAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+
+            // Settings form
+            document.getElementById('settingsName').value = name;
+            document.getElementById('settingsEmail').value = user.email;
+            document.getElementById('settingsPhone').value = metadata.phone || '';
+        }
+
+        async function loadUserItems(userId) {
+            try {
+                const { data: items, error } = await BackTrackDB.supabase
+                    .from('items')
+                    .select('*')
+                    .eq('submitted_by', userId)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                const grid = document.getElementById('myItemsGrid');
+                const noItems = document.getElementById('noItems');
+                document.getElementById('statSubmitted').textContent = items?.length || 0;
+
+                if (!items || items.length === 0) {
+                    grid.innerHTML = '';
+                    noItems.style.display = 'block';
+                    return;
+                }
+
+                noItems.style.display = 'none';
+                grid.innerHTML = items.map(item => createItemCard(item)).join('');
+            } catch (err) {
+                console.error('Error loading items:', err);
+            }
+        }
+
+        async function loadUserClaims(userId) {
+            try {
+                const { data: claims, error } = await BackTrackDB.supabase
+                    .from('claims')
+                    .select('*, items(*)')
+                    .eq('user_id', userId)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                const grid = document.getElementById('myClaimsGrid');
+                const noClaims = document.getElementById('noClaims');
+                document.getElementById('statClaimed').textContent = claims?.length || 0;
+
+                const returned = claims?.filter(c => c.status === 'approved').length || 0;
+                document.getElementById('statReturned').textContent = returned;
+
+                if (!claims || claims.length === 0) {
+                    grid.innerHTML = '';
+                    noClaims.style.display = 'block';
+                    return;
+                }
+
+                noClaims.style.display = 'none';
+                grid.innerHTML = claims.map(claim => createItemCard(claim.items, claim.status)).join('');
+            } catch (err) {
+                console.error('Error loading claims:', err);
+            }
+        }
+
+        function createItemCard(item, claimStatus) {
+            const status = claimStatus || item.status || 'active';
+            const statusLabels = {
+                'active': 'Active',
+                'pending': 'Pending',
+                'claimed': 'Claimed',
+                'approved': 'Returned',
+                'rejected': 'Rejected'
+            };
+
+            const imageHtml = item.image_url
+                ? `<img src="${item.image_url}" alt="${item.title}">`
+                : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                       <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                   </svg>`;
+
+            const date = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+            return `
+                <div class="item-card">
+                    <div class="item-image">${imageHtml}</div>
+                    <div class="item-content">
+                        <h3 class="item-title">${item.title || 'Untitled Item'}</h3>
+                        <div class="item-meta">
+                            <span>${date}</span>
+                            <span class="item-status ${status}">${statusLabels[status] || status}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Settings form
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser) return;
+
+            const name = document.getElementById('settingsName').value;
+            const phone = document.getElementById('settingsPhone').value;
+
+            try {
+                const { error } = await BackTrackDB.supabase.auth.updateUser({
+                    data: {
+                        full_name: name,
+                        phone: phone
+                    }
+                });
+
+                if (error) throw error;
+                alert('Settings saved successfully!');
+            } catch (err) {
+                alert('Error saving settings: ' + err.message);
+            }
+        });
+
+        // Sign out
+        signOutBtn.addEventListener('click', async () => {
+            if (typeof BackTrackDB !== 'undefined') {
+                await BackTrackDB.signOut();
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Delete account
+        document.getElementById('deleteAccountBtn').addEventListener('click', async () => {
+            if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                return;
+            }
+
+            alert('Please contact support to delete your account.');
+        });
+
+        // Initialize
+        loadProfile();
+
+        // Auth state listener
+        if (typeof BackTrackDB !== 'undefined') {
+            BackTrackDB.onAuthStateChange((event, user) => {
+                if (!user) {
+                    loadingState.style.display = 'none';
+                    profileContent.style.display = 'none';
+                    notLoggedIn.style.display = 'block';
+                }
+            });
+        }
+
+        // Nav scroll effect
+        function updateNavBorder() {
+            document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
+        }
+        updateNavBorder();
+        window.addEventListener('scroll', updateNavBorder, { passive: true });
+
+        // Page transitions
+        const pageTransition = document.getElementById('pageTransition');
+        const transitionLinks = document.querySelectorAll('a[href$=".html"]');
+
+        transitionLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href === window.location.pathname.split('/').pop() || href.startsWith('http')) return;
+
+                e.preventDefault();
+                pageTransition.classList.add('active');
+                setTimeout(() => { window.location.href = href; }, 400);
+            });
+        });
+    </script>
+    <script src="js/nav-auth.js"></script>
+    <script src="js/accessibility.js"></script>
+</body>
+</html>
