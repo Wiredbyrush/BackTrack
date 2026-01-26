@@ -980,79 +980,8 @@
         if (!deferredInstallPrompt) return;
         if (window.matchMedia('(display-mode: standalone)').matches) return;
 
-        // Check if button already exists
-        if (document.getElementById('pwa-install-btn')) return;
-
-        const btn = document.createElement('button');
-        btn.id = 'pwa-install-btn';
-        btn.setAttribute('aria-label', 'Install BackTrack app');
-        btn.innerHTML = `
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            <span>Install App</span>
-        `;
-
-        const styles = document.createElement('style');
-        styles.textContent = `
-            #pwa-install-btn {
-                position: fixed;
-                left: 80px;
-                bottom: 24px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 12px 20px;
-                background: linear-gradient(145deg, #22c55e 0%, #16a34a 100%);
-                border: none;
-                border-radius: 50px;
-                color: #fff;
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-                box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
-                z-index: 9999;
-                animation: pwaSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-                transition: all 0.3s ease;
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            }
-            #pwa-install-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 30px rgba(34, 197, 94, 0.5);
-            }
-            @keyframes pwaSlideIn {
-                from { opacity: 0; transform: translateX(-20px); }
-                to { opacity: 1; transform: translateX(0); }
-            }
-            @media (max-width: 768px) {
-                #pwa-install-btn {
-                    left: 50%;
-                    transform: translateX(-50%);
-                    bottom: 90px;
-                }
-                #pwa-install-btn:hover {
-                    transform: translateX(-50%) translateY(-2px);
-                }
-            }
-        `;
-
-        document.head.appendChild(styles);
-        document.body.appendChild(btn);
-
-        btn.addEventListener('click', async () => {
-            if (!deferredInstallPrompt) return;
-
-            deferredInstallPrompt.prompt();
-            const { outcome } = await deferredInstallPrompt.userChoice;
-
-            if (outcome === 'accepted') {
-                showToast('BackTrack installed! Find it on your home screen.', 'success');
-                btn.remove();
-            }
-            deferredInstallPrompt = null;
-        });
+        window.BackTrackDeferredInstallPrompt = deferredInstallPrompt;
+        window.dispatchEvent(new CustomEvent('backtrack:install-available'));
     }
 
     // ============================================

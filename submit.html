@@ -500,7 +500,10 @@
     <!-- Navigation -->
     <nav>
         <a href="index.html" class="nav-left">
-            <img src="logo.png" alt="BackTrack">
+            <span class="brand-logo">
+                <img class="logo-dark" src="logo.png" alt="BackTrack">
+                <img class="logo-light" src="logo-white.png" alt="" aria-hidden="true">
+            </span>
         </a>
 
         <div class="nav-center">
@@ -809,6 +812,15 @@
             submitBtn.textContent = 'Submitting...';
 
             try {
+                if (typeof BackTrackDB !== 'undefined' && BackTrackDB.isSupabaseConfigured()) {
+                    const user = await BackTrackDB.getCurrentUser();
+                    if (!user) {
+                        alert('Please log in to submit an item.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                }
+
                 let imageUrl = null;
 
                 // Upload image if selected
@@ -837,7 +849,7 @@
                     finder_name: document.getElementById('finderName').value,
                     contact_email: document.getElementById('contactEmail').value,
                     contact_phone: document.getElementById('contactPhone').value,
-                    status: 'pending'
+                    status: 'found'
                 };
 
                 // Check if Supabase is configured
@@ -862,7 +874,7 @@
 
             } catch (error) {
                 console.error('Error submitting item:', error);
-                alert('Something went wrong. Please try again.');
+                alert(error.message || 'Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Item';

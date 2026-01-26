@@ -966,6 +966,45 @@ body.light-theme .page-transition {
     background: var(--bg-primary) !important;
 }
 
+/* Hero Visual / 3D Animation Container - Seamless */
+body.light-theme .hero-visual {
+    background: transparent !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.light-theme .hero-visual canvas {
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* Logo in light mode - make dark logo visible */
+body.light-theme .nav-left {
+    background: transparent !important;
+}
+
+body.light-theme .nav-left img {
+    filter: brightness(0) saturate(100%) !important;
+    /* Makes logo solid black for light mode */
+}
+
+/* Secondary Button - Clean look in light mode (no border) */
+body.light-theme .btn-secondary {
+    color: var(--accent-primary) !important;
+    border: none !important;
+    background: rgba(37, 99, 235, 0.08) !important;
+}
+
+body.light-theme .btn-secondary:hover {
+    background: rgba(37, 99, 235, 0.15) !important;
+    color: var(--accent-primary-hover) !important;
+}
+
+body.light-theme .btn-secondary::after {
+    background: var(--accent-primary) !important;
+}
+
 /* Claim page specific */
 body.light-theme .item-detail,
 body.light-theme .share-section {

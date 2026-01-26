@@ -34,6 +34,8 @@
   }
 
   function buildDropdown(isAdmin) {
+    const canInstall = window.BackTrackDeferredInstallPrompt &&
+      !window.matchMedia('(display-mode: standalone)').matches;
     const dropdown = document.createElement('div');
     dropdown.className = 'user-dropdown';
     dropdown.innerHTML = `
@@ -41,6 +43,7 @@
       <a href="profile.html?tab=items">My Items</a>
       <a href="profile.html?tab=claims">My Claims</a>
       <a href="profile.html?tab=settings">Settings</a>
+      ${canInstall ? '<button type="button" class="install-app-btn">Install App</button>' : ''}
       ${isAdmin ? '<a href="admin.html" class="admin-link">Admin Panel</a>' : ''}
       <div class="divider"></div>
       <button type="button" class="sign-out-btn">Sign Out</button>
@@ -57,6 +60,7 @@
     const signInBtn = ensureSignIn(navRight);
 
     let currentMenu = null;
+    let currentUser = null;
 
     function closeMenu() {
       if (currentMenu) {
@@ -81,6 +85,7 @@
     }
 
     async function renderSignedIn(user) {
+      currentUser = user;
       const name = user.user_metadata?.full_name || user.email || 'U';
       const initial = name.charAt(0).toUpperCase();
       const bgColor = avatarColors[initial] || '#6366f1';
@@ -103,6 +108,20 @@
       avatar.title = user.email || 'Account';
 
       const dropdown = buildDropdown(isAdmin);
+      const installBtn = dropdown.querySelector('.install-app-btn');
+      if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+          const prompt = window.BackTrackDeferredInstallPrompt;
+          if (!prompt) return;
+          prompt.prompt();
+          const { outcome } = await prompt.userChoice;
+          if (outcome === 'accepted' && window.BackTrackToast) {
+            window.BackTrackToast('BackTrack installed! Find it on your home screen.', 'success');
+          }
+          window.BackTrackDeferredInstallPrompt = null;
+          installBtn.remove();
+        });
+      }
       const signOutBtn = dropdown.querySelector('.sign-out-btn');
       signOutBtn.addEventListener('click', async () => {
         await BackTrackDB.signOut();
@@ -147,6 +166,12 @@
         }
       });
     }
+
+    window.addEventListener('backtrack:install-available', () => {
+      if (currentUser) {
+        renderSignedIn(currentUser);
+      }
+    });
 
     updateAuth();
   }

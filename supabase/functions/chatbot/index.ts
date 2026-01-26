@@ -1,15 +1,5 @@
 import { corsHeaders } from '../_shared/cors.ts';
-
-const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-
-if (!OPENAI_API_KEY) {
-  throw new Error('Missing OPENAI_API_KEY');
-}
-
-const OPENAI_HEADERS = {
-  Authorization: `Bearer ${OPENAI_API_KEY}`,
-  'Content-Type': 'application/json',
-};
+import { chatText } from '../_shared/openai.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -25,32 +15,17 @@ Deno.serve(async (req) => {
       });
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: OPENAI_HEADERS,
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are BackTrack, a concise assistant for a lost-and-found app. Keep answers short and helpful.',
-          },
-          { role: 'user', content: message },
-        ],
-        temperature: 0.3,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.text();
-      return new Response(JSON.stringify({ error }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const payload = await response.json();
-    const reply = payload.choices?.[0]?.message?.content?.trim() || '';
+    const reply = await chatText(
+      [
+        {
+          role: 'system',
+          content:
+            'You are BackTrack, a concise assistant for a lost-and-found app. Keep answers short and helpful.',
+        },
+        { role: 'user', content: message },
+      ],
+      0.3,
+    );
 
     return new Response(JSON.stringify({ reply }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

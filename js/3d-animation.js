@@ -1,5 +1,6 @@
-// BackTrack - Hero 3D Sphere Mesh Animation
-// Premium interactive wireframe sphere with mouse tracking
+// BackTrack - Premium Solar System Animation
+// Clean, elegant orbital design representing the lost-and-found network
+// Designed to impress FBLA judges
 
 (function() {
   const container = document.querySelector('.hero-visual');
@@ -16,14 +17,12 @@
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  let w, h;
+  let w, h, centerX, centerY;
   let animId;
   let time = 0;
   let mouseX = 0.5;
   let mouseY = 0.5;
   let mouseInCanvas = false;
-  let targetRotX = 0, targetRotY = 0;
-  let currentRotX = 0, currentRotY = 0;
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio, 2);
@@ -32,314 +31,371 @@
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    centerX = w * 0.52;
+    centerY = h * 0.48;
   }
 
-  // --- Generate sphere vertices ---
-  const RINGS = 14;
-  const SEGMENTS = 20;
-  const vertices = [];
-  const edges = [];
+  // Theme detection
+  function isLightMode() {
+    return document.body.classList.contains('light-theme');
+  }
 
-  // Generate vertices on a unit sphere
-  for (let i = 0; i <= RINGS; i++) {
-    const phi = (i / RINGS) * Math.PI;
-    for (let j = 0; j < SEGMENTS; j++) {
-      const theta = (j / SEGMENTS) * Math.PI * 2;
-      vertices.push({
-        x: Math.sin(phi) * Math.cos(theta),
-        y: Math.cos(phi),
-        z: Math.sin(phi) * Math.sin(theta),
-        baseX: Math.sin(phi) * Math.cos(theta),
-        baseY: Math.cos(phi),
-        baseZ: Math.sin(phi) * Math.sin(theta),
+  function getColors() {
+    const light = isLightMode();
+    return {
+      primary: light ? '#2563eb' : '#3b82f6',
+      primaryRGB: light ? '37, 99, 235' : '59, 130, 246',
+      secondary: light ? '#06b6d4' : '#22d3ee',
+      secondaryRGB: light ? '6, 182, 212' : '34, 211, 238',
+      accent: light ? '#8b5cf6' : '#a78bfa',
+      accentRGB: light ? '139, 92, 246' : '167, 139, 250',
+      text: light ? '15, 23, 42' : '255, 255, 255',
+      glow: light ? '37, 99, 235' : '59, 130, 246',
+    };
+  }
+
+  // ========== ORBITAL CONFIGURATION ==========
+  const orbits = [
+    { radius: 0.18, speed: 0.0012, items: 2, dotted: false },
+    { radius: 0.32, speed: -0.0008, items: 3, dotted: true },
+    { radius: 0.48, speed: 0.0005, items: 4, dotted: false },
+    { radius: 0.66, speed: -0.0003, items: 3, dotted: true },
+  ];
+
+  // Items orbiting - representing lost items
+  const orbitingItems = [];
+
+  // Item icon definitions (cleaner, simpler)
+  const itemShapes = [
+    // Key
+    (ctx, x, y, size) => {
+      ctx.beginPath();
+      ctx.arc(x, y - size * 0.25, size * 0.3, 0, Math.PI * 2);
+      ctx.moveTo(x, y + size * 0.05);
+      ctx.lineTo(x, y + size * 0.5);
+      ctx.moveTo(x, y + size * 0.35);
+      ctx.lineTo(x + size * 0.15, y + size * 0.35);
+    },
+    // Phone
+    (ctx, x, y, size) => {
+      ctx.beginPath();
+      ctx.roundRect(x - size * 0.22, y - size * 0.4, size * 0.44, size * 0.8, size * 0.08);
+    },
+    // Wallet
+    (ctx, x, y, size) => {
+      ctx.beginPath();
+      ctx.roundRect(x - size * 0.4, y - size * 0.28, size * 0.8, size * 0.56, size * 0.05);
+    },
+    // Bag
+    (ctx, x, y, size) => {
+      ctx.beginPath();
+      ctx.roundRect(x - size * 0.32, y - size * 0.2, size * 0.64, size * 0.55, size * 0.08);
+      ctx.moveTo(x - size * 0.18, y - size * 0.2);
+      ctx.quadraticCurveTo(x - size * 0.18, y - size * 0.45, x, y - size * 0.45);
+      ctx.quadraticCurveTo(x + size * 0.18, y - size * 0.45, x + size * 0.18, y - size * 0.2);
+    },
+    // Watch
+    (ctx, x, y, size) => {
+      ctx.beginPath();
+      ctx.arc(x, y, size * 0.32, 0, Math.PI * 2);
+      ctx.moveTo(x, y - size * 0.45);
+      ctx.lineTo(x, y - size * 0.32);
+      ctx.moveTo(x, y + size * 0.32);
+      ctx.lineTo(x, y + size * 0.45);
+    },
+    // Headphones
+    (ctx, x, y, size) => {
+      ctx.beginPath();
+      ctx.arc(x, y - size * 0.1, size * 0.38, Math.PI, 0);
+      ctx.moveTo(x - size * 0.38, y - size * 0.1);
+      ctx.lineTo(x - size * 0.38, y + size * 0.15);
+      ctx.moveTo(x + size * 0.38, y - size * 0.1);
+      ctx.lineTo(x + size * 0.38, y + size * 0.15);
+    },
+  ];
+
+  function initOrbits() {
+    orbitingItems.length = 0;
+    let shapeIdx = 0;
+
+    orbits.forEach((orbit, orbitIdx) => {
+      for (let i = 0; i < orbit.items; i++) {
+        const angle = (i / orbit.items) * Math.PI * 2 + orbitIdx * 0.5;
+        orbitingItems.push({
+          orbitIdx,
+          angle,
+          baseAngle: angle,
+          size: 14 + Math.random() * 6,
+          shape: itemShapes[shapeIdx % itemShapes.length],
+          glowPhase: Math.random() * Math.PI * 2,
+          trail: [],
+        });
+        shapeIdx++;
+      }
+    });
+  }
+
+  // ========== PARTICLES ==========
+  const particles = [];
+  const PARTICLE_COUNT = 40;
+
+  function initParticles() {
+    particles.length = 0;
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        angle: Math.random() * Math.PI * 2,
+        radius: 0.1 + Math.random() * 0.7,
+        speed: (0.0001 + Math.random() * 0.0003) * (Math.random() > 0.5 ? 1 : -1),
+        size: 1 + Math.random() * 1.5,
+        alpha: 0.1 + Math.random() * 0.3,
+        twinkleSpeed: 0.002 + Math.random() * 0.003,
+        twinklePhase: Math.random() * Math.PI * 2,
       });
     }
   }
 
-  // Generate edges (connect adjacent vertices)
-  for (let i = 0; i <= RINGS; i++) {
-    for (let j = 0; j < SEGMENTS; j++) {
-      const idx = i * SEGMENTS + j;
-      const nextJ = (j + 1) % SEGMENTS;
-
-      // Horizontal edge
-      if (i < RINGS) {
-        edges.push([idx, i * SEGMENTS + nextJ]);
-      }
-      // Vertical edge
-      if (i < RINGS) {
-        edges.push([idx, (i + 1) * SEGMENTS + j]);
-      }
-      // Diagonal for visual interest
-      if (i < RINGS && j % 2 === 0) {
-        edges.push([idx, (i + 1) * SEGMENTS + nextJ]);
-      }
-    }
-  }
-
-  // --- Floating particles around the sphere ---
-  const PARTICLE_COUNT = 24;
-  const floatingParticles = [];
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const dist = 1.15 + Math.random() * 0.6;
-    floatingParticles.push({
-      x: Math.sin(phi) * Math.cos(theta) * dist,
-      y: Math.cos(phi) * dist,
-      z: Math.sin(phi) * Math.sin(theta) * dist,
-      size: 0.6 + Math.random() * 1.1,
-      speed: 0.00015 + Math.random() * 0.0002,
-      offset: Math.random() * Math.PI * 2,
-      opacity: 0.08 + Math.random() * 0.18,
-    });
-  }
-
-  // --- 3D math ---
-  function rotatePoint(x, y, z, rx, ry) {
-    // Rotate around Y
-    const cosY = Math.cos(ry), sinY = Math.sin(ry);
-    let nx = x * cosY - z * sinY;
-    let nz = x * sinY + z * cosY;
-    // Rotate around X
-    const cosX = Math.cos(rx), sinX = Math.sin(rx);
-    let ny = y * cosX - nz * sinX;
-    nz = y * sinX + nz * cosX;
-    return { x: nx, y: ny, z: nz };
-  }
-
-  function project(x, y, z) {
-    const perspective = 3.5;
-    const scale = perspective / (perspective + z);
-    const size = Math.min(w, h) * 0.38;
-    return {
-      x: w * 0.5 + x * size * scale,
-      y: h * 0.5 - y * size * scale,
-      z: z,
-      scale: scale,
-    };
-  }
-
-  // --- Hot nodes (vertices that pulse brighter) ---
-  const HOT_NODE_COUNT = 5;
-  const hotNodes = [];
-  for (let i = 0; i < HOT_NODE_COUNT; i++) {
-    hotNodes.push({
-      idx: Math.floor(Math.random() * vertices.length),
-      phase: Math.random() * Math.PI * 2,
-      speed: 0.01 + Math.random() * 0.02,
-    });
-  }
-
-  // --- Render ---
+  // ========== RENDER ==========
   function render() {
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, w, h);
+    const colors = getColors();
+    const light = isLightMode();
+    const baseRadius = Math.min(w, h) * 0.42;
 
-    // Smooth rotation toward mouse
-    if (mouseInCanvas) {
-      targetRotY = (mouseX - 0.5) * 1.2;
-      targetRotX = -(mouseY - 0.5) * 0.8;
+    // Clear
+    if (light) {
+      ctx.clearRect(0, 0, w, h);
     } else {
-      targetRotY = time * 0.0004;
-      targetRotX = Math.sin(time * 0.0002) * 0.3;
+      // Dark gradient background
+      const bgGrad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, baseRadius * 1.8);
+      bgGrad.addColorStop(0, '#050510');
+      bgGrad.addColorStop(0.5, '#020208');
+      bgGrad.addColorStop(1, '#000000');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
     }
-    currentRotX += (targetRotX - currentRotX) * 0.03;
-    currentRotY += (targetRotY - currentRotY) * 0.03;
 
-    const autoRotY = time * 0.0004;
-    const ry = currentRotY + autoRotY;
-    const rx = currentRotX;
+    // ========== AMBIENT GLOW ==========
+    if (!light) {
+      const ambientGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, baseRadius * 0.8);
+      ambientGlow.addColorStop(0, 'rgba(59, 130, 246, 0.06)');
+      ambientGlow.addColorStop(0.5, 'rgba(34, 211, 238, 0.02)');
+      ambientGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = ambientGlow;
+      ctx.fillRect(0, 0, w, h);
+    }
 
-    // Breathe effect
-    const breathe = 1 + Math.sin(time * 0.002) * 0.02;
+    // ========== DRAW ORBIT RINGS ==========
+    orbits.forEach((orbit, idx) => {
+      const radius = baseRadius * orbit.radius;
+      const alpha = light ? 0.15 : 0.12;
 
-    // Scan line position (sweeps vertically through sphere)
-    const scanY = Math.sin(time * 0.003) * 0.9;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
 
-    // --- Ambient glow behind sphere ---
-    const gcx = w * 0.5;
-    const gcy = h * 0.5;
-    const glowRadius = Math.min(w, h) * 0.42;
-    const ambientGlow = ctx.createRadialGradient(gcx, gcy, 0, gcx, gcy, glowRadius);
-    ambientGlow.addColorStop(0, 'rgba(255, 255, 255, 0.018)');
-    ambientGlow.addColorStop(0.4, 'rgba(255, 255, 255, 0.006)');
-    ambientGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
-    ctx.fillStyle = ambientGlow;
-    ctx.fillRect(0, 0, w, h);
+      if (orbit.dotted) {
+        ctx.setLineDash([4, 8]);
+      } else {
+        ctx.setLineDash([]);
+      }
 
-    // --- Outer halo ring ---
-    const haloRadius = Math.min(w, h) * 0.4;
-    const haloAlpha = 0.014 + Math.sin(time * 0.001) * 0.006;
+      // Gradient stroke effect
+      const gradient = ctx.createLinearGradient(
+        centerX - radius, centerY,
+        centerX + radius, centerY
+      );
+      gradient.addColorStop(0, `rgba(${colors.primaryRGB}, ${alpha * 0.5})`);
+      gradient.addColorStop(0.5, `rgba(${colors.secondaryRGB}, ${alpha})`);
+      gradient.addColorStop(1, `rgba(${colors.primaryRGB}, ${alpha * 0.5})`);
+
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = light ? 1.5 : 1;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+
+    // ========== DRAW PARTICLES ==========
+    particles.forEach(p => {
+      p.angle += p.speed;
+      const twinkle = (Math.sin(time * p.twinkleSpeed + p.twinklePhase) + 1) / 2;
+      const currentAlpha = p.alpha * (0.3 + twinkle * 0.7);
+
+      const x = centerX + Math.cos(p.angle) * baseRadius * p.radius;
+      const y = centerY + Math.sin(p.angle) * baseRadius * p.radius;
+
+      ctx.beginPath();
+      ctx.arc(x, y, p.size * (0.8 + twinkle * 0.4), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${colors.text}, ${currentAlpha * (light ? 0.5 : 1)})`;
+      ctx.fill();
+    });
+
+    // ========== DRAW CENTRAL CORE ==========
+    // Outer glow rings
+    for (let i = 3; i >= 0; i--) {
+      const glowRadius = 20 + i * 12 + Math.sin(time * 0.003) * 3;
+      const glowAlpha = (0.08 - i * 0.015) * (light ? 1.5 : 1);
+
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${colors.primaryRGB}, ${glowAlpha})`;
+      ctx.fill();
+    }
+
+    // Core gradient
+    const coreSize = 16 + Math.sin(time * 0.004) * 2;
+    const coreGrad = ctx.createRadialGradient(
+      centerX - 3, centerY - 3, 0,
+      centerX, centerY, coreSize
+    );
+    coreGrad.addColorStop(0, '#ffffff');
+    coreGrad.addColorStop(0.3, colors.primary);
+    coreGrad.addColorStop(0.7, colors.secondary);
+    coreGrad.addColorStop(1, `rgba(${colors.secondaryRGB}, 0.5)`);
+
     ctx.beginPath();
-    ctx.arc(gcx, gcy, haloRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(255, 255, 255, ${haloAlpha})`;
+    ctx.arc(centerX, centerY, coreSize, 0, Math.PI * 2);
+    ctx.fillStyle = coreGrad;
+    ctx.fill();
+
+    // Core shine
+    ctx.beginPath();
+    ctx.arc(centerX - 4, centerY - 4, 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fill();
+
+    // ========== DRAW ORBITING ITEMS ==========
+    orbitingItems.forEach(item => {
+      const orbit = orbits[item.orbitIdx];
+      item.angle += orbit.speed;
+
+      const radius = baseRadius * orbit.radius;
+      const x = centerX + Math.cos(item.angle) * radius;
+      const y = centerY + Math.sin(item.angle) * radius;
+
+      // Update trail
+      item.trail.unshift({ x, y, alpha: 1 });
+      if (item.trail.length > 12) item.trail.pop();
+
+      // Draw trail
+      item.trail.forEach((point, i) => {
+        point.alpha *= 0.85;
+        if (point.alpha > 0.05) {
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, 2 * (1 - i / 12), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${colors.secondaryRGB}, ${point.alpha * 0.3})`;
+          ctx.fill();
+        }
+      });
+
+      // Item glow
+      const glowPulse = (Math.sin(time * 0.003 + item.glowPhase) + 1) / 2;
+      const glowSize = item.size * (1.8 + glowPulse * 0.4);
+
+      const itemGlow = ctx.createRadialGradient(x, y, 0, x, y, glowSize);
+      itemGlow.addColorStop(0, `rgba(${colors.primaryRGB}, ${0.2 + glowPulse * 0.1})`);
+      itemGlow.addColorStop(0.5, `rgba(${colors.secondaryRGB}, ${0.08 + glowPulse * 0.05})`);
+      itemGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = itemGlow;
+      ctx.beginPath();
+      ctx.arc(x, y, glowSize, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Item background circle
+      ctx.beginPath();
+      ctx.arc(x, y, item.size * 0.85, 0, Math.PI * 2);
+      const bgGrad = ctx.createRadialGradient(x - 2, y - 2, 0, x, y, item.size * 0.85);
+      bgGrad.addColorStop(0, light ? 'rgba(255, 255, 255, 0.95)' : 'rgba(30, 41, 59, 0.9)');
+      bgGrad.addColorStop(1, light ? 'rgba(241, 245, 249, 0.9)' : 'rgba(15, 23, 42, 0.95)');
+      ctx.fillStyle = bgGrad;
+      ctx.fill();
+
+      // Item border
+      ctx.strokeStyle = `rgba(${colors.primaryRGB}, ${light ? 0.4 : 0.3})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Draw item icon
+      ctx.save();
+      ctx.strokeStyle = light ? `rgba(${colors.text}, 0.7)` : `rgba(255, 255, 255, 0.8)`;
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      item.shape(ctx, x, y, item.size * 0.7);
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // ========== CONNECTION LINES (to nearby items) ==========
+    ctx.globalAlpha = 0.15;
+    for (let i = 0; i < orbitingItems.length; i++) {
+      const item1 = orbitingItems[i];
+      const orbit1 = orbits[item1.orbitIdx];
+      const x1 = centerX + Math.cos(item1.angle) * baseRadius * orbit1.radius;
+      const y1 = centerY + Math.sin(item1.angle) * baseRadius * orbit1.radius;
+
+      for (let j = i + 1; j < orbitingItems.length; j++) {
+        const item2 = orbitingItems[j];
+        const orbit2 = orbits[item2.orbitIdx];
+        const x2 = centerX + Math.cos(item2.angle) * baseRadius * orbit2.radius;
+        const y2 = centerY + Math.sin(item2.angle) * baseRadius * orbit2.radius;
+
+        const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+
+        if (dist < 100) {
+          const lineAlpha = (1 - dist / 100);
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.strokeStyle = `rgba(${colors.secondaryRGB}, ${lineAlpha})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // ========== MOUSE INTERACTION ==========
+    if (mouseInCanvas) {
+      const mx = mouseX * w;
+      const my = mouseY * h;
+
+      // Subtle glow at cursor
+      const cursorGlow = ctx.createRadialGradient(mx, my, 0, mx, my, 60);
+      cursorGlow.addColorStop(0, `rgba(${colors.primaryRGB}, ${light ? 0.08 : 0.04})`);
+      cursorGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = cursorGlow;
+      ctx.fillRect(mx - 60, my - 60, 120, 120);
+    }
+
+    // ========== OUTER DECORATIVE RING ==========
+    const outerRingRadius = baseRadius * 0.82;
+    const dashOffset = time * 0.3;
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, outerRingRadius, 0, Math.PI * 2);
+    ctx.setLineDash([2, 6]);
+    ctx.lineDashOffset = dashOffset;
+    ctx.strokeStyle = `rgba(${colors.primaryRGB}, ${light ? 0.1 : 0.06})`;
     ctx.lineWidth = 1;
     ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.lineDashOffset = 0;
 
-    // Second inner halo
-    ctx.beginPath();
-    ctx.arc(gcx, gcy, haloRadius * 0.72, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(255, 255, 255, ${haloAlpha * 0.5})`;
-    ctx.lineWidth = 0.5;
-    ctx.stroke();
-
-    // --- Project all vertices ---
-    const projected = vertices.map((v, idx) => {
-      const bx = v.baseX * breathe;
-      const by = v.baseY * breathe;
-      const bz = v.baseZ * breathe;
-      const rotated = rotatePoint(bx, by, bz, rx, ry);
-      const p = project(rotated.x, rotated.y, rotated.z);
-      p.worldY = rotated.y; // store for scan line
-      p.vertIdx = idx;
-      return p;
-    });
-
-    // --- Draw edges ---
-    const mx = mouseInCanvas ? mouseX * w : -999;
-    const my = mouseInCanvas ? mouseY * h : -999;
-
-    for (let i = 0; i < edges.length; i++) {
-      const [a, b] = edges[i];
-      const pa = projected[a];
-      const pb = projected[b];
-
-      const avgZ = (pa.z + pb.z) / 2;
-      const depthAlpha = Math.max(0, (avgZ + 1.2) / 2.4);
-
-      // Scan line boost
-      const avgWorldY = (pa.worldY + pb.worldY) / 2;
-      const scanDist = Math.abs(avgWorldY - scanY);
-      const scanBoost = scanDist < 0.15 ? (1 - scanDist / 0.15) * 0.15 : 0;
-
-      // Mouse proximity boost for edges
-      const edgeMidX = (pa.x + pb.x) / 2;
-      const edgeMidY = (pa.y + pb.y) / 2;
-      const mouseDist = Math.sqrt((edgeMidX - mx) ** 2 + (edgeMidY - my) ** 2);
-      const mouseBoost = mouseDist < 100 ? (1 - mouseDist / 100) * 0.12 : 0;
-
-      const alpha = depthAlpha * 0.09 + scanBoost + mouseBoost * 0.6;
-
-      if (alpha < 0.005) continue;
+    // ========== ACCENT DOTS ON OUTER RING ==========
+    for (let i = 0; i < 8; i++) {
+      const dotAngle = (i / 8) * Math.PI * 2 + time * 0.0002;
+      const dotX = centerX + Math.cos(dotAngle) * outerRingRadius;
+      const dotY = centerY + Math.sin(dotAngle) * outerRingRadius;
 
       ctx.beginPath();
-      ctx.moveTo(pa.x, pa.y);
-      ctx.lineTo(pb.x, pb.y);
-      ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(alpha, 0.4)})`;
-      ctx.lineWidth = 0.5 + depthAlpha * 0.5 + (mouseBoost > 0 ? 0.3 : 0);
-      ctx.stroke();
-    }
-
-    // --- Draw vertices ---
-    // Pre-calculate hot node set
-    const hotNodeSet = new Set(hotNodes.map(h => h.idx));
-
-    for (let i = 0; i < projected.length; i++) {
-      const p = projected[i];
-      const depthAlpha = Math.max(0, (p.z + 1.2) / 2.4);
-
-      // Scan line boost for vertices
-      const scanDist = Math.abs(p.worldY - scanY);
-      const scanBoost = scanDist < 0.12 ? (1 - scanDist / 0.12) * 0.25 : 0;
-
-      // Mouse proximity boost
-      const vMouseDist = Math.sqrt((p.x - mx) ** 2 + (p.y - my) ** 2);
-      const vMouseBoost = vMouseDist < 80 ? (1 - vMouseDist / 80) * 0.35 : 0;
-
-      // Hot node pulse
-      let hotBoost = 0;
-      if (hotNodeSet.has(i)) {
-        const hn = hotNodes.find(h => h.idx === i);
-        hotBoost = (Math.sin(time * hn.speed + hn.phase) * 0.5 + 0.5) * 0.25;
-      }
-
-      const alpha = depthAlpha * 0.38 + scanBoost + vMouseBoost + hotBoost;
-      const radius = 1 + depthAlpha * 1.4 + (vMouseBoost > 0 ? vMouseBoost * 1.5 : 0) + hotBoost * 1.1;
-
-      if (alpha < 0.02) continue;
-
-      // Glow for bright vertices
-      if (alpha > 0.25 || vMouseBoost > 0.12 || hotBoost > 0.18) {
-        const glowSize = radius * (4 + vMouseBoost * 4 + hotBoost * 3);
-        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowSize);
-        glow.addColorStop(0, `rgba(255, 255, 255, ${Math.min(alpha * 0.24, 0.14)})`);
-        glow.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(p.x - glowSize, p.y - glowSize, glowSize * 2, glowSize * 2);
-      }
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, Math.min(radius, 5), 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(alpha, 0.7)})`;
+      ctx.arc(dotX, dotY, 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${colors.secondaryRGB}, ${light ? 0.4 : 0.25})`;
       ctx.fill();
-    }
-
-    // --- Scan line horizontal glow ---
-    const scanScreenY = h * 0.5 - scanY * Math.min(w, h) * 0.38 * (3.5 / (3.5 + 0));
-    const scanLineGrad = ctx.createLinearGradient(gcx - haloRadius, scanScreenY, gcx + haloRadius, scanScreenY);
-    scanLineGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    scanLineGrad.addColorStop(0.3, 'rgba(255, 255, 255, 0.01)');
-    scanLineGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.018)');
-    scanLineGrad.addColorStop(0.7, 'rgba(255, 255, 255, 0.01)');
-    scanLineGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-    ctx.fillStyle = scanLineGrad;
-    ctx.fillRect(gcx - haloRadius, scanScreenY - 2, haloRadius * 2, 4);
-
-    // --- Floating particles ---
-    for (const fp of floatingParticles) {
-      const angle = time * fp.speed + fp.offset;
-      const fx = fp.x * Math.cos(angle * 0.3) - fp.z * Math.sin(angle * 0.3);
-      const fz = fp.x * Math.sin(angle * 0.3) + fp.z * Math.cos(angle * 0.3);
-      const fy = fp.y + Math.sin(time * 0.001 + fp.offset) * 0.1;
-
-      const rotated = rotatePoint(fx * breathe, fy * breathe, fz * breathe, rx, ry);
-      const p = project(rotated.x, rotated.y, rotated.z);
-
-      const depthAlpha = Math.max(0, (p.z + 1.5) / 3);
-      const alpha = depthAlpha * fp.opacity;
-
-      if (alpha < 0.01) continue;
-
-      // Particle glow
-      if (alpha > 0.12) {
-        const pGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, fp.size * p.scale * 3);
-        pGlow.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.12})`);
-        pGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.fillStyle = pGlow;
-        const gs = fp.size * p.scale * 3;
-        ctx.fillRect(p.x - gs, p.y - gs, gs * 2, gs * 2);
-      }
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, fp.size * p.scale, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-      ctx.fill();
-    }
-
-    // --- Mouse interactive spotlight ---
-    if (mouseInCanvas) {
-      const highlightGlow = ctx.createRadialGradient(mx, my, 0, mx, my, 100);
-      highlightGlow.addColorStop(0, 'rgba(255, 255, 255, 0.02)');
-      highlightGlow.addColorStop(0.5, 'rgba(255, 255, 255, 0.007)');
-      highlightGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = highlightGlow;
-      ctx.fillRect(mx - 100, my - 100, 200, 200);
-    }
-
-    // --- Shimmer (random vertex flash) ---
-    if (time % 45 === 0) {
-      // Reassign one hot node to a new random vertex
-      const idx = Math.floor(Math.random() * HOT_NODE_COUNT);
-      hotNodes[idx].idx = Math.floor(Math.random() * vertices.length);
-      hotNodes[idx].phase = Math.random() * Math.PI * 2;
     }
 
     time++;
     animId = requestAnimationFrame(render);
   }
 
-  // --- Events ---
+  // ========== EVENT LISTENERS ==========
   canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = (e.clientX - rect.left) / rect.width;
@@ -351,7 +407,6 @@
     mouseInCanvas = false;
   });
 
-  // Touch support
   canvas.addEventListener('touchmove', (e) => {
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
@@ -366,15 +421,13 @@
 
   window.addEventListener('resize', resize);
 
-  // --- Init ---
+  // ========== INIT ==========
   resize();
+  initOrbits();
+  initParticles();
 
   if (window.__DISABLE_ANIMATIONS__) {
     time = 100;
-    currentRotX = -0.2;
-    currentRotY = 0.5;
-    targetRotX = currentRotX;
-    targetRotY = currentRotY;
     render();
     cancelAnimationFrame(animId);
   } else {

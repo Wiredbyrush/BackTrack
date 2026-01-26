@@ -102,8 +102,14 @@ async function addItem(item) {
         .select();
 
     if (error) {
+        const details = [
+            error.message,
+            error.details,
+            error.hint,
+            error.code
+        ].filter(Boolean).join(' | ');
         console.error('Error adding item:', error);
-        return null;
+        throw new Error(details || 'Failed to add item');
     }
 
     return data?.[0] || null;

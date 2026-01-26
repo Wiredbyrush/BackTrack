@@ -344,8 +344,9 @@
         .btn-secondary {
             background: transparent;
             color: #ffffff;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 16px 24px;
+            border-radius: 30px;
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
@@ -354,24 +355,22 @@
             position: relative;
         }
 
-        .btn-secondary::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ffffff;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         .btn-secondary:hover {
-            color: #a0a0a0;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
             transform: translateY(-2px);
         }
 
-        .btn-secondary:hover::after {
-            width: 100%;
+        /* Light mode secondary button - clean, no border */
+        body.light-theme .btn-secondary {
+            color: #2563eb !important;
+            border: none !important;
+            background: rgba(37, 99, 235, 0.08) !important;
+        }
+
+        body.light-theme .btn-secondary:hover {
+            background: rgba(37, 99, 235, 0.15) !important;
+            color: #1d4ed8 !important;
         }
 
         /* Chatbot widget */
@@ -1423,7 +1422,10 @@
     <!-- Navigation -->
     <nav aria-label="Main navigation" role="navigation">
         <a href="index.html" class="nav-left" aria-label="BackTrack Home">
-            <img src="logo.png" alt="BackTrack - Lost and Found System">
+            <span class="brand-logo">
+                <img class="logo-dark" src="logo.png" alt="BackTrack - Lost and Found System">
+                <img class="logo-light" src="logo-white.png" alt="" aria-hidden="true">
+            </span>
         </a>
 
         <div class="nav-center" role="menubar">

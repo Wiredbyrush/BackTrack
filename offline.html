@@ -115,14 +115,22 @@
             position: fixed;
             top: 24px;
             left: 24px;
-            height: 28px;
             opacity: 0.5;
+        }
+
+        .logo img {
+            height: 28px;
+            width: auto;
+            display: block;
         }
     </style>
     <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
-    <img src="logo.png" alt="BackTrack" class="logo">
+    <span class="brand-logo logo">
+        <img class="logo-dark" src="logo.png" alt="BackTrack">
+        <img class="logo-light" src="logo-white.png" alt="" aria-hidden="true">
+    </span>
 
     <div class="offline-container">
         <div class="offline-icon">
