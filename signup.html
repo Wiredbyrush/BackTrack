@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data: https:;
+        connect-src 'self' https://*.supabase.co;
+    ">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <title>Sign Up - BackTrack</title>
@@ -507,17 +521,17 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="firstName">First name</label>
-                        <input type="text" id="firstName" class="form-input" placeholder="John" required aria-required="true">
+                        <input type="text" id="firstName" class="form-input" placeholder="John" required aria-required="true" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="lastName">Last name</label>
-                        <input type="text" id="lastName" class="form-input" placeholder="Doe" required aria-required="true">
+                        <input type="text" id="lastName" class="form-input" placeholder="Doe" required aria-required="true" maxlength="50">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required aria-required="true">
+                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required aria-required="true" maxlength="254">
                 </div>
 
                 <div class="form-group">
@@ -591,6 +605,84 @@
             location.replace(`/backtrack-fbla${targetPath}${location.search}${location.hash}`);
         }
 
+        // Security Functions
+        
+        // Sanitize input to prevent XSS
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return '';
+            
+            // Create a temporary div to use browser's HTML entity encoding
+            const div = document.createElement('div');
+            div.textContent = input;
+            let sanitized = div.innerHTML;
+            
+            // Remove potentially dangerous patterns
+            sanitized = sanitized
+                .replace(/[<>]/g, '') // Remove angle brackets
+                .replace(/javascript:/gi, '') // Remove javascript: protocol
+                .replace(/on\w+=/gi, '') // Remove event handlers like onclick=
+                .replace(/data:text\/html/gi, ''); // Remove data URIs
+            
+            return sanitized.trim();
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            // RFC 5322 compliant regex (simplified but robust)
+            const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            return emailRegex.test(email) && email.length <= 254;
+        }
+
+        // Validate name format (letters, spaces, hyphens, apostrophes only)
+        function isValidName(name) {
+            const nameRegex = /^[a-zA-Z\s\-']{1,50}$/;
+            return nameRegex.test(name);
+        }
+
+        // Rate limiting for signup attempts
+        const MAX_ATTEMPTS = 5;
+        const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+
+        function checkRateLimit() {
+            try {
+                const attempts = JSON.parse(localStorage.getItem('signupAttempts') || '[]');
+                const now = Date.now();
+                
+                // Remove old attempts (outside lockout window)
+                const recentAttempts = attempts.filter(time => now - time < LOCKOUT_TIME);
+                
+                if (recentAttempts.length >= MAX_ATTEMPTS) {
+                    const oldestAttempt = Math.min(...recentAttempts);
+                    const timeLeft = Math.ceil((LOCKOUT_TIME - (now - oldestAttempt)) / 1000 / 60);
+                    showStatus(`Too many signup attempts. Please try again in ${timeLeft} minute(s).`, 'error');
+                    return false;
+                }
+                
+                // Add current attempt
+                recentAttempts.push(now);
+                localStorage.setItem('signupAttempts', JSON.stringify(recentAttempts));
+                return true;
+            } catch (e) {
+                // If localStorage fails, allow the attempt
+                console.warn('Rate limiting unavailable:', e);
+                return true;
+            }
+        }
+
+        // Safe status message display (prevents XSS in error messages)
+        function showStatus(message, type) {
+            // Sanitize message to prevent XSS through error messages
+            const sanitizedMessage = String(message)
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#x27;');
+            
+            statusMsg.textContent = sanitizedMessage;
+            statusMsg.className = 'status ' + type;
+        }
+
+        
         const googleBtn = document.getElementById('googleBtn');
         const signupForm = document.getElementById('signupForm');
         const firstNameInput = document.getElementById('firstName');
@@ -612,7 +704,8 @@
         const bar4 = document.getElementById('bar4');
         const passwordHint = document.getElementById('passwordHint');
 
-        // Toggle password visibility
+        // Password Visibility Bars
+        
         function setupPasswordToggle(toggleBtn, inputField) {
             toggleBtn.addEventListener('click', () => {
                 const type = inputField.type === 'password' ? 'text' : 'password';
@@ -639,7 +732,8 @@
         setupPasswordToggle(togglePassword, passwordInput);
         setupPasswordToggle(toggleConfirmPassword, confirmPasswordInput);
 
-        // Password strength checker
+        // Password Strength Checker
+        
         function checkPasswordStrength(password) {
             let strength = 0;
             if (password.length >= 8) strength++;
@@ -651,170 +745,4 @@
 
         function updatePasswordStrength() {
             const password = passwordInput.value;
-            const strength = checkPasswordStrength(password);
-
-            // Reset all bars
-            [bar1, bar2, bar3, bar4].forEach(bar => {
-                bar.className = 'strength-bar';
-            });
-
-            if (password.length === 0) {
-                passwordHint.textContent = 'Must be at least 8 characters';
-                return;
-            }
-
-            if (strength >= 1) bar1.classList.add('weak');
-            if (strength >= 2) {
-                bar1.classList.remove('weak');
-                bar1.classList.add('medium');
-                bar2.classList.add('medium');
-            }
-            if (strength >= 3) {
-                bar1.classList.remove('medium');
-                bar2.classList.remove('medium');
-                bar1.classList.add('strong');
-                bar2.classList.add('strong');
-                bar3.classList.add('strong');
-            }
-            if (strength >= 4) {
-                bar4.classList.add('strong');
-            }
-
-            const hints = [
-                'Very weak - add more characters',
-                'Weak - add uppercase & lowercase',
-                'Medium - add numbers',
-                'Strong - add special characters',
-                'Very strong!'
-            ];
-            passwordHint.textContent = hints[strength];
-        }
-
-        passwordInput.addEventListener('input', updatePasswordStrength);
-
-        // Validate passwords match
-        confirmPasswordInput.addEventListener('input', () => {
-            if (confirmPasswordInput.value !== passwordInput.value) {
-                confirmPasswordInput.classList.add('error');
-            } else {
-                confirmPasswordInput.classList.remove('error');
-            }
-        });
-
-        function showStatus(message, type) {
-            statusMsg.textContent = message;
-            statusMsg.className = 'status ' + type;
-        }
-
-        // Check if Supabase is configured
-        async function checkConfig() {
-            if (typeof BackTrackDB !== 'undefined' && !BackTrackDB.isSupabaseConfigured()) {
-                configWarning.style.display = 'block';
-            }
-        }
-
-        // Google Sign Up
-        googleBtn.addEventListener('click', async () => {
-            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured()) {
-                configWarning.style.display = 'block';
-                return;
-            }
-            await BackTrackDB.signInWithGoogle();
-        });
-
-        // Email/Password Sign Up
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured()) {
-                configWarning.style.display = 'block';
-                return;
-            }
-
-            const firstName = firstNameInput.value.trim();
-            const lastName = lastNameInput.value.trim();
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-
-            // Validation
-            if (password !== confirmPassword) {
-                showStatus('Passwords do not match.', 'error');
-                confirmPasswordInput.classList.add('error');
-                return;
-            }
-
-            if (password.length < 8) {
-                showStatus('Password must be at least 8 characters.', 'error');
-                return;
-            }
-
-            if (!termsCheckbox.checked) {
-                showStatus('Please agree to the Terms of Service and Privacy Policy.', 'error');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Creating account...';
-
-            try {
-                const { data, error } = await BackTrackDB.supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            first_name: firstName,
-                            last_name: lastName,
-                            full_name: `${firstName} ${lastName}`
-                        }
-                    }
-                });
-
-                if (error) {
-                    showStatus(error.message, 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Create account';
-                } else {
-                    showStatus('Account created! Check your email to verify your account.', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
-                }
-            } catch (err) {
-                showStatus('An error occurred. Please try again.', 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Create account';
-            }
-        });
-
-        checkConfig();
-
-        // Nav scroll effect
-        function updateNavBorder() {
-            document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
-        }
-        updateNavBorder();
-        window.addEventListener('scroll', updateNavBorder, { passive: true });
-
-        // Page transitions
-        const pageTransition = document.getElementById('pageTransition');
-        const transitionLinks = document.querySelectorAll('a[href$=".html"]');
-
-        transitionLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
-                if (href === window.location.pathname.split('/').pop() || href.startsWith('http') || href === '#') return;
-
-                e.preventDefault();
-                pageTransition.classList.add('active');
-
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 400);
-            });
-        });
-    </script>
-    <script src="js/nav-auth.js"></script>
-    <script src="js/accessibility.js"></script>
-</body>
-</html>
+            
