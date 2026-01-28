@@ -748,4 +748,179 @@
 
         function updatePasswordStrength() {
             const password = passwordInput.value;
-            
+            const strength = checkPasswordStrength(password);
+
+            // Reset all bars
+            [bar1, bar2, bar3, bar4].forEach(bar => {
+                bar.className = 'strength-bar';
+            });
+
+            if (password.length === 0) {
+                passwordHint.textContent = 'Must be at least 8 characters';
+                return;
+            }
+
+            if (strength >= 1) bar1.classList.add('weak');
+            if (strength >= 2) {
+                bar1.classList.remove('weak');
+                bar1.classList.add('medium');
+                bar2.classList.add('medium');
+            }
+            if (strength >= 3) {
+                bar1.classList.remove('medium');
+                bar2.classList.remove('medium');
+                bar1.classList.add('strong');
+                bar2.classList.add('strong');
+                bar3.classList.add('strong');
+            }
+            if (strength >= 4) {
+                bar4.classList.add('strong');
+            }
+
+            const hints = [
+                'Very weak - add more characters',
+                'Weak - add uppercase & lowercase',
+                'Medium - add numbers',
+                'Strong - add special characters',
+                'Very strong!'
+            ];
+            passwordHint.textContent = hints[strength];
+        }
+
+        passwordInput.addEventListener('input', updatePasswordStrength);
+
+        // Validate passwords match
+        confirmPasswordInput.addEventListener('input', () => {
+            if (confirmPasswordInput.value !== passwordInput.value) {
+                confirmPasswordInput.classList.add('error');
+            } else {
+                confirmPasswordInput.classList.remove('error');
+            }
+        });
+
+        // Check if Supabase is configured
+        async function checkConfig() {
+            if (typeof BackTrackDB !== 'undefined' && !BackTrackDB.isSupabaseConfigured()) {
+                configWarning.style.display = 'block';
+            }
+        }
+
+        // Google Sign Up
+        googleBtn.addEventListener('click', async () => {
+            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured()) {
+                configWarning.style.display = 'block';
+                return;
+            }
+            await BackTrackDB.signInWithGoogle();
+        });
+
+        // Email/Password Sign Up
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured()) {
+                configWarning.style.display = 'block';
+                return;
+            }
+
+            if (!checkRateLimit()) {
+                return;
+            }
+
+            const firstName = sanitizeInput(firstNameInput.value.trim());
+            const lastName = sanitizeInput(lastNameInput.value.trim());
+            const email = sanitizeInput(emailInput.value.trim());
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // Validation
+            if (!isValidName(firstName) || !isValidName(lastName)) {
+                showStatus('Please enter a valid first and last name.', 'error');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showStatus('Please enter a valid email address.', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showStatus('Passwords do not match.', 'error');
+                confirmPasswordInput.classList.add('error');
+                return;
+            }
+
+            if (password.length < 8) {
+                showStatus('Password must be at least 8 characters.', 'error');
+                return;
+            }
+
+            if (!termsCheckbox.checked) {
+                showStatus('Please agree to the Terms of Service and Privacy Policy.', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account...';
+
+            try {
+                const { error } = await BackTrackDB.supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            first_name: firstName,
+                            last_name: lastName,
+                            full_name: `${firstName} ${lastName}`
+                        }
+                    }
+                });
+
+                if (error) {
+                    showStatus(error.message, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create account';
+                } else {
+                    showStatus('Account created! Check your email to verify your account.', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                }
+            } catch (err) {
+                showStatus('An error occurred. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create account';
+            }
+        });
+
+        checkConfig();
+
+        // Nav scroll effect
+        function updateNavBorder() {
+            document.body.classList.toggle('nav-scrolled', window.scrollY > 4);
+        }
+        updateNavBorder();
+        window.addEventListener('scroll', updateNavBorder, { passive: true });
+
+        // Page transitions
+        const pageTransition = document.getElementById('pageTransition');
+        const transitionLinks = document.querySelectorAll('a[href$=".html"]');
+
+        transitionLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href === window.location.pathname.split('/').pop() || href.startsWith('http') || href === '#') return;
+
+                e.preventDefault();
+                pageTransition.classList.add('active');
+
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 400);
+            });
+        });
+    </script>
+    <script src="js/nav-auth.js"></script>
+    <script src="js/accessibility.js"></script>
+</body>
+</html>
