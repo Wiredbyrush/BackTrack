@@ -54,6 +54,10 @@
   function initNavAuth() {
     const nav = document.querySelector('nav');
     if (!nav || nav.getAttribute(NAV_AUTH_LOADED) === 'true') return;
+    if (nav.getAttribute('data-nav-auth') === 'false') {
+      nav.setAttribute(NAV_AUTH_LOADED, 'true');
+      return;
+    }
     nav.setAttribute(NAV_AUTH_LOADED, 'true');
 
     const navRight = ensureNavRight(nav);

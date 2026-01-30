@@ -996,6 +996,7 @@
         const searchContainers = document.querySelectorAll('.search-bar, .search-container');
 
         searchContainers.forEach(container => {
+            if (container.closest('[data-voice-search="false"]')) return;
             const input = container.querySelector('input');
             if (!input) return;
             if (container.querySelector('.voice-search-btn')) return; // Already added
