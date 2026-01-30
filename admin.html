@@ -250,6 +250,19 @@
             </div>
             <div class="cards-list" id="pendingClaims"><div class="loading">Loading...</div></div>
         </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Map Items</h2>
+                <span class="section-count" id="mapItemsCountBadge">0</span>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <button class="btn" style="background: rgba(255,255,255,0.06); color: #aaa; margin-right: 8px;" onclick="filterMapItems('all')">All Floors</button>
+                <button class="btn" style="background: rgba(255,255,255,0.06); color: #aaa; margin-right: 8px;" onclick="filterMapItems(1)">Floor 1</button>
+                <button class="btn" style="background: rgba(255,255,255,0.06); color: #aaa;" onclick="filterMapItems(2)">Floor 2</button>
+            </div>
+            <div class="cards-list" id="mapItems"></div>
+        </section>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -275,8 +288,11 @@
                 return;
             }
 
+            const user = await BackTrackDB.getCurrentUser();
             const isAdmin = await BackTrackDB.isAdmin();
-            if (!isAdmin) {
+            const isSuperAdmin = user?.email === 'rushwanthmahendran1@gmail.com';
+
+            if (!isAdmin && !isSuperAdmin) {
                 showStatus('Admin access required. Sign in with an admin account.');
                 return;
             }
@@ -388,6 +404,116 @@
         }
 
         loadAdminData();
+        loadMapItems();
+
+        // Map Items Management - matches map.html
+        const mapData = {
+            1: {
+                rooms: [
+                    { id: "F1-101", name: "Main Office", items: [{ name: "Black Wallet", desc: "Found near reception desk" }] },
+                    { id: "F1-102", name: "Cafeteria", items: [{ name: "Lunch Box", desc: "Red with superhero stickers" }] },
+                    { id: "F1-103", name: "Gymnasium", items: [{ name: "Water Bottle", desc: "Blue Hydro Flask" }, { name: "AirPods", desc: "White case" }] },
+                    { id: "F1-104", name: "Hallway", items: [{ name: "Textbook", desc: "AP Chemistry" }] },
+                    { id: "F1-105", name: "Health Clinic", items: [{ name: "Jacket", desc: "Nike gray hoodie size M" }] },
+                    { id: "F1-106", name: "Auditorium", items: [] },
+                    { id: "F1-107", name: "Library Entrance", items: [] },
+                ],
+            },
+            2: {
+                rooms: [
+                    { id: "F2-201", name: "Biology Lab", items: [{ name: "Lab Goggles", desc: "Clear safety goggles" }] },
+                    { id: "F2-202", name: "Library", items: [{ name: "Calculator", desc: "TI-84 Plus" }, { name: "Earbuds", desc: "Samsung Galaxy Buds" }] },
+                    { id: "F2-203", name: "Computer Lab", items: [{ name: "USB Drive", desc: "32GB SanDisk" }] },
+                    { id: "F2-204", name: "Classroom A", items: [] },
+                    { id: "F2-205", name: "Hallway", items: [] },
+                    { id: "F2-206", name: "Chemistry Lab", items: [] },
+                    { id: "F2-207", name: "Classroom B", items: [{ name: "Backpack", desc: "Black Jansport" }] },
+                    { id: "F2-208", name: "Classroom C", items: [] },
+                    { id: "F2-209", name: "Teacher Lounge", items: [] },
+                ],
+            },
+        };
+
+        let currentFilter = 'all';
+
+        function getAllMapItems() {
+            const items = [];
+            Object.entries(mapData).forEach(([floor, data]) => {
+                data.rooms.forEach(room => {
+                    room.items.forEach((item, idx) => {
+                        items.push({
+                            id: `${room.id}-${idx}`,
+                            floor: parseInt(floor),
+                            room: room.name,
+                            roomId: room.id,
+                            itemIndex: idx,
+                            ...item
+                        });
+                    });
+                });
+            });
+            return items;
+        }
+
+        function filterMapItems(filter) {
+            currentFilter = filter;
+            loadMapItems();
+        }
+
+        function loadMapItems() {
+            const mapItemsEl = document.getElementById('mapItems');
+            let items = getAllMapItems();
+
+            if (currentFilter !== 'all') {
+                items = items.filter(item => item.floor === currentFilter);
+            }
+
+            document.getElementById('mapItemsCountBadge').textContent = items.length;
+
+            if (items.length === 0) {
+                mapItemsEl.innerHTML = '<div class="empty-state"><p>No map items found.</p></div>';
+                return;
+            }
+
+            mapItemsEl.innerHTML = items.map(item => `
+                <div class="review-card" id="mapitem-${item.id}">
+                    <div class="card-top">
+                        <div class="card-info">
+                            <div class="card-title">${item.name}</div>
+                            <div class="card-meta">
+                                Floor ${item.floor} &middot; ${item.room}
+                            </div>
+                            ${item.desc ? `<div class="card-proof">${item.desc}</div>` : ''}
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-reject" onclick="removeMapItem('${item.id}', ${item.floor}, '${item.roomId}', ${item.itemIndex})">Remove</button>
+                        </div>
+                    </div>
+                    <div class="card-status" id="mapitem-status-${item.id}"></div>
+                </div>
+            `).join('');
+        }
+
+        function removeMapItem(id, floor, roomId, itemIndex) {
+            if (!confirm('Remove this item from the map?')) return;
+
+            const statusEl = document.getElementById(`mapitem-status-${id}`);
+            statusEl.textContent = 'Removing...';
+            statusEl.className = 'card-status';
+
+            // Remove from data structure
+            const room = mapData[floor].rooms.find(r => r.id === roomId);
+            if (room && room.items[itemIndex]) {
+                room.items.splice(itemIndex, 1);
+                statusEl.textContent = 'Removed successfully.';
+                setTimeout(() => {
+                    loadMapItems();
+                }, 800);
+            } else {
+                statusEl.textContent = 'Error removing item.';
+                statusEl.className = 'card-status error';
+            }
+        }
     </script>
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
