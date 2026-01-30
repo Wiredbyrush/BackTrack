@@ -296,7 +296,8 @@ async function signIn(email, password) {
 async function signInWithGoogle() {
     const options = {};
     if (window.location && window.location.origin && window.location.origin !== 'null') {
-        options.redirectTo = `${window.location.origin}/login.html`;
+        const path = window.location.pathname || '/';
+        options.redirectTo = `${window.location.origin}${path}`;
     }
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
