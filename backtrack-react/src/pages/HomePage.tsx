@@ -1,4 +1,3 @@
-import { use3DAnimation } from '../hooks/use3DAnimation';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './HomePage.module.css';
@@ -8,9 +7,6 @@ export default function HomePage() {
   const [statsAnimated, setStatsAnimated] = useState(false);
   const statsRef = useRef<HTMLElement>(null);
   const featureRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Enhanced 3D Animation
-  use3DAnimation('hero-visual');
 
   useEffect(() => {
     // Observe feature rows
@@ -84,7 +80,7 @@ export default function HomePage() {
         {/* Feature 1: Browse */}
         <div
           className={`${styles.featureRow} ${visibleFeatures.includes(0) ? styles.visible : ''}`}
-          ref={el => { featureRefs.current[0] = el; }}
+          ref={el => featureRefs.current[0] = el}
         >
           <div className={styles.featureContent}>
             <p className={styles.featureNumber}>01</p>
@@ -144,7 +140,7 @@ export default function HomePage() {
         {/* Feature 2: Search */}
         <div
           className={`${styles.featureRow} ${styles.reverse} ${visibleFeatures.includes(1) ? styles.visible : ''}`}
-          ref={el => { featureRefs.current[1] = el; }}
+          ref={el => featureRefs.current[1] = el}
         >
           <div className={styles.featureContent}>
             <p className={styles.featureNumber}>02</p>
@@ -191,7 +187,7 @@ export default function HomePage() {
         {/* Feature 3: Submit */}
         <div
           className={`${styles.featureRow} ${visibleFeatures.includes(2) ? styles.visible : ''}`}
-          ref={el => { featureRefs.current[2] = el; }}
+          ref={el => featureRefs.current[2] = el}
         >
           <div className={styles.featureContent}>
             <p className={styles.featureNumber}>03</p>
@@ -243,7 +239,7 @@ export default function HomePage() {
         {/* Feature 4: AI Match */}
         <div
           className={`${styles.featureRow} ${styles.reverse} ${visibleFeatures.includes(3) ? styles.visible : ''}`}
-          ref={el => { featureRefs.current[3] = el; }}
+          ref={el => featureRefs.current[3] = el}
         >
           <div className={styles.featureContent}>
             <p className={styles.featureNumber}>04</p>
