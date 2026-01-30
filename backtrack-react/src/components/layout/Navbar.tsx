@@ -48,23 +48,21 @@ export default function Navbar() {
         </Link>
 
         <div className={styles.navLinks}>
-          <NavLink to="/" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
-            Home
-          </NavLink>
           <NavLink to="/browse" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
             Browse
-          </NavLink>
-          <NavLink to="/submit" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
-            Submit
           </NavLink>
           <NavLink to="/map" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
             Map
           </NavLink>
-          {isAdmin && (
-            <NavLink to="/admin" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
-              Admin
-            </NavLink>
-          )}
+          <NavLink to="/submit" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+            Submit
+          </NavLink>
+          <NavLink to="/features" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+            Features
+          </NavLink>
+          <NavLink to="/sources" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+            Sources
+          </NavLink>
         </div>
 
         <div className={styles.navRight}>

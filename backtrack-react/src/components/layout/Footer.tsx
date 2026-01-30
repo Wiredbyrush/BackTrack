@@ -6,33 +6,48 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.grid}>
-          <div className={styles.column}>
-            <h4>BackTrack</h4>
-            <p>AI-powered lost and found system for schools. Find what you've lost, return what you've found.</p>
+          <div className={styles.brandColumn}>
+            <div className={styles.brandTitle}>BackTrack</div>
+            <p className={styles.brandDescription}>
+              A centralized lost-and-found system for students and staff. Built for FBLA Coding & Programming.
+            </p>
           </div>
 
           <div className={styles.column}>
-            <h4>Quick Links</h4>
-            <Link to="/browse">Browse Items</Link>
-            <Link to="/submit">Report Item</Link>
-            <Link to="/map">Campus Map</Link>
+            <div className={styles.columnTitle}>Product</div>
+            <div className={styles.links}>
+              <Link to="/browse">Browse Items</Link>
+              <Link to="/submit">Submit Item</Link>
+              <Link to="/claim">Claim Item</Link>
+              <Link to="/map">Campus Map</Link>
+            </div>
           </div>
 
           <div className={styles.column}>
-            <h4>About</h4>
-            <Link to="/features">Features</Link>
-            <Link to="/sources">Sources</Link>
+            <div className={styles.columnTitle}>Resources</div>
+            <div className={styles.links}>
+              <Link to="/features">Features</Link>
+              <Link to="/sources">Sources</Link>
+            </div>
           </div>
 
           <div className={styles.column}>
-            <h4>Legal</h4>
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
+            <div className={styles.columnTitle}>Account</div>
+            <div className={styles.links}>
+              <Link to="/login">Log In</Link>
+              <Link to="/signup">Sign Up</Link>
+              <Link to="/profile">Profile</Link>
+            </div>
           </div>
         </div>
 
         <div className={styles.bottom}>
-          <p>&copy; {new Date().getFullYear()} BackTrack. Built for FBLA.</p>
+          <div className={styles.copyright}>
+            &copy; 2025 BackTrack. Built for FBLA Coding & Programming.
+          </div>
+          <div className={styles.credits}>
+            Made by BackTrack Team
+          </div>
         </div>
       </div>
     </footer>
