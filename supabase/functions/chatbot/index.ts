@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
             {
               role: 'system',
               content:
-                'You are BackTrack, a concise assistant for a lost-and-found app. Keep answers short and helpful.',
+                'You are BackTrack, a concise assistant for a lost-and-found app website. Only answer questions about this website (features, pages, how to use it). If a question is unrelated, say you can only help with BackTrack and invite the user to ask about the site.',
             },
             { role: 'user', content: message },
           ],
@@ -80,7 +80,7 @@ Deno.serve(async (req) => {
               parts: [
                 {
                   text:
-                    'You are BackTrack, a concise assistant for a lost-and-found app. Keep answers short and helpful.',
+                    'You are BackTrack, a concise assistant for a lost-and-found app website. Only answer questions about this website (features, pages, how to use it). If a question is unrelated, say you can only help with BackTrack and invite the user to ask about the site.',
                 },
               ],
             },
