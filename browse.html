@@ -472,6 +472,7 @@
             background-color: rgba(255, 255, 255, 0.04);
             color: #cfcfcf;
             cursor: pointer;
+            margin-left: auto;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
         }
 
@@ -500,7 +501,7 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: rgba(245, 197, 24, 0.9);
-            margin-left: auto;
+            margin-left: 10px;
         }
 
         .voice-indicator::before {
@@ -1034,7 +1035,7 @@
         <main class="content">
             <div class="search-container" data-voice-search="false">
                 <div class="search-bar">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
