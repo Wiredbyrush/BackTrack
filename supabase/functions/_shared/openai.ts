@@ -51,6 +51,24 @@ function extractOutputText(payload: any) {
   return parts.join('').trim();
 }
 
+function shouldFallbackToGemini(error: unknown) {
+  if (!error) {
+    return false;
+  }
+
+  const message =
+    error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+
+  return (
+    message.includes('insufficient_quota') ||
+    message.includes('quota') ||
+    message.includes('rate limit') ||
+    message.includes('billing') ||
+    message.includes('(402)') ||
+    message.includes('(429)')
+  );
+}
+
 async function loadGeminiModels() {
   if (geminiModelCache) {
     return geminiModelCache;
@@ -140,7 +158,7 @@ async function fetchResponses(body: Record<string, unknown>) {
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`OpenAI responses failed: ${error}`);
+    throw new Error(`OpenAI responses failed (${response.status}): ${error}`);
   }
 
   return response.json();
@@ -211,7 +229,7 @@ export async function chatText(messages: ChatMessage[], temperature = 0.3) {
       }
       throw new Error('OpenAI responses returned empty response');
     } catch (error) {
-      if (!GEMINI_API_KEY) {
+      if (!GEMINI_API_KEY || !shouldFallbackToGemini(error)) {
         throw error;
       }
     }
@@ -278,7 +296,7 @@ export async function labelImage(imageBase64: string) {
       }
       throw new Error('OpenAI image match returned empty response');
     } catch (error) {
-      if (!GEMINI_API_KEY) {
+      if (!GEMINI_API_KEY || !shouldFallbackToGemini(error)) {
         throw error;
       }
     }
