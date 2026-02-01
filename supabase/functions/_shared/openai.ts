@@ -228,11 +228,11 @@ export async function chatText(messages: ChatMessage[], temperature = 0.3) {
 
   if (OPENAI_HEADERS) {
     try {
-      const payload = await fetchResponses({
+      const body: Record<string, unknown> = {
         model: 'o1-pro',
         input: buildInput(messages),
-        temperature,
-      });
+      };
+      const payload = await fetchResponses(body);
 
       const text = extractOutputText(payload);
       if (text) {
@@ -298,7 +298,6 @@ export async function labelImage(imageBase64: string) {
           },
         ],
         text: { format: { type: 'json_object' } },
-        temperature: 0.2,
       });
 
       const content = extractOutputText(payload);
