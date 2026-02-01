@@ -60,12 +60,23 @@ function shouldFallbackToGemini(error: unknown) {
     error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
 
   return (
+    message.includes('timeout') ||
+    message.includes('timed out') ||
+    message.includes('etimedout') ||
+    message.includes('econnreset') ||
+    message.includes('service unavailable') ||
+    message.includes('bad gateway') ||
+    message.includes('gateway') ||
     message.includes('insufficient_quota') ||
     message.includes('quota') ||
     message.includes('rate limit') ||
     message.includes('billing') ||
     message.includes('(402)') ||
-    message.includes('(429)')
+    message.includes('(429)') ||
+    message.includes('(500)') ||
+    message.includes('(502)') ||
+    message.includes('(503)') ||
+    message.includes('(504)')
   );
 }
 
