@@ -500,7 +500,7 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: rgba(245, 197, 24, 0.9);
-            margin-left: 8px;
+            margin-left: auto;
         }
 
         .voice-indicator::before {
@@ -1039,6 +1039,7 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                     <input type="text" placeholder="Search smart (earbuds, AirPods, headphones)..." aria-label="Search found items">
+                    <div class="voice-indicator" aria-hidden="true">Listening</div>
                     <button class="voice-btn" type="button" aria-label="Start voice search" data-voice-btn>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="2" width="6" height="12" rx="3"></rect>
@@ -1047,7 +1048,6 @@
                             <line x1="8" y1="22" x2="16" y2="22"></line>
                         </svg>
                     </button>
-                    <div class="voice-indicator" aria-hidden="true">Listening</div>
                 </div>
                 <input type="file" id="imageUploadInput" accept="image/*" class="file-input" aria-label="Upload an image for matching">
                 <button class="upload-btn" type="button" aria-label="Upload image for AI matching">
