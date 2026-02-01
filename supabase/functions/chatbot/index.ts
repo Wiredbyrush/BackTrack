@@ -24,6 +24,33 @@ function shouldFallbackToGemini(error: string) {
   );
 }
 
+function isOnTopic(text: string) {
+  const value = text.toLowerCase();
+  const keywords = [
+    'backtrack',
+    'lost',
+    'found',
+    'item',
+    'claim',
+    'browse',
+    'submit',
+    'map',
+    'login',
+    'sign in',
+    'sign up',
+    'image match',
+    'ai match',
+    'chatbot',
+    'listing',
+    'post',
+  ];
+
+  return keywords.some((keyword) => value.includes(keyword));
+}
+
+const OFF_TOPIC_REPLY =
+  "I can only help with the BackTrack website (features, pages, and how to use it). Ask me about the site and I’ll help.";
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -111,6 +138,12 @@ Deno.serve(async (req) => {
     if (!reply) {
       return new Response(JSON.stringify({ error: openaiError || 'No reply' }), {
         status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (!isOnTopic(message) && !isOnTopic(reply)) {
+      return new Response(JSON.stringify({ reply: OFF_TOPIC_REPLY }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
