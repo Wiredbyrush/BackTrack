@@ -56,7 +56,7 @@ async function loadGeminiModels() {
     return geminiModelCache;
   }
 
-  const fallback = ['gemini-1.5-flash', 'gemini-1.5-pro'];
+  const fallback = ['gemini-2.5-pro', 'gemini-1.5-pro', 'gemini-1.5-flash'];
 
   if (!GEMINI_API_KEY) {
     geminiModelCache = fallback;
@@ -226,7 +226,7 @@ export async function chatText(messages: ChatMessage[], temperature = 0.3) {
     }));
 
   const payload = await fetchGeminiContent(
-    ['gemini-1.5-flash', 'gemini-1.5-pro'],
+    ['gemini-2.5-pro', 'gemini-1.5-pro', 'gemini-1.5-flash'],
     {
       systemInstruction: systemMessage
         ? { parts: [{ text: systemMessage }] }
@@ -285,7 +285,7 @@ export async function labelImage(imageBase64: string) {
   }
 
   const payload = await fetchGeminiContent(
-    ['gemini-1.5-flash', 'gemini-1.5-pro'],
+    ['gemini-2.5-pro', 'gemini-1.5-pro', 'gemini-1.5-flash'],
     {
       contents: [
         {
