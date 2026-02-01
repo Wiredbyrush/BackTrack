@@ -492,6 +492,45 @@
             box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.15);
         }
 
+        .voice-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: rgba(245, 197, 24, 0.9);
+        }
+
+        .voice-indicator::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background-color: rgba(245, 197, 24, 0.9);
+            box-shadow: 0 0 8px rgba(245, 197, 24, 0.8);
+            animation: voicePulse 1.2s ease-in-out infinite;
+        }
+
+        .search-container[data-voice-search="true"] .voice-indicator {
+            display: inline-flex;
+        }
+
+        @keyframes voicePulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+        }
+
         .search-bar:focus-within {
             border-color: rgba(245, 197, 24, 0.6);
             box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.15);
@@ -1007,6 +1046,7 @@
                         </svg>
                     </button>
                 </div>
+                <div class="voice-indicator" aria-hidden="true">Listening</div>
                 <input type="file" id="imageUploadInput" accept="image/*" class="file-input" aria-label="Upload an image for matching">
                 <button class="upload-btn" type="button" aria-label="Upload image for AI matching">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
