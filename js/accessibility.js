@@ -1,17 +1,23 @@
 /**
  * BackTrack Accessibility & UX Enhancement Module
- * Provides accessibility features, keyboard shortcuts, toast notifications,
- * and other UX improvements for the BackTrack lost-and-found system.
  *
- * Features:
- * - Accessibility toolbar (high contrast, text size, reduced motion)
- * - Keyboard shortcuts with help modal
- * - Toast notification system
- * - Recent searches with localStorage
- * - Screen reader announcements
+ * This module manages all accessibility features and user experience enhancements
+ * for the BackTrack application, ensuring compliance with WCAG 2.1 guidelines
+ * and FBLA competition standards.
+ *
+ * Key Functionalities:
+ * 1. Accessibility Toolbar (High Contrast, Text Scaling, Reduced Motion)
+ * 2. Keyboard Shortcuts System
+ * 3. Toast Notification System
+ * 4. LocalStorage State Persistence
+ * 5. ARIA Announcements for Screen Readers
+ *
+ * @module Accessibility
+ * @version 1.0.0
+ * @author BackTrack Development Team
  */
 
-(function() {
+(function () {
     'use strict';
 
     // ============================================
@@ -43,6 +49,15 @@
     // ============================================
     // UTILITY FUNCTIONS
     // ============================================
+
+    /**
+     * Safely retrieves parsed JSON data from localStorage.
+     * Handles errors gracefully if storage is disabled or data is corrupt.
+     *
+     * @param {string} key - The localStorage key to retrieve
+     * @param {any} defaultValue - Value to return if key doesn't exist or error occurs
+     * @returns {any} The parsed value or defaultValue
+     */
     function getStorage(key, defaultValue = null) {
         try {
             const value = localStorage.getItem(key);
@@ -52,11 +67,19 @@
         }
     }
 
+    /**
+     * Safely saves data to localStorage as a JSON string.
+     * Silently catches errors (e.g., quota exceeded, private browsing).
+     *
+     * @param {string} key - The localStorage key to set
+     * @param {any} value - The data to store (will be JSON stringified)
+     */
     function setStorage(key, value) {
         try {
             localStorage.setItem(key, JSON.stringify(value));
         } catch {
-            // Storage unavailable
+            // Storage unavailable or quota exceeded
+            console.warn('BackTrack: LocalStorage unavailable');
         }
     }
 
@@ -1193,7 +1216,7 @@
 
     // Create skeleton card HTML
     window.BackTrackSkeleton = {
-        card: function() {
+        card: function () {
             return `
                 <div class="skeleton-card">
                     <div class="skeleton skeleton-image"></div>
@@ -1208,7 +1231,7 @@
                 </div>
             `;
         },
-        grid: function(count = 6) {
+        grid: function (count = 6) {
             return Array(count).fill(this.card()).join('');
         }
     };

@@ -177,19 +177,9 @@ button[type="submit"]:not(.secondary):not(.btn-ghost):hover {
     box-shadow: 0 8px 30px rgba(37, 99, 235, 0.35);
 }
 
-/* Sign In Button - Now Blue */
-.sign-in-btn {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-    color: #fff !important;
-    border: none !important;
-    box-shadow: var(--shadow-blue) !important;
-}
 
-.sign-in-btn:hover {
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4) !important;
-}
+/* Legacy button styles removed */
+
 
 /* Secondary Button */
 .btn-secondary {
@@ -475,7 +465,7 @@ textarea::placeholder {
     border-color: var(--accent-primary) !important;
 }
 
-input[type="checkbox"]:checked + .checkbox-box {
+input[type="checkbox"]:checked+.checkbox-box {
     background: var(--accent-primary) !important;
     border-color: var(--accent-primary) !important;
 }
@@ -1171,4 +1161,41 @@ body.light-theme .shortcut-item span {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
+}
+
+/* ============================================
+   HERO BACKGROUND - AURORAL GRADIENT
+   ============================================ */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.15), transparent 25%);
+    filter: blur(60px);
+    opacity: 0.6;
+    animation: auroraPulse 10s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes auroraPulse {
+    0% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* Light Theme Overrides for Hero Background */
+body.light-theme .hero-background {
+    background: radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.08), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.12), transparent 40%);
+    opacity: 0.8;
 }

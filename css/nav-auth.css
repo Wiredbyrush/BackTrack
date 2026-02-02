@@ -78,7 +78,41 @@
   background: rgba(255, 255, 255, 0.08);
   margin: 6px 0;
 }
+
 .nav-right {
   display: flex;
   align-items: center;
+}
+
+/* Sign In Button - Apple Glass Style */
+.sign-in-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.2px;
+  box-shadow: none !important;
+  /* Override default glow */
+  margin-right: 16px;
+}
+
+/* Hover State - Subtle luminance increase */
+.sign-in-btn:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Active State */
+.sign-in-btn:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.12) !important;
 }

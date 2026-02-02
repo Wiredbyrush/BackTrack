@@ -1,6 +1,16 @@
 (function () {
+  /**
+   * BackTrack Navigation & Authentication Module
+   *
+   * Manages the dynamic navigation bar, user authentication state,
+   * and responsive mobile menu. Integrates with Supabase for real-time
+   * user sessions.
+   *
+   * @module NavAuth
+   */
   const NAV_AUTH_LOADED = 'data-nav-auth-loaded';
 
+  // Colors for user avatars based on the first letter of their name/email
   const avatarColors = {
     'A': '#e91e63', 'B': '#9c27b0', 'C': '#673ab7', 'D': '#3f51b5',
     'E': '#2196f3', 'F': '#03a9f4', 'G': '#00bcd4', 'H': '#009688',
@@ -278,8 +288,8 @@
 
       // Check for exact match or home page
       if (linkPage === currentPage ||
-          (currentPage === '' && linkPage === 'index.html') ||
-          (currentPage === 'index.html' && linkPage === 'index.html')) {
+        (currentPage === '' && linkPage === 'index.html') ||
+        (currentPage === 'index.html' && linkPage === 'index.html')) {
         link.classList.add('active');
         link.setAttribute('aria-current', 'page');
       } else {
