@@ -968,7 +968,7 @@ body.light-theme .popup-count {
 }
 
 /* Map SVG elements in light mode */
-body.light-theme .school-map svg rect[fill="url(#grid)"] + rect {
+body.light-theme .school-map svg rect[fill="url(#grid)"]+rect {
     fill: rgba(0, 0, 0, 0.02) !important;
     stroke: rgba(0, 0, 0, 0.1) !important;
 }
@@ -997,4 +997,45 @@ body.light-theme strong {
 body.light-theme .spinner {
     border-color: #e2e8f0 !important;
     border-top-color: #2563eb !important;
+}
+
+/* ============================================
+   HERO SECTION — ALWAYS DARK (even in light mode)
+   The Spline 3D model has a dark/space background,
+   so the hero must stay dark for visual consistency.
+   ============================================ */
+body.light-theme .hero-container {
+    background: #000000 !important;
+}
+
+body.light-theme .hero-title {
+    color: #f8fafc !important;
+    background: none !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+body.light-theme .hero-description {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+body.light-theme .hero-container .btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3) !important;
+}
+
+body.light-theme .hero-container .btn-secondary {
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+body.light-theme .hero-container .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body.light-theme .hero-visual::after {
+    background: radial-gradient(ellipse at center, transparent 40%, #000 85%) !important;
 }

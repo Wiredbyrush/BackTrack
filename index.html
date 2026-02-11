@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BackTrack is a centralized lost-and-found system for students and staff. Report, browse, and claim lost items on campus.">
+    <meta name="description"
+        content="BackTrack is a centralized lost-and-found system for students and staff. Report, browse, and claim lost items on campus.">
     <meta name="keywords" content="lost and found, school, campus, FBLA, lost items, found items, BackTrack">
     <meta name="author" content="BackTrack Team">
     <meta property="og:title" content="BackTrack - Never lose track of what matters">
-    <meta property="og:description" content="A centralized lost-and-found system for students and staff. Report, browse, and claim lost items.">
+    <meta property="og:description"
+        content="A centralized lost-and-found system for students and staff. Report, browse, and claim lost items.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,7 +25,8 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
     <style>
         * {
@@ -46,6 +50,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -78,7 +83,8 @@
         }
 
         /* Smooth transitions for all interactive elements */
-        a, button {
+        a,
+        button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -266,6 +272,7 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -286,6 +293,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -413,6 +421,7 @@
                 opacity: 0;
                 transform: scale(0);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -588,7 +597,71 @@
             border: none;
             background: transparent;
             box-shadow: none;
-            overflow: visible;
+            overflow: hidden;
+        }
+
+        /* Hide Spline watermark */
+        .hero-visual spline-viewer #logo {
+            display: none !important;
+        }
+
+        /* Orbital Canvas Animation */
+        #orbitalCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            display: block;
+            z-index: 1;
+        }
+
+        /* Blend edges into dark background */
+        .hero-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 40%, #000 85%);
+            z-index: 2;
+        }
+
+        /* Light mode */
+        body.light-theme .hero-visual::after {
+            background: radial-gradient(ellipse at center, transparent 40%, #000 85%) !important;
+        }
+
+        /* Force hero section to stay dark in light mode (Spline has dark bg) */
+        body.light-theme .hero-container {
+            background: #000000 !important;
+        }
+
+        body.light-theme .hero-title {
+            color: #f8fafc !important;
+            background: none !important;
+            -webkit-text-fill-color: #f8fafc !important;
+        }
+
+        body.light-theme .hero-description {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        body.light-theme .hero-container .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            color: #ffffff !important;
+        }
+
+        body.light-theme .hero-container .btn-secondary {
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            background: transparent !important;
+            color: #ffffff !important;
+        }
+
+        body.light-theme .hero-container .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            color: #ffffff !important;
         }
 
         @keyframes slideInRight {
@@ -596,6 +669,7 @@
                 opacity: 0;
                 transform: translateX(60px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -665,7 +739,7 @@
             direction: rtl;
         }
 
-        .feature-row.reverse > * {
+        .feature-row.reverse>* {
             direction: ltr;
         }
 
@@ -1215,31 +1289,12 @@
 
             .hero-visual {
                 height: 400px;
+                width: 100%;
             }
 
-            .scene {
-                width: 280px;
-                height: 280px;
+            #orbitalCanvas {
+                min-height: 350px;
             }
-
-            .cube {
-                width: 150px;
-                height: 150px;
-            }
-
-            .face {
-                width: 150px;
-                height: 150px;
-            }
-
-            .front { transform: translateZ(75px); }
-            .back { transform: rotateY(180deg) translateZ(75px); }
-            .right { transform: rotateY(90deg) translateZ(75px); }
-            .left { transform: rotateY(-90deg) translateZ(75px); }
-            .top { transform: rotateX(90deg) translateZ(75px); }
-            .bottom { transform: rotateX(-90deg) translateZ(75px); }
-
-            .particle { display: none; }
         }
 
         /* Mobile Menu */
@@ -1339,13 +1394,18 @@
                 width: 100%;
             }
 
-            .btn-primary, .btn-secondary {
+            .btn-primary,
+            .btn-secondary {
                 width: 100%;
                 text-align: center;
             }
 
             .hero-visual {
-                height: 350px;
+                height: 300px;
+            }
+
+            #orbitalCanvas {
+                min-height: 280px;
             }
 
             .chatbot-widget {
@@ -1399,7 +1459,7 @@
                 grid-template-columns: 1fr;
             }
 
-            footer > div:first-child {
+            footer>div:first-child {
                 grid-template-columns: 1fr !important;
                 gap: 32px !important;
             }
@@ -1411,10 +1471,14 @@
     </style>
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
 </head>
+
 <body>
     <!-- Skip to Content (Accessibility) -->
-    <a href="#main-content" style="position: absolute; top: -100px; left: 0; background: #ffffff; color: #000000; padding: 12px 24px; z-index: 10000; font-weight: 600; font-size: 14px; transition: top 0.2s;" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Skip to main content</a>
+    <a href="#main-content"
+        style="position: absolute; top: -100px; left: 0; background: #ffffff; color: #000000; padding: 12px 24px; z-index: 10000; font-weight: 600; font-size: 14px; transition: top 0.2s;"
+        onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Skip to main content</a>
 
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition"></div>
@@ -1471,8 +1535,11 @@
             </div>
         </div>
 
-        <!-- 3D Animation Container -->
-        <div class="hero-visual" aria-hidden="true" role="presentation"></div>
+        <!-- 3D Animation - Spline Orbital Blue Star -->
+        <div class="hero-visual" aria-hidden="true" role="presentation">
+            <spline-viewer url="https://prod.spline.design/HPjAeH1ucs4F5AJv/scene.splinecode"
+                style="width:100%;height:100%;"></spline-viewer>
+        </div>
     </main>
 
     <!-- Features Showcase Section -->
@@ -1480,7 +1547,8 @@
         <div class="features-header">
             <p class="features-label">How it works</p>
             <h2 class="features-title" id="features-title">Everything you need to find what's lost</h2>
-            <p class="features-subtitle">A modern lost-and-found system designed for students and staff. Simple, fast, and smart.</p>
+            <p class="features-subtitle">A modern lost-and-found system designed for students and staff. Simple, fast,
+                and smart.</p>
         </div>
 
         <!-- Feature 1: Browse -->
@@ -1488,7 +1556,8 @@
             <div class="feature-content">
                 <p class="feature-number">01</p>
                 <h3 class="feature-heading">Browse all lost items in one place</h3>
-                <p class="feature-description">See every reported lost item across campus in a clean, organized grid. Filter by category, location, or date to quickly find what you're looking for.</p>
+                <p class="feature-description">See every reported lost item across campus in a clean, organized grid.
+                    Filter by category, location, or date to quickly find what you're looking for.</p>
                 <div class="feature-tags">
                     <span class="feature-tag">Grid View</span>
                     <span class="feature-tag">Filters</span>
@@ -1578,7 +1647,8 @@
             <div class="feature-content">
                 <p class="feature-number">02</p>
                 <h3 class="feature-heading">Smart search that understands you</h3>
-                <p class="feature-description">Type naturally and find matches instantly. Search for "blue water bottle" or "AirPods case" and get relevant results, not just exact matches.</p>
+                <p class="feature-description">Type naturally and find matches instantly. Search for "blue water bottle"
+                    or "AirPods case" and get relevant results, not just exact matches.</p>
                 <div class="feature-tags">
                     <span class="feature-tag">Natural Language</span>
                     <span class="feature-tag">Instant Results</span>
@@ -1627,7 +1697,8 @@
             <div class="feature-content">
                 <p class="feature-number">03</p>
                 <h3 class="feature-heading">Report found items in seconds</h3>
-                <p class="feature-description">Found something? Snap a photo, add a quick description, and submit. Your report goes live instantly so the owner can find it fast.</p>
+                <p class="feature-description">Found something? Snap a photo, add a quick description, and submit. Your
+                    report goes live instantly so the owner can find it fast.</p>
                 <div class="feature-tags">
                     <span class="feature-tag">Photo Upload</span>
                     <span class="feature-tag">Quick Form</span>
@@ -1676,7 +1747,8 @@
             <div class="feature-content">
                 <p class="feature-number">04</p>
                 <h3 class="feature-heading">AI-powered image matching</h3>
-                <p class="feature-description">Upload a photo of your lost item and let AI find similar matches. Our system analyzes colors, shapes, and features to surface the best results.</p>
+                <p class="feature-description">Upload a photo of your lost item and let AI find similar matches. Our
+                    system analyzes colors, shapes, and features to surface the best results.</p>
                 <div class="feature-tags">
                     <span class="feature-tag">Image Recognition</span>
                     <span class="feature-tag">Smart Matching</span>
@@ -1732,9 +1804,10 @@
                 <div class="stat-card">
                     <div class="stat-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                            <line x1="12" y1="22.08" x2="12" y2="12" />
                         </svg>
                     </div>
                     <div class="stat-value" data-target="1247">0</div>
@@ -1743,8 +1816,8 @@
                 <div class="stat-card">
                     <div class="stat-icon" style="color: #22c55e;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                            <polyline points="22 4 12 14.01 9 11.01"/>
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
                         </svg>
                     </div>
                     <div class="stat-value" data-target="892">0</div>
@@ -1753,10 +1826,10 @@
                 <div class="stat-card">
                     <div class="stat-icon" style="color: #f5c518;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                         </svg>
                     </div>
                     <div class="stat-value" data-target="2156">0</div>
@@ -1765,8 +1838,8 @@
                 <div class="stat-card">
                     <div class="stat-icon" style="color: #a855f7;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
                         </svg>
                     </div>
                     <div class="stat-value" data-target="4" data-suffix="hrs">0</div>
@@ -1780,17 +1853,20 @@
         /* Statistics Section */
         .stats-section {
             padding: 100px 80px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
-            border-top: 1px solid rgba(255,255,255,0.04);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
         }
+
         .stats-container {
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .stats-header {
             text-align: center;
             margin-bottom: 60px;
         }
+
         .stats-title {
             font-size: 36px;
             font-weight: 700;
@@ -1801,38 +1877,45 @@
             background-clip: text;
             margin-bottom: 12px;
         }
+
         .stats-subtitle {
             font-size: 16px;
             color: #666;
         }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 24px;
         }
+
         .stat-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             padding: 32px 24px;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .stat-card:hover {
             transform: translateY(-8px);
-            border-color: rgba(255,255,255,0.12);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
+
         .stat-icon {
             width: 48px;
             height: 48px;
             margin: 0 auto 20px;
             color: #fff;
         }
+
         .stat-icon svg {
             width: 100%;
             height: 100%;
         }
+
         .stat-value {
             font-size: 48px;
             font-weight: 800;
@@ -1841,30 +1924,37 @@
             margin-bottom: 8px;
             font-variant-numeric: tabular-nums;
         }
+
         .stat-label {
             font-size: 14px;
             color: #888;
             font-weight: 500;
         }
+
         @media (max-width: 1024px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
         @media (max-width: 768px) {
             .stats-section {
                 padding: 60px 20px;
             }
+
             .stats-title {
                 font-size: 28px;
             }
+
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 16px;
             }
+
             .stat-card {
                 padding: 24px 16px;
             }
+
             .stat-value {
                 font-size: 36px;
             }
@@ -1873,9 +1963,12 @@
 
     <div class="chatbot-widget">
         <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat assistant">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                <circle cx="9" cy="10" r="1" fill="#ffffff"/><circle cx="12" cy="10" r="1" fill="#ffffff"/><circle cx="15" cy="10" r="1" fill="#ffffff"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                <circle cx="9" cy="10" r="1" fill="#ffffff" />
+                <circle cx="12" cy="10" r="1" fill="#ffffff" />
+                <circle cx="15" cy="10" r="1" fill="#ffffff" />
             </svg>
         </button>
         <div class="chatbot-panel" id="chatbotPanel">
@@ -1884,7 +1977,8 @@
                 <button class="chatbot-close" id="chatbotClose">&times;</button>
             </div>
             <div class="chatbot-messages" id="chatbotMessages">
-                <div class="chatbot-message">Ask me about BackTrack's features, how to submit items, or how browsing works.</div>
+                <div class="chatbot-message">Ask me about BackTrack's features, how to submit items, or how browsing
+                    works.</div>
             </div>
             <div class="chatbot-hint">Questions outside the website won't be answered.</div>
             <div class="chatbot-status" id="chatbotStatus"></div>
@@ -1900,26 +1994,35 @@
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;">
             <div>
                 <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
-                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized lost-and-found system for students and staff. Built for FBLA Website Coding & Development.</p>
+                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized
+                    lost-and-found system for students and staff. Built for FBLA Website Coding & Development.</p>
             </div>
             <div>
-                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Product</div>
+                <div
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    Product</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse Items</a>
-                    <a href="submit.html" style="color: #777777; text-decoration: none; font-size: 14px;">Submit Item</a>
+                    <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse
+                        Items</a>
+                    <a href="submit.html" style="color: #777777; text-decoration: none; font-size: 14px;">Submit
+                        Item</a>
                     <a href="claim.html" style="color: #777777; text-decoration: none; font-size: 14px;">Claim Item</a>
                     <a href="map.html" style="color: #777777; text-decoration: none; font-size: 14px;">Campus Map</a>
                 </div>
             </div>
             <div>
-                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Resources</div>
+                <div
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    Resources</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="features.html" style="color: #777777; text-decoration: none; font-size: 14px;">Features</a>
                     <a href="sources.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sources</a>
                 </div>
             </div>
             <div>
-                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Account</div>
+                <div
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    Account</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="login.html" style="color: #777777; text-decoration: none; font-size: 14px;">Log In</a>
                     <a href="signup.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sign Up</a>
@@ -1927,8 +2030,10 @@
                 </div>
             </div>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
-            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp; Development.</div>
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
+            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp;
+                Development.</div>
             <div style="color: #444444; font-size: 13px;">Made by BackTrack Team</div>
         </div>
     </footer>
@@ -2127,14 +2232,29 @@
 
     </script>
 
-    <!-- Hero Animation -->
-    <script src="js/3d-animation.js"></script>
+    <!-- Spline handles the hero animation via <spline-viewer> -->
+    <script>
+        // Remove Spline watermark from Shadow DOM
+        (function removeSplineLogo() {
+            const viewer = document.querySelector('spline-viewer');
+            if (!viewer) return;
+            const check = setInterval(() => {
+                const shadow = viewer.shadowRoot;
+                if (shadow) {
+                    const logo = shadow.querySelector('#logo');
+                    if (logo) { logo.remove(); clearInterval(check); }
+                }
+            }, 500);
+            // Stop trying after 15s
+            setTimeout(() => clearInterval(check), 15000);
+        })();
+    </script>
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
 
     <!-- Animated Statistics Counter -->
     <script>
-        (function() {
+        (function () {
             const statValues = document.querySelectorAll('.stat-value');
             let animated = false;
 
@@ -2177,5 +2297,131 @@
             }
         })();
     </script>
+
+    <!-- Orbital Animation Script -->
+    <script>
+        (function () {
+            const canvas = document.getElementById('orbitalCanvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let width, height, centerX, centerY;
+
+            function resize() {
+                const parent = canvas.parentElement;
+                width = canvas.width = parent.offsetWidth;
+                height = canvas.height = parent.offsetHeight;
+                centerX = width / 2;
+                centerY = height / 2;
+            }
+
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Particles for stars
+            const stars = [];
+            for (let i = 0; i < 100; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2,
+                    opacity: Math.random() * 0.5 + 0.3
+                });
+            }
+
+            // Orbiting particles
+            const orbitals = [];
+            for (let i = 0; i < 3; i++) {
+                orbitals.push({
+                    angle: (Math.PI * 2 / 3) * i,
+                    speed: 0.001 + i * 0.0003,
+                    radius: 150 + i * 40,
+                    size: 8 - i * 2
+                });
+            }
+
+            let time = 0;
+
+            function animate() {
+                ctx.fillStyle = 'transparent';
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw stars
+                stars.forEach(star => {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // Draw central planet
+                const planetRadius = 60;
+                const gradient = ctx.createRadialGradient(
+                    centerX - planetRadius * 0.3, centerY - planetRadius * 0.3, 0,
+                    centerX, centerY, planetRadius * 1.5
+                );
+                gradient.addColorStop(0, '#38bdf8');
+                gradient.addColorStop(0.5, '#0ea5e9');
+                gradient.addColorStop(1, '#0369a1');
+
+                ctx.fillStyle = gradient;
+                ctx.shadowBlur = 40;
+                ctx.shadowColor = '#06b6d4';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, planetRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Draw glow
+                const glowGradient = ctx.createRadialGradient(
+                    centerX, centerY, planetRadius,
+                    centerX, centerY, planetRadius * 2
+                );
+                glowGradient.addColorStop(0, 'rgba(6, 182, 212, 0.3)');
+                glowGradient.addColorStop(1, 'transparent');
+                ctx.fillStyle = glowGradient;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, planetRadius * 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Draw orbiting particles
+                orbitals.forEach((orbital, i) => {
+                    orbital.angle += orbital.speed;
+                    const x = centerX + Math.cos(orbital.angle) * orbital.radius;
+                    const y = centerY + Math.sin(orbital.angle) * orbital.radius * 0.4;
+
+                    // Orbital path
+                    ctx.strokeStyle = `rgba(6, 182, 212, 0.1)`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.ellipse(centerX, centerY, orbital.radius, orbital.radius * 0.4, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    // Particle
+                    const particleGradient = ctx.createRadialGradient(x, y, 0, x, y, orbital.size * 2);
+                    particleGradient.addColorStop(0, '#06b6d4');
+                    particleGradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = particleGradient;
+                    ctx.beginPath();
+                    ctx.arc(x, y, orbital.size * 2, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#06b6d4';
+                    ctx.beginPath();
+                    ctx.arc(x, y, orbital.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                });
+
+                time++;
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+    </script>
 </body>
+
 </html>
