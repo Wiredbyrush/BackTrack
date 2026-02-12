@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="BackTrack is a centralized lost-and-found system for students and staff. Report, browse, and claim lost items on campus.">
-    <meta name="keywords" content="lost and found, school, campus, FBLA, lost items, found items, BackTrack">
+        content="BackTrack is the official lost-and-found system for Forsyth County high schools. Report, browse, and claim lost items across all campuses.">
+    <meta name="keywords"
+        content="lost and found, Forsyth County, high school, FBLA, lost items, found items, BackTrack, Georgia">
     <meta name="author" content="BackTrack Team">
     <meta property="og:title" content="BackTrack - Never lose track of what matters">
     <meta property="og:description"
-        content="A centralized lost-and-found system for students and staff. Report, browse, and claim lost items.">
+        content="The official lost-and-found system for Forsyth County high schools. Report, browse, and claim lost items across all campuses.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -676,597 +677,452 @@
             }
         }
 
-        /* Features Showcase Section */
+        /* ============================================
+           FEATURES SHOWCASE — Bento Steps
+           ============================================ */
         .features-showcase {
-            padding: 120px 80px;
+            padding: 100px 40px 80px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .features-header {
             text-align: center;
-            margin-bottom: 100px;
+            margin-bottom: 60px;
         }
 
         .features-label {
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #2563eb;
+            color: #60a5fa;
             margin-bottom: 16px;
         }
 
         .features-title {
-            font-size: 48px;
-            font-weight: 700;
+            font-size: 44px;
+            font-weight: 800;
             letter-spacing: -1.5px;
-            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #2563eb 100%);
+            line-height: 1.1;
+            background: linear-gradient(180deg, #ffffff 0%, #60a5fa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .features-subtitle {
-            font-size: 18px;
-            color: #666666;
-            max-width: 500px;
+            font-size: 17px;
+            color: #64748b;
+            max-width: 480px;
             margin: 0 auto;
             line-height: 1.6;
         }
 
-        .feature-row {
+        /* --- 3-step bento grid --- */
+        .steps-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-            margin-bottom: 140px;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
         }
 
-        .feature-row.visible {
+        .step-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(37, 99, 235, 0.08);
+            border-radius: 20px;
+            padding: 28px 24px 24px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .step-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .feature-row:last-child {
-            margin-bottom: 0;
+        .step-card:nth-child(2) { transition-delay: 0.12s; }
+        .step-card:nth-child(3) { transition-delay: 0.24s; }
+
+        .step-card:hover {
+            border-color: rgba(37, 99, 235, 0.2);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(37, 99, 235, 0.04);
         }
 
-        .feature-row.reverse {
-            direction: rtl;
-        }
-
-        .feature-row.reverse>* {
-            direction: ltr;
-        }
-
-        .feature-content {
-            max-width: 480px;
-        }
-
-        .feature-number {
-            font-size: 12px;
-            font-weight: 700;
-            color: #2563eb;
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-        }
-
-        .feature-heading {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-
-        .feature-description {
-            font-size: 16px;
-            color: #888888;
-            line-height: 1.7;
-            margin-bottom: 24px;
-        }
-
-        .feature-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .feature-tag {
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            font-size: 12px;
-            color: #a0a0a0;
-            font-weight: 500;
-        }
-
-        .feature-visual {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            aspect-ratio: 4/3;
-        }
-
-        .feature-visual::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
             height: 32px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            padding-left: 12px;
+            border-radius: 10px;
+            background: rgba(37, 99, 235, 0.12);
+            border: 1px solid rgba(37, 99, 235, 0.25);
+            color: #60a5fa;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 20px;
         }
 
-        .feature-visual::after {
+        .step-visual {
+            height: 180px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(8, 12, 25, 0.95) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-visual::before {
             content: '';
             position: absolute;
-            top: 10px;
-            left: 12px;
-            width: 8px;
-            height: 8px;
-            background: #ff5f57;
-            border-radius: 50%;
-            box-shadow: 14px 0 0 #febc2e, 28px 0 0 #28c840;
+            top: 0; left: 0; right: 0;
+            height: 40%;
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.04) 0%, transparent 100%);
+            pointer-events: none;
         }
 
-        .feature-mockup {
-            padding: 48px 20px 20px;
-            height: 100%;
+        .step-heading {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
         }
 
-        /* Browse Mockup - Like actual browse page with sidebar */
-        .mockup-browse {
-            display: flex;
-            gap: 12px;
-            height: 100%;
+        .step-desc {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
         }
 
-        .mockup-sidebar {
-            width: 100px;
-            background: rgba(0, 0, 0, 0.3);
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 12px 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .mockup-sidebar-title {
-            font-size: 8px;
-            color: #666;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
-        .mockup-sidebar-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 6px;
-        }
-
-        .mockup-sidebar-item.active {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.12);
-        }
-
-        .mockup-sidebar-icon {
-            width: 12px;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 3px;
-        }
-
-        .mockup-sidebar-text {
-            width: 50px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .mockup-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .mockup-header-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 0;
-        }
-
-        .mockup-page-title {
-            height: 14px;
-            width: 80px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 4px;
-        }
-
-        .mockup-view-toggle {
-            display: flex;
-            gap: 4px;
-        }
-
-        .mockup-view-btn {
-            width: 24px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
-        }
-
-        .mockup-view-btn.active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .mockup-items-grid {
+        /* --- Step 1 visual: Browse grid --- */
+        .sv-browse {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            flex: 1;
+            gap: 6px;
+            padding: 14px;
+            height: 100%;
+            align-content: start;
         }
 
-        .mockup-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+        .sv-item {
             border-radius: 8px;
             overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(37, 99, 235, 0.08);
         }
 
-        .mockup-card-image {
+        .sv-item-img {
             aspect-ratio: 1;
-            background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
-            position: relative;
+            background: linear-gradient(135deg, #0c1528 0%, #111827 100%);
         }
 
-        .mockup-card-image::after {
-            content: '';
-            position: absolute;
-            bottom: 6px;
-            left: 6px;
-            padding: 2px 6px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 4px;
-            width: 30px;
-            height: 10px;
-        }
-
-        .mockup-card-body {
-            padding: 8px;
-        }
-
-        .mockup-line {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.08);
+        .sv-item-bar {
+            height: 5px;
+            margin: 6px;
+            background: rgba(96, 165, 250, 0.12);
             border-radius: 3px;
-            margin-bottom: 4px;
         }
 
-        .mockup-line.short {
-            width: 60%;
+        .sv-item-bar.short { width: 55%; }
+
+        .sv-item:nth-child(1) { animation: svFloat 3s ease-in-out infinite; }
+        .sv-item:nth-child(2) { animation: svFloat 3s ease-in-out 0.4s infinite; }
+        .sv-item:nth-child(3) { animation: svFloat 3s ease-in-out 0.8s infinite; }
+        .sv-item:nth-child(4) { animation: svFloat 3s ease-in-out 1.2s infinite; }
+        .sv-item:nth-child(5) { animation: svFloat 3s ease-in-out 1.6s infinite; }
+        .sv-item:nth-child(6) { animation: svFloat 3s ease-in-out 2s infinite; }
+
+        @keyframes svFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
-        .mockup-line.shorter {
-            width: 40%;
-        }
-
-        /* Search Mockup - Like actual browse page search */
-        .mockup-search {
+        /* --- Step 2 visual: Submit form --- */
+        .sv-submit {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
+            padding: 14px;
+            height: 100%;
         }
 
-        .mockup-search-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .sv-upload {
+            border: 2px dashed rgba(37, 99, 235, 0.2);
             border-radius: 10px;
-        }
-
-        .mockup-search-icon {
-            width: 16px;
-            height: 16px;
-            border: 2px solid #444;
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .mockup-search-icon::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            right: -3px;
-            width: 5px;
-            height: 2px;
-            background: #444;
-            transform: rotate(45deg);
-        }
-
-        .mockup-search-text {
-            flex: 1;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .mockup-filters {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .mockup-filter-chip {
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            font-size: 10px;
-            color: #666;
-        }
-
-        .mockup-filter-chip.active {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
-        }
-
-        .mockup-date-filter {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            margin-top: 4px;
-        }
-
-        .mockup-date-icon {
-            width: 14px;
-            height: 14px;
-            border: 1px solid #444;
-            border-radius: 3px;
-        }
-
-        .mockup-date-text {
-            height: 6px;
-            width: 60px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .mockup-results {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        /* Submit Mockup - Like actual submit page */
-        .mockup-submit {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .mockup-upload-area {
-            border: 2px dashed rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .mockup-upload-icon {
-            width: 36px;
-            height: 36px;
-            border: 2px solid #444;
-            border-radius: 50%;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
+            animation: svPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes svPulse {
+            0%, 100% { border-color: rgba(37, 99, 235, 0.2); }
+            50% { border-color: rgba(37, 99, 235, 0.4); }
+        }
+
+        .sv-upload-arrow {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
             position: relative;
         }
 
-        .mockup-upload-icon::before {
-            content: '';
-            width: 12px;
-            height: 2px;
-            background: #666;
-        }
-
-        .mockup-upload-icon::after {
+        .sv-upload-arrow::after {
             content: '';
             position: absolute;
-            width: 2px;
-            height: 12px;
-            background: #666;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px; height: 2px;
+            background: #3b82f6;
         }
 
-        .mockup-upload-text {
+        .sv-upload-text {
             font-size: 10px;
-            color: #555;
+            color: #475569;
         }
 
-        .mockup-form-fields {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .mockup-form-row {
+        .sv-fields {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .sv-field {
+            height: 28px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(37, 99, 235, 0.08);
+            border-radius: 6px;
+        }
+
+        .sv-field.full { grid-column: 1 / -1; height: 36px; }
+
+        .sv-btn {
+            height: 32px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 8px;
+            margin-top: auto;
+        }
+
+        /* --- Step 3 visual: Claim + reward --- */
+        .sv-claim {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 14px;
+            height: 100%;
+        }
+
+        .sv-claim-item {
+            display: flex;
+            align-items: center;
             gap: 10px;
-        }
-
-        .mockup-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mockup-label {
-            height: 6px;
-            width: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .mockup-input {
-            height: 32px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-        }
-
-        .mockup-select {
-            height: 32px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            position: relative;
-        }
-
-        .mockup-select::after {
-            content: '';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-top: 5px solid #444;
-        }
-
-        .mockup-textarea {
-            height: 50px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-        }
-
-        .mockup-btn {
-            height: 40px;
-            background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(37, 99, 235, 0.08);
             border-radius: 10px;
-            margin-top: 6px;
         }
 
-        /* AI Mockup */
-        .mockup-ai {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .mockup-ai-upload {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .mockup-ai-image {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .sv-claim-thumb {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #0c1528, #111827);
             flex-shrink: 0;
         }
 
-        .mockup-ai-analysis {
-            flex: 1;
+        .sv-claim-info { flex: 1; }
+
+        .sv-claim-line {
+            height: 5px;
+            background: rgba(96, 165, 250, 0.15);
+            border-radius: 3px;
+            margin-bottom: 4px;
         }
 
-        .mockup-ai-label {
+        .sv-claim-line.sm { width: 50%; margin-bottom: 0; }
+
+        .sv-claim-badge {
+            padding: 3px 8px;
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid rgba(74, 222, 128, 0.25);
+            border-radius: 4px;
+            font-size: 9px;
+            color: #4ade80;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .sv-points-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: rgba(37, 99, 235, 0.06);
+            border: 1px solid rgba(37, 99, 235, 0.12);
+            border-radius: 10px;
+            margin-top: auto;
+        }
+
+        .sv-pts-label {
             font-size: 10px;
-            color: #555;
-            margin-bottom: 8px;
+            color: #64748b;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .mockup-ai-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+        .sv-pts-val {
+            font-size: 16px;
+            font-weight: 800;
+            color: #60a5fa;
         }
 
-        .mockup-ai-tag {
-            padding: 4px 10px;
-            background: rgba(245, 197, 24, 0.1);
-            border: 1px solid rgba(245, 197, 24, 0.3);
-            border-radius: 12px;
-            font-size: 10px;
-            color: #f5c518;
+        /* --- Extras row (4 mini highlights) --- */
+        .extras-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
         }
 
-        .mockup-ai-results {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 16px;
-        }
-
-        .mockup-ai-match {
+        .extra-pill {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px 18px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(37, 99, 235, 0.06);
+            border-radius: 14px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease;
+        }
+
+        .extra-pill.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .extra-pill:nth-child(2) { transition-delay: 0.08s; }
+        .extra-pill:nth-child(3) { transition-delay: 0.16s; }
+        .extra-pill:nth-child(4) { transition-delay: 0.24s; }
+
+        .extra-pill:hover {
+            border-color: rgba(37, 99, 235, 0.18);
+        }
+
+        .extra-icon {
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
-            margin-bottom: 8px;
-        }
-
-        .mockup-ai-match-img {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
-            border-radius: 6px;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            color: #60a5fa;
         }
 
-        .mockup-ai-match-info {
-            flex: 1;
+        .extra-icon svg {
+            width: 18px;
+            height: 18px;
         }
 
-        .mockup-ai-match-badge {
-            padding: 3px 8px;
-            background: rgba(74, 222, 128, 0.15);
-            border: 1px solid rgba(74, 222, 128, 0.3);
-            border-radius: 4px;
-            font-size: 9px;
-            color: #4ade80;
+        .extra-text {
+            font-size: 13px;
             font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .extra-sub {
+            font-size: 11px;
+            color: #475569;
+            margin-top: 2px;
+        }
+
+        /* Light mode */
+        body.light-theme .step-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .step-card:hover {
+            border-color: rgba(37, 99, 235, 0.15);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .step-heading { color: #0f172a; }
+        body.light-theme .step-desc { color: #64748b; }
+
+        body.light-theme .step-visual {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .sv-item {
+            background: #fff;
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .sv-item-img {
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+        }
+
+        body.light-theme .sv-field,
+        body.light-theme .sv-claim-item {
+            background: #fff;
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .sv-claim-thumb {
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+        }
+
+        body.light-theme .sv-points-row {
+            background: rgba(37, 99, 235, 0.04);
+            border-color: rgba(37, 99, 235, 0.1);
+        }
+
+        body.light-theme .extra-pill {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .extra-text { color: #0f172a; }
+
+        body.light-theme .features-title {
+            background: linear-gradient(180deg, #0f172a 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .step-card:last-child {
+                grid-column: 1 / -1;
+            }
+
+            .extras-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 1200px) {
             .hero-container {
                 flex-direction: column;
@@ -1433,29 +1289,23 @@
                 font-size: 15px;
             }
 
-            .feature-row {
+            .steps-grid {
                 grid-template-columns: 1fr;
-                gap: 40px;
-                margin-bottom: 80px;
             }
 
-            .feature-row.reverse {
-                direction: ltr;
+            .step-card:last-child {
+                grid-column: auto;
             }
 
-            .feature-heading {
-                font-size: 24px;
+            .step-visual {
+                height: 170px;
             }
 
-            .feature-visual {
-                order: -1;
+            .step-heading {
+                font-size: 22px;
             }
 
-            .mockup-browse {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .mockup-results {
+            .extras-row {
                 grid-template-columns: 1fr;
             }
 
@@ -1496,6 +1346,7 @@
             <a href="browse.html" class="nav-link" role="menuitem">Browse</a>
             <a href="map.html" class="nav-link" role="menuitem">Map</a>
             <a href="submit.html" class="nav-link" role="menuitem">Submit</a>
+            <a href="rewards.html" class="nav-link" role="menuitem">Rewards</a>
             <a href="features.html" class="nav-link" role="menuitem">Features</a>
             <a href="sources.html" class="nav-link" role="menuitem">Sources</a>
         </div>
@@ -1526,8 +1377,9 @@
     <main class="hero-container" role="main" id="main-content">
         <div class="hero-content">
             <h1 class="hero-title">Never lose track<br>of what matters.</h1>
-            <p class="hero-description">BackTrack is a centralized lost-and-found system for students and staff.</p>
-            <p class="hero-description">A smarter way to reconnect people with their belongings.</p>
+            <p class="hero-description">The official lost-and-found system for Forsyth County high schools.</p>
+            <p class="hero-description">A smarter way to reconnect students with their belongings across all campuses.
+            </p>
 
             <div class="button-group" role="group" aria-label="Get started actions">
                 <a href="browse.html" class="btn-primary" aria-label="Browse lost items">Browse items</a>
@@ -1547,417 +1399,927 @@
         <div class="features-header">
             <p class="features-label">How it works</p>
             <h2 class="features-title" id="features-title">Everything you need to find what's lost</h2>
-            <p class="features-subtitle">A modern lost-and-found system designed for students and staff. Simple, fast,
-                and smart.</p>
+            <p class="features-subtitle">BackTrack is built for Forsyth County high schools. No confusing menus, no
+                waiting around—just a simple way to report and find lost stuff.</p>
         </div>
 
-        <!-- Feature 1: Browse -->
-        <div class="feature-row">
-            <div class="feature-content">
-                <p class="feature-number">01</p>
-                <h3 class="feature-heading">Browse all lost items in one place</h3>
-                <p class="feature-description">See every reported lost item across campus in a clean, organized grid.
-                    Filter by category, location, or date to quickly find what you're looking for.</p>
-                <div class="feature-tags">
-                    <span class="feature-tag">Grid View</span>
-                    <span class="feature-tag">Filters</span>
-                    <span class="feature-tag">Real-time Updates</span>
-                </div>
-            </div>
-            <div class="feature-visual">
-                <div class="feature-mockup mockup-browse">
-                    <div class="mockup-sidebar">
-                        <span class="mockup-sidebar-title">Categories</span>
-                        <div class="mockup-sidebar-item active">
-                            <div class="mockup-sidebar-icon"></div>
-                            <div class="mockup-sidebar-text"></div>
+        <div class="steps-grid">
+            <article class="step-card">
+                <span class="step-num">01</span>
+                <div class="step-visual">
+                    <div class="sv-browse">
+                        <div class="sv-item">
+                            <div class="sv-item-img"></div>
+                            <div class="sv-item-bar"></div>
+                            <div class="sv-item-bar short"></div>
                         </div>
-                        <div class="mockup-sidebar-item">
-                            <div class="mockup-sidebar-icon"></div>
-                            <div class="mockup-sidebar-text"></div>
+                        <div class="sv-item">
+                            <div class="sv-item-img"></div>
+                            <div class="sv-item-bar"></div>
+                            <div class="sv-item-bar short"></div>
                         </div>
-                        <div class="mockup-sidebar-item">
-                            <div class="mockup-sidebar-icon"></div>
-                            <div class="mockup-sidebar-text"></div>
+                        <div class="sv-item">
+                            <div class="sv-item-img"></div>
+                            <div class="sv-item-bar"></div>
+                            <div class="sv-item-bar short"></div>
                         </div>
-                        <div class="mockup-sidebar-item">
-                            <div class="mockup-sidebar-icon"></div>
-                            <div class="mockup-sidebar-text"></div>
+                        <div class="sv-item">
+                            <div class="sv-item-img"></div>
+                            <div class="sv-item-bar"></div>
+                            <div class="sv-item-bar short"></div>
                         </div>
-                    </div>
-                    <div class="mockup-main">
-                        <div class="mockup-header-bar">
-                            <div class="mockup-page-title"></div>
-                            <div class="mockup-view-toggle">
-                                <div class="mockup-view-btn active"></div>
-                                <div class="mockup-view-btn"></div>
-                            </div>
+                        <div class="sv-item">
+                            <div class="sv-item-img"></div>
+                            <div class="sv-item-bar"></div>
+                            <div class="sv-item-bar short"></div>
                         </div>
-                        <div class="mockup-items-grid">
-                            <div class="mockup-card">
-                                <div class="mockup-card-image"></div>
-                                <div class="mockup-card-body">
-                                    <div class="mockup-line"></div>
-                                    <div class="mockup-line short"></div>
-                                </div>
-                            </div>
-                            <div class="mockup-card">
-                                <div class="mockup-card-image"></div>
-                                <div class="mockup-card-body">
-                                    <div class="mockup-line"></div>
-                                    <div class="mockup-line short"></div>
-                                </div>
-                            </div>
-                            <div class="mockup-card">
-                                <div class="mockup-card-image"></div>
-                                <div class="mockup-card-body">
-                                    <div class="mockup-line"></div>
-                                    <div class="mockup-line short"></div>
-                                </div>
-                            </div>
-                            <div class="mockup-card">
-                                <div class="mockup-card-image"></div>
-                                <div class="mockup-card-body">
-                                    <div class="mockup-line"></div>
-                                    <div class="mockup-line short"></div>
-                                </div>
-                            </div>
-                            <div class="mockup-card">
-                                <div class="mockup-card-image"></div>
-                                <div class="mockup-card-body">
-                                    <div class="mockup-line"></div>
-                                    <div class="mockup-line short"></div>
-                                </div>
-                            </div>
-                            <div class="mockup-card">
-                                <div class="mockup-card-image"></div>
-                                <div class="mockup-card-body">
-                                    <div class="mockup-line"></div>
-                                    <div class="mockup-line short"></div>
-                                </div>
-                            </div>
+                        <div class="sv-item">
+                            <div class="sv-item-img"></div>
+                            <div class="sv-item-bar"></div>
+                            <div class="sv-item-bar short"></div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <h3 class="step-heading">Browse and filter quickly</h3>
+                <p class="step-desc">Open one live feed of lost-and-found listings, then narrow by category, location, and date in seconds.</p>
+            </article>
+
+            <article class="step-card">
+                <span class="step-num">02</span>
+                <div class="step-visual">
+                    <div class="sv-submit">
+                        <div class="sv-upload">
+                            <span class="sv-upload-arrow"></span>
+                            <span class="sv-upload-text">Drop photo + item details</span>
+                        </div>
+                        <div class="sv-fields">
+                            <div class="sv-field"></div>
+                            <div class="sv-field"></div>
+                            <div class="sv-field"></div>
+                            <div class="sv-field"></div>
+                            <div class="sv-field full"></div>
+                        </div>
+                        <div class="sv-btn"></div>
+                    </div>
+                </div>
+                <h3 class="step-heading">Submit found items fast</h3>
+                <p class="step-desc">Post an item with a photo, where it was found, and a short note. Listings publish immediately for students.</p>
+            </article>
+
+            <article class="step-card">
+                <span class="step-num">03</span>
+                <div class="step-visual">
+                    <div class="sv-claim">
+                        <div class="sv-claim-item">
+                            <div class="sv-claim-thumb"></div>
+                            <div class="sv-claim-info">
+                                <div class="sv-claim-line"></div>
+                                <div class="sv-claim-line sm"></div>
+                            </div>
+                            <span class="sv-claim-badge">Reviewing</span>
+                        </div>
+                        <div class="sv-claim-item">
+                            <div class="sv-claim-thumb"></div>
+                            <div class="sv-claim-info">
+                                <div class="sv-claim-line"></div>
+                                <div class="sv-claim-line sm"></div>
+                            </div>
+                            <span class="sv-claim-badge">Approved</span>
+                        </div>
+                        <div class="sv-points-row">
+                            <span class="sv-pts-label">Current recovery rate</span>
+                            <span class="sv-pts-val">92%</span>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="step-heading">Claim and recover with proof</h3>
+                <p class="step-desc">Students submit claim details, admins verify ownership, and pickup status updates in real time.</p>
+            </article>
         </div>
 
-        <!-- Feature 2: Search -->
-        <div class="feature-row reverse">
-            <div class="feature-content">
-                <p class="feature-number">02</p>
-                <h3 class="feature-heading">Smart search that understands you</h3>
-                <p class="feature-description">Type naturally and find matches instantly. Search for "blue water bottle"
-                    or "AirPods case" and get relevant results, not just exact matches.</p>
-                <div class="feature-tags">
-                    <span class="feature-tag">Natural Language</span>
-                    <span class="feature-tag">Instant Results</span>
-                    <span class="feature-tag">Category Filters</span>
+        <div class="extras-row">
+            <div class="extra-pill">
+                <div class="extra-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 4v16"></path>
+                        <path d="M4 12h16"></path>
+                        <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                    </svg>
+                </div>
+                <div>
+                    <div class="extra-text">Live sync</div>
+                    <div class="extra-sub">No stale listing states</div>
                 </div>
             </div>
-            <div class="feature-visual">
-                <div class="feature-mockup mockup-search">
-                    <div class="mockup-search-bar">
-                        <div class="mockup-search-icon"></div>
-                        <div class="mockup-search-text"></div>
-                    </div>
-                    <div class="mockup-filters">
-                        <span class="mockup-filter-chip active">All</span>
-                        <span class="mockup-filter-chip">Electronics</span>
-                        <span class="mockup-filter-chip">Clothing</span>
-                        <span class="mockup-filter-chip">Books</span>
-                        <span class="mockup-filter-chip">Keys</span>
-                    </div>
-                    <div class="mockup-date-filter">
-                        <div class="mockup-date-icon"></div>
-                        <div class="mockup-date-text"></div>
-                    </div>
-                    <div class="mockup-results">
-                        <div class="mockup-card">
-                            <div class="mockup-card-image"></div>
-                            <div class="mockup-card-body">
-                                <div class="mockup-line"></div>
-                                <div class="mockup-line short"></div>
-                            </div>
-                        </div>
-                        <div class="mockup-card">
-                            <div class="mockup-card-image"></div>
-                            <div class="mockup-card-body">
-                                <div class="mockup-line"></div>
-                                <div class="mockup-line short"></div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="extra-pill">
+                <div class="extra-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path>
+                        <path d="M9 12l2 2 4-4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="extra-text">Verified claims</div>
+                    <div class="extra-sub">Proof and identity checks</div>
                 </div>
             </div>
-        </div>
-
-        <!-- Feature 3: Submit -->
-        <div class="feature-row">
-            <div class="feature-content">
-                <p class="feature-number">03</p>
-                <h3 class="feature-heading">Report found items in seconds</h3>
-                <p class="feature-description">Found something? Snap a photo, add a quick description, and submit. Your
-                    report goes live instantly so the owner can find it fast.</p>
-                <div class="feature-tags">
-                    <span class="feature-tag">Photo Upload</span>
-                    <span class="feature-tag">Quick Form</span>
-                    <span class="feature-tag">Instant Publishing</span>
+            <div class="extra-pill">
+                <div class="extra-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 20V10"></path>
+                        <path d="M10 20V6"></path>
+                        <path d="M16 20v-8"></path>
+                        <path d="M22 20v-4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="extra-text">Actionable analytics</div>
+                    <div class="extra-sub">Track queue and return speed</div>
                 </div>
             </div>
-            <div class="feature-visual">
-                <div class="feature-mockup mockup-submit">
-                    <div class="mockup-upload-area">
-                        <div class="mockup-upload-icon"></div>
-                        <span class="mockup-upload-text">Click or drag to upload</span>
-                    </div>
-                    <div class="mockup-form-fields">
-                        <div class="mockup-form-row">
-                            <div class="mockup-input-group">
-                                <div class="mockup-label"></div>
-                                <div class="mockup-input"></div>
-                            </div>
-                            <div class="mockup-input-group">
-                                <div class="mockup-label"></div>
-                                <div class="mockup-select"></div>
-                            </div>
-                        </div>
-                        <div class="mockup-form-row">
-                            <div class="mockup-input-group">
-                                <div class="mockup-label"></div>
-                                <div class="mockup-select"></div>
-                            </div>
-                            <div class="mockup-input-group">
-                                <div class="mockup-label"></div>
-                                <div class="mockup-input"></div>
-                            </div>
-                        </div>
-                        <div class="mockup-input-group">
-                            <div class="mockup-label"></div>
-                            <div class="mockup-textarea"></div>
-                        </div>
-                        <div class="mockup-btn"></div>
-                    </div>
+            <div class="extra-pill">
+                <div class="extra-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"></path>
+                        <path d="M10.5 20a1.5 1.5 0 0 0 3 0"></path>
+                    </svg>
                 </div>
-            </div>
-        </div>
-
-        <!-- Feature 4: AI Match -->
-        <div class="feature-row reverse">
-            <div class="feature-content">
-                <p class="feature-number">04</p>
-                <h3 class="feature-heading">AI-powered image matching</h3>
-                <p class="feature-description">Upload a photo of your lost item and let AI find similar matches. Our
-                    system analyzes colors, shapes, and features to surface the best results.</p>
-                <div class="feature-tags">
-                    <span class="feature-tag">Image Recognition</span>
-                    <span class="feature-tag">Smart Matching</span>
-                    <span class="feature-tag">Match Scores</span>
-                </div>
-            </div>
-            <div class="feature-visual">
-                <div class="feature-mockup mockup-ai">
-                    <div class="mockup-ai-upload">
-                        <div class="mockup-ai-image"></div>
-                        <div class="mockup-ai-analysis">
-                            <p class="mockup-ai-label">AI detected</p>
-                            <div class="mockup-ai-tags">
-                                <span class="mockup-ai-tag">Blue</span>
-                                <span class="mockup-ai-tag">Backpack</span>
-                                <span class="mockup-ai-tag">Nike</span>
-                                <span class="mockup-ai-tag">Zipper</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mockup-ai-results">
-                        <p class="mockup-ai-label">Top matches</p>
-                        <div class="mockup-ai-match">
-                            <div class="mockup-ai-match-img"></div>
-                            <div class="mockup-ai-match-info">
-                                <div class="mockup-line" style="width: 70%; margin-bottom: 4px;"></div>
-                                <div class="mockup-line shorter"></div>
-                            </div>
-                            <span class="mockup-ai-match-badge">92% Match</span>
-                        </div>
-                        <div class="mockup-ai-match">
-                            <div class="mockup-ai-match-img"></div>
-                            <div class="mockup-ai-match-info">
-                                <div class="mockup-line" style="width: 70%; margin-bottom: 4px;"></div>
-                                <div class="mockup-line shorter"></div>
-                            </div>
-                            <span class="mockup-ai-match-badge">78% Match</span>
-                        </div>
-                    </div>
+                <div>
+                    <div class="extra-text">Saved alerts</div>
+                    <div class="extra-sub">Get notified on likely matches</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Statistics Section -->
-    <section class="stats-section" aria-labelledby="stats-title">
-        <div class="stats-container">
-            <div class="stats-header">
-                <h2 class="stats-title" id="stats-title">Making a difference, one item at a time</h2>
-                <p class="stats-subtitle">Real-time statistics from our lost-and-found community</p>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path
-                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                            <line x1="12" y1="22.08" x2="12" y2="12" />
-                        </svg>
-                    </div>
-                    <div class="stat-value" data-target="1247">0</div>
-                    <div class="stat-label">Items Reported</div>
+    <!-- School Logos Carousel -->
+    <section class="schools-section" aria-labelledby="schools-title">
+        <div class="schools-header">
+            <p class="schools-badge">Trusted by schools across the district</p>
+            <h2 class="schools-title" id="schools-title">Built for Forsyth County Schools</h2>
+            <p class="schools-subtitle">Serving every high school in the district</p>
+        </div>
+        <div class="schools-marquee">
+            <div class="schools-track">
+                <!-- Set 1 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color: #22c55e;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                            <polyline points="22 4 12 14.01 9 11.01" />
-                        </svg>
-                    </div>
-                    <div class="stat-value" data-target="892">0</div>
-                    <div class="stat-label">Items Returned</div>
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color: #f5c518;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
-                    </div>
-                    <div class="stat-value" data-target="2156">0</div>
-                    <div class="stat-label">Happy Users</div>
+                <div class="school-logo" title="East Forsyth HS">
+                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color: #a855f7;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="10" />
-                            <polyline points="12 6 12 12 16 14" />
-                        </svg>
-                    </div>
-                    <div class="stat-value" data-target="4" data-suffix="hrs">0</div>
-                    <div class="stat-label">Avg. Return Time</div>
+                <div class="school-logo" title="Forsyth Central HS">
+                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Lambert HS">
+                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="North Forsyth HS">
+                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="South Forsyth HS">
+                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="West Forsyth HS">
+                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
+                </div>
+
+                <!-- Set 2 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="East Forsyth HS">
+                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Forsyth Central HS">
+                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Lambert HS">
+                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="North Forsyth HS">
+                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="South Forsyth HS">
+                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="West Forsyth HS">
+                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
+                </div>
+
+                <!-- Set 3 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="East Forsyth HS">
+                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Forsyth Central HS">
+                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Lambert HS">
+                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="North Forsyth HS">
+                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="South Forsyth HS">
+                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="West Forsyth HS">
+                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
+                </div>
+
+                <!-- Set 4 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="East Forsyth HS">
+                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Forsyth Central HS">
+                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Lambert HS">
+                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="North Forsyth HS">
+                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="South Forsyth HS">
+                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="West Forsyth HS">
+                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
                 </div>
             </div>
         </div>
     </section>
 
     <style>
-        /* Statistics Section */
-        .stats-section {
-            padding: 100px 80px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+        /* School Logos Carousel */
+        /* School Logos Carousel */
+        .schools-section {
+            padding: 100px 0 80px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
+            overflow: hidden;
         }
 
-        .stats-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stats-header {
+        .schools-header {
             text-align: center;
             margin-bottom: 60px;
+            padding: 0 40px;
         }
 
-        .stats-title {
-            font-size: 36px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .schools-badge {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 999px;
+            padding: 8px 20px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .schools-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: #ffffff;
             margin-bottom: 12px;
         }
 
-        .stats-subtitle {
-            font-size: 16px;
-            color: #666;
+        .schools-subtitle {
+            font-size: 18px;
+            color: #94a3b8;
+            font-weight: 400;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-        }
-
-        .stat-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 32px 24px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 20px;
-            color: #fff;
-        }
-
-        .stat-icon svg {
+        .schools-marquee {
+            position: relative;
             width: 100%;
-            height: 100%;
+            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            padding: 20px 0;
         }
 
-        .stat-value {
-            font-size: 48px;
-            font-weight: 800;
-            letter-spacing: -2px;
-            color: #fff;
-            margin-bottom: 8px;
-            font-variant-numeric: tabular-nums;
+        .schools-track {
+            display: flex;
+            gap: 40px;
+            animation: marqueeScroll 60s linear infinite;
+            width: max-content;
         }
 
-        .stat-label {
-            font-size: 14px;
-            color: #888;
-            font-weight: 500;
+        .schools-track:hover {
+            animation-play-state: paused;
         }
 
-        @media (max-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+        @keyframes marqueeScroll {
+            0% {
+                transform: translateX(0);
             }
+
+            100% {
+                transform: translateX(-25%);
+            }
+        }
+
+        .school-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 20px;
+            width: 140px;
+            height: 140px;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .school-logo:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .school-icon-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            opacity: 0.85;
+            transition: opacity 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .school-logo:hover .school-icon-img {
+            opacity: 1;
+        }
+
+        /* Light mode */
+        body.light-theme .schools-section {
+            border-top-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .schools-title {
+            color: #1e293b;
+        }
+
+        body.light-theme .schools-badge {
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.08);
+            border-color: rgba(37, 99, 235, 0.15);
+        }
+
+        body.light-theme .schools-subtitle {
+            color: #64748b;
+        }
+
+        body.light-theme .school-logo {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .school-logo:hover {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
-            .stats-section {
-                padding: 60px 20px;
+            .schools-section {
+                padding: 60px 0 40px;
             }
 
-            .stats-title {
-                font-size: 28px;
+            .schools-title {
+                font-size: 32px;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
+            .school-logo {
+                width: 100px;
+                height: 100px;
+                padding: 14px;
+                border-radius: 18px;
+            }
+
+            .school-icon-img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+
+    <!-- Leaderboard Section -->
+    <section class="lb-section" aria-labelledby="lb-heading">
+        <div class="lb-wrap">
+            <div class="lb-head">
+                <h2 class="lb-heading" id="lb-heading">Leaderboard</h2>
+                <p class="lb-sub">Top contributors across Forsyth County</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="lb-tabs">
+                <button class="lb-tab active" data-tab="finders">Items Found</button>
+                <button class="lb-tab" data-tab="heroes">Items Returned</button>
+            </div>
+
+            <!-- Podium: 2nd | 1st | 3rd -->
+            <div class="lb-podium" id="lbPodium">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Ranking List 4+ -->
+            <div class="lb-list" id="lbList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ============================================
+           LEADERBOARD — Creative Podium Design
+           ============================================ */
+        .lb-section {
+            padding: 80px 40px 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lb-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .lb-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .lb-head {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .lb-heading {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            background: linear-gradient(180deg, #fff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .lb-sub {
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        /* Tabs */
+        .lb-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 48px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+            border-radius: 14px;
+            padding: 4px;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .lb-tab {
+            flex: 1;
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 11px;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .lb-tab:hover { color: #94a3b8; }
+
+        .lb-tab.active {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        /* ---- PODIUM: 2nd | 1st (tall) | 3rd ---- */
+        .lb-podium {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            min-height: 320px;
+        }
+
+        .lb-p {
+            flex: 1;
+            max-width: 230px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .lb-p:hover { transform: translateY(-6px); }
+
+        /* Avatar ring */
+        .lb-p-ring {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 0;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lb-p-ring::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .lb-p-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Crown / badge */
+        .lb-p-crown {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+        }
+
+        /* Pedestal */
+        .lb-p-pedestal {
+            margin-top: -36px;
+            padding: 48px 16px 20px;
+            border-radius: 16px 16px 12px 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lb-p-pedestal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .lb-p-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lb-p-school {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .lb-p-count {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            display: block;
+        }
+
+        .lb-p-unit {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .lb-p-place {
+            position: absolute;
+            bottom: 10px;
+            right: 14px;
+            font-size: 48px;
+            font-weight: 900;
+            opacity: 0.06;
+            line-height: 1;
+            color: #fff;
+        }
+
+        /* === 1st Place (center, tallest) === */
+        .lb-p.first { order: 2; }
+
+        .lb-p.first .lb-p-ring::before {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24, #f59e0b);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .lb-p.first .lb-p-avatar {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .lb-p.first .lb-p-pedestal {
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.03) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            min-height: 180px;
+        }
+
+        .lb-p.first .lb-p-pedestal::before {
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+        }
+
+        .lb-p.first .lb-p-count {
+            color: #fbbf24;
+        }
+
+        /* === 2nd Place === */
+        .lb-p.second { order: 1; }
+
+        .lb-p.second .lb-p-ring::before {
+            background: linear-gradient(135deg, #94a3b8, #cbd5e1, #94a3b8);
+            box-shadow: 0 0 16px rgba(148, 163, 184, 0.2);
+        }
+
+        .lb-p.second .lb-p-avatar {
+            background: linear-gradient(135deg, #64748b, #94a3b8);
+            box-shadow: 0 4px 16px rgba(148, 163, 184, 0.2);
+        }
+
+        .lb-p.second .lb-p-pedestal {
+            background: linear-gradient(180deg, rgba(148, 163, 184, 0.08) 0%, rgba(148, 163, 184, 0.02) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            min-height: 140px;
+        }
+
+        .lb-p.second .lb-p-pedestal::before {
+            background: linear-gradient(90deg, transparent, #94a3b8, transparent);
+        }
+
+        .lb-p.second .lb-p-count {
+            color: #cbd5e1;
+        }
+
+        /* === 3rd Place === */
+        .lb-p.third { order: 3; }
+
+        .lb-p.third .lb-p-ring::before {
+            background: linear-gradient(135deg, #b45309, #d97706, #b45309);
+            box-shadow: 0 0 16px rgba(180, 83, 9, 0.2);
+        }
+
+        .lb-p.third .lb-p-avatar {
+            background: linear-gradient(135deg, #92400e, #b45309);
+            box-shadow: 0 4px 16px rgba(180, 83, 9, 0.2);
+        }
+
+        .lb-p.third .lb-p-pedestal {
+            background: linear-gradient(180deg, rgba(180, 83, 9, 0.08) 0%, rgba(180, 83, 9, 0.02) 100%);
+            border: 1px solid rgba(180, 83, 9, 0.12);
+            min-height: 120px;
+        }
+
+        .lb-p.third .lb-p-pedestal::before {
+            background: linear-gradient(90deg, transparent, #b45309, transparent);
+        }
+
+        .lb-p.third .lb-p-count {
+            color: #d97706;
+        }
+
+        /* ---- Ranking List (4+) ---- */
+        .lb-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .lb-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 20px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(37, 99, 235, 0.06);
+            border-radius: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .lb-row:hover {
+            background: rgba(37, 99, 235, 0.06);
+            border-color: rgba(37, 99, 235, 0.15);
+            transform: translateX(4px);
+        }
+
+        .lb-row-num {
+            width: 28px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #475569;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .lb-row-av {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .lb-row-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .lb-row-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .lb-row-school {
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .lb-row-ct {
+            font-size: 15px;
+            font-weight: 700;
+            color: #60a5fa;
+            font-variant-numeric: tabular-nums;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .lb-row-bar {
+            width: 80px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .lb-row-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            transition: width 0.6s ease;
+        }
+
+        /* Light Mode */
+        body.light-theme .lb-heading {
+            background: linear-gradient(180deg, #111 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.light-theme .lb-sub { color: #888; }
+
+        body.light-theme .lb-tabs {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .lb-tab { color: #999; }
+
+        body.light-theme .lb-tab.active {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #fff;
+        }
+
+        body.light-theme .lb-p-name { color: #111; }
+        body.light-theme .lb-p-school { color: #888; }
+        body.light-theme .lb-p-place { color: #000; opacity: 0.04; }
+
+        body.light-theme .lb-p.first .lb-p-pedestal {
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.06) 0%, transparent 100%);
+            border-color: rgba(245, 158, 11, 0.12);
+        }
+
+        body.light-theme .lb-p.second .lb-p-pedestal {
+            background: linear-gradient(180deg, rgba(100, 116, 139, 0.06) 0%, transparent 100%);
+            border-color: rgba(100, 116, 139, 0.12);
+        }
+
+        body.light-theme .lb-p.third .lb-p-pedestal {
+            background: linear-gradient(180deg, rgba(180, 83, 9, 0.04) 0%, transparent 100%);
+            border-color: rgba(180, 83, 9, 0.1);
+        }
+
+        body.light-theme .lb-row {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .lb-row:hover {
+            background: rgba(37, 99, 235, 0.04);
+            border-color: rgba(37, 99, 235, 0.1);
+        }
+
+        body.light-theme .lb-row-name { color: #111; }
+        body.light-theme .lb-row-school { color: #888; }
+        body.light-theme .lb-row-num { color: #aaa; }
+        body.light-theme .lb-row-ct { color: #2563eb; }
+
+        body.light-theme .lb-row-bar {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        body.light-theme .lb-section::before {
+            background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.04) 0%, transparent 70%);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lb-section { padding: 60px 20px 80px; }
+            .lb-heading { font-size: 28px; }
+
+            .lb-podium {
+                flex-direction: column;
+                align-items: center;
+                min-height: auto;
                 gap: 16px;
             }
 
-            .stat-card {
-                padding: 24px 16px;
+            .lb-p { max-width: 100%; width: 100%; }
+            .lb-p.first, .lb-p.second, .lb-p.third { order: unset; }
+
+            .lb-p.first .lb-p-pedestal,
+            .lb-p.second .lb-p-pedestal,
+            .lb-p.third .lb-p-pedestal {
+                min-height: auto;
             }
 
-            .stat-value {
-                font-size: 36px;
-            }
+            .lb-row-bar { display: none; }
         }
     </style>
 
@@ -1977,10 +2339,10 @@
                 <button class="chatbot-close" id="chatbotClose">&times;</button>
             </div>
             <div class="chatbot-messages" id="chatbotMessages">
-                <div class="chatbot-message">Ask me about BackTrack's features, how to submit items, or how browsing
-                    works.</div>
+                <div class="chatbot-message">Got questions about how BackTrack works? Ask me about submitting items,
+                    browsing, claims, or any features.</div>
             </div>
-            <div class="chatbot-hint">Questions outside the website won't be answered.</div>
+            <div class="chatbot-hint">Only answers BackTrack-related questions.</div>
             <div class="chatbot-status" id="chatbotStatus"></div>
             <div class="chatbot-footer">
                 <input class="chatbot-input" id="chatbotInput" type="text" placeholder="Ask about BackTrack..." />
@@ -1989,13 +2351,16 @@
         </div>
     </div>
 
+
+
     <!-- Footer -->
     <footer style="padding: 60px 80px 40px; border-top: 1px solid rgba(255,255,255,0.06);">
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;">
             <div>
                 <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
-                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized
-                    lost-and-found system for students and staff. Built for FBLA Website Coding & Development.</p>
+                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">The official
+                    lost-and-found system for Forsyth County high schools. Built for FBLA Website Coding & Development.
+                </p>
             </div>
             <div>
                 <div
@@ -2041,6 +2406,162 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script>
+        // ============================================
+        // LEADERBOARD — Gaming-Style with Podium + Table
+        // ============================================
+        (function () {
+            const avatarGradients = [
+                'linear-gradient(135deg, #f59e0b, #d97706)',
+                'linear-gradient(135deg, #6366f1, #4f46e5)',
+                'linear-gradient(135deg, #ec4899, #db2777)',
+                'linear-gradient(135deg, #22c55e, #16a34a)',
+                'linear-gradient(135deg, #06b6d4, #0891b2)',
+                'linear-gradient(135deg, #f97316, #ea580c)',
+                'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                'linear-gradient(135deg, #14b8a6, #0d9488)',
+            ];
+
+            const crownSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#fbbf24"><path d="M2.5 19h19v2h-19v-2zm19.57-9.36c-.21-.8-1.04-1.28-1.84-1.06L14.97 10l-2.2-6.03a1.49 1.49 0 0 0-2.81.06L7.97 10l-5.26-1.42c-.8-.22-1.63.26-1.84 1.06-.21.8.26 1.63 1.06 1.84L7.97 13l-.97 6h10l-.97-6 6.04-1.52c.8-.21 1.28-1.04 1.06-1.84h-.06z"/></svg>`;
+
+            function renderLeaderboard(entries, unit) {
+                const podium = document.getElementById('lbPodium');
+                const list = document.getElementById('lbList');
+                if (!podium || !list) return;
+
+                const top3 = entries.slice(0, 3);
+                const rest = entries.slice(3, 8);
+                const places = ['first', 'second', 'third'];
+                const maxCount = top3.length ? top3[0].count : 1;
+
+                podium.innerHTML = top3.map((e, i) => {
+                    const initial = e.name.charAt(0).toUpperCase();
+                    return `
+                        <div class="lb-p ${places[i]}">
+                            <div class="lb-p-ring">
+                                ${i === 0 ? `<div class="lb-p-crown">${crownSvg}</div>` : ''}
+                                <div class="lb-p-avatar" style="background: ${avatarGradients[i]};">${initial}</div>
+                            </div>
+                            <div class="lb-p-pedestal">
+                                <div class="lb-p-name">${e.name}</div>
+                                <div class="lb-p-school">Forsyth County</div>
+                                <span class="lb-p-count">${e.count}</span>
+                                <span class="lb-p-unit">${unit}</span>
+                                <div class="lb-p-place">${i + 1}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                list.innerHTML = rest.map((e, i) => {
+                    const place = i + 4;
+                    const initial = e.name.charAt(0).toUpperCase();
+                    const barWidth = Math.round((e.count / maxCount) * 100);
+                    return `
+                        <div class="lb-row">
+                            <span class="lb-row-num">${place}</span>
+                            <div class="lb-row-av" style="background: ${avatarGradients[(i + 3) % avatarGradients.length]};">${initial}</div>
+                            <div class="lb-row-info">
+                                <div class="lb-row-name">${e.name}</div>
+                                <div class="lb-row-school">Forsyth County</div>
+                            </div>
+                            <span class="lb-row-ct">${e.count} ${unit}</span>
+                            <div class="lb-row-bar">
+                                <div class="lb-row-bar-fill" style="width: ${barWidth}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                list.style.display = rest.length ? '' : 'none';
+            }
+
+            // Demo data
+            const demoFinders = [
+                { name: 'Marcus J.', count: 23 },
+                { name: 'Priya S.', count: 18 },
+                { name: 'Carlos R.', count: 14 },
+                { name: 'Aaliyah M.', count: 11 },
+                { name: 'Nathan K.', count: 8 },
+                { name: 'Zoe T.', count: 6 },
+                { name: 'Liam H.', count: 4 },
+                { name: 'Olivia D.', count: 3 },
+            ];
+
+            const demoHeroes = [
+                { name: 'Sophie L.', count: 12 },
+                { name: 'Ethan W.', count: 9 },
+                { name: 'Mia T.', count: 7 },
+                { name: 'Jordan P.', count: 5 },
+                { name: 'Ava C.', count: 3 },
+                { name: 'Ryan F.', count: 2 },
+                { name: 'Chloe B.', count: 1 },
+            ];
+
+            // State
+            let cachedFinders = demoFinders;
+            let cachedHeroes = demoHeroes;
+            let activeTab = 'finders';
+
+            function switchTab(tab) {
+                activeTab = tab;
+                document.querySelectorAll('.lb-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+                renderLeaderboard(tab === 'finders' ? cachedFinders : cachedHeroes, tab === 'finders' ? 'items' : 'returned');
+            }
+
+            // Tab click handlers
+            document.querySelectorAll('.lb-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+
+            // Load from Supabase or fall back to demo
+            (async function () {
+                try {
+                    if (typeof BackTrackDB !== 'undefined' && BackTrackDB.isSupabaseConfigured()) {
+                        const items = await BackTrackDB.getItems({ status: ['found', 'claimed', 'pending'] });
+
+                        if (items && items.length > 0) {
+                            const finderCounts = {};
+                            items.forEach(item => {
+                                const email = item.submitted_by || 'Anonymous';
+                                const displayName = email.includes('@')
+                                    ? email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 15) + '.'
+                                    : email;
+                                if (!finderCounts[displayName]) finderCounts[displayName] = 0;
+                                finderCounts[displayName]++;
+                            });
+
+                            cachedFinders = Object.entries(finderCounts)
+                                .map(([name, count]) => ({ name, count }))
+                                .sort((a, b) => b.count - a.count);
+                            if (!cachedFinders.length) cachedFinders = demoFinders;
+
+                            const claimedItems = items.filter(item => item.status === 'claimed');
+                            const heroCounts = {};
+                            claimedItems.forEach(item => {
+                                const email = item.submitted_by || 'Anonymous';
+                                const displayName = email.includes('@')
+                                    ? email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 15) + '.'
+                                    : email;
+                                if (!heroCounts[displayName]) heroCounts[displayName] = 0;
+                                heroCounts[displayName]++;
+                            });
+
+                            cachedHeroes = Object.entries(heroCounts)
+                                .map(([name, count]) => ({ name, count }))
+                                .sort((a, b) => b.count - a.count);
+                            if (!cachedHeroes.length) cachedHeroes = demoHeroes;
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Leaderboard: using demo data', err);
+                }
+
+                // Initial render
+                switchTab('finders');
+            })();
+        })();
+    </script>
+    <script>
         // Mobile menu toggle
         const hamburger = document.getElementById('hamburger');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -2065,8 +2586,8 @@
         updateNavBorder();
         window.addEventListener('scroll', updateNavBorder, { passive: true });
 
-        // Scroll animations for feature rows
-        const featureRows = document.querySelectorAll('.feature-row');
+        // Scroll animations for "How it works" cards
+        const revealItems = document.querySelectorAll('.step-card, .extra-pill');
         const observerOptions = {
             root: null,
             rootMargin: '0px 0px -100px 0px',
@@ -2077,11 +2598,12 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    featureObserver.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        featureRows.forEach(row => featureObserver.observe(row));
+        revealItems.forEach(item => featureObserver.observe(item));
 
         const chatbotToggle = document.getElementById('chatbotToggle');
         const chatbotPanel = document.getElementById('chatbotPanel');
@@ -2252,51 +2774,7 @@
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
 
-    <!-- Animated Statistics Counter -->
-    <script>
-        (function () {
-            const statValues = document.querySelectorAll('.stat-value');
-            let animated = false;
 
-            function animateCounters() {
-                if (animated) return;
-                animated = true;
-
-                statValues.forEach(stat => {
-                    const target = parseInt(stat.dataset.target, 10);
-                    const suffix = stat.dataset.suffix || '';
-                    const duration = 2000;
-                    const step = target / (duration / 16);
-                    let current = 0;
-
-                    function update() {
-                        current += step;
-                        if (current < target) {
-                            stat.textContent = Math.floor(current).toLocaleString() + suffix;
-                            requestAnimationFrame(update);
-                        } else {
-                            stat.textContent = target.toLocaleString() + suffix;
-                        }
-                    }
-                    requestAnimationFrame(update);
-                });
-            }
-
-            // Observe stats section
-            const statsSection = document.querySelector('.stats-section');
-            if (statsSection) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            animateCounters();
-                            observer.disconnect();
-                        }
-                    });
-                }, { threshold: 0.3 });
-                observer.observe(statsSection);
-            }
-        })();
-    </script>
 
     <!-- Orbital Animation Script -->
     <script>

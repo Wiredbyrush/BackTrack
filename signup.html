@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    
+
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
@@ -18,7 +19,7 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    
+
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <title>Sign Up - BackTrack</title>
@@ -28,7 +29,10 @@
     </script>
     <style>
         /* Disable CSS animations (stops pulsing/flashing indicators) but keep final states visible */
-        * { animation: none !important; -webkit-animation: none !important; }
+        * {
+            animation: none !important;
+            -webkit-animation: none !important;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,8 +56,13 @@
         }
 
         @keyframes pageLoadFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .page-transition {
@@ -74,7 +83,8 @@
             pointer-events: all;
         }
 
-        a, button {
+        a,
+        button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -330,9 +340,17 @@
             transition: background 0.3s ease;
         }
 
-        .strength-bar.weak { background: #ef4444; }
-        .strength-bar.medium { background: #f59e0b; }
-        .strength-bar.strong { background: #22c55e; }
+        .strength-bar.weak {
+            background: #ef4444;
+        }
+
+        .strength-bar.medium {
+            background: #f59e0b;
+        }
+
+        .strength-bar.strong {
+            background: #22c55e;
+        }
 
         .password-hint {
             margin-top: 8px;
@@ -478,6 +496,7 @@
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
 </head>
+
 <body>
     <div class="page-transition" id="pageTransition"></div>
 
@@ -492,6 +511,7 @@
             <a href="browse.html" class="nav-link">Browse</a>
             <a href="map.html" class="nav-link">Map</a>
             <a href="submit.html" class="nav-link">Submit</a>
+            <a href="rewards.html" class="nav-link">Rewards</a>
             <a href="features.html" class="nav-link">Features</a>
             <a href="sources.html" class="nav-link">Sources</a>
         </div>
@@ -506,10 +526,18 @@
 
             <button class="google-btn" id="googleBtn" aria-label="Sign up with Google">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    <path
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        fill="#4285F4" />
+                    <path
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        fill="#34A853" />
+                    <path
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        fill="#FBBC05" />
+                    <path
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        fill="#EA4335" />
                 </svg>
                 Continue with Google
             </button>
@@ -524,27 +552,33 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="firstName">First name</label>
-                        <input type="text" id="firstName" class="form-input" placeholder="John" required aria-required="true" maxlength="50">
+                        <input type="text" id="firstName" class="form-input" placeholder="John" required
+                            aria-required="true" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="lastName">Last name</label>
-                        <input type="text" id="lastName" class="form-input" placeholder="Doe" required aria-required="true" maxlength="50">
+                        <input type="text" id="lastName" class="form-input" placeholder="Doe" required
+                            aria-required="true" maxlength="50">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required aria-required="true" maxlength="254">
+                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required
+                        aria-required="true" maxlength="254">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="password">Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="password" class="form-input" placeholder="Create a password" required minlength="8" aria-required="true" aria-describedby="passwordHint">
-                        <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
+                        <input type="password" id="password" class="form-input" placeholder="Create a password" required
+                            minlength="8" aria-required="true" aria-describedby="passwordHint">
+                        <button type="button" class="password-toggle" id="togglePassword"
+                            aria-label="Toggle password visibility">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
                             </svg>
                         </button>
                     </div>
@@ -560,11 +594,14 @@
                 <div class="form-group">
                     <label class="form-label" for="confirmPassword">Confirm password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required aria-required="true">
-                        <button type="button" class="password-toggle" id="toggleConfirmPassword" aria-label="Toggle confirm password visibility">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
+                        <input type="password" id="confirmPassword" class="form-input"
+                            placeholder="Confirm your password" required aria-required="true">
+                        <button type="button" class="password-toggle" id="toggleConfirmPassword"
+                            aria-label="Toggle confirm password visibility">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
                             </svg>
                         </button>
                     </div>
@@ -572,7 +609,8 @@
 
                 <div class="terms-checkbox">
                     <input type="checkbox" id="terms" required aria-required="true">
-                    <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a href="#" id="privacyLink">Privacy Policy</a></label>
+                    <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a href="#"
+                            id="privacyLink">Privacy Policy</a></label>
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitBtn">Create account</button>
@@ -590,8 +628,10 @@
         </div>
     </main>
 
-    <footer style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-        <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp; Development.</div>
+    <footer
+        style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp;
+            Development.</div>
         <div style="display: flex; gap: 24px;">
             <a href="features.html" style="color: #555555; text-decoration: none; font-size: 13px;">Features</a>
             <a href="sources.html" style="color: #555555; text-decoration: none; font-size: 13px;">Sources</a>
@@ -609,23 +649,23 @@
         }
 
         // Security Functions
-        
+
         // Sanitize input to prevent XSS
         function sanitizeInput(input) {
             if (typeof input !== 'string') return '';
-            
+
             // Create a temporary div to use browser's HTML entity encoding
             const div = document.createElement('div');
             div.textContent = input;
             let sanitized = div.innerHTML;
-            
+
             // Remove potentially dangerous patterns
             sanitized = sanitized
                 .replace(/[<>]/g, '') // Remove angle brackets
                 .replace(/javascript:/gi, '') // Remove javascript: protocol
                 .replace(/on\w+=/gi, '') // Remove event handlers like onclick=
                 .replace(/data:text\/html/gi, ''); // Remove data URIs
-            
+
             return sanitized.trim();
         }
 
@@ -650,17 +690,17 @@
             try {
                 const attempts = JSON.parse(localStorage.getItem('signupAttempts') || '[]');
                 const now = Date.now();
-                
+
                 // Remove old attempts (outside lockout window)
                 const recentAttempts = attempts.filter(time => now - time < LOCKOUT_TIME);
-                
+
                 if (recentAttempts.length >= MAX_ATTEMPTS) {
                     const oldestAttempt = Math.min(...recentAttempts);
                     const timeLeft = Math.ceil((LOCKOUT_TIME - (now - oldestAttempt)) / 1000 / 60);
                     showStatus(`Too many signup attempts. Please try again in ${timeLeft} minute(s).`, 'error');
                     return false;
                 }
-                
+
                 // Add current attempt
                 recentAttempts.push(now);
                 localStorage.setItem('signupAttempts', JSON.stringify(recentAttempts));
@@ -680,12 +720,12 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#x27;');
-            
+
             statusMsg.textContent = sanitizedMessage;
             statusMsg.className = 'status ' + type;
         }
 
-        
+
         const googleBtn = document.getElementById('googleBtn');
         const signupForm = document.getElementById('signupForm');
         const firstNameInput = document.getElementById('firstName');
@@ -708,7 +748,7 @@
         const passwordHint = document.getElementById('passwordHint');
 
         // Password Visibility Bars
-        
+
         function setupPasswordToggle(toggleBtn, inputField) {
             toggleBtn.addEventListener('click', () => {
                 const type = inputField.type === 'password' ? 'text' : 'password';
@@ -736,7 +776,7 @@
         setupPasswordToggle(toggleConfirmPassword, confirmPasswordInput);
 
         // Password Strength Checker
-        
+
         function checkPasswordStrength(password) {
             let strength = 0;
             if (password.length >= 8) strength++;
@@ -923,4 +963,5 @@
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
 </body>
+
 </html>

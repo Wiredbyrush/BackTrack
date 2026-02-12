@@ -103,6 +103,84 @@
   margin-right: 16px;
 }
 
+/* ============================================
+   SHARED NAVIGATION STYLES
+   ============================================ */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  background-color: transparent;
+  height: 70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.nav-scrolled nav {
+  background-color: #000000;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.nav-scrolled nav::after {
+  opacity: 1;
+}
+
+.nav-spacer {
+  height: 70px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  height: 100%;
+}
+
+.nav-left img {
+  height: 70px;
+  width: auto;
+}
+
+.nav-center {
+  display: flex;
+  gap: 48px;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-link.active {
+  color: #ffffff;
+}
+
+
+
 /* Hover State - Subtle luminance increase */
 .sign-in-btn:hover {
   background: rgba(255, 255, 255, 0.18) !important;

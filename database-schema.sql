@@ -261,5 +261,26 @@ WITH CHECK (bucket_id = 'images' AND auth.role() = 'authenticated');
 
 -- Storage policy for public viewing
 CREATE POLICY "Anyone can view images"
-ON storage.objects FOR SELECT
 USING (bucket_id = 'images');
+
+-- ============================================
+-- REDEMPTIONS TABLE (for claiming rewards)
+-- ============================================
+CREATE TABLE redemptions (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    reward_name VARCHAR(255) NOT NULL,
+    points_cost INTEGER NOT NULL,
+    status VARCHAR(20) DEFAULT 'approved',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- RLS for redemptions
+ALTER TABLE redemptions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own redemptions" ON redemptions
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own redemptions" ON redemptions
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+

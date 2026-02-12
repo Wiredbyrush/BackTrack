@@ -1,70 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
     <title>Interactive Map - BackTrack | Denmark High School</title>
+    <meta name="description"
+        content="Interactive campus map showing lost item locations with heat map visualization at Denmark High School.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; min-height: 100vh; overflow: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        /* Navigation */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Nav overrides for map page */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            background: rgba(0,0,0,0.95);
-            height: 70px;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 1000;
         }
-        .nav-left { display: flex; align-items: center; text-decoration: none; height: 100%; }
-        .nav-left img { height: 70px; width: auto; }
-        .nav-center { display: flex; gap: 48px; }
-        .nav-link {
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        .nav-link:hover { color: rgba(255,255,255,0.8); }
-        .nav-link.active { color: #fff; }
-        .nav-right { display: flex; align-items: center; }
-        .sign-in-btn {
-            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
-            color: #f3f4f6;
-            border: 1px solid #3f3f3f;
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .sign-in-btn:hover {
-            transform: translateY(-1px);
-            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
-            color: #1a1a1a;
-        }
-        .nav-spacer { height: 70px; }
 
-        /* Main Container */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .brand-logo img {
+            height: 38px;
+            width: auto;
+            display: block;
+        }
+
+        .brand-logo .logo-light {
+            display: none;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-center .nav-link {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-center .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-center .nav-link.active {
+            color: #2563eb;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .sign-in-btn {
+            padding: 8px 20px;
+            background: #2563eb;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .sign-in-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .nav-spacer {
+            height: 70px;
+            flex-shrink: 0;
+        }
+
+        /* Page Layout */
         .map-page {
             display: flex;
             height: calc(100vh - 70px);
@@ -75,25 +130,25 @@
         /* Sidebar */
         .sidebar {
             width: 340px;
-            background: rgba(10,10,10,0.98);
-            border-right: 1px solid rgba(255,255,255,0.06);
-            padding: 28px;
+            background: rgba(10, 10, 10, 0.98);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 28px;
             backdrop-filter: blur(20px);
+            flex-shrink: 0;
         }
 
-        .building-header {
-            padding-bottom: 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+        .sidebar-header {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .building-name {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             background: linear-gradient(135deg, #fff 0%, #aaa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -103,24 +158,16 @@
         .building-info {
             font-size: 13px;
             color: #777;
-            line-height: 1.8;
+            line-height: 1.6;
         }
 
-        .info-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(6, 182, 212, 0.12);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #06b6d4;
-            font-weight: 600;
-            margin-top: 12px;
+        /* Heat Map Legend */
+        .legend-section {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .section-title {
+        .legend-title {
             font-size: 11px;
             font-weight: 700;
             color: #555;
@@ -129,17 +176,79 @@
             margin-bottom: 12px;
         }
 
+        .legend-bar {
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #166534, #22c55e, #eab308, #f97316, #ef4444);
+            margin-bottom: 8px;
+        }
+
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Stats Row */
+        .sidebar-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-stat {
+            padding: 14px 16px;
+            text-align: center;
+            background: rgba(10, 10, 10, 0.98);
+        }
+
+        .sidebar-stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #06b6d4;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-stat-label {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Room List */
+        .rooms-section {
+            padding: 16px 24px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
         .room-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .room-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 10px 14px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 13px;
@@ -150,36 +259,78 @@
         }
 
         .room-item:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
             color: #fff;
-            transform: translateX(6px);
+            transform: translateX(4px);
         }
 
-        .room-item.has-items {
-            border-color: rgba(6, 182, 212, 0.25);
-            background: rgba(6, 182, 212, 0.05);
+        .room-item .room-name {
+            font-weight: 600;
         }
 
-        .room-item.has-items:hover {
-            background: rgba(6, 182, 212, 0.12);
-            border-color: rgba(6, 182, 212, 0.4);
+        .room-item .room-number {
+            font-size: 11px;
+            color: #555;
+            margin-left: 6px;
+            font-weight: 500;
         }
 
-        .room-item.has-items .item-badge {
-            background: rgba(6, 182, 212, 0.25);
-            color: #06b6d4;
-            padding: 4px 10px;
-            border-radius: 8px;
+        .room-item .item-count {
+            padding: 3px 8px;
+            border-radius: 6px;
             font-size: 11px;
             font-weight: 700;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        /* Heat colors for room items */
+        .room-item.heat-0 {
+            border-left: 3px solid #166534;
+        }
+
+        .room-item.heat-1 {
+            border-left: 3px solid #22c55e;
+        }
+
+        .room-item.heat-2 {
+            border-left: 3px solid #eab308;
+        }
+
+        .room-item.heat-3 {
+            border-left: 3px solid #f97316;
+        }
+
+        .room-item.heat-4 {
+            border-left: 3px solid #ef4444;
+        }
+
+        .room-item.heat-1 .item-count {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .room-item.heat-2 .item-count {
+            background: rgba(234, 179, 8, 0.15);
+            color: #eab308;
+        }
+
+        .room-item.heat-3 .item-count {
+            background: rgba(249, 115, 22, 0.15);
+            color: #f97316;
+        }
+
+        .room-item.heat-4 .item-count {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
         }
 
         /* Map Container */
         .map-container {
             flex: 1;
             position: relative;
-            background: #000;
+            background: #050505;
             overflow: hidden;
         }
 
@@ -194,7 +345,9 @@
             cursor: grab;
         }
 
-        .map-canvas-wrapper:active { cursor: grabbing; }
+        .map-canvas-wrapper:active {
+            cursor: grabbing;
+        }
 
         .map-canvas {
             transform-origin: center center;
@@ -209,16 +362,16 @@
             right: 24px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             z-index: 10;
         }
 
         .control-btn {
-            width: 48px;
-            height: 48px;
-            background: rgba(15,15,15,0.95);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -228,9 +381,9 @@
         }
 
         .control-btn:hover {
-            background: rgba(25,25,25,0.98);
-            border-color: rgba(255,255,255,0.25);
-            transform: scale(1.08);
+            background: rgba(25, 25, 25, 0.98);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
         }
 
         .control-btn:active {
@@ -238,50 +391,52 @@
         }
 
         .control-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             color: #999;
             transition: color 0.3s;
         }
 
-        .control-btn:hover svg { color: #fff; }
+        .control-btn:hover svg {
+            color: #fff;
+        }
 
-        /* Floor Switcher - Bottom Center */
+        /* Floor Switcher */
         .floor-switcher {
             position: absolute;
-            bottom: 32px;
+            bottom: 28px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 12px;
-            background: rgba(15,15,15,0.95);
-            padding: 8px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.12);
+            gap: 10px;
+            background: rgba(15, 15, 15, 0.95);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(20px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             z-index: 50;
         }
 
         .floor-tab {
             position: relative;
-            padding: 14px 32px;
+            padding: 12px 28px;
             background: transparent;
             border: none;
-            border-radius: 12px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 13px;
             font-weight: 600;
             color: #666;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Inter', sans-serif;
-            min-width: 140px;
+            min-width: 130px;
             text-align: center;
         }
 
         .floor-tab:hover {
             color: #aaa;
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .floor-tab.active {
@@ -293,7 +448,7 @@
         .floor-tab.active::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -6px;
             left: 50%;
             transform: translateX(-50%);
             width: 4px;
@@ -305,9 +460,9 @@
 
         .floor-label {
             display: block;
-            font-size: 11px;
+            font-size: 10px;
             color: #555;
-            margin-top: 4px;
+            margin-top: 3px;
             font-weight: 500;
         }
 
@@ -315,70 +470,22 @@
             color: #06b6d4;
         }
 
-        /* School Info Banner */
-        .school-info-banner {
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            background: rgba(15,15,15,0.95);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 16px;
-            padding: 20px 24px;
-            backdrop-filter: blur(20px);
-            z-index: 10;
-            max-width: 360px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        }
-
-        .banner-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .banner-subtitle {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 16px;
-        }
-
-        .banner-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px;
-        }
-
-        .stat-item { }
-
-        .stat-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: #06b6d4;
-            letter-spacing: -0.5px;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: #666;
-            margin-top: 2px;
-        }
-
         /* Room Popup */
         .room-popup {
             position: absolute;
-            background: rgba(10,10,10,0.98);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 16px;
-            padding: 18px 22px;
-            min-width: 240px;
-            max-width: 300px;
+            background: rgba(10, 10, 10, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 16px 20px;
+            min-width: 220px;
+            max-width: 280px;
             z-index: 100;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
             backdrop-filter: blur(30px);
-            box-shadow: 0 24px 70px rgba(0,0,0,0.9);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9);
         }
 
         .room-popup.show {
@@ -387,29 +494,36 @@
         }
 
         .popup-room-name {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .popup-room-number {
+            font-size: 11px;
+            color: #555;
             margin-bottom: 4px;
+            font-weight: 600;
         }
 
         .popup-room-type {
             font-size: 12px;
             color: #666;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .popup-items {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .popup-item {
-            background: rgba(255,255,255,0.06);
-            padding: 10px 12px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 8px 10px;
+            border-radius: 8px;
             font-size: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .popup-item-name {
@@ -420,35 +534,51 @@
         .popup-item-desc {
             color: #888;
             font-size: 11px;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         .popup-no-items {
-            color: #666;
+            color: #555;
             font-size: 12px;
             font-style: italic;
         }
 
+        /* Loading */
+        .map-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 5;
+        }
+
         /* Responsive */
         @media (max-width: 1000px) {
-            .sidebar { width: 300px; }
-            .school-info-banner { display: none; }
+            .sidebar {
+                width: 280px;
+            }
         }
 
         @media (max-width: 768px) {
-            .nav-center { display: none; }
-            .sidebar { display: none; }
-            .school-info-banner { display: none; }
+            .sidebar {
+                display: none;
+            }
+
             .floor-switcher {
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
             }
+
             .floor-tab {
-                min-width: 200px;
+                min-width: 180px;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav>
@@ -463,6 +593,7 @@
             <a href="browse.html" class="nav-link">Browse</a>
             <a href="map.html" class="nav-link active">Map</a>
             <a href="submit.html" class="nav-link">Submit</a>
+            <a href="rewards.html" class="nav-link">Rewards</a>
             <a href="features.html" class="nav-link">Features</a>
             <a href="sources.html" class="nav-link">Sources</a>
         </div>
@@ -477,82 +608,91 @@
     <div class="map-page">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="building-header">
+            <div class="sidebar-header">
                 <div class="building-name">Denmark High School</div>
                 <div class="building-info">
-                    417,000 sq ft • 2 floors • 2,500 students<br>
+                    417,000 sq ft &bull; 2 floors &bull; 2,500 students<br>
                     Alpharetta, GA (Forsyth County)
-                </div>
-                <div class="info-badge">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                    Largest campus in Georgia
                 </div>
             </div>
 
-            <div>
-                <div class="section-title">ROOMS ON FLOOR <span id="currentFloorNum">1</span></div>
-                <div class="room-list" id="roomList">
-                    <!-- Rooms will be populated here -->
+            <!-- Heat Map Legend -->
+            <div class="legend-section">
+                <div class="legend-title">Item Density</div>
+                <div class="legend-bar"></div>
+                <div class="legend-labels">
+                    <span>No items</span>
+                    <span>Low</span>
+                    <span>Medium</span>
+                    <span>High</span>
+                    <span>Hot Zone</span>
                 </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="sidebar-stats">
+                <div class="sidebar-stat">
+                    <div class="sidebar-stat-value" id="totalItems">0</div>
+                    <div class="sidebar-stat-label">Items</div>
+                </div>
+                <div class="sidebar-stat">
+                    <div class="sidebar-stat-value" id="totalRooms">0</div>
+                    <div class="sidebar-stat-label">Rooms</div>
+                </div>
+                <div class="sidebar-stat">
+                    <div class="sidebar-stat-value" id="hotZones">0</div>
+                    <div class="sidebar-stat-label">Hot Zones</div>
+                </div>
+            </div>
+
+            <!-- Room List -->
+            <div class="rooms-section">
+                <div class="section-title">Rooms on Floor <span id="currentFloorNum">1</span></div>
+                <div class="room-list" id="roomList"></div>
             </div>
         </aside>
 
         <!-- Map Container -->
         <div class="map-container">
-            <!-- School Info Banner -->
-            <div class="school-info-banner">
-                <div class="banner-title">Denmark High School</div>
-                <div class="banner-subtitle">Interactive campus map with lost item tracking</div>
-                <div class="banner-stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalItems">12</div>
-                        <div class="stat-label">Lost Items</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">110</div>
-                        <div class="stat-label">Acres</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">2</div>
-                        <div class="stat-label">Floors</div>
-                    </div>
-                </div>
-            </div>
+            <div class="map-loading" id="mapLoading">Loading items from database...</div>
 
             <!-- Map Controls -->
             <div class="map-controls">
                 <button class="control-btn" id="zoomIn" title="Zoom In">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="M21 21l-4.35-4.35"/>
-                        <line x1="11" y1="8" x2="11" y2="14"/>
-                        <line x1="8" y1="11" x2="14" y2="11"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" />
+                        <line x1="11" y1="8" x2="11" y2="14" />
+                        <line x1="8" y1="11" x2="14" y2="11" />
                     </svg>
                 </button>
                 <button class="control-btn" id="zoomOut" title="Zoom Out">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="M21 21l-4.35-4.35"/>
-                        <line x1="8" y1="11" x2="14" y2="11"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" />
+                        <line x1="8" y1="11" x2="14" y2="11" />
                     </svg>
                 </button>
                 <button class="control-btn" id="resetView" title="Reset View">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                        <path d="M3 3v5h5"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
                     </svg>
                 </button>
             </div>
 
-            <!-- Floor Switcher - Bottom Center -->
+            <!-- Floor Switcher -->
             <div class="floor-switcher">
-                <button class="floor-tab active" data-floor="1">
+                <button class="floor-tab active" data-floor="0">
+                    <div>Campus</div>
+                    <div class="floor-label">Full campus overview</div>
+                </button>
+                <button class="floor-tab" data-floor="1">
                     <div>First Floor</div>
-                    <div class="floor-label">Main, Gym, Cafeteria</div>
+                    <div class="floor-label">Main Office, Gym, Cafeteria</div>
                 </button>
                 <button class="floor-tab" data-floor="2">
                     <div>Second Floor</div>
@@ -562,14 +702,13 @@
 
             <!-- Map Canvas -->
             <div class="map-canvas-wrapper" id="mapWrapper">
-                <div class="map-canvas" id="mapCanvas">
-                    <!-- Canvas will be drawn here -->
-                </div>
+                <div class="map-canvas" id="mapCanvas"></div>
             </div>
 
             <!-- Room Popup -->
             <div class="room-popup" id="roomPopup">
                 <div class="popup-room-name" id="popupRoomName">Room Name</div>
+                <div class="popup-room-number" id="popupRoomNumber"></div>
                 <div class="popup-room-type" id="popupRoomType">Room Type</div>
                 <div class="popup-items" id="popupItems">
                     <div class="popup-no-items">No items found here</div>
@@ -582,218 +721,780 @@
     <script src="js/supabase.js"></script>
     <script src="js/nav-auth.js"></script>
     <script>
-        // Denmark High School Floor Plans - Simple Grid Layout
+        // ============================================================
+        // Denmark High School — Realistic Floor Plan Layout
+        // Rooms are arranged to look like a real school building
+        // with connecting hallways, proper adjacency, and room numbers.
+        // ============================================================
         const schoolData = {
+            0: {
+                name: "Campus",
+                rooms: [
+                    { id: "TENNIS", name: "Tennis Courts", type: "Athletic", x: 40, y: 30, w: 220, h: 120 },
+                    { id: "PARKING", name: "Parking", type: "Parking", x: 40, y: 170, w: 220, h: 160 },
+                    { id: "MAIN", name: "Main Building", type: "Building", x: 280, y: 170, w: 280, h: 320, clickable: true },
+                    { id: "STADIUM", name: "Stadium", type: "Athletic", x: 620, y: 30, w: 240, h: 180 },
+                    { id: "TRACK", name: "Track", type: "Athletic", x: 870, y: 50, w: 100, h: 140 },
+                    { id: "ROAD1", name: "Access Road", type: "Road", x: 280, y: 140, w: 580, h: 24 },
+                    { id: "ROAD2", name: "Main Road", type: "Road", x: 560, y: 164, w: 24, h: 340 },
+                    { id: "SOFTBALL", name: "Softball Field", type: "Athletic", x: 420, y: 510, w: 160, h: 130 },
+                    { id: "BASEBALL", name: "Baseball Field", type: "Athletic", x: 620, y: 420, w: 200, h: 180 },
+                    { id: "BARN", name: "The Barn", type: "Facility", x: 280, y: 510, w: 130, h: 100 },
+                    { id: "FIELDHOUSE", name: "Field House", type: "Athletic", x: 830, y: 420, w: 130, h: 100 },
+                ],
+            },
             1: {
                 name: "First Floor",
                 rooms: [
-                    { id: "F1-101", name: "Main Office", type: "Administration", x: 100, y: 100, w: 200, h: 150, items: [{ name: "Black Wallet", desc: "Found near reception desk" }] },
-                    { id: "F1-102", name: "Cafeteria", type: "Dining", x: 350, y: 100, w: 300, h: 150, items: [{ name: "Lunch Box", desc: "Red with superhero stickers" }] },
-                    { id: "F1-103", name: "Gymnasium", type: "Athletic", x: 700, y: 100, w: 400, h: 250, items: [{ name: "Water Bottle", desc: "Blue Hydro Flask" }, { name: "AirPods", desc: "White case" }] },
-                    { id: "F1-104", name: "Hallway", type: "Corridor", x: 100, y: 300, w: 550, h: 80, items: [{ name: "Textbook", desc: "AP Chemistry" }] },
-                    { id: "F1-105", name: "Health Clinic", type: "Medical", x: 100, y: 430, w: 200, h: 150, items: [{ name: "Jacket", desc: "Nike gray hoodie size M" }] },
-                    { id: "F1-106", name: "Auditorium", type: "Performance", x: 350, y: 430, w: 300, h: 150, items: [] },
-                    { id: "F1-107", name: "Library Entrance", type: "Academic", x: 700, y: 400, w: 200, h: 180, items: [] },
+                    { id: "100", name: "Main Office", type: "Administration", x: 60, y: 40, w: 180, h: 110 },
+                    { id: "101", name: "Attendance", type: "Administration", x: 240, y: 40, w: 110, h: 110 },
+                    { id: "102", name: "Counseling", type: "Administration", x: 350, y: 40, w: 140, h: 110 },
+                    { id: "103", name: "Front Lobby", type: "Common Area", x: 490, y: 40, w: 180, h: 110 },
+                    { id: "104", name: "Admin Suite", type: "Administration", x: 670, y: 40, w: 140, h: 110 },
+                    { id: "105", name: "Nurse", type: "Medical", x: 810, y: 40, w: 110, h: 110 },
+                    { id: "H1A", name: "Hallway A", type: "Corridor", x: 60, y: 150, w: 860, h: 40 },
+                    { id: "106", name: "Room 106", type: "Classroom", x: 60, y: 190, w: 140, h: 100 },
+                    { id: "107", name: "Room 107", type: "Classroom", x: 200, y: 190, w: 140, h: 100 },
+                    { id: "108", name: "Room 108", type: "Classroom", x: 340, y: 190, w: 140, h: 100 },
+                    { id: "109", name: "Room 109", type: "Classroom", x: 480, y: 190, w: 140, h: 100 },
+                    { id: "CAF", name: "Cafeteria", type: "Dining", x: 620, y: 190, w: 300, h: 160 },
+                    { id: "H1B", name: "Hallway B", type: "Corridor", x: 60, y: 290, w: 560, h: 35 },
+                    { id: "110", name: "Room 110", type: "Classroom", x: 60, y: 325, w: 140, h: 100 },
+                    { id: "111", name: "Room 111", type: "Classroom", x: 200, y: 325, w: 140, h: 100 },
+                    { id: "112", name: "Art Room", type: "Elective", x: 340, y: 325, w: 160, h: 100 },
+                    { id: "113", name: "Band Room", type: "Elective", x: 500, y: 325, w: 120, h: 100 },
+                    { id: "GYM", name: "Gymnasium", type: "Athletic", x: 620, y: 350, w: 300, h: 200 },
+                    { id: "H1C", name: "Hallway C", type: "Corridor", x: 60, y: 425, w: 560, h: 35 },
+                    { id: "114", name: "Room 114", type: "Classroom", x: 60, y: 460, w: 140, h: 90 },
+                    { id: "115", name: "Room 115", type: "Classroom", x: 200, y: 460, w: 140, h: 90 },
+                    { id: "116", name: "Auditorium", type: "Performance", x: 340, y: 460, w: 280, h: 130 },
+                    { id: "RR1", name: "Restrooms", type: "Facilities", x: 60, y: 550, w: 140, h: 60 },
+                    { id: "LK1", name: "Locker Room", type: "Athletic", x: 200, y: 550, w: 140, h: 60 },
+                    { id: "117", name: "Weight Room", type: "Athletic", x: 620, y: 550, w: 150, h: 60 },
+                    { id: "118", name: "Locker Room B", type: "Athletic", x: 770, y: 550, w: 150, h: 60 },
                 ],
             },
             2: {
                 name: "Second Floor",
                 rooms: [
-                    { id: "F2-201", name: "Biology Lab", type: "Science", x: 100, y: 100, w: 200, h: 150, items: [{ name: "Lab Goggles", desc: "Clear safety goggles" }] },
-                    { id: "F2-202", name: "Library", type: "Academic", x: 350, y: 100, w: 300, h: 250, items: [{ name: "Calculator", desc: "TI-84 Plus" }, { name: "Earbuds", desc: "Samsung Galaxy Buds" }] },
-                    { id: "F2-203", name: "Computer Lab", type: "Technology", x: 700, y: 100, w: 200, h: 150, items: [{ name: "USB Drive", desc: "32GB SanDisk" }] },
-                    { id: "F2-204", name: "Classroom A", type: "Academic", x: 950, y: 100, w: 150, h: 150, items: [] },
-                    { id: "F2-205", name: "Hallway", type: "Corridor", x: 100, y: 300, w: 800, h: 80, items: [] },
-                    { id: "F2-206", name: "Chemistry Lab", type: "Science", x: 100, y: 430, w: 200, h: 150, items: [] },
-                    { id: "F2-207", name: "Classroom B", type: "Academic", x: 350, y: 400, w: 150, h: 180, items: [{ name: "Backpack", desc: "Black Jansport" }] },
-                    { id: "F2-208", name: "Classroom C", type: "Academic", x: 550, y: 400, w: 150, h: 180, items: [] },
-                    { id: "F2-209", name: "Teacher Lounge", type: "Staff", x: 750, y: 430, w: 150, h: 150, items: [] },
+                    { id: "200", name: "Biology Lab", type: "Science", x: 60, y: 40, w: 170, h: 110 },
+                    { id: "201", name: "Chemistry Lab", type: "Science", x: 230, y: 40, w: 170, h: 110 },
+                    { id: "202", name: "Physics Lab", type: "Science", x: 400, y: 40, w: 170, h: 110 },
+                    { id: "203", name: "AP Science", type: "Science", x: 570, y: 40, w: 140, h: 110 },
+                    { id: "204", name: "Science Prep", type: "Science", x: 710, y: 40, w: 100, h: 110 },
+                    { id: "205", name: "Room 205", type: "Classroom", x: 810, y: 40, w: 110, h: 110 },
+                    { id: "H2A", name: "Hallway D", type: "Corridor", x: 60, y: 150, w: 860, h: 40 },
+                    { id: "206", name: "Room 206", type: "Classroom", x: 60, y: 190, w: 140, h: 100 },
+                    { id: "207", name: "Room 207", type: "Classroom", x: 200, y: 190, w: 140, h: 100 },
+                    { id: "208", name: "Room 208", type: "Classroom", x: 340, y: 190, w: 140, h: 100 },
+                    { id: "209", name: "Room 209", type: "Classroom", x: 480, y: 190, w: 140, h: 100 },
+                    { id: "LIB", name: "Media Center", type: "Academic", x: 620, y: 190, w: 300, h: 160 },
+                    { id: "H2B", name: "Hallway E", type: "Corridor", x: 60, y: 290, w: 560, h: 35 },
+                    { id: "210", name: "Room 210", type: "Classroom", x: 60, y: 325, w: 140, h: 100 },
+                    { id: "211", name: "Room 211", type: "Classroom", x: 200, y: 325, w: 140, h: 100 },
+                    { id: "212", name: "Room 212", type: "Classroom", x: 340, y: 325, w: 140, h: 100 },
+                    { id: "213", name: "Room 213", type: "Classroom", x: 480, y: 325, w: 140, h: 100 },
+                    { id: "CL1", name: "Computer Lab A", type: "Technology", x: 620, y: 350, w: 150, h: 110 },
+                    { id: "CL2", name: "Computer Lab B", type: "Technology", x: 770, y: 350, w: 150, h: 110 },
+                    { id: "H2C", name: "Hallway F", type: "Corridor", x: 60, y: 425, w: 560, h: 35 },
+                    { id: "214", name: "Room 214", type: "Classroom", x: 60, y: 460, w: 140, h: 100 },
+                    { id: "215", name: "Room 215", type: "Classroom", x: 200, y: 460, w: 140, h: 100 },
+                    { id: "216", name: "Room 216", type: "Classroom", x: 340, y: 460, w: 140, h: 100 },
+                    { id: "217", name: "Teacher Lounge", type: "Staff", x: 480, y: 460, w: 140, h: 100 },
+                    { id: "CL3", name: "Mac Lab", type: "Technology", x: 620, y: 460, w: 150, h: 100 },
+                    { id: "RR2", name: "Restrooms", type: "Facilities", x: 770, y: 460, w: 150, h: 100 },
                 ],
             },
         };
 
+        // ============================================================
         // State
-        let currentFloor = 1;
+        // ============================================================
+        let currentFloor = 0;
         let scale = 1;
         let translateX = 0;
         let translateY = 0;
         let isDragging = false;
         let startX = 0;
         let startY = 0;
+        let supabaseItems = []; // Items from Supabase
 
         const mapCanvas = document.getElementById('mapCanvas');
         const mapWrapper = document.getElementById('mapWrapper');
         const roomPopup = document.getElementById('roomPopup');
         const roomList = document.getElementById('roomList');
         const currentFloorNum = document.getElementById('currentFloorNum');
-        const totalItems = document.getElementById('totalItems');
+        const mapLoading = document.getElementById('mapLoading');
 
-        // Draw floor plan
-        function drawFloor() {
-            const floor = schoolData[currentFloor];
-            currentFloorNum.textContent = currentFloor;
+        // ============================================================
+        // Map location -> room ID mapping
+        // (Maps Supabase location strings to room IDs)
+        // ============================================================
+        const locationToRoom = {
+            'main office': '100',
+            'attendance': '101',
+            'counseling': '102',
+            'front lobby': '103',
+            'lobby': '103',
+            'admin': '104',
+            'nurse': '105',
+            'cafeteria': 'CAF',
+            'café': 'CAF',
+            'gym': 'GYM',
+            'gymnasium': 'GYM',
+            'auditorium': '116',
+            'library': 'LIB',
+            'media center': 'LIB',
+            'art room': '112',
+            'art': '112',
+            'band room': '113',
+            'band': '113',
+            'biology': '200',
+            'biology lab': '200',
+            'chemistry': '201',
+            'chemistry lab': '201',
+            'physics': '202',
+            'physics lab': '202',
+            'computer lab': 'CL1',
+            'computer lab a': 'CL1',
+            'computer lab b': 'CL2',
+            'mac lab': 'CL3',
+            'weight room': '117',
+            'locker room': 'LK1',
+            'restroom': 'RR1',
+            'restrooms': 'RR1',
+            'teacher lounge': '217',
+            'hallway': 'H1A',
+            'hallway a': 'H1A',
+            'hallway b': 'H1B',
+            'hallway c': 'H1C',
+        };
 
-            // Clear canvas
-            mapCanvas.innerHTML = '';
+        // ============================================================
+        // Heat map color utils
+        // ============================================================
+        function getHeatColor(count) {
+            if (count === 0) return { fill: 'rgba(255,255,255,0.02)', stroke: 'rgba(255,255,255,0.1)', class: 'heat-0' };
+            if (count <= 1) return { fill: 'rgba(34, 197, 94, 0.1)', stroke: 'rgba(34, 197, 94, 0.4)', class: 'heat-1' };
+            if (count <= 2) return { fill: 'rgba(234, 179, 8, 0.12)', stroke: 'rgba(234, 179, 8, 0.45)', class: 'heat-2' };
+            if (count <= 4) return { fill: 'rgba(249, 115, 22, 0.14)', stroke: 'rgba(249, 115, 22, 0.5)', class: 'heat-3' };
+            return { fill: 'rgba(239, 68, 68, 0.18)', stroke: 'rgba(239, 68, 68, 0.55)', class: 'heat-4' };
+        }
 
-            // Create SVG
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('width', '1200');
-            svg.setAttribute('height', '720');
-            svg.style.display = 'block';
+        function getHeatGlow(count) {
+            if (count === 0) return '';
+            if (count <= 1) return '0 0 20px rgba(34, 197, 94, 0.15)';
+            if (count <= 2) return '0 0 25px rgba(234, 179, 8, 0.2)';
+            if (count <= 4) return '0 0 30px rgba(249, 115, 22, 0.25)';
+            return '0 0 40px rgba(239, 68, 68, 0.3)';
+        }
 
-            // Background grid
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-            pattern.setAttribute('id', 'grid');
-            pattern.setAttribute('width', '40');
-            pattern.setAttribute('height', '40');
-            pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', 'M 40 0 L 0 0 0 40');
-            path.setAttribute('fill', 'none');
-            path.setAttribute('stroke', 'rgba(255,255,255,0.02)');
-            path.setAttribute('stroke-width', '1');
-            pattern.appendChild(path);
-            defs.appendChild(pattern);
-            svg.appendChild(defs);
+        // ============================================================
+        // Load items from Supabase and distribute to rooms
+        // ============================================================
+        async function loadItems() {
+            // Reset all room items
+            Object.values(schoolData).forEach(floor => {
+                floor.rooms.forEach(room => { room.items = []; });
+            });
 
-            const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            bgRect.setAttribute('width', '1200');
-            bgRect.setAttribute('height', '720');
-            bgRect.setAttribute('fill', 'url(#grid)');
-            svg.appendChild(bgRect);
+            try {
+                if (typeof BackTrackDB !== 'undefined' && BackTrackDB.isSupabaseConfigured()) {
+                    const items = await BackTrackDB.getItems({ status: 'pending' });
+                    if (items && items.length > 0) {
+                        supabaseItems = items;
+                        items.forEach(item => {
+                            const location = (item.location || '').toLowerCase().trim();
+                            let assigned = false;
 
-            // Draw rooms
-            floor.rooms.forEach(room => {
-                const hasItems = room.items.length > 0;
+                            // Try direct mapping
+                            for (const [key, roomId] of Object.entries(locationToRoom)) {
+                                if (location.includes(key)) {
+                                    // Find room across floors
+                                    for (const floor of Object.values(schoolData)) {
+                                        const room = floor.rooms.find(r => r.id === roomId);
+                                        if (room) {
+                                            room.items.push({
+                                                name: item.name || 'Unknown Item',
+                                                desc: item.description || 'No description',
+                                                id: item.id
+                                            });
+                                            assigned = true;
+                                            break;
+                                        }
+                                    }
+                                    if (assigned) break;
+                                }
+                            }
 
-                // Room rectangle
-                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                rect.setAttribute('x', room.x);
-                rect.setAttribute('y', room.y);
-                rect.setAttribute('width', room.w);
-                rect.setAttribute('height', room.h);
-                rect.setAttribute('rx', '10');
-                rect.setAttribute('fill', hasItems ? 'rgba(6,182,212,0.08)' : 'rgba(255,255,255,0.03)');
-                rect.setAttribute('stroke', hasItems ? 'rgba(6,182,212,0.5)' : 'rgba(255,255,255,0.15)');
-                rect.setAttribute('stroke-width', hasItems ? '2' : '1.5');
-                rect.style.cursor = 'pointer';
-                rect.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                            // Try room number match (e.g., "Room 106", "106")
+                            if (!assigned) {
+                                const roomNumMatch = location.match(/\b(\d{3})\b/);
+                                if (roomNumMatch) {
+                                    const num = roomNumMatch[1];
+                                    for (const floor of Object.values(schoolData)) {
+                                        const room = floor.rooms.find(r => r.id === num);
+                                        if (room) {
+                                            room.items.push({
+                                                name: item.name || 'Unknown Item',
+                                                desc: item.description || 'No description',
+                                                id: item.id
+                                            });
+                                            assigned = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
 
-                // Hover effect
-                rect.addEventListener('mouseenter', (e) => {
-                    rect.setAttribute('fill', hasItems ? 'rgba(6,182,212,0.18)' : 'rgba(255,255,255,0.08)');
-                    rect.setAttribute('stroke-width', '2.5');
-                    showRoomPopup(room, e);
-                });
-                rect.addEventListener('mouseleave', () => {
-                    rect.setAttribute('fill', hasItems ? 'rgba(6,182,212,0.08)' : 'rgba(255,255,255,0.03)');
-                    rect.setAttribute('stroke-width', hasItems ? '2' : '1.5');
-                    hideRoomPopup();
-                });
+                            // Fallback: assign to hallway
+                            if (!assigned) {
+                                const hallway = schoolData[1].rooms.find(r => r.id === 'H1A');
+                                if (hallway) {
+                                    hallway.items.push({
+                                        name: item.name || 'Unknown Item',
+                                        desc: item.description || (location ? `Found near: ${item.location}` : 'No description'),
+                                        id: item.id
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not load items from Supabase:', e);
+            }
 
-                svg.appendChild(rect);
+            // If no items loaded, use demo data
+            const totalItems = Object.values(schoolData).reduce((sum, f) =>
+                sum + f.rooms.reduce((s, r) => s + (r.items ? r.items.length : 0), 0), 0);
 
-                // Room label
-                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', room.x + room.w / 2);
-                text.setAttribute('y', room.y + room.h / 2);
-                text.setAttribute('text-anchor', 'middle');
-                text.setAttribute('dominant-baseline', 'middle');
-                text.setAttribute('fill', hasItems ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)');
-                text.setAttribute('font-size', '14');
-                text.setAttribute('font-weight', '700');
-                text.setAttribute('pointer-events', 'none');
-                text.textContent = room.name;
-                svg.appendChild(text);
+            if (totalItems === 0) {
+                loadDemoData();
+            }
 
-                // Item badge
-                if (hasItems) {
-                    const badge = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    badge.setAttribute('cx', room.x + room.w - 18);
-                    badge.setAttribute('cy', room.y + 18);
-                    badge.setAttribute('r', '14');
-                    badge.setAttribute('fill', '#06b6d4');
-                    badge.setAttribute('pointer-events', 'none');
-                    svg.appendChild(badge);
+            mapLoading.style.display = 'none';
+            drawFloor();
+        }
 
-                    const badgeText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    badgeText.setAttribute('x', room.x + room.w - 18);
-                    badgeText.setAttribute('y', room.y + 18);
-                    badgeText.setAttribute('text-anchor', 'middle');
-                    badgeText.setAttribute('dominant-baseline', 'middle');
-                    badgeText.setAttribute('fill', '#000');
-                    badgeText.setAttribute('font-size', '12');
-                    badgeText.setAttribute('font-weight', '800');
-                    badgeText.setAttribute('pointer-events', 'none');
-                    badgeText.textContent = room.items.length;
-                    svg.appendChild(badgeText);
+        function loadDemoData() {
+            // Realistic demo data spread across rooms
+            const demoItems = [
+                { room: 'CAF', items: [{ name: 'Black Wallet', desc: 'Found near lunch line' }, { name: 'Red Lunch Box', desc: 'With superhero stickers' }, { name: 'Water Bottle', desc: 'Blue Hydro Flask' }] },
+                { room: 'GYM', items: [{ name: 'AirPods Case', desc: 'White, 3rd gen' }, { name: 'Nike Hoodie', desc: 'Gray size M' }, { name: 'Basketball Shoes', desc: 'Jordan size 10' }, { name: 'Gym Bag', desc: 'Under Armour black' }, { name: 'Sports Watch', desc: 'Fitbit Versa' }] },
+                { room: '106', items: [{ name: 'TI-84 Calculator', desc: 'Name scratched off' }] },
+                { room: '108', items: [{ name: 'Textbook', desc: 'AP Chemistry, 7th ed.' }, { name: 'Pencil Pouch', desc: 'Clear with markers' }] },
+                { room: 'H1A', items: [{ name: 'Student ID', desc: 'Found in A-wing' }, { name: 'Keys', desc: 'Car keys with lanyard' }, { name: 'Earbuds', desc: 'Samsung Galaxy Buds' }] },
+                { room: '116', items: [{ name: 'Jacket', desc: 'Denim jacket size S' }] },
+                { room: '200', items: [{ name: 'Lab Goggles', desc: 'Clear safety goggles' }, { name: 'Notebook', desc: 'Composition, labeled Bio' }] },
+                { room: 'LIB', items: [{ name: 'Backpack', desc: 'Black Jansport' }, { name: 'Laptop Charger', desc: 'USB-C Macbook charger' }, { name: 'AirPods Max', desc: 'Silver' }] },
+                { room: 'CL1', items: [{ name: 'USB Drive', desc: '32GB SanDisk Cruzer' }, { name: 'Mouse', desc: 'Logitech wireless' }] },
+                { room: '210', items: [{ name: 'Graphing Calculator', desc: 'TI-Nspire CX' }] },
+                { room: 'H2A', items: [{ name: 'Umbrella', desc: 'Black compact' }, { name: 'Phone Case', desc: 'Clear iPhone 15 case' }] },
+                { room: '112', items: [{ name: 'Art Supplies', desc: 'Set of Prismacolor pencils' }] },
+                { room: '100', items: [{ name: 'Glasses', desc: 'Ray-Ban frames, brown' }] },
+            ];
+
+            demoItems.forEach(d => {
+                for (const floor of Object.values(schoolData)) {
+                    const room = floor.rooms.find(r => r.id === d.room);
+                    if (room) {
+                        room.items = d.items;
+                        break;
+                    }
                 }
             });
+        }
+
+        // ============================================================
+        // Drawing
+        // ============================================================
+        function drawFloor() {
+            const floor = schoolData[currentFloor];
+            currentFloorNum.textContent = currentFloor === 0 ? 'C' : currentFloor;
+            mapCanvas.innerHTML = '';
+
+            const svgW = 1000;
+            const svgH = 660;
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', svgW);
+            svg.setAttribute('height', svgH);
+            svg.style.display = 'block';
+
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+
+            // Grid pattern — prominent blueprint style
+            const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+            pattern.setAttribute('id', 'grid');
+            pattern.setAttribute('width', '30');
+            pattern.setAttribute('height', '30');
+            pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+            const gridPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            gridPath.setAttribute('d', 'M 30 0 L 0 0 0 30');
+            gridPath.setAttribute('fill', 'none');
+            gridPath.setAttribute('stroke', 'rgba(100,160,255,0.07)');
+            gridPath.setAttribute('stroke-width', '0.8');
+            pattern.appendChild(gridPath);
+            defs.appendChild(pattern);
+
+            // Large grid overlay
+            const lgPattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+            lgPattern.setAttribute('id', 'gridLarge');
+            lgPattern.setAttribute('width', '150');
+            lgPattern.setAttribute('height', '150');
+            lgPattern.setAttribute('patternUnits', 'userSpaceOnUse');
+            const lgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            lgPath.setAttribute('d', 'M 150 0 L 0 0 0 150');
+            lgPath.setAttribute('fill', 'none');
+            lgPath.setAttribute('stroke', 'rgba(100,160,255,0.12)');
+            lgPath.setAttribute('stroke-width', '1');
+            lgPattern.appendChild(lgPath);
+            defs.appendChild(lgPattern);
+
+            // Glow filters
+            ['green', 'yellow', 'orange', 'red', 'blue'].forEach((color, i) => {
+                const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+                filter.setAttribute('id', `glow-${color}`);
+                filter.setAttribute('x', '-20%'); filter.setAttribute('y', '-20%');
+                filter.setAttribute('width', '140%'); filter.setAttribute('height', '140%');
+                const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+                blur.setAttribute('stdDeviation', String(2 + i));
+                blur.setAttribute('result', 'blur');
+                filter.appendChild(blur);
+                const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+                const mn1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+                mn1.setAttribute('in', 'blur');
+                const mn2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+                mn2.setAttribute('in', 'SourceGraphic');
+                merge.appendChild(mn1); merge.appendChild(mn2);
+                filter.appendChild(merge);
+                defs.appendChild(filter);
+            });
+
+            // Text glow filter
+            const txtGlow = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+            txtGlow.setAttribute('id', 'textGlow');
+            txtGlow.setAttribute('x', '-30%'); txtGlow.setAttribute('y', '-30%');
+            txtGlow.setAttribute('width', '160%'); txtGlow.setAttribute('height', '160%');
+            const tBlur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+            tBlur.setAttribute('stdDeviation', '3'); tBlur.setAttribute('result', 'blur');
+            txtGlow.appendChild(tBlur);
+            const tMerge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+            const tmn1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+            tmn1.setAttribute('in', 'blur');
+            const tmn2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+            tmn2.setAttribute('in', 'SourceGraphic');
+            tMerge.appendChild(tmn1); tMerge.appendChild(tmn2);
+            txtGlow.appendChild(tMerge);
+            defs.appendChild(txtGlow);
+
+            svg.appendChild(defs);
+
+            // Background grids
+            const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            bgRect.setAttribute('width', svgW); bgRect.setAttribute('height', svgH);
+            bgRect.setAttribute('fill', 'url(#grid)');
+            svg.appendChild(bgRect);
+            const bgLg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            bgLg.setAttribute('width', svgW); bgLg.setAttribute('height', svgH);
+            bgLg.setAttribute('fill', 'url(#gridLarge)');
+            svg.appendChild(bgLg);
+
+            if (currentFloor === 0) {
+                // ===== CAMPUS VIEW =====
+                floor.rooms.forEach(room => {
+                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    const isRoad = room.type === 'Road';
+                    const isBuilding = room.type === 'Building';
+
+                    if (isRoad) {
+                        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        rect.setAttribute('x', room.x); rect.setAttribute('y', room.y);
+                        rect.setAttribute('width', room.w); rect.setAttribute('height', room.h);
+                        rect.setAttribute('rx', '2');
+                        rect.setAttribute('fill', 'rgba(80,80,80,0.3)');
+                        rect.setAttribute('stroke', 'rgba(120,120,120,0.3)');
+                        rect.setAttribute('stroke-width', '1');
+                        rect.setAttribute('stroke-dasharray', '8 4');
+                        g.appendChild(rect);
+                    } else {
+                        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        rect.setAttribute('x', room.x); rect.setAttribute('y', room.y);
+                        rect.setAttribute('width', room.w); rect.setAttribute('height', room.h);
+                        rect.setAttribute('rx', isBuilding ? '4' : '8');
+
+                        if (isBuilding) {
+                            rect.setAttribute('fill', 'rgba(37, 99, 235, 0.08)');
+                            rect.setAttribute('stroke', 'rgba(100, 160, 255, 0.5)');
+                            rect.setAttribute('stroke-width', '2');
+                            rect.setAttribute('filter', 'url(#glow-blue)');
+                            g.style.cursor = 'pointer';
+                        } else if (room.type === 'Athletic') {
+                            rect.setAttribute('fill', 'rgba(34, 197, 94, 0.06)');
+                            rect.setAttribute('stroke', 'rgba(34, 197, 94, 0.3)');
+                            rect.setAttribute('stroke-width', '1.5');
+                        } else if (room.type === 'Parking') {
+                            rect.setAttribute('fill', 'rgba(255,255,255,0.03)');
+                            rect.setAttribute('stroke', 'rgba(255,255,255,0.15)');
+                            rect.setAttribute('stroke-width', '1');
+                            rect.setAttribute('stroke-dasharray', '6 3');
+                        } else {
+                            rect.setAttribute('fill', 'rgba(245, 158, 11, 0.06)');
+                            rect.setAttribute('stroke', 'rgba(245, 158, 11, 0.3)');
+                            rect.setAttribute('stroke-width', '1.5');
+                        }
+                        rect.style.transition = 'all 0.3s ease';
+                        g.appendChild(rect);
+
+                        // Stadium oval overlay
+                        if (room.id === 'STADIUM') {
+                            const el = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+                            el.setAttribute('cx', room.x + room.w / 2);
+                            el.setAttribute('cy', room.y + room.h / 2);
+                            el.setAttribute('rx', room.w / 2 - 20);
+                            el.setAttribute('ry', room.h / 2 - 15);
+                            el.setAttribute('fill', 'none');
+                            el.setAttribute('stroke', 'rgba(34,197,94,0.2)');
+                            el.setAttribute('stroke-width', '1');
+                            el.setAttribute('stroke-dasharray', '4 3');
+                            g.appendChild(el);
+                        }
+
+                        // Track oval
+                        if (room.id === 'TRACK') {
+                            const el = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+                            el.setAttribute('cx', room.x + room.w / 2);
+                            el.setAttribute('cy', room.y + room.h / 2);
+                            el.setAttribute('rx', room.w / 2 - 10);
+                            el.setAttribute('ry', room.h / 2 - 10);
+                            el.setAttribute('fill', 'none');
+                            el.setAttribute('stroke', 'rgba(34,197,94,0.25)');
+                            el.setAttribute('stroke-width', '2');
+                            g.appendChild(el);
+                        }
+
+                        // Baseball diamond
+                        if (room.id === 'BASEBALL' || room.id === 'SOFTBALL') {
+                            const cx = room.x + room.w / 2;
+                            const cy = room.y + room.h / 2;
+                            const sz = Math.min(room.w, room.h) * 0.3;
+                            const diamond = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                            diamond.setAttribute('points', `${cx},${cy - sz} ${cx + sz},${cy} ${cx},${cy + sz} ${cx - sz},${cy}`);
+                            diamond.setAttribute('fill', 'none');
+                            diamond.setAttribute('stroke', 'rgba(34,197,94,0.2)');
+                            diamond.setAttribute('stroke-width', '1');
+                            g.appendChild(diamond);
+                        }
+
+                        // Label with glow
+                        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        label.setAttribute('x', room.x + room.w / 2);
+                        label.setAttribute('y', room.y + room.h / 2);
+                        label.setAttribute('text-anchor', 'middle');
+                        label.setAttribute('dominant-baseline', 'middle');
+                        label.setAttribute('fill', isBuilding ? 'rgba(160,200,255,0.95)' : 'rgba(255,255,255,0.7)');
+                        label.setAttribute('font-size', isBuilding ? '15' : room.w > 150 ? '13' : '11');
+                        label.setAttribute('font-weight', '700');
+                        label.setAttribute('font-family', 'Inter, sans-serif');
+                        label.setAttribute('letter-spacing', '1.5');
+                        label.setAttribute('pointer-events', 'none');
+                        label.setAttribute('filter', 'url(#textGlow)');
+                        label.textContent = room.name.toUpperCase();
+                        g.appendChild(label);
+
+                        // Sub-label for building
+                        if (isBuilding) {
+                            const sub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                            sub.setAttribute('x', room.x + room.w / 2);
+                            sub.setAttribute('y', room.y + room.h / 2 + 20);
+                            sub.setAttribute('text-anchor', 'middle');
+                            sub.setAttribute('dominant-baseline', 'middle');
+                            sub.setAttribute('fill', 'rgba(100,160,255,0.6)');
+                            sub.setAttribute('font-size', '10');
+                            sub.setAttribute('font-weight', '500');
+                            sub.setAttribute('font-family', 'Inter, sans-serif');
+                            sub.setAttribute('pointer-events', 'none');
+                            sub.textContent = 'Click to enter';
+                            g.appendChild(sub);
+
+                            g.addEventListener('click', () => {
+                                currentFloor = 1;
+                                document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active'));
+                                document.querySelector('.floor-tab[data-floor="1"]').classList.add('active');
+                                scale = 1; translateX = 0; translateY = 0;
+                                updateTransform();
+                                drawFloor();
+                            });
+
+                            g.addEventListener('mouseenter', () => {
+                                rect.setAttribute('fill', 'rgba(37, 99, 235, 0.15)');
+                                rect.setAttribute('stroke', 'rgba(100, 160, 255, 0.7)');
+                            });
+                            g.addEventListener('mouseleave', () => {
+                                rect.setAttribute('fill', 'rgba(37, 99, 235, 0.08)');
+                                rect.setAttribute('stroke', 'rgba(100, 160, 255, 0.5)');
+                            });
+                        }
+
+                        // Parking lot lines
+                        if (room.type === 'Parking') {
+                            for (let px = room.x + 20; px < room.x + room.w - 10; px += 18) {
+                                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                                line.setAttribute('x1', px); line.setAttribute('y1', room.y + 20);
+                                line.setAttribute('x2', px); line.setAttribute('y2', room.y + room.h - 20);
+                                line.setAttribute('stroke', 'rgba(255,255,255,0.06)');
+                                line.setAttribute('stroke-width', '0.5');
+                                g.appendChild(line);
+                            }
+                        }
+                    }
+                    svg.appendChild(g);
+                });
+
+                // Compass
+                const compassG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                compassG.setAttribute('transform', `translate(${svgW - 50}, ${svgH - 50})`);
+                const compassC = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                compassC.setAttribute('r', '20'); compassC.setAttribute('fill', 'rgba(0,0,0,0.5)');
+                compassC.setAttribute('stroke', 'rgba(255,255,255,0.15)'); compassC.setAttribute('stroke-width', '1');
+                compassG.appendChild(compassC);
+                ['N', 'S', 'E', 'W'].forEach((dir, i) => {
+                    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    const positions = [[0, -8], [0, 14], [10, 4], [-10, 4]];
+                    t.setAttribute('x', positions[i][0]); t.setAttribute('y', positions[i][1]);
+                    t.setAttribute('text-anchor', 'middle'); t.setAttribute('dominant-baseline', 'middle');
+                    t.setAttribute('fill', dir === 'N' ? '#ef4444' : 'rgba(255,255,255,0.5)');
+                    t.setAttribute('font-size', dir === 'N' ? '11' : '8');
+                    t.setAttribute('font-weight', '700'); t.setAttribute('font-family', 'Inter, sans-serif');
+                    t.textContent = dir;
+                    compassG.appendChild(t);
+                });
+                svg.appendChild(compassG);
+
+            } else {
+                // ===== BUILDING INTERIOR VIEW (Floor 1 or 2) =====
+                // Building outline
+                const outline = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                outline.setAttribute('x', '50'); outline.setAttribute('y', '30');
+                outline.setAttribute('width', '880'); outline.setAttribute('height', '590');
+                outline.setAttribute('rx', '8'); outline.setAttribute('fill', 'none');
+                outline.setAttribute('stroke', 'rgba(100,160,255,0.1)');
+                outline.setAttribute('stroke-width', '2');
+                outline.setAttribute('stroke-dasharray', '8 4');
+                svg.appendChild(outline);
+
+                // Draw rooms
+                floor.rooms.forEach(room => {
+                    const items = room.items || [];
+                    const count = items.length;
+                    const heat = getHeatColor(count);
+                    const isCorr = room.type === 'Corridor';
+
+                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    g.style.cursor = isCorr ? 'default' : 'pointer';
+
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('x', room.x); rect.setAttribute('y', room.y);
+                    rect.setAttribute('width', room.w); rect.setAttribute('height', room.h);
+                    rect.setAttribute('rx', isCorr ? '4' : '6');
+
+                    if (isCorr) {
+                        rect.setAttribute('fill', 'rgba(255,255,255,0.015)');
+                        rect.setAttribute('stroke', 'rgba(255,255,255,0.05)');
+                        rect.setAttribute('stroke-width', '0.5');
+                        rect.setAttribute('stroke-dasharray', '4 3');
+                    } else {
+                        rect.setAttribute('fill', heat.fill);
+                        rect.setAttribute('stroke', heat.stroke);
+                        rect.setAttribute('stroke-width', count > 0 ? '2' : '1');
+                        if (count > 0) {
+                            const fn = count <= 1 ? 'green' : count <= 2 ? 'yellow' : count <= 4 ? 'orange' : 'red';
+                            rect.setAttribute('filter', `url(#glow-${fn})`);
+                        }
+                    }
+                    rect.style.transition = 'all 0.3s ease';
+                    g.appendChild(rect);
+
+                    if (!isCorr) {
+                        const nameText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        nameText.setAttribute('x', room.x + room.w / 2);
+                        nameText.setAttribute('y', room.y + room.h / 2 - (count > 0 ? 4 : 0));
+                        nameText.setAttribute('text-anchor', 'middle');
+                        nameText.setAttribute('dominant-baseline', 'middle');
+                        nameText.setAttribute('fill', count > 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.4)');
+                        nameText.setAttribute('font-size', room.w > 200 ? '13' : '11');
+                        nameText.setAttribute('font-weight', '700');
+                        nameText.setAttribute('font-family', 'Inter, sans-serif');
+                        nameText.setAttribute('pointer-events', 'none');
+                        nameText.textContent = room.name;
+                        g.appendChild(nameText);
+
+                        if (!room.id.startsWith('H') && !['CAF', 'GYM', 'LIB', 'CL1', 'CL2', 'CL3', 'RR1', 'RR2', 'LK1'].includes(room.id)) {
+                            const numText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                            numText.setAttribute('x', room.x + room.w / 2);
+                            numText.setAttribute('y', room.y + room.h / 2 + 14);
+                            numText.setAttribute('text-anchor', 'middle');
+                            numText.setAttribute('dominant-baseline', 'middle');
+                            numText.setAttribute('fill', 'rgba(255,255,255,0.2)');
+                            numText.setAttribute('font-size', '9');
+                            numText.setAttribute('font-weight', '600');
+                            numText.setAttribute('font-family', 'Inter, sans-serif');
+                            numText.setAttribute('pointer-events', 'none');
+                            numText.textContent = `#${room.id}`;
+                            g.appendChild(numText);
+                        }
+                    } else {
+                        const corrText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        corrText.setAttribute('x', room.x + room.w / 2);
+                        corrText.setAttribute('y', room.y + room.h / 2);
+                        corrText.setAttribute('text-anchor', 'middle');
+                        corrText.setAttribute('dominant-baseline', 'middle');
+                        corrText.setAttribute('fill', 'rgba(255,255,255,0.08)');
+                        corrText.setAttribute('font-size', '9'); corrText.setAttribute('font-weight', '600');
+                        corrText.setAttribute('font-family', 'Inter, sans-serif');
+                        corrText.setAttribute('letter-spacing', '2');
+                        corrText.setAttribute('pointer-events', 'none');
+                        corrText.textContent = room.name.toUpperCase();
+                        g.appendChild(corrText);
+                    }
+
+                    // Item count badge
+                    if (count > 0 && !isCorr) {
+                        const bx = room.x + room.w - 14;
+                        const by = room.y + 14;
+                        const badge = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        badge.setAttribute('cx', bx); badge.setAttribute('cy', by);
+                        badge.setAttribute('r', '12');
+                        badge.setAttribute('fill', heat.stroke.replace(/[\d.]+\)$/, '1)'));
+                        badge.setAttribute('pointer-events', 'none');
+                        g.appendChild(badge);
+
+                        const badgeText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        badgeText.setAttribute('x', bx); badgeText.setAttribute('y', by);
+                        badgeText.setAttribute('text-anchor', 'middle');
+                        badgeText.setAttribute('dominant-baseline', 'middle');
+                        badgeText.setAttribute('fill', '#000');
+                        badgeText.setAttribute('font-size', '10');
+                        badgeText.setAttribute('font-weight', '800');
+                        badgeText.setAttribute('font-family', 'Inter, sans-serif');
+                        badgeText.setAttribute('pointer-events', 'none');
+                        badgeText.textContent = count;
+                        g.appendChild(badgeText);
+                    }
+
+                    if (!isCorr) {
+                        g.addEventListener('mouseenter', (e) => {
+                            rect.setAttribute('fill', count > 0
+                                ? heat.fill.replace(/[\d.]+\)$/, `${parseFloat(heat.fill.match(/[\d.]+\)$/)[0]) + 0.1})`)
+                                : 'rgba(255,255,255,0.06)');
+                            rect.setAttribute('stroke-width', '2.5');
+                            showRoomPopup(room, e);
+                        });
+                        g.addEventListener('mouseleave', () => {
+                            rect.setAttribute('fill', heat.fill);
+                            rect.setAttribute('stroke-width', count > 0 ? '2' : '1');
+                            hideRoomPopup();
+                        });
+                    }
+                    svg.appendChild(g);
+                });
+            }
 
             mapCanvas.appendChild(svg);
             updateRoomList();
+            updateStats();
         }
 
-        // Update room list sidebar
+        // ============================================================
+        // Sidebar room list
+        // ============================================================
         function updateRoomList() {
             const floor = schoolData[currentFloor];
+            const nonCorridors = floor.rooms.filter(r => r.type !== 'Corridor');
 
-            roomList.innerHTML = floor.rooms.map(room => `
-                <div class="room-item ${room.items.length > 0 ? 'has-items' : ''}" data-room="${room.id}">
-                    <span>${room.name}</span>
-                    ${room.items.length > 0 ? `<span class="item-badge">${room.items.length}</span>` : ''}
-                </div>
-            `).join('');
+            // Sort: rooms with items first, then by count desc
+            nonCorridors.sort((a, b) => (b.items || []).length - (a.items || []).length);
 
-            // Add click handlers
+            roomList.innerHTML = nonCorridors.map(room => {
+                const count = (room.items || []).length;
+                const heat = getHeatColor(count);
+                return `
+                    <div class="room-item ${heat.class}" data-room="${room.id}">
+                        <div>
+                            <span class="room-name">${room.name}</span>
+                            <span class="room-number">#${room.id}</span>
+                        </div>
+                        ${count > 0 ? `<span class="item-count">${count}</span>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            // Click handlers
             document.querySelectorAll('.room-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const roomId = item.dataset.room;
                     const room = floor.rooms.find(r => r.id === roomId);
                     if (room) {
-                        // Center on room
-                        const roomCenterX = room.x + room.w / 2;
-                        const roomCenterY = room.y + room.h / 2;
-                        translateX = mapWrapper.clientWidth / 2 - roomCenterX * scale;
-                        translateY = mapWrapper.clientHeight / 2 - roomCenterY * scale;
+                        const cx = room.x + room.w / 2;
+                        const cy = room.y + room.h / 2;
+                        translateX = mapWrapper.clientWidth / 2 - cx * scale;
+                        translateY = mapWrapper.clientHeight / 2 - cy * scale;
+                        scale = Math.max(scale, 1.5);
                         updateTransform();
                     }
                 });
             });
-
-            // Update total items
-            let total = 0;
-            Object.values(schoolData).forEach(floor => {
-                floor.rooms.forEach(room => {
-                    total += room.items.length;
-                });
-            });
-            totalItems.textContent = total;
         }
 
-        // Show room popup
+        function updateStats() {
+            let totalItemCount = 0;
+            let totalRoomCount = 0;
+            let hotZoneCount = 0;
+
+            Object.values(schoolData).forEach(floor => {
+                floor.rooms.forEach(room => {
+                    if (room.type !== 'Corridor') {
+                        totalRoomCount++;
+                        const c = (room.items || []).length;
+                        totalItemCount += c;
+                        if (c >= 3) hotZoneCount++;
+                    }
+                });
+            });
+
+            document.getElementById('totalItems').textContent = totalItemCount;
+            document.getElementById('totalRooms').textContent = totalRoomCount;
+            document.getElementById('hotZones').textContent = hotZoneCount;
+        }
+
+        // ============================================================
+        // Popups
+        // ============================================================
         function showRoomPopup(room, event) {
             document.getElementById('popupRoomName').textContent = room.name;
-            document.getElementById('popupRoomType').textContent = room.type;
+            document.getElementById('popupRoomNumber').textContent = `Room #${room.id} — ${room.type}`;
+            document.getElementById('popupRoomType').textContent =
+                (room.items || []).length > 0
+                    ? `${room.items.length} item${room.items.length > 1 ? 's' : ''} found here`
+                    : 'No items reported';
 
             const itemsContainer = document.getElementById('popupItems');
-            if (room.items.length > 0) {
-                itemsContainer.innerHTML = room.items.map(item => `
+            const items = room.items || [];
+            if (items.length > 0) {
+                itemsContainer.innerHTML = items.slice(0, 5).map(item => `
                     <div class="popup-item">
                         <div class="popup-item-name">${item.name}</div>
                         <div class="popup-item-desc">${item.desc}</div>
                     </div>
-                `).join('');
+                `).join('') + (items.length > 5 ? `<div class="popup-no-items">+${items.length - 5} more items</div>` : '');
             } else {
                 itemsContainer.innerHTML = '<div class="popup-no-items">No items found here</div>';
             }
 
-            // Position popup near mouse
             const rect = mapWrapper.getBoundingClientRect();
-            roomPopup.style.left = `${event.clientX - rect.left + 20}px`;
-            roomPopup.style.top = `${event.clientY - rect.top - 20}px`;
+            roomPopup.style.left = `${event.clientX - rect.left + 16}px`;
+            roomPopup.style.top = `${event.clientY - rect.top - 16}px`;
             roomPopup.classList.add('show');
         }
 
@@ -801,7 +1502,9 @@
             roomPopup.classList.remove('show');
         }
 
-        // Floor switcher
+        // ============================================================
+        // Controls
+        // ============================================================
         document.querySelectorAll('.floor-tab').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active'));
@@ -811,7 +1514,6 @@
             });
         });
 
-        // Zoom controls
         document.getElementById('zoomIn').addEventListener('click', () => {
             scale = Math.min(scale + 0.2, 3);
             updateTransform();
@@ -849,9 +1551,7 @@
             updateTransform();
         });
 
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
+        document.addEventListener('mouseup', () => { isDragging = false; });
 
         // Mouse wheel zoom
         mapWrapper.addEventListener('wheel', (e) => {
@@ -861,8 +1561,11 @@
             updateTransform();
         }, { passive: false });
 
-        // Initialize
-        drawFloor();
+        // ============================================================
+        // Initialize — load from Supabase then draw
+        // ============================================================
+        loadItems();
     </script>
 </body>
+
 </html>

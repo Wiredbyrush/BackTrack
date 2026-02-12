@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,17 +11,24 @@
     <title>Sources & Credits - BackTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/nav-auth.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #000;
             color: #fff;
             min-height: 100vh;
         }
+
         nav {
             display: flex;
             justify-content: space-between;
@@ -28,16 +36,35 @@
             padding: 0 40px;
             height: 70px;
             position: fixed;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             z-index: 100;
         }
-        .nav-spacer { height: 70px; }
-        .nav-left { display: flex; align-items: center; text-decoration: none; }
-        .nav-left img { height: 60px; width: auto; }
-        .nav-center { display: flex; gap: 40px; }
+
+        .nav-spacer {
+            height: 70px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-left img {
+            height: 60px;
+            width: auto;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 40px;
+        }
+
         .nav-link {
             color: rgba(255, 255, 255, 0.45);
             text-decoration: none;
@@ -45,9 +72,20 @@
             font-weight: 500;
             transition: color 0.2s;
         }
-        .nav-link:hover { color: rgba(255, 255, 255, 0.8); }
-        .nav-link.active { color: #fff; }
-        .nav-right { display: flex; align-items: center; }
+
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-link.active {
+            color: #fff;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
         .sign-in-btn {
             background: linear-gradient(180deg, #2e2e2e 0%, #1a1a1a 100%);
             color: #f3f4f6;
@@ -64,16 +102,27 @@
             margin: 0 auto;
             padding: 40px 24px 80px;
         }
-        .page-header { margin-bottom: 40px; }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
         .page-header h1 {
             font-size: 36px;
             font-weight: 800;
             letter-spacing: -1px;
             margin-bottom: 8px;
         }
-        .page-header p { color: #777; font-size: 15px; }
 
-        .section { margin-bottom: 40px; }
+        .page-header p {
+            color: #777;
+            font-size: 15px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
         .section-title {
             font-size: 14px;
             font-weight: 600;
@@ -85,7 +134,11 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .source-list { display: grid; gap: 12px; }
+        .source-list {
+            display: grid;
+            gap: 12px;
+        }
+
         .source-card {
             background: #0a0a0a;
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -97,18 +150,27 @@
             gap: 16px;
             transition: border-color 0.2s;
         }
-        .source-card:hover { border-color: rgba(255, 255, 255, 0.12); }
-        .source-info { flex: 1; }
+
+        .source-card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .source-info {
+            flex: 1;
+        }
+
         .source-name {
             font-size: 15px;
             font-weight: 600;
             margin-bottom: 4px;
         }
+
         .source-desc {
             color: #777;
             font-size: 13px;
             line-height: 1.5;
         }
+
         .source-link {
             color: #888;
             font-size: 12px;
@@ -119,18 +181,26 @@
             transition: all 0.2s;
             white-space: nowrap;
         }
+
         .source-link:hover {
             color: #fff;
             border-color: rgba(255, 255, 255, 0.25);
         }
 
         @media (max-width: 600px) {
-            .source-card { flex-direction: column; align-items: flex-start; }
-            nav { padding: 0 20px; }
+            .source-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                padding: 0 20px;
+            }
         }
     </style>
     <link rel="stylesheet" href="css/theme.css">
 </head>
+
 <body>
     <nav>
         <a class="nav-left" href="index.html"><span class="brand-logo">
@@ -141,6 +211,7 @@
             <a class="nav-link" href="browse.html">Browse</a>
             <a class="nav-link" href="map.html">Map</a>
             <a class="nav-link" href="submit.html">Submit</a>
+            <a class="nav-link" href="rewards.html">Rewards</a>
             <a class="nav-link" href="features.html">Features</a>
             <a class="nav-link active" href="sources.html">Sources</a>
         </div>
@@ -162,23 +233,99 @@
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Supabase</div>
-                        <div class="source-desc">Open-source backend platform providing PostgreSQL database, authentication, real-time subscriptions, and file storage.</div>
+                        <div class="source-desc">Open-source backend platform providing PostgreSQL database,
+                            authentication, real-time subscriptions, and file storage.</div>
                     </div>
                     <a class="source-link" href="https://supabase.com" target="_blank" rel="noopener">Visit</a>
                 </div>
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Supabase Edge Functions</div>
-                        <div class="source-desc">Serverless Deno functions for AI chatbot, semantic search, and image matching capabilities.</div>
+                        <div class="source-desc">Serverless Deno functions for AI chatbot, semantic search, and image
+                            matching capabilities.</div>
                     </div>
-                    <a class="source-link" href="https://supabase.com/docs/guides/functions" target="_blank" rel="noopener">Docs</a>
+                    <a class="source-link" href="https://supabase.com/docs/guides/functions" target="_blank"
+                        rel="noopener">Docs</a>
                 </div>
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">pgvector</div>
-                        <div class="source-desc">PostgreSQL extension for vector similarity search, powering semantic item matching with AI embeddings.</div>
+                        <div class="source-desc">PostgreSQL extension for vector similarity search, powering semantic
+                            item matching with AI embeddings.</div>
                     </div>
-                    <a class="source-link" href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">GitHub</a>
+                    <a class="source-link" href="https://github.com/pgvector/pgvector" target="_blank"
+                        rel="noopener">GitHub</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">PostgreSQL</div>
+                        <div class="source-desc">Core relational database engine used by Supabase for storing users,
+                            items, claims, and admin permissions.</div>
+                    </div>
+                    <a class="source-link" href="https://www.postgresql.org/" target="_blank" rel="noopener">Visit</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Supabase Auth</div>
+                        <div class="source-desc">Authentication system for email/password and Google OAuth sign in
+                            flows.</div>
+                    </div>
+                    <a class="source-link" href="https://supabase.com/docs/guides/auth" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Supabase Storage</div>
+                        <div class="source-desc">Object storage used for uploaded item photos and generated public image
+                            URLs.</div>
+                    </div>
+                    <a class="source-link" href="https://supabase.com/docs/guides/storage" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Supabase Realtime</div>
+                        <div class="source-desc">Realtime update capabilities available for syncing database changes in
+                            the app.</div>
+                    </div>
+                    <a class="source-link" href="https://supabase.com/docs/guides/realtime" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Supabase Row Level Security</div>
+                        <div class="source-desc">Security model used to enforce table access rules for normal users and
+                            admins.</div>
+                    </div>
+                    <a class="source-link"
+                        href="https://supabase.com/docs/guides/database/postgres/row-level-security" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Supabase SQL Editor</div>
+                        <div class="source-desc">Browser SQL environment used to run schema setup, migrations, and admin
+                            account inserts.</div>
+                    </div>
+                    <a class="source-link" href="https://supabase.com/docs/guides/database/sql-editor" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">PostgREST</div>
+                        <div class="source-desc">REST API layer used under the hood by Supabase for table queries and
+                            filters.</div>
+                    </div>
+                    <a class="source-link" href="https://postgrest.org/en/stable/" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Deno Runtime</div>
+                        <div class="source-desc">Runtime environment used for Supabase Edge Functions that power AI and
+                            search endpoints.</div>
+                    </div>
+                    <a class="source-link" href="https://deno.com/" target="_blank" rel="noopener">Visit</a>
                 </div>
             </div>
         </div>
@@ -189,23 +336,101 @@
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Google Fonts - Inter</div>
-                        <div class="source-desc">Primary typeface across the entire application. Designed for computer screens with tall x-height for legibility.</div>
+                        <div class="source-desc">Primary typeface across the entire application. Designed for computer
+                            screens with tall x-height for legibility.</div>
                     </div>
-                    <a class="source-link" href="https://fonts.google.com/specimen/Inter" target="_blank" rel="noopener">Visit</a>
+                    <a class="source-link" href="https://fonts.google.com/specimen/Inter" target="_blank"
+                        rel="noopener">Visit</a>
                 </div>
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Canvas API</div>
-                        <div class="source-desc">HTML5 Canvas 2D rendering for the homepage hero animation featuring particle network and wireframe geometry.</div>
+                        <div class="source-desc">HTML5 Canvas 2D rendering for the homepage hero animation featuring
+                            particle network and wireframe geometry.</div>
                     </div>
-                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank" rel="noopener">MDN</a>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"
+                        target="_blank" rel="noopener">MDN</a>
                 </div>
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Supabase JS Client</div>
-                        <div class="source-desc">Official JavaScript client library for interacting with Supabase services from the browser.</div>
+                        <div class="source-desc">Official JavaScript client library for interacting with Supabase
+                            services from the browser.</div>
                     </div>
-                    <a class="source-link" href="https://github.com/supabase/supabase-js" target="_blank" rel="noopener">GitHub</a>
+                    <a class="source-link" href="https://github.com/supabase/supabase-js" target="_blank"
+                        rel="noopener">GitHub</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">HTML Standard (WHATWG)</div>
+                        <div class="source-desc">Specification reference for semantic page structure and browser
+                            compatibility.</div>
+                    </div>
+                    <a class="source-link" href="https://html.spec.whatwg.org/" target="_blank"
+                        rel="noopener">Spec</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">MDN CSS Reference</div>
+                        <div class="source-desc">Reference used for layout, animations, gradients, and responsive
+                            styling.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">MDN JavaScript Reference</div>
+                        <div class="source-desc">Language reference used for DOM logic, utility methods, and event
+                            handling.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Fetch API</div>
+                        <div class="source-desc">Network requests to Edge Function endpoints for chatbot and image
+                            matching.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Intersection Observer API</div>
+                        <div class="source-desc">Scroll-triggered reveal and animation behavior used across feature and
+                            homepage sections.</div>
+                    </div>
+                    <a class="source-link"
+                        href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">URLSearchParams</div>
+                        <div class="source-desc">Query string parsing for page state, tabs, and claim item context.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Window.matchMedia</div>
+                        <div class="source-desc">Used for reduced-motion and PWA display-mode checks in accessibility
+                            controls.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">requestAnimationFrame</div>
+                        <div class="source-desc">Animation timing loop for smooth canvas rendering and UI transitions.
+                        </div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame"
+                        target="_blank" rel="noopener">MDN</a>
                 </div>
             </div>
         </div>
@@ -216,16 +441,90 @@
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">OpenAI Embeddings</div>
-                        <div class="source-desc">Text embedding models for generating vector representations of item descriptions, enabling semantic search.</div>
+                        <div class="source-desc">Text embedding models for generating vector representations of item
+                            descriptions, enabling semantic search.</div>
                     </div>
-                    <a class="source-link" href="https://platform.openai.com/docs/guides/embeddings" target="_blank" rel="noopener">Docs</a>
+                    <a class="source-link" href="https://platform.openai.com/docs/guides/embeddings" target="_blank"
+                        rel="noopener">Docs</a>
                 </div>
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">AI Image Recognition</div>
-                        <div class="source-desc">Computer vision for automatic item tagging, caption generation, and visual similarity matching.</div>
+                        <div class="source-desc">Computer vision for automatic item tagging, caption generation, and
+                            visual similarity matching.</div>
                     </div>
-                    <a class="source-link" href="https://platform.openai.com/docs/guides/vision" target="_blank" rel="noopener">Docs</a>
+                    <a class="source-link" href="https://platform.openai.com/docs/guides/vision" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">OpenAI API Reference</div>
+                        <div class="source-desc">Reference for model calls used by chatbot, embeddings, and image-aware
+                            prompts.</div>
+                    </div>
+                    <a class="source-link" href="https://platform.openai.com/docs/api-reference" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">OpenAI Chat Completions</div>
+                        <div class="source-desc">Guide used to implement conversational responses and structured output
+                            behavior.</div>
+                    </div>
+                    <a class="source-link" href="https://platform.openai.com/docs/guides/chat-completions"
+                        target="_blank" rel="noopener">Guide</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Prompt Engineering Guide</div>
+                        <div class="source-desc">Prompt patterns for better item extraction, matching quality, and
+                            chatbot reliability.</div>
+                    </div>
+                    <a class="source-link" href="https://platform.openai.com/docs/guides/prompt-engineering"
+                        target="_blank" rel="noopener">Guide</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">pgvector Querying</div>
+                        <div class="source-desc">Distance operator and nearest-neighbor querying reference for vector
+                            search in PostgreSQL.</div>
+                    </div>
+                    <a class="source-link" href="https://github.com/pgvector/pgvector#querying" target="_blank"
+                        rel="noopener">Guide</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">pgvector Indexing (IVFFlat)</div>
+                        <div class="source-desc">Approximate nearest-neighbor indexing approach used for scalable
+                            semantic lookup.</div>
+                    </div>
+                    <a class="source-link" href="https://github.com/pgvector/pgvector#indexing" target="_blank"
+                        rel="noopener">Guide</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Cosine Similarity</div>
+                        <div class="source-desc">Core similarity metric concept used for comparing text embeddings.</div>
+                    </div>
+                    <a class="source-link" href="https://en.wikipedia.org/wiki/Cosine_similarity" target="_blank"
+                        rel="noopener">Reference</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">k-Nearest Neighbors</div>
+                        <div class="source-desc">Nearest-neighbor retrieval concept behind top-match item results.</div>
+                    </div>
+                    <a class="source-link" href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm"
+                        target="_blank" rel="noopener">Reference</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Semantic Search</div>
+                        <div class="source-desc">Search pattern used to find similar items based on meaning, not only
+                            keywords.</div>
+                    </div>
+                    <a class="source-link" href="https://en.wikipedia.org/wiki/Semantic_search" target="_blank"
+                        rel="noopener">Reference</a>
                 </div>
             </div>
         </div>
@@ -236,16 +535,89 @@
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Unsplash</div>
-                        <div class="source-desc">High-quality stock photos used for demo item listings during development and testing.</div>
+                        <div class="source-desc">High-quality stock photos used for demo item listings during
+                            development and testing.</div>
                     </div>
                     <a class="source-link" href="https://unsplash.com" target="_blank" rel="noopener">Visit</a>
                 </div>
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">GitHub Pages</div>
-                        <div class="source-desc">Static site hosting for deploying the frontend application directly from the repository.</div>
+                        <div class="source-desc">Static site hosting for deploying the frontend application directly
+                            from the repository.</div>
                     </div>
                     <a class="source-link" href="https://pages.github.com" target="_blank" rel="noopener">Visit</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">MDN SVG</div>
+                        <div class="source-desc">Reference for inline icon drawing and vector graphics used across the
+                            UI.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/SVG" target="_blank"
+                        rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">CSS Animations</div>
+                        <div class="source-desc">Animation primitives used for transitions, hero effects, and interaction
+                            polish.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">CSS Grid Layout</div>
+                        <div class="source-desc">Grid-based layout system used for cards and responsive content blocks.
+                        </div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">CSS Flexbox</div>
+                        <div class="source-desc">Flexible row/column alignment used heavily in navigation and card
+                            structures.</div>
+                    </div>
+                    <a class="source-link"
+                        href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">CSS Custom Properties</div>
+                        <div class="source-desc">Theme tokens and design variables used for colors, spacing, and UI
+                            consistency.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">CSS Gradients</div>
+                        <div class="source-desc">Gradient overlays and accent backgrounds used in hero and component
+                            styling.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient"
+                        target="_blank" rel="noopener">MDN</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Open Graph Protocol</div>
+                        <div class="source-desc">Metadata format used for social sharing previews in page head tags.</div>
+                    </div>
+                    <a class="source-link" href="https://ogp.me/" target="_blank" rel="noopener">Spec</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">WCAG 2 Overview</div>
+                        <div class="source-desc">Accessibility reference for readable contrast, keyboard support, and
+                            inclusive design patterns.</div>
+                    </div>
+                    <a class="source-link" href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank"
+                        rel="noopener">Guide</a>
                 </div>
             </div>
         </div>
@@ -256,16 +628,84 @@
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Visual Studio Code</div>
-                        <div class="source-desc">Primary code editor used for development of all HTML, CSS, and JavaScript files.</div>
+                        <div class="source-desc">Primary code editor used for development of all HTML, CSS, and
+                            JavaScript files.</div>
                     </div>
                     <a class="source-link" href="https://code.visualstudio.com" target="_blank" rel="noopener">Visit</a>
                 </div>
                 <div class="source-card">
                     <div class="source-info">
                         <div class="source-name">Git & GitHub</div>
-                        <div class="source-desc">Version control and collaborative development platform for source code management.</div>
+                        <div class="source-desc">Version control and collaborative development platform for source code
+                            management.</div>
                     </div>
                     <a class="source-link" href="https://github.com" target="_blank" rel="noopener">Visit</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Node.js</div>
+                        <div class="source-desc">JavaScript runtime used for local tooling, scripts, and build workflows.
+                        </div>
+                    </div>
+                    <a class="source-link" href="https://nodejs.org/" target="_blank" rel="noopener">Visit</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">npm</div>
+                        <div class="source-desc">Package manager used to install dependencies for the React and tooling
+                            stack.</div>
+                    </div>
+                    <a class="source-link" href="https://www.npmjs.com/" target="_blank" rel="noopener">Visit</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Vercel Docs</div>
+                        <div class="source-desc">Deployment documentation for hosting and environment variable
+                            configuration.</div>
+                    </div>
+                    <a class="source-link" href="https://vercel.com/docs" target="_blank" rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Git Documentation</div>
+                        <div class="source-desc">Reference for branching, rebase, merge conflict resolution, and release
+                            workflows.</div>
+                    </div>
+                    <a class="source-link" href="https://git-scm.com/doc" target="_blank" rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">GitHub Docs</div>
+                        <div class="source-desc">Repository management, pull request, and deployment integration
+                            references.</div>
+                    </div>
+                    <a class="source-link" href="https://docs.github.com/" target="_blank" rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Chrome DevTools</div>
+                        <div class="source-desc">Browser debugging suite used for layout checks, network tracing, and
+                            performance profiling.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.chrome.com/docs/devtools" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">Lighthouse</div>
+                        <div class="source-desc">Audit tooling for accessibility, performance, and progressive web app
+                            quality checks.</div>
+                    </div>
+                    <a class="source-link" href="https://developer.chrome.com/docs/lighthouse" target="_blank"
+                        rel="noopener">Docs</a>
+                </div>
+                <div class="source-card">
+                    <div class="source-info">
+                        <div class="source-name">ESLint</div>
+                        <div class="source-desc">Linting tool for code quality checks in the React TypeScript codebase.
+                        </div>
+                    </div>
+                    <a class="source-link" href="https://eslint.org/" target="_blank" rel="noopener">Visit</a>
                 </div>
             </div>
         </div>
@@ -276,4 +716,5 @@
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
 </body>
+
 </html>

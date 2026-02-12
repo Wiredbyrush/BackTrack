@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,10 @@
     </script>
     <style>
         /* Disable CSS animations (stops pulsing/flashing indicators) but keep final states visible */
-        * { animation: none !important; -webkit-animation: none !important; }
+        * {
+            animation: none !important;
+            -webkit-animation: none !important;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,8 +40,13 @@
         }
 
         @keyframes pageLoadFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .page-transition {
@@ -58,7 +67,8 @@
             pointer-events: all;
         }
 
-        a, button {
+        a,
+        button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -520,7 +530,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .not-logged-in {
@@ -589,6 +601,7 @@
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
 </head>
+
 <body>
     <div class="page-transition" id="pageTransition"></div>
 
@@ -603,6 +616,7 @@
             <a href="browse.html" class="nav-link">Browse</a>
             <a href="map.html" class="nav-link">Map</a>
             <a href="submit.html" class="nav-link">Submit</a>
+            <a href="rewards.html" class="nav-link">Rewards</a>
             <a href="features.html" class="nav-link">Features</a>
             <a href="sources.html" class="nav-link">Sources</a>
         </div>
@@ -670,7 +684,7 @@
                 </div>
                 <div class="empty-state" id="noItems" style="display: none;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                     <p>You haven't submitted any items yet.</p>
                     <a href="submit.html">Submit your first item</a>
@@ -687,7 +701,7 @@
                 </div>
                 <div class="empty-state" id="noClaims" style="display: none;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <p>You haven't claimed any items yet.</p>
                     <a href="browse.html">Browse lost items</a>
@@ -710,7 +724,8 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="settingsPhone">Phone (optional)</label>
-                        <input type="tel" id="settingsPhone" class="form-input" placeholder="For item pickup notifications">
+                        <input type="tel" id="settingsPhone" class="form-input"
+                            placeholder="For item pickup notifications">
                     </div>
                     <button type="submit" class="btn-save">Save Changes</button>
                 </form>
@@ -724,8 +739,10 @@
         </div>
     </main>
 
-    <footer style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-        <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp; Development.</div>
+    <footer
+        style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp;
+            Development.</div>
         <div style="display: flex; gap: 24px;">
             <a href="features.html" style="color: #555555; text-decoration: none; font-size: 13px;">Features</a>
             <a href="sources.html" style="color: #555555; text-decoration: none; font-size: 13px;">Sources</a>
@@ -989,4 +1006,5 @@
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
 </body>
+
 </html>
