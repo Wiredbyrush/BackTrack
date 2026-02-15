@@ -678,67 +678,132 @@
         }
 
         /* ============================================
-           FEATURES SHOWCASE — Bento Steps
+           FEATURES SHOWCASE — How It Works
+           ============================================ */
+        /* ============================================
+           FEATURES SHOWCASE — Void / Skeleton Design
            ============================================ */
         .features-showcase {
-            padding: 100px 40px 80px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 160px 0;
+            background: #000000;
+            position: relative;
+            overflow: hidden;
+            /* Subtle noise texture for "premium" feel */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
         }
 
+        /* --- Typography Fixes --- */
         .features-header {
             text-align: center;
-            margin-bottom: 60px;
+            max-width: 800px;
+            margin: 0 auto 120px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
         }
 
         .features-label {
-            font-size: 12px;
+            display: inline-block;
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #60a5fa;
-            margin-bottom: 16px;
+            color: #3b82f6;
+            margin-bottom: 24px;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
         }
 
         .features-title {
-            font-size: 44px;
+            font-size: 56px;
             font-weight: 800;
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
             line-height: 1.1;
-            background: linear-gradient(180deg, #ffffff 0%, #60a5fa 100%);
+            margin-bottom: 24px;
+            color: #ffffff;
+            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 16px;
+            -webkit-text-fill-color: transparent;
         }
 
         .features-subtitle {
-            font-size: 17px;
-            color: #64748b;
-            max-width: 480px;
-            margin: 0 auto;
+            font-size: 20px;
+            color: #94a3b8;
             line-height: 1.6;
+            max-width: 580px;
+            margin: 0 auto;
         }
 
-        /* --- 3-step bento grid --- */
+        /* --- Skeletons V2 (Much Better) --- */
+        .sv-browse {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            font-family: inherit;
+        }
+
+        .sv-sidebar {
+            width: 220px;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            /* Brighter border */
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            background: rgba(255, 255, 255, 0.015);
+            /* Slightly lighter */
+            backdrop-filter: blur(10px);
+        }
+
+        .sv-sk-menu-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+        }
+
+        .sv-main {
+            background: #050505;
+        }
+
+        .sv-card-ghost {
+            background: linear-gradient(145deg, #111 0%, #080808 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .sv-card-ghost:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        }
+
+
         .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 180px;
+            max-width: 1200px;
+            /* Tighter container */
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
         }
 
         .step-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(37, 99, 235, 0.08);
-            border-radius: 20px;
-            padding: 28px 24px 24px;
-            position: relative;
-            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* Text left, Image right */
+            gap: 120px;
+            align-items: center;
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .step-card.visible {
@@ -746,360 +811,526 @@
             transform: translateY(0);
         }
 
-        .step-card:nth-child(2) { transition-delay: 0.12s; }
-        .step-card:nth-child(3) { transition-delay: 0.24s; }
-
-        .step-card:hover {
-            border-color: rgba(37, 99, 235, 0.2);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(37, 99, 235, 0.04);
+        /* Zig-zag: Even children flip */
+        .step-card:nth-child(even) {
+            direction: rtl;
         }
 
-        .step-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            background: rgba(37, 99, 235, 0.12);
-            border: 1px solid rgba(37, 99, 235, 0.25);
-            color: #60a5fa;
-            font-size: 13px;
-            font-weight: 800;
-            margin-bottom: 20px;
+        .step-card:nth-child(even) .step-content {
+            direction: ltr;
+            /* Text stays LTR */
+            padding-left: 40px;
+            /* Offset for balance */
         }
 
-        .step-visual {
-            height: 180px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(8, 12, 25, 0.95) 100%);
-            border: 1px solid rgba(37, 99, 235, 0.1);
-            margin-bottom: 20px;
+        .step-card:nth-child(odd) .step-content {
+            padding-right: 40px;
+        }
+
+        .step-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
             position: relative;
-            overflow: hidden;
         }
 
-        .step-visual::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 40%;
-            background: linear-gradient(180deg, rgba(37, 99, 235, 0.04) 0%, transparent 100%);
-            pointer-events: none;
+        /* Distinct "01" Number */
+        .step-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0;
+            letter-spacing: 0.5px;
+            opacity: 1;
+            /* Solid white as per ref */
         }
 
         .step-heading {
-            font-size: 20px;
+            font-size: 48px;
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-            letter-spacing: -0.3px;
+            color: #ffffff;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin: 0;
         }
 
         .step-desc {
-            font-size: 14px;
-            color: #64748b;
+            font-size: 18px;
+            color: #888888;
+            /* Neutral grey */
             line-height: 1.6;
+            max-width: 440px;
+            font-weight: 400;
         }
 
-        /* --- Step 1 visual: Browse grid --- */
-        .sv-browse {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            padding: 14px;
-            height: 100%;
-            align-content: start;
+        /* Pill Buttons Row */
+        .step-features {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px;
         }
 
-        .sv-item {
+        .step-feature-pill {
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            /* Very subtle */
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
+            /* Slightly squared pill */
+            font-size: 12px;
+            color: #a0a0a0;
+            font-weight: 500;
+            transition: 0.3s ease;
+            cursor: default;
+        }
+
+        .step-feature-pill:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        /* --- Visual Container (High-Fidelity "Void" Window) --- */
+        .step-visual {
+            height: 520px;
+            width: 100%;
+            background: #050505;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            position: relative;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(37, 99, 235, 0.08);
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 1),
+                0 20px 50px -10px rgba(0, 0, 0, 0.9);
         }
 
-        .sv-item-img {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, #0c1528 0%, #111827 100%);
+        /* Top highlight for 3D feel */
+        .step-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 20%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
-        .sv-item-bar {
-            height: 5px;
-            margin: 6px;
-            background: rgba(96, 165, 250, 0.12);
-            border-radius: 3px;
-        }
-
-        .sv-item-bar.short { width: 55%; }
-
-        .sv-item:nth-child(1) { animation: svFloat 3s ease-in-out infinite; }
-        .sv-item:nth-child(2) { animation: svFloat 3s ease-in-out 0.4s infinite; }
-        .sv-item:nth-child(3) { animation: svFloat 3s ease-in-out 0.8s infinite; }
-        .sv-item:nth-child(4) { animation: svFloat 3s ease-in-out 1.2s infinite; }
-        .sv-item:nth-child(5) { animation: svFloat 3s ease-in-out 1.6s infinite; }
-        .sv-item:nth-child(6) { animation: svFloat 3s ease-in-out 2s infinite; }
-
-        @keyframes svFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-
-        /* --- Step 2 visual: Submit form --- */
-        .sv-submit {
+        /* --- Global Skeleton Styles --- */
+        .sv-browse {
+            height: 100%;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            padding: 14px;
-            height: 100%;
+            background: #080808;
+            font-family: inherit;
         }
 
-        .sv-upload {
-            border: 2px dashed rgba(37, 99, 235, 0.2);
-            border-radius: 10px;
-            height: 60px;
+        /* Window Header */
+        .sv-browser-chrome {
+            height: 52px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            animation: svPulse 3s ease-in-out infinite;
+            padding: 0 24px;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.01);
         }
 
-        @keyframes svPulse {
-            0%, 100% { border-color: rgba(37, 99, 235, 0.2); }
-            50% { border-color: rgba(37, 99, 235, 0.4); }
-        }
-
-        .sv-upload-arrow {
-            width: 16px;
-            height: 16px;
-            border: 2px solid #3b82f6;
+        .sv-browser-dot {
+            width: 11px;
+            height: 11px;
             border-radius: 50%;
             position: relative;
         }
 
-        .sv-upload-arrow::after {
+        .sv-browser-dot::after {
             content: '';
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 6px; height: 2px;
-            background: #3b82f6;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
-        .sv-upload-text {
-            font-size: 10px;
-            color: #475569;
+        .sv-browser-dot:nth-child(1) {
+            background: #ff5f56;
         }
 
-        .sv-fields {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
+        .sv-browser-dot:nth-child(2) {
+            background: #ffbd2e;
         }
 
-        .sv-field {
+        .sv-browser-dot:nth-child(3) {
+            background: #27c93f;
+        }
+
+        /* Address Bar (Fake) */
+        .sv-address-bar {
+            margin-left: 20px;
             height: 28px;
+            width: 300px;
             background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(37, 99, 235, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 8px;
         }
 
-        .sv-field.full { grid-column: 1 / -1; height: 36px; }
-
-        .sv-btn {
-            height: 32px;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            border-radius: 8px;
-            margin-top: auto;
+        .sv-address-lock {
+            width: 10px;
+            height: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
         }
 
-        /* --- Step 3 visual: Claim + reward --- */
-        .sv-claim {
+        .sv-address-line {
+            height: 4px;
+            width: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .sv-browser-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sv-sidebar {
+            width: 220px;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            background: rgba(255, 255, 255, 0.005);
+        }
+
+        .sv-sk-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .sv-sk-row {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            padding: 14px;
-            height: 100%;
         }
 
-        .sv-claim-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(37, 99, 235, 0.08);
-            border-radius: 10px;
-        }
-
-        .sv-claim-thumb {
-            width: 36px;
+        .sv-sk-menu-item {
             height: 36px;
+            width: 100%;
             border-radius: 8px;
-            background: linear-gradient(135deg, #0c1528, #111827);
-            flex-shrink: 0;
-        }
-
-        .sv-claim-info { flex: 1; }
-
-        .sv-claim-line {
-            height: 5px;
-            background: rgba(96, 165, 250, 0.15);
-            border-radius: 3px;
-            margin-bottom: 4px;
-        }
-
-        .sv-claim-line.sm { width: 50%; margin-bottom: 0; }
-
-        .sv-claim-badge {
-            padding: 3px 8px;
-            background: rgba(74, 222, 128, 0.12);
-            border: 1px solid rgba(74, 222, 128, 0.25);
-            border-radius: 4px;
-            font-size: 9px;
-            color: #4ade80;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .sv-points-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            background: rgba(37, 99, 235, 0.06);
-            border: 1px solid rgba(37, 99, 235, 0.12);
-            border-radius: 10px;
-            margin-top: auto;
+            padding: 0 12px;
+            gap: 12px;
+            transition: 0.2s;
         }
 
-        .sv-pts-label {
+        .sv-sk-menu-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .sv-sk-icon {
+            width: 16px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .sv-sk-menu-item.active .sv-sk-icon {
+            background: #60a5fa;
+        }
+
+        .sv-sk-text {
+            height: 6px;
+            width: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+        }
+
+        .sv-sk-menu-item.active .sv-sk-text {
+            background: #fff;
+        }
+
+        /* Main Content */
+        .sv-main {
+            flex: 1;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            background: #060606;
+            overflow: hidden;
+            /* Prevent scroll inside mockup */
+        }
+
+        /* --- Browse: Grid --- */
+        .sv-grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sv-gh-title {
+            height: 18px;
+            width: 140px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+        }
+
+        .sv-gh-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .sv-gh-btn {
+            height: 32px;
+            padding: 0 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sv-grid-ghost {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .sv-card-ghost {
+            aspect-ratio: 0.8;
+            background: #0f0f0f;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sv-card-ghost:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .sv-img-ghost {
+            flex: 1;
+            background: linear-gradient(145deg, #1a1a1a, #141414);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Image placeholder icon */
+        .sv-img-ghost::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+        }
+
+        .sv-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sv-line {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            width: 90%;
+        }
+
+        .sv-line.short {
+            width: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* New: Status Pill on Card */
+        .sv-card-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            /* Lost Red */
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+
+        /* --- Submit Form --- */
+        .sv-form-wrap {
+            max-width: 440px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sv-upload-area {
+            height: 160px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: 0.3s;
+        }
+
+        .sv-upload-area:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .sv-upload-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+        }
+
+        .sv-input {
+            height: 48px;
+            background: #0f0f0f;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+        }
+
+        .sv-btn-primary {
+            height: 48px;
+            background: #2563eb;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+        }
+
+        /* --- Claim List --- */
+        .sv-list-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sv-list-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #0f0f0f;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+        }
+
+        .sv-list-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .sv-list-meta {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sv-status-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 10px;
-            color: #64748b;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: 700;
             letter-spacing: 0.5px;
         }
 
-        .sv-pts-val {
-            font-size: 16px;
-            font-weight: 800;
-            color: #60a5fa;
+        .sv-status-green {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
-        /* --- Extras row (4 mini highlights) --- */
-        .extras-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+        .sv-status-yellow {
+            background: rgba(234, 179, 8, 0.15);
+            color: #facc15;
+            border: 1px solid rgba(234, 179, 8, 0.2);
         }
 
-        .extra-pill {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 18px;
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(37, 99, 235, 0.06);
-            border-radius: 14px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease;
-        }
-
-        .extra-pill.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .extra-pill:nth-child(2) { transition-delay: 0.08s; }
-        .extra-pill:nth-child(3) { transition-delay: 0.16s; }
-        .extra-pill:nth-child(4) { transition-delay: 0.24s; }
-
-        .extra-pill:hover {
-            border-color: rgba(37, 99, 235, 0.18);
-        }
-
-        .extra-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: rgba(37, 99, 235, 0.1);
-            border: 1px solid rgba(37, 99, 235, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: #60a5fa;
-        }
-
-        .extra-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .extra-text {
-            font-size: 13px;
-            font-weight: 600;
-            color: #e2e8f0;
-        }
-
-        .extra-sub {
-            font-size: 11px;
-            color: #475569;
-            margin-top: 2px;
-        }
-
-        /* Light mode */
-        body.light-theme .step-card {
-            background: rgba(255, 255, 255, 0.7);
-            border-color: rgba(0, 0, 0, 0.06);
-        }
-
-        body.light-theme .step-card:hover {
-            border-color: rgba(37, 99, 235, 0.15);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        body.light-theme .step-heading { color: #0f172a; }
-        body.light-theme .step-desc { color: #64748b; }
-
+        /* --- Light Mode Overrides (Updated) --- */
         body.light-theme .step-visual {
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            border-color: rgba(0, 0, 0, 0.06);
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.1);
         }
 
-        body.light-theme .sv-item {
+        body.light-theme .sv-browse {
+            background: #f8fafc;
+        }
+
+        body.light-theme .sv-main {
             background: #fff;
-            border-color: rgba(0, 0, 0, 0.06);
         }
 
-        body.light-theme .sv-item-img {
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+        body.light-theme .sv-sidebar {
+            background: #f1f5f9;
+            border-right-color: rgba(0, 0, 0, 0.05);
         }
 
-        body.light-theme .sv-field,
-        body.light-theme .sv-claim-item {
+        body.light-theme .sv-browser-chrome {
             background: #fff;
-            border-color: rgba(0, 0, 0, 0.06);
+            border-bottom-color: rgba(0, 0, 0, 0.05);
         }
 
-        body.light-theme .sv-claim-thumb {
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+        body.light-theme .sv-address-bar {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.05);
         }
 
-        body.light-theme .sv-points-row {
-            background: rgba(37, 99, 235, 0.04);
-            border-color: rgba(37, 99, 235, 0.1);
+        body.light-theme .sv-card-ghost {
+            background: #fff;
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        body.light-theme .extra-pill {
-            background: rgba(255, 255, 255, 0.7);
-            border-color: rgba(0, 0, 0, 0.06);
+        body.light-theme .sv-img-ghost {
+            background: #cbd5e1;
         }
 
-        body.light-theme .extra-text { color: #0f172a; }
+        body.light-theme .sv-line {
+            background: #e2e8f0;
+        }
 
         body.light-theme .features-title {
             background: linear-gradient(180deg, #0f172a 0%, #2563eb 100%);
@@ -1111,15 +1342,12 @@
         /* Responsive */
         @media (max-width: 1024px) {
             .steps-grid {
-                grid-template-columns: repeat(2, 1fr);
+                gap: 100px;
+                padding: 0 24px;
             }
 
-            .step-card:last-child {
-                grid-column: 1 / -1;
-            }
-
-            .extras-row {
-                grid-template-columns: repeat(2, 1fr);
+            .step-card {
+                gap: 54px;
             }
         }
 
@@ -1290,23 +1518,53 @@
             }
 
             .steps-grid {
-                grid-template-columns: 1fr;
+                gap: 72px;
+                padding: 0;
             }
 
-            .step-card:last-child {
-                grid-column: auto;
+            .step-card {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .step-card:nth-child(even) {
+                direction: ltr;
             }
 
             .step-visual {
-                height: 170px;
+                height: 236px;
+                border-radius: 18px;
             }
 
             .step-heading {
-                font-size: 22px;
+                font-size: 24px;
             }
 
-            .extras-row {
-                grid-template-columns: 1fr;
+            .step-desc {
+                font-size: 15px;
+                max-width: 100%;
+            }
+
+            .step-num {
+                font-size: 48px;
+                top: -36px;
+                left: -4px;
+            }
+
+            .step-icon-wrap {
+                width: 90%;
+                height: 180px;
+            }
+
+            .step-icon-core {
+                width: 78px;
+                height: 78px;
+                border-radius: 18px;
+            }
+
+            .step-icon-core svg {
+                width: 36px;
+                height: 36px;
             }
 
             footer>div:first-child {
@@ -1404,151 +1662,218 @@
         </div>
 
         <div class="steps-grid">
+            <!-- Step 1: Browse -->
             <article class="step-card">
-                <span class="step-num">01</span>
+                <div class="step-content">
+                    <h3 class="step-num">01</h3>
+                    <h3 class="step-heading">Browse all lost items in one place</h3>
+                    <p class="step-desc">
+                        See every reported lost item across campus in a clean, organized grid. Filter by category,
+                        location, or date to quickly find what you're looking for.
+                    </p>
+                    <div class="step-features">
+                        <div class="step-feature-pill">Grid View</div>
+                        <div class="step-feature-pill">Filters</div>
+                        <div class="step-feature-pill">Real-time Updates</div>
+                    </div>
+                </div>
+
                 <div class="step-visual">
                     <div class="sv-browse">
-                        <div class="sv-item">
-                            <div class="sv-item-img"></div>
-                            <div class="sv-item-bar"></div>
-                            <div class="sv-item-bar short"></div>
-                        </div>
-                        <div class="sv-item">
-                            <div class="sv-item-img"></div>
-                            <div class="sv-item-bar"></div>
-                            <div class="sv-item-bar short"></div>
-                        </div>
-                        <div class="sv-item">
-                            <div class="sv-item-img"></div>
-                            <div class="sv-item-bar"></div>
-                            <div class="sv-item-bar short"></div>
-                        </div>
-                        <div class="sv-item">
-                            <div class="sv-item-img"></div>
-                            <div class="sv-item-bar"></div>
-                            <div class="sv-item-bar short"></div>
-                        </div>
-                        <div class="sv-item">
-                            <div class="sv-item-img"></div>
-                            <div class="sv-item-bar"></div>
-                            <div class="sv-item-bar short"></div>
-                        </div>
-                        <div class="sv-item">
-                            <div class="sv-item-img"></div>
-                            <div class="sv-item-bar"></div>
-                            <div class="sv-item-bar short"></div>
-                        </div>
-                    </div>
-                </div>
-                <h3 class="step-heading">Browse and filter quickly</h3>
-                <p class="step-desc">Open one live feed of lost-and-found listings, then narrow by category, location, and date in seconds.</p>
-            </article>
-
-            <article class="step-card">
-                <span class="step-num">02</span>
-                <div class="step-visual">
-                    <div class="sv-submit">
-                        <div class="sv-upload">
-                            <span class="sv-upload-arrow"></span>
-                            <span class="sv-upload-text">Drop photo + item details</span>
-                        </div>
-                        <div class="sv-fields">
-                            <div class="sv-field"></div>
-                            <div class="sv-field"></div>
-                            <div class="sv-field"></div>
-                            <div class="sv-field"></div>
-                            <div class="sv-field full"></div>
-                        </div>
-                        <div class="sv-btn"></div>
-                    </div>
-                </div>
-                <h3 class="step-heading">Submit found items fast</h3>
-                <p class="step-desc">Post an item with a photo, where it was found, and a short note. Listings publish immediately for students.</p>
-            </article>
-
-            <article class="step-card">
-                <span class="step-num">03</span>
-                <div class="step-visual">
-                    <div class="sv-claim">
-                        <div class="sv-claim-item">
-                            <div class="sv-claim-thumb"></div>
-                            <div class="sv-claim-info">
-                                <div class="sv-claim-line"></div>
-                                <div class="sv-claim-line sm"></div>
+                        <!-- Browser Chrome -->
+                        <div class="sv-browser-chrome">
+                            <div class="sv-browser-dot"></div>
+                            <div class="sv-browser-dot"></div>
+                            <div class="sv-browser-dot"></div>
+                            <div class="sv-address-bar">
+                                <div class="sv-address-lock"></div>
+                                <div class="sv-address-line"></div>
                             </div>
-                            <span class="sv-claim-badge">Reviewing</span>
                         </div>
-                        <div class="sv-claim-item">
-                            <div class="sv-claim-thumb"></div>
-                            <div class="sv-claim-info">
-                                <div class="sv-claim-line"></div>
-                                <div class="sv-claim-line sm"></div>
+
+                        <div class="sv-browser-body">
+                            <!-- Sidebar -->
+                            <div class="sv-sidebar">
+                                <div class="sv-sk-title">FILTERS</div>
+                                <div class="sv-sk-row">
+                                    <div class="sv-sk-menu-item active">
+                                        <div class="sv-sk-icon"></div>
+                                        <div class="sv-sk-text"></div>
+                                    </div>
+                                    <div class="sv-sk-menu-item">
+                                        <div class="sv-sk-icon"></div>
+                                        <div class="sv-sk-text"></div>
+                                    </div>
+                                    <div class="sv-sk-menu-item">
+                                        <div class="sv-sk-icon"></div>
+                                        <div class="sv-sk-text"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="sv-claim-badge">Approved</span>
-                        </div>
-                        <div class="sv-points-row">
-                            <span class="sv-pts-label">Current recovery rate</span>
-                            <span class="sv-pts-val">92%</span>
+
+                            <!-- Main Grid -->
+                            <div class="sv-main">
+                                <div class="sv-grid-header">
+                                    <div class="sv-gh-title"></div>
+                                    <div class="sv-gh-actions">
+                                        <div class="sv-gh-btn"></div>
+                                        <div class="sv-gh-btn"></div>
+                                    </div>
+                                </div>
+
+                                <div class="sv-grid-ghost">
+                                    <!-- Card 1 -->
+                                    <div class="sv-card-ghost">
+                                        <div class="sv-card-badge"></div>
+                                        <div class="sv-img-ghost"></div>
+                                        <div class="sv-meta">
+                                            <div class="sv-line"></div>
+                                            <div class="sv-line short"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Card 2 -->
+                                    <div class="sv-card-ghost">
+                                        <div class="sv-card-badge"></div>
+                                        <div class="sv-img-ghost"></div>
+                                        <div class="sv-meta">
+                                            <div class="sv-line"></div>
+                                            <div class="sv-line short"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Card 3 -->
+                                    <div class="sv-card-ghost">
+                                        <div class="sv-img-ghost"></div>
+                                        <div class="sv-meta">
+                                            <div class="sv-line"></div>
+                                            <div class="sv-line short"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Card 4 -->
+                                    <div class="sv-card-ghost">
+                                        <div class="sv-img-ghost"></div>
+                                        <div class="sv-meta">
+                                            <div class="sv-line"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Card 5 -->
+                                    <div class="sv-card-ghost">
+                                        <div class="sv-img-ghost"></div>
+                                        <div class="sv-meta">
+                                            <div class="sv-line"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Card 6 -->
+                                    <div class="sv-card-ghost">
+                                        <div class="sv-img-ghost"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <h3 class="step-heading">Claim and recover with proof</h3>
-                <p class="step-desc">Students submit claim details, admins verify ownership, and pickup status updates in real time.</p>
             </article>
-        </div>
 
-        <div class="extras-row">
-            <div class="extra-pill">
-                <div class="extra-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 4v16"></path>
-                        <path d="M4 12h16"></path>
-                        <rect x="3" y="3" width="18" height="18" rx="3"></rect>
-                    </svg>
+            <!-- Step 2: Submit -->
+            <article class="step-card">
+                <div class="step-content">
+                    <h3 class="step-num">02</h3>
+                    <h3 class="step-heading">Submit items instantly</h3>
+                    <p class="step-desc">
+                        Found something? Upload a photo, add location and description, then publish in seconds. No
+                        complicated forms or waiting for approval.
+                    </p>
+                    <div class="step-features">
+                        <div class="step-feature-pill">Photo Upload</div>
+                        <div class="step-feature-pill">Quick Form</div>
+                        <div class="step-feature-pill">Instant Publish</div>
+                    </div>
                 </div>
-                <div>
-                    <div class="extra-text">Live sync</div>
-                    <div class="extra-sub">No stale listing states</div>
+
+                <div class="step-visual">
+                    <div class="sv-browse">
+                        <div class="sv-browser-chrome">
+                            <div class="sv-browser-dot"></div>
+                            <div class="sv-browser-dot"></div>
+                            <div class="sv-browser-dot"></div>
+                        </div>
+                        <div class="sv-main" style="align-items: center; justify-content: center;">
+                            <div class="sv-form-wrap">
+                                <div class="sv-upload-area">
+                                    <div class="sv-upload-icon"></div>
+                                    <div class="sv-sk-text" style="width: 120px; background: rgba(255,255,255,0.2);">
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <div class="sv-input"></div>
+                                    <div class="sv-input"></div>
+                                </div>
+                                <div class="sv-input" style="height: 80px;"></div>
+                                <div class="sv-btn-primary"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="extra-pill">
-                <div class="extra-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 3l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path>
-                        <path d="M9 12l2 2 4-4"></path>
-                    </svg>
+            </article>
+
+            <!-- Step 3: Claim -->
+            <article class="step-card">
+                <div class="step-content">
+                    <h3 class="step-num">03</h3>
+                    <h3 class="step-heading">Track and claim with proof</h3>
+                    <p class="step-desc">
+                        Submit a claim with proof of ownership. Admins verify, approve, and notify you when your item is
+                        ready for pickup. Simple and secure.
+                    </p>
+                    <div class="step-features">
+                        <div class="step-feature-pill">Claim System</div>
+                        <div class="step-feature-pill">Admin Review</div>
+                        <div class="step-feature-pill">Status Updates</div>
+                    </div>
                 </div>
-                <div>
-                    <div class="extra-text">Verified claims</div>
-                    <div class="extra-sub">Proof and identity checks</div>
+
+                <div class="step-visual">
+                    <div class="sv-browse">
+                        <div class="sv-browser-chrome">
+                            <div class="sv-browser-dot"></div>
+                            <div class="sv-browser-dot"></div>
+                            <div class="sv-browser-dot"></div>
+                        </div>
+                        <div class="sv-main">
+                            <div class="sv-sk-title" style="margin-bottom: 20px;">YOUR CLAIMS</div>
+                            <div class="sv-list-wrap">
+                                <!-- Item 1 -->
+                                <div class="sv-list-item">
+                                    <div class="sv-list-icon"></div>
+                                    <div class="sv-list-meta">
+                                        <div class="sv-line" style="width: 120px;"></div>
+                                        <div class="sv-line short" style="width: 80px;"></div>
+                                    </div>
+                                    <div class="sv-status-badge sv-status-green">APPROVED</div>
+                                </div>
+                                <!-- Item 2 -->
+                                <div class="sv-list-item">
+                                    <div class="sv-list-icon"></div>
+                                    <div class="sv-list-meta">
+                                        <div class="sv-line" style="width: 100px;"></div>
+                                        <div class="sv-line short" style="width: 60px;"></div>
+                                    </div>
+                                    <div class="sv-status-badge sv-status-yellow">REVIEWING</div>
+                                </div>
+                                <!-- Item 3 -->
+                                <div class="sv-list-item" style="opacity: 0.5;">
+                                    <div class="sv-list-icon"></div>
+                                    <div class="sv-list-meta">
+                                        <div class="sv-line" style="width: 110px;"></div>
+                                        <div class="sv-line short" style="width: 90px;"></div>
+                                    </div>
+                                    <div class="sv-status-badge"
+                                        style="background: rgba(255,255,255,0.1); color: #888;">PENDING</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="extra-pill">
-                <div class="extra-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M4 20V10"></path>
-                        <path d="M10 20V6"></path>
-                        <path d="M16 20v-8"></path>
-                        <path d="M22 20v-4"></path>
-                    </svg>
-                </div>
-                <div>
-                    <div class="extra-text">Actionable analytics</div>
-                    <div class="extra-sub">Track queue and return speed</div>
-                </div>
-            </div>
-            <div class="extra-pill">
-                <div class="extra-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"></path>
-                        <path d="M10.5 20a1.5 1.5 0 0 0 3 0"></path>
-                    </svg>
-                </div>
-                <div>
-                    <div class="extra-text">Saved alerts</div>
-                    <div class="extra-sub">Get notified on likely matches</div>
-                </div>
-            </div>
+            </article>
         </div>
     </section>
 
@@ -1557,7 +1882,6 @@
         <div class="schools-header">
             <p class="schools-badge">Trusted by schools across the district</p>
             <h2 class="schools-title" id="schools-title">Built for Forsyth County Schools</h2>
-            <p class="schools-subtitle">Serving every high school in the district</p>
         </div>
         <div class="schools-marquee">
             <div class="schools-track">
@@ -1766,13 +2090,15 @@
             width: 80px;
             height: 80px;
             object-fit: contain;
-            opacity: 0.85;
-            transition: opacity 0.3s ease;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            opacity: 0.5;
+            transition: all 0.4s ease;
+            filter: grayscale(100%) brightness(1.2);
         }
 
         .school-logo:hover .school-icon-img {
             opacity: 1;
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.1);
         }
 
         /* Light mode */
@@ -1832,496 +2158,9 @@
     </style>
 
     <!-- Leaderboard Section -->
-    <section class="lb-section" aria-labelledby="lb-heading">
-        <div class="lb-wrap">
-            <div class="lb-head">
-                <h2 class="lb-heading" id="lb-heading">Leaderboard</h2>
-                <p class="lb-sub">Top contributors across Forsyth County</p>
-            </div>
 
-            <!-- Tab Switcher -->
-            <div class="lb-tabs">
-                <button class="lb-tab active" data-tab="finders">Items Found</button>
-                <button class="lb-tab" data-tab="heroes">Items Returned</button>
-            </div>
 
-            <!-- Podium: 2nd | 1st | 3rd -->
-            <div class="lb-podium" id="lbPodium">
-                <!-- Populated by JS -->
-            </div>
 
-            <!-- Ranking List 4+ -->
-            <div class="lb-list" id="lbList">
-                <!-- Populated by JS -->
-            </div>
-        </div>
-    </section>
-
-    <style>
-        /* ============================================
-           LEADERBOARD — Creative Podium Design
-           ============================================ */
-        .lb-section {
-            padding: 80px 40px 100px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lb-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 600px;
-            background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .lb-wrap {
-            max-width: 760px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .lb-head {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .lb-heading {
-            font-size: 40px;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            background: linear-gradient(180deg, #fff 0%, #60a5fa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .lb-sub {
-            font-size: 15px;
-            color: #64748b;
-        }
-
-        /* Tabs */
-        .lb-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            margin-bottom: 48px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(37, 99, 235, 0.1);
-            border-radius: 14px;
-            padding: 4px;
-            max-width: 320px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .lb-tab {
-            flex: 1;
-            padding: 10px 20px;
-            border: none;
-            background: transparent;
-            color: #64748b;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 11px;
-            transition: all 0.25s ease;
-            font-family: inherit;
-        }
-
-        .lb-tab:hover { color: #94a3b8; }
-
-        .lb-tab.active {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        /* ---- PODIUM: 2nd | 1st (tall) | 3rd ---- */
-        .lb-podium {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 32px;
-            min-height: 320px;
-        }
-
-        .lb-p {
-            flex: 1;
-            max-width: 230px;
-            text-align: center;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .lb-p:hover { transform: translateY(-6px); }
-
-        /* Avatar ring */
-        .lb-p-ring {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            margin: 0 auto 0;
-            position: relative;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .lb-p-ring::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .lb-p-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 800;
-            color: #fff;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Crown / badge */
-        .lb-p-crown {
-            position: absolute;
-            top: -16px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-        }
-
-        /* Pedestal */
-        .lb-p-pedestal {
-            margin-top: -36px;
-            padding: 48px 16px 20px;
-            border-radius: 16px 16px 12px 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lb-p-pedestal::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-        }
-
-        .lb-p-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .lb-p-school {
-            font-size: 11px;
-            color: #64748b;
-            margin-bottom: 10px;
-        }
-
-        .lb-p-count {
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: -1px;
-            display: block;
-        }
-
-        .lb-p-unit {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            color: #64748b;
-        }
-
-        .lb-p-place {
-            position: absolute;
-            bottom: 10px;
-            right: 14px;
-            font-size: 48px;
-            font-weight: 900;
-            opacity: 0.06;
-            line-height: 1;
-            color: #fff;
-        }
-
-        /* === 1st Place (center, tallest) === */
-        .lb-p.first { order: 2; }
-
-        .lb-p.first .lb-p-ring::before {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24, #f59e0b);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
-        }
-
-        .lb-p.first .lb-p-avatar {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-        }
-
-        .lb-p.first .lb-p-pedestal {
-            background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.03) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.15);
-            min-height: 180px;
-        }
-
-        .lb-p.first .lb-p-pedestal::before {
-            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
-        }
-
-        .lb-p.first .lb-p-count {
-            color: #fbbf24;
-        }
-
-        /* === 2nd Place === */
-        .lb-p.second { order: 1; }
-
-        .lb-p.second .lb-p-ring::before {
-            background: linear-gradient(135deg, #94a3b8, #cbd5e1, #94a3b8);
-            box-shadow: 0 0 16px rgba(148, 163, 184, 0.2);
-        }
-
-        .lb-p.second .lb-p-avatar {
-            background: linear-gradient(135deg, #64748b, #94a3b8);
-            box-shadow: 0 4px 16px rgba(148, 163, 184, 0.2);
-        }
-
-        .lb-p.second .lb-p-pedestal {
-            background: linear-gradient(180deg, rgba(148, 163, 184, 0.08) 0%, rgba(148, 163, 184, 0.02) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.12);
-            min-height: 140px;
-        }
-
-        .lb-p.second .lb-p-pedestal::before {
-            background: linear-gradient(90deg, transparent, #94a3b8, transparent);
-        }
-
-        .lb-p.second .lb-p-count {
-            color: #cbd5e1;
-        }
-
-        /* === 3rd Place === */
-        .lb-p.third { order: 3; }
-
-        .lb-p.third .lb-p-ring::before {
-            background: linear-gradient(135deg, #b45309, #d97706, #b45309);
-            box-shadow: 0 0 16px rgba(180, 83, 9, 0.2);
-        }
-
-        .lb-p.third .lb-p-avatar {
-            background: linear-gradient(135deg, #92400e, #b45309);
-            box-shadow: 0 4px 16px rgba(180, 83, 9, 0.2);
-        }
-
-        .lb-p.third .lb-p-pedestal {
-            background: linear-gradient(180deg, rgba(180, 83, 9, 0.08) 0%, rgba(180, 83, 9, 0.02) 100%);
-            border: 1px solid rgba(180, 83, 9, 0.12);
-            min-height: 120px;
-        }
-
-        .lb-p.third .lb-p-pedestal::before {
-            background: linear-gradient(90deg, transparent, #b45309, transparent);
-        }
-
-        .lb-p.third .lb-p-count {
-            color: #d97706;
-        }
-
-        /* ---- Ranking List (4+) ---- */
-        .lb-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .lb-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 14px 20px;
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(37, 99, 235, 0.06);
-            border-radius: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .lb-row:hover {
-            background: rgba(37, 99, 235, 0.06);
-            border-color: rgba(37, 99, 235, 0.15);
-            transform: translateX(4px);
-        }
-
-        .lb-row-num {
-            width: 28px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #475569;
-            text-align: center;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .lb-row-av {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        .lb-row-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .lb-row-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #e2e8f0;
-        }
-
-        .lb-row-school {
-            font-size: 11px;
-            color: #475569;
-        }
-
-        .lb-row-ct {
-            font-size: 15px;
-            font-weight: 700;
-            color: #60a5fa;
-            font-variant-numeric: tabular-nums;
-            min-width: 60px;
-            text-align: right;
-        }
-
-        .lb-row-bar {
-            width: 80px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .lb-row-bar-fill {
-            height: 100%;
-            border-radius: 3px;
-            background: linear-gradient(90deg, #2563eb, #60a5fa);
-            transition: width 0.6s ease;
-        }
-
-        /* Light Mode */
-        body.light-theme .lb-heading {
-            background: linear-gradient(180deg, #111 0%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        body.light-theme .lb-sub { color: #888; }
-
-        body.light-theme .lb-tabs {
-            background: rgba(0, 0, 0, 0.03);
-            border-color: rgba(0, 0, 0, 0.06);
-        }
-
-        body.light-theme .lb-tab { color: #999; }
-
-        body.light-theme .lb-tab.active {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: #fff;
-        }
-
-        body.light-theme .lb-p-name { color: #111; }
-        body.light-theme .lb-p-school { color: #888; }
-        body.light-theme .lb-p-place { color: #000; opacity: 0.04; }
-
-        body.light-theme .lb-p.first .lb-p-pedestal {
-            background: linear-gradient(180deg, rgba(245, 158, 11, 0.06) 0%, transparent 100%);
-            border-color: rgba(245, 158, 11, 0.12);
-        }
-
-        body.light-theme .lb-p.second .lb-p-pedestal {
-            background: linear-gradient(180deg, rgba(100, 116, 139, 0.06) 0%, transparent 100%);
-            border-color: rgba(100, 116, 139, 0.12);
-        }
-
-        body.light-theme .lb-p.third .lb-p-pedestal {
-            background: linear-gradient(180deg, rgba(180, 83, 9, 0.04) 0%, transparent 100%);
-            border-color: rgba(180, 83, 9, 0.1);
-        }
-
-        body.light-theme .lb-row {
-            background: rgba(0, 0, 0, 0.02);
-            border-color: rgba(0, 0, 0, 0.06);
-        }
-
-        body.light-theme .lb-row:hover {
-            background: rgba(37, 99, 235, 0.04);
-            border-color: rgba(37, 99, 235, 0.1);
-        }
-
-        body.light-theme .lb-row-name { color: #111; }
-        body.light-theme .lb-row-school { color: #888; }
-        body.light-theme .lb-row-num { color: #aaa; }
-        body.light-theme .lb-row-ct { color: #2563eb; }
-
-        body.light-theme .lb-row-bar {
-            background: rgba(0, 0, 0, 0.04);
-        }
-
-        body.light-theme .lb-section::before {
-            background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.04) 0%, transparent 70%);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .lb-section { padding: 60px 20px 80px; }
-            .lb-heading { font-size: 28px; }
-
-            .lb-podium {
-                flex-direction: column;
-                align-items: center;
-                min-height: auto;
-                gap: 16px;
-            }
-
-            .lb-p { max-width: 100%; width: 100%; }
-            .lb-p.first, .lb-p.second, .lb-p.third { order: unset; }
-
-            .lb-p.first .lb-p-pedestal,
-            .lb-p.second .lb-p-pedestal,
-            .lb-p.third .lb-p-pedestal {
-                min-height: auto;
-            }
-
-            .lb-row-bar { display: none; }
-        }
-    </style>
 
     <div class="chatbot-widget">
         <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat assistant">
@@ -2405,162 +2244,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
-    <script>
-        // ============================================
-        // LEADERBOARD — Gaming-Style with Podium + Table
-        // ============================================
-        (function () {
-            const avatarGradients = [
-                'linear-gradient(135deg, #f59e0b, #d97706)',
-                'linear-gradient(135deg, #6366f1, #4f46e5)',
-                'linear-gradient(135deg, #ec4899, #db2777)',
-                'linear-gradient(135deg, #22c55e, #16a34a)',
-                'linear-gradient(135deg, #06b6d4, #0891b2)',
-                'linear-gradient(135deg, #f97316, #ea580c)',
-                'linear-gradient(135deg, #8b5cf6, #7c3aed)',
-                'linear-gradient(135deg, #14b8a6, #0d9488)',
-            ];
 
-            const crownSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#fbbf24"><path d="M2.5 19h19v2h-19v-2zm19.57-9.36c-.21-.8-1.04-1.28-1.84-1.06L14.97 10l-2.2-6.03a1.49 1.49 0 0 0-2.81.06L7.97 10l-5.26-1.42c-.8-.22-1.63.26-1.84 1.06-.21.8.26 1.63 1.06 1.84L7.97 13l-.97 6h10l-.97-6 6.04-1.52c.8-.21 1.28-1.04 1.06-1.84h-.06z"/></svg>`;
-
-            function renderLeaderboard(entries, unit) {
-                const podium = document.getElementById('lbPodium');
-                const list = document.getElementById('lbList');
-                if (!podium || !list) return;
-
-                const top3 = entries.slice(0, 3);
-                const rest = entries.slice(3, 8);
-                const places = ['first', 'second', 'third'];
-                const maxCount = top3.length ? top3[0].count : 1;
-
-                podium.innerHTML = top3.map((e, i) => {
-                    const initial = e.name.charAt(0).toUpperCase();
-                    return `
-                        <div class="lb-p ${places[i]}">
-                            <div class="lb-p-ring">
-                                ${i === 0 ? `<div class="lb-p-crown">${crownSvg}</div>` : ''}
-                                <div class="lb-p-avatar" style="background: ${avatarGradients[i]};">${initial}</div>
-                            </div>
-                            <div class="lb-p-pedestal">
-                                <div class="lb-p-name">${e.name}</div>
-                                <div class="lb-p-school">Forsyth County</div>
-                                <span class="lb-p-count">${e.count}</span>
-                                <span class="lb-p-unit">${unit}</span>
-                                <div class="lb-p-place">${i + 1}</div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                list.innerHTML = rest.map((e, i) => {
-                    const place = i + 4;
-                    const initial = e.name.charAt(0).toUpperCase();
-                    const barWidth = Math.round((e.count / maxCount) * 100);
-                    return `
-                        <div class="lb-row">
-                            <span class="lb-row-num">${place}</span>
-                            <div class="lb-row-av" style="background: ${avatarGradients[(i + 3) % avatarGradients.length]};">${initial}</div>
-                            <div class="lb-row-info">
-                                <div class="lb-row-name">${e.name}</div>
-                                <div class="lb-row-school">Forsyth County</div>
-                            </div>
-                            <span class="lb-row-ct">${e.count} ${unit}</span>
-                            <div class="lb-row-bar">
-                                <div class="lb-row-bar-fill" style="width: ${barWidth}%"></div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                list.style.display = rest.length ? '' : 'none';
-            }
-
-            // Demo data
-            const demoFinders = [
-                { name: 'Marcus J.', count: 23 },
-                { name: 'Priya S.', count: 18 },
-                { name: 'Carlos R.', count: 14 },
-                { name: 'Aaliyah M.', count: 11 },
-                { name: 'Nathan K.', count: 8 },
-                { name: 'Zoe T.', count: 6 },
-                { name: 'Liam H.', count: 4 },
-                { name: 'Olivia D.', count: 3 },
-            ];
-
-            const demoHeroes = [
-                { name: 'Sophie L.', count: 12 },
-                { name: 'Ethan W.', count: 9 },
-                { name: 'Mia T.', count: 7 },
-                { name: 'Jordan P.', count: 5 },
-                { name: 'Ava C.', count: 3 },
-                { name: 'Ryan F.', count: 2 },
-                { name: 'Chloe B.', count: 1 },
-            ];
-
-            // State
-            let cachedFinders = demoFinders;
-            let cachedHeroes = demoHeroes;
-            let activeTab = 'finders';
-
-            function switchTab(tab) {
-                activeTab = tab;
-                document.querySelectorAll('.lb-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-                renderLeaderboard(tab === 'finders' ? cachedFinders : cachedHeroes, tab === 'finders' ? 'items' : 'returned');
-            }
-
-            // Tab click handlers
-            document.querySelectorAll('.lb-tab').forEach(tab => {
-                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-            });
-
-            // Load from Supabase or fall back to demo
-            (async function () {
-                try {
-                    if (typeof BackTrackDB !== 'undefined' && BackTrackDB.isSupabaseConfigured()) {
-                        const items = await BackTrackDB.getItems({ status: ['found', 'claimed', 'pending'] });
-
-                        if (items && items.length > 0) {
-                            const finderCounts = {};
-                            items.forEach(item => {
-                                const email = item.submitted_by || 'Anonymous';
-                                const displayName = email.includes('@')
-                                    ? email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 15) + '.'
-                                    : email;
-                                if (!finderCounts[displayName]) finderCounts[displayName] = 0;
-                                finderCounts[displayName]++;
-                            });
-
-                            cachedFinders = Object.entries(finderCounts)
-                                .map(([name, count]) => ({ name, count }))
-                                .sort((a, b) => b.count - a.count);
-                            if (!cachedFinders.length) cachedFinders = demoFinders;
-
-                            const claimedItems = items.filter(item => item.status === 'claimed');
-                            const heroCounts = {};
-                            claimedItems.forEach(item => {
-                                const email = item.submitted_by || 'Anonymous';
-                                const displayName = email.includes('@')
-                                    ? email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 15) + '.'
-                                    : email;
-                                if (!heroCounts[displayName]) heroCounts[displayName] = 0;
-                                heroCounts[displayName]++;
-                            });
-
-                            cachedHeroes = Object.entries(heroCounts)
-                                .map(([name, count]) => ({ name, count }))
-                                .sort((a, b) => b.count - a.count);
-                            if (!cachedHeroes.length) cachedHeroes = demoHeroes;
-                        }
-                    }
-                } catch (err) {
-                    console.warn('Leaderboard: using demo data', err);
-                }
-
-                // Initial render
-                switchTab('finders');
-            })();
-        })();
-    </script>
     <script>
         // Mobile menu toggle
         const hamburger = document.getElementById('hamburger');

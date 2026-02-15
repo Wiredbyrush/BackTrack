@@ -168,6 +168,33 @@ async function addClaim(claim) {
     return data?.[0] || null;
 }
 
+async function getClaims(filters = {}) {
+    let query = supabase
+        .from('claims')
+        .select('*, items (id, name, location, category, image_url, status)')
+        .order('created_at', { ascending: false });
+
+    if (filters.status) {
+        if (Array.isArray(filters.status)) {
+            query = query.in('status', filters.status);
+        } else {
+            query = query.eq('status', filters.status);
+        }
+    }
+
+    if (filters.itemId) {
+        query = query.eq('item_id', filters.itemId);
+    }
+
+    const { data, error } = await query;
+    if (error) {
+        console.error('Error fetching claims:', error);
+        return [];
+    }
+
+    return data || [];
+}
+
 async function getPendingItems() {
     const { data, error } = await supabase
         .from('items')
@@ -229,6 +256,52 @@ async function isAdmin() {
     }
 
     return Array.isArray(data) && data.length > 0;
+}
+
+async function getAdmins() {
+    const { data, error } = await supabase
+        .from('admins')
+        .select('id, user_id, email, created_at')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        // If policy blocks this for non-admin users, caller can still degrade gracefully.
+        console.warn('Error fetching admins:', error.message);
+        return [];
+    }
+
+    return data || [];
+}
+
+async function getAdminMessages(limit = 50) {
+    const { data, error } = await supabase
+        .from('admin_messages')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+    if (error) {
+        // Table might not exist yet in older environments.
+        console.warn('Admin messages unavailable:', error.message);
+        return [];
+    }
+
+    return data || [];
+}
+
+async function addAdminMessage(message) {
+    const { data, error } = await supabase
+        .from('admin_messages')
+        .insert([message])
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error adding admin message:', error);
+        return null;
+    }
+
+    return data || null;
 }
 
 // ============================================
@@ -350,6 +423,39 @@ async function getMapItems(filters = {}) {
     return getItems(filters);
 }
 
+async function getMapRooms(school = 'Denmark High School') {
+    const { data, error } = await supabase
+        .from('map_rooms')
+        .select('school, floor, room_id, name, room_type, x, y, w, h, clickable, sort_order')
+        .eq('school', school)
+        .order('floor', { ascending: true })
+        .order('sort_order', { ascending: true })
+        .order('room_id', { ascending: true });
+
+    if (error) {
+        // Table may not exist in older projects; map page falls back to local defaults.
+        console.warn('Map rooms unavailable:', error.message);
+        return [];
+    }
+
+    return data || [];
+}
+
+async function getMapLocationAliases(school = 'Denmark High School') {
+    const { data, error } = await supabase
+        .from('map_location_aliases')
+        .select('school, alias, room_id')
+        .eq('school', school)
+        .order('alias', { ascending: true });
+
+    if (error) {
+        console.warn('Map aliases unavailable:', error.message);
+        return [];
+    }
+
+    return data || [];
+}
+
 async function sendChatMessage(message) {
     const { data, error } = await supabase.functions.invoke('chatbot', {
         body: { message }
@@ -401,10 +507,14 @@ async function searchItems(query, filters = {}) {
 
     // Claims + admin
     addClaim,
+    getClaims,
     getPendingItems,
     getPendingClaims,
     updateClaimStatus,
     isAdmin,
+    getAdmins,
+    getAdminMessages,
+    addAdminMessage,
 
     // Auth
     signUp,
@@ -417,6 +527,8 @@ async function searchItems(query, filters = {}) {
 
     // Map + chatbot
     getMapItems,
+    getMapRooms,
+    getMapLocationAliases,
     sendChatMessage,
     searchItems,
 

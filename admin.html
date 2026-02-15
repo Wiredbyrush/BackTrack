@@ -1640,9 +1640,9 @@
                     <div class="dash-kpi">
                         <div class="kpi-top">
                             <span class="kpi-label">Recovery Rate</span>
-                            <span class="kpi-badge positive">+5%</span>
+                            <span class="kpi-badge positive" id="recoveryRateBadge">—</span>
                         </div>
-                        <div class="kpi-value">68<span class="kpi-unit">%</span></div>
+                        <div class="kpi-value"><span id="recoveryRateKpi">0</span><span class="kpi-unit">%</span></div>
                         <div class="kpi-sub">Last 30 days</div>
                     </div>
                 </div>
@@ -1757,9 +1757,9 @@
                     <span class="section-count" id="mapItemsCountBadge">0</span>
                 </div>
                 <div class="filter-bar">
-                    <button class="filter-btn active" onclick="filterMapItems('all')">All Floors</button>
-                    <button class="filter-btn" onclick="filterMapItems(1)">Floor 1</button>
-                    <button class="filter-btn" onclick="filterMapItems(2)">Floor 2</button>
+                    <button class="filter-btn active" onclick="filterMapItems('all', this)">All Floors</button>
+                    <button class="filter-btn" onclick="filterMapItems(1, this)">Floor 1</button>
+                    <button class="filter-btn" onclick="filterMapItems(2, this)">Floor 2</button>
                 </div>
                 <div class="cards-list" id="mapItems"></div>
             </div>
@@ -1783,33 +1783,33 @@
                 <!-- Metric Strip -->
                 <div class="metric-strip">
                     <div class="metric-item">
-                        <div class="metric-value">156</div>
+                        <div class="metric-value" id="metricTotalItems">0</div>
                         <div class="metric-label">Total Items</div>
-                        <div class="metric-change positive">↑ 12%</div>
+                        <div class="metric-change positive" id="metricTotalItemsChange">—</div>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="metric-item">
-                        <div class="metric-value">23</div>
+                        <div class="metric-value" id="metricThisWeek">0</div>
                         <div class="metric-label">This Week</div>
-                        <div class="metric-change positive">↑ 8</div>
+                        <div class="metric-change positive" id="metricThisWeekChange">—</div>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="metric-item">
-                        <div class="metric-value">68%</div>
+                        <div class="metric-value" id="metricRecoveryRate">0%</div>
                         <div class="metric-label">Recovery Rate</div>
-                        <div class="metric-change positive">↑ 5%</div>
+                        <div class="metric-change positive" id="metricRecoveryRateChange">—</div>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="metric-item">
-                        <div class="metric-value">2.3d</div>
+                        <div class="metric-value" id="metricAvgResolution">0d</div>
                         <div class="metric-label">Avg Resolution</div>
-                        <div class="metric-change negative">↓ 0.5d</div>
+                        <div class="metric-change positive" id="metricAvgResolutionChange">—</div>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="metric-item">
-                        <div class="metric-value">247</div>
+                        <div class="metric-value" id="metricActiveUsers">0</div>
                         <div class="metric-label">Active Users</div>
-                        <div class="metric-change positive">↑ 18</div>
+                        <div class="metric-change positive" id="metricActiveUsersChange">—</div>
                     </div>
                 </div>
 
@@ -1819,8 +1819,8 @@
                         <div class="chart-card-header">
                             <div class="chart-card-title">Weekly Submissions</div>
                             <div class="chart-card-tabs">
-                                <button class="chart-tab active">Found</button>
-                                <button class="chart-tab">Claimed</button>
+                                <button class="chart-tab active" id="analyticsTabFound" data-metric="found">Found</button>
+                                <button class="chart-tab" id="analyticsTabClaimed" data-metric="claimed">Claimed</button>
                             </div>
                         </div>
                         <canvas id="analyticsLineChart" height="220"></canvas>
@@ -1832,7 +1832,7 @@
                         <div class="doughnut-wrap">
                             <canvas id="analyticsDoughnut" width="200" height="200"></canvas>
                             <div class="doughnut-center">
-                                <div class="doughnut-center-val">156</div>
+                                <div class="doughnut-center-val" id="doughnutTotal">0</div>
                                 <div class="doughnut-center-label">Total</div>
                             </div>
                         </div>
@@ -1970,7 +1970,7 @@
                             </svg>
                         </div>
                         <div class="stat-card-label">Total Users</div>
-                        <div class="stat-card-value">247</div>
+                        <div class="stat-card-value" id="usersTotalStat">0</div>
                     </div>
                     <div class="analytics-stat-card">
                         <div class="stat-card-icon" style="background:rgba(34,197,94,0.15);color:#4ade80">
@@ -1981,7 +1981,7 @@
                             </svg>
                         </div>
                         <div class="stat-card-label">Active Today</div>
-                        <div class="stat-card-value">34</div>
+                        <div class="stat-card-value" id="usersActiveTodayStat">0</div>
                     </div>
                     <div class="analytics-stat-card">
                         <div class="stat-card-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24">
@@ -1994,13 +1994,13 @@
                             </svg>
                         </div>
                         <div class="stat-card-label">New This Week</div>
-                        <div class="stat-card-value">12</div>
+                        <div class="stat-card-value" id="usersNewWeekStat">0</div>
                     </div>
                 </div>
 
                 <div class="section-header" style="margin-top:24px">
                     <h2 class="section-title">All Users</h2>
-                    <span class="section-count">247</span>
+                    <span class="section-count" id="usersCountBadge">0</span>
                 </div>
                 <div class="users-table-wrap">
                     <table class="users-table" id="usersTable">
@@ -2026,11 +2026,11 @@
                 <p class="admin-main-desc">Chronological feed of all admin actions</p>
 
                 <div class="activity-filters">
-                    <button class="filter-btn active" onclick="filterActivity('all')">All</button>
-                    <button class="filter-btn" onclick="filterActivity('approval')">Approvals</button>
-                    <button class="filter-btn" onclick="filterActivity('claim')">Claims</button>
-                    <button class="filter-btn" onclick="filterActivity('message')">Messages</button>
-                    <button class="filter-btn" onclick="filterActivity('system')">System</button>
+                    <button class="filter-btn active" onclick="filterActivity('all', this)">All</button>
+                    <button class="filter-btn" onclick="filterActivity('approval', this)">Approvals</button>
+                    <button class="filter-btn" onclick="filterActivity('claim', this)">Claims</button>
+                    <button class="filter-btn" onclick="filterActivity('message', this)">Messages</button>
+                    <button class="filter-btn" onclick="filterActivity('system', this)">System</button>
                 </div>
 
                 <div class="activity-feed" id="activityFeed"></div>
@@ -2042,885 +2042,1445 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script>
-        // ==========================================
-        // PANEL NAVIGATION
-        // ==========================================
-        function switchPanel(name) {
-            // Update panels
-            document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-            const panel = document.getElementById('panel-' + name);
-            if (panel) panel.classList.add('active');
+        (function () {
+            'use strict';
 
-            // Update sidebar
-            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-            const link = document.querySelector(`.sidebar-link[data-panel="${name}"]`);
-            if (link) link.classList.add('active');
+            const pendingItemsEl = document.getElementById('pendingItems');
+            const pendingClaimsEl = document.getElementById('pendingClaims');
+            const bountyItemsEl = document.getElementById('bountyItems');
+            const adminStatus = document.getElementById('adminStatus');
+            const dashStats = document.getElementById('dashStats');
+            const usersTableBody = document.getElementById('usersTableBody');
+            const mapItemsEl = document.getElementById('mapItems');
+            const analyticsRangeEl = document.getElementById('analyticsRange');
 
-            // Update mobile tabs
-            document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
-            const tab = document.querySelector(`.mobile-tab[data-panel="${name}"]`);
-            if (tab) tab.classList.add('active');
-        }
+            const state = {
+                currentMapFilter: 'all',
+                currentActivityFilter: 'all',
+                analyticsDays: 30,
+                analyticsMetric: 'found',
+                user: null,
+                isAdmin: false,
+                pendingItems: [],
+                pendingClaims: [],
+                bounties: [],
+                allItems: [],
+                allClaims: [],
+                admins: [],
+                mapItems: [],
+                users: [],
+                activityData: [],
+                sentMessages: []
+            };
 
-        // Sidebar clicks
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', () => switchPanel(link.dataset.panel));
-        });
+            // ==========================================
+            // PANEL NAVIGATION
+            // ==========================================
+            function switchPanel(name) {
+                document.querySelectorAll('.admin-panel').forEach((panel) => panel.classList.remove('active'));
+                const panel = document.getElementById('panel-' + name);
+                if (panel) panel.classList.add('active');
 
-        // Mobile tab clicks
-        document.querySelectorAll('.mobile-tab').forEach(tab => {
-            tab.addEventListener('click', () => switchPanel(tab.dataset.panel));
-        });
+                document.querySelectorAll('.sidebar-link').forEach((link) => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.sidebar-link[data-panel="${name}"]`);
+                if (activeLink) activeLink.classList.add('active');
 
-        // ==========================================
-        // ADMIN DATA
-        // ==========================================
-        const pendingItemsEl = document.getElementById('pendingItems');
-        const pendingClaimsEl = document.getElementById('pendingClaims');
-        const bountyItemsEl = document.getElementById('bountyItems');
-        const adminStatus = document.getElementById('adminStatus');
-        const dashStats = document.getElementById('dashStats');
+                document.querySelectorAll('.mobile-tab').forEach((tab) => tab.classList.remove('active'));
+                const activeTab = document.querySelector(`.mobile-tab[data-panel="${name}"]`);
+                if (activeTab) activeTab.classList.add('active');
 
-        function showStatus(msg) {
-            adminStatus.textContent = msg;
-            adminStatus.classList.toggle('visible', !!msg);
-        }
-
-        function renderEmpty(container, text) {
-            container.innerHTML = `<div class="empty-state"><p>${text}</p></div>`;
-        }
-
-        async function loadAdminData() {
-            if (typeof BackTrackDB === 'undefined') {
-                showStatus('Supabase is not configured.');
-                return;
+                if (name === 'analytics') {
+                    setTimeout(renderAnalyticsCharts, 60);
+                }
+                if (name === 'dashboard') {
+                    setTimeout(() => {
+                        drawDashTrend();
+                        drawDashboardSparklines();
+                    }, 60);
+                }
             }
 
-            const user = await BackTrackDB.getCurrentUser();
-            const isAdmin = await BackTrackDB.isAdmin();
-            const isSuperAdmin = user?.email === 'rushwanthmahendran1@gmail.com';
+            window.switchPanel = switchPanel;
 
-            if (!isAdmin && !isSuperAdmin) {
-                showStatus('Admin access required. Sign in with an admin account.');
-                return;
+            document.querySelectorAll('.sidebar-link').forEach((link) => {
+                link.addEventListener('click', () => switchPanel(link.dataset.panel));
+            });
+            document.querySelectorAll('.mobile-tab').forEach((tab) => {
+                tab.addEventListener('click', () => switchPanel(tab.dataset.panel));
+            });
+
+            // ==========================================
+            // HELPERS
+            // ==========================================
+            function showStatus(msg) {
+                adminStatus.textContent = msg || '';
+                adminStatus.classList.toggle('visible', !!msg);
             }
 
-            showStatus('');
-            dashStats.style.display = 'grid';
-
-            const [items, claims] = await Promise.all([
-                BackTrackDB.getPendingItems(),
-                BackTrackDB.getPendingClaims()
-            ]);
-
-            // Get bounties
-            let bounties = [];
-            try {
-                bounties = await BackTrackDB.getItems({ status: ['bounty'] });
-            } catch (e) { console.log('No bounties table or column', e); }
-
-            let totalActive = 0;
-            try {
-                const all = await BackTrackDB.getItems({ status: ['found', 'claimed'] });
-                totalActive = all.length;
-            } catch (e) { }
-
-            // Update all counts
-            document.getElementById('pendingCount').textContent = items.length;
-            document.getElementById('claimsCount').textContent = claims.length;
-            document.getElementById('bountiesCount').textContent = bounties.length;
-            document.getElementById('totalCount').textContent = totalActive;
-            document.getElementById('itemsCountBadge').textContent = items.length;
-            document.getElementById('claimsCountBadge').textContent = claims.length;
-            document.getElementById('bountiesCountBadge').textContent = bounties.length;
-            document.getElementById('sidebarItemsBadge').textContent = items.length;
-            document.getElementById('sidebarClaimsBadge').textContent = claims.length;
-            document.getElementById('sidebarBountiesBadge').textContent = bounties.length;
-
-            // Render Pending Items
-            if (!items.length) {
-                renderEmpty(pendingItemsEl, 'No pending submissions. All caught up! ');
-            } else {
-                pendingItemsEl.innerHTML = items.map(item => `
-                    <div class="review-card" id="item-card-${item.id}">
-                        <div class="card-top">
-                            <div class="card-info">
-                                <div class="card-title">${item.name}</div>
-                                <div class="card-meta">
-                                    ${item.category} &middot; ${item.location} &middot; ${item.date_lost || 'No date'}
-                                </div>
-                                <div class="card-meta">Contact: ${item.contact_email || 'N/A'}${item.contact_phone ? ' &middot; ' + item.contact_phone : ''}</div>
-                                ${item.description ? `<div class="card-proof">${item.description}</div>` : ''}
-                            </div>
-                            <div class="card-actions">
-                                <button class="btn btn-approve" onclick="approveItem('${item.id}')">Approve</button>
-                                <button class="btn btn-reject" onclick="rejectItem('${item.id}')">Reject</button>
-                            </div>
-                        </div>
-                        <div class="card-status" id="item-status-${item.id}"></div>
-                    </div>
-                `).join('');
+            function renderEmpty(container, text) {
+                if (!container) return;
+                container.innerHTML = `<div class="empty-state"><p>${escapeHtml(text)}</p></div>`;
             }
 
-            // Render Pending Claims
-            if (!claims.length) {
-                renderEmpty(pendingClaimsEl, 'No pending claims to review.');
-            } else {
-                pendingClaimsEl.innerHTML = claims.map(claim => `
-                    <div class="review-card" id="claim-card-${claim.id}">
-                        <div class="card-top">
-                            <div class="card-info">
-                                <div class="card-title">${claim.items?.name || 'Unknown Item'}</div>
-                                <div class="card-meta">
-                                    ${claim.items?.category || 'N/A'} &middot; ${claim.items?.location || 'N/A'}
-                                </div>
-                                <div class="card-meta">Claimed by: <strong style="color:#ccc">${claim.claimer_name || 'Unknown'}</strong> (${claim.claimer_email})</div>
-                                ${claim.proof_description ? `<div class="card-proof"><strong>Proof:</strong> ${claim.proof_description}</div>` : ''}
-                            </div>
-                            <div class="card-actions">
-                                <button class="btn btn-approve" onclick="approveClaim('${claim.id}', '${claim.item_id}')">Approve</button>
-                                <button class="btn btn-reject" onclick="rejectClaim('${claim.id}')">Reject</button>
-                            </div>
-                        </div>
-                        <div class="card-status" id="claim-status-${claim.id}"></div>
-                    </div>
-                `).join('');
+            function escapeHtml(value) {
+                return String(value || '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
             }
 
-            // Render Bounties
-            if (!bounties.length) {
-                renderEmpty(bountyItemsEl, 'No active bounties.');
-            } else {
-                bountyItemsEl.innerHTML = bounties.map(b => `
-                    <div class="review-card" id="bounty-card-${b.id}">
-                        <div class="card-top">
-                            <div class="card-info">
-                                <div class="card-title">${b.name}
-                                    ${b.urgency ? `<span class="urgency-badge urgency-${b.urgency}">${b.urgency}</span>` : ''}
-                                </div>
-                                <div class="card-meta">
-                                    ${b.category || 'N/A'} &middot; Last seen: ${b.location || 'N/A'} &middot; ${b.date_lost || 'No date'}
-                                </div>
-                                <div class="card-meta">Posted by: ${b.contact_email || 'N/A'}${b.contact_phone ? ' &middot; ' + b.contact_phone : ''}</div>
-                                ${b.description ? `<div class="card-proof">${b.description}</div>` : ''}
-                            </div>
-                            <div class="card-actions">
-                                <button class="btn btn-reject" onclick="removeBounty('${b.id}')">Remove</button>
-                            </div>
-                        </div>
-                        <div class="card-status" id="bounty-status-${b.id}"></div>
-                    </div>
-                `).join('');
+            function setText(id, value) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = String(value);
             }
-        }
 
-        // ==========================================
-        // ITEM ACTIONS
-        // ==========================================
-        async function approveItem(id) {
-            const s = document.getElementById(`item-status-${id}`);
-            s.textContent = 'Approving...'; s.className = 'card-status';
-            const ok = await BackTrackDB.setItemStatus(id, 'found');
-            if (ok) { s.textContent = 'Approved.'; setTimeout(loadAdminData, 800); }
-            else { s.textContent = 'Failed.'; s.className = 'card-status error'; }
-        }
+            function asDate(value) {
+                if (!value) return null;
+                const d = new Date(value);
+                return Number.isNaN(d.getTime()) ? null : d;
+            }
 
-        async function rejectItem(id) {
-            if (!confirm('Remove this submission?')) return;
-            const s = document.getElementById(`item-status-${id}`);
-            s.textContent = 'Removing...';
-            const ok = await BackTrackDB.deleteItem(id);
-            if (ok) { s.textContent = 'Removed.'; setTimeout(loadAdminData, 800); }
-            else { s.textContent = 'Failed.'; s.className = 'card-status error'; }
-        }
+            function startOfDay(date) {
+                const d = new Date(date);
+                d.setHours(0, 0, 0, 0);
+                return d;
+            }
 
-        async function approveClaim(claimId, itemId) {
-            const s = document.getElementById(`claim-status-${claimId}`);
-            s.textContent = 'Approving...'; s.className = 'card-status';
-            const claim = await BackTrackDB.updateClaimStatus(claimId, 'approved');
-            if (claim && itemId) {
-                await BackTrackDB.setItemStatus(itemId, 'claimed');
-                s.textContent = 'Approved. Item marked claimed.';
-                setTimeout(loadAdminData, 800);
-            } else { s.textContent = 'Failed.'; s.className = 'card-status error'; }
-        }
+            function daysAgo(days) {
+                const d = startOfDay(new Date());
+                d.setDate(d.getDate() - days);
+                return d;
+            }
 
-        async function rejectClaim(claimId) {
-            if (!confirm('Reject this claim?')) return;
-            const s = document.getElementById(`claim-status-${claimId}`);
-            s.textContent = 'Rejecting...';
-            const ok = await BackTrackDB.updateClaimStatus(claimId, 'rejected');
-            if (ok) { s.textContent = 'Rejected.'; setTimeout(loadAdminData, 800); }
-            else { s.textContent = 'Failed.'; s.className = 'card-status error'; }
-        }
+            function formatDateShort(value) {
+                const d = asDate(value);
+                if (!d) return '—';
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
 
-        async function removeBounty(id) {
-            if (!confirm('Remove this bounty?')) return;
-            const s = document.getElementById(`bounty-status-${id}`);
-            s.textContent = 'Removing...';
-            const ok = await BackTrackDB.deleteItem(id);
-            if (ok) { s.textContent = 'Removed.'; setTimeout(loadAdminData, 800); }
-            else { s.textContent = 'Failed.'; s.className = 'card-status error'; }
-        }
+            function formatDateTime(value) {
+                const d = asDate(value);
+                if (!d) return '—';
+                return d.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+            }
 
-        // ==========================================
-        // MAP ITEMS
-        // ==========================================
-        const mapData = {
-            1: {
-                rooms: [
-                    { id: "F1-101", name: "Main Office", items: [{ name: "Black Wallet", desc: "Found near reception desk" }] },
-                    { id: "F1-102", name: "Cafeteria", items: [{ name: "Lunch Box", desc: "Red with superhero stickers" }] },
-                    { id: "F1-103", name: "Gymnasium", items: [{ name: "Water Bottle", desc: "Blue Hydro Flask" }, { name: "AirPods", desc: "White case" }] },
-                    { id: "F1-104", name: "Hallway", items: [{ name: "Textbook", desc: "AP Chemistry" }] },
-                    { id: "F1-105", name: "Health Clinic", items: [{ name: "Jacket", desc: "Nike gray hoodie size M" }] },
-                    { id: "F1-106", name: "Auditorium", items: [] },
-                    { id: "F1-107", name: "Library Entrance", items: [] },
-                ],
-            },
-            2: {
-                rooms: [
-                    { id: "F2-201", name: "Biology Lab", items: [{ name: "Lab Goggles", desc: "Clear safety goggles" }] },
-                    { id: "F2-202", name: "Library", items: [{ name: "Calculator", desc: "TI-84 Plus" }, { name: "Earbuds", desc: "Samsung Galaxy Buds" }] },
-                    { id: "F2-203", name: "Computer Lab", items: [{ name: "USB Drive", desc: "32GB SanDisk" }] },
-                    { id: "F2-204", name: "Classroom A", items: [] },
-                    { id: "F2-205", name: "Hallway", items: [] },
-                    { id: "F2-206", name: "Chemistry Lab", items: [] },
-                    { id: "F2-207", name: "Classroom B", items: [{ name: "Backpack", desc: "Black Jansport" }] },
-                    { id: "F2-208", name: "Classroom C", items: [] },
-                    { id: "F2-209", name: "Teacher Lounge", items: [] },
-                ],
-            },
-        };
+            function formatRelative(value) {
+                const d = asDate(value);
+                if (!d) return 'Unknown';
+                const diffMs = Date.now() - d.getTime();
+                const minute = 60 * 1000;
+                const hour = 60 * minute;
+                const day = 24 * hour;
+                if (diffMs < minute) return 'Just now';
+                if (diffMs < hour) return `${Math.round(diffMs / minute)}m ago`;
+                if (diffMs < day) return `${Math.round(diffMs / hour)}h ago`;
+                if (diffMs < day * 7) return `${Math.round(diffMs / day)}d ago`;
+                return formatDateShort(d);
+            }
 
-        let currentFilter = 'all';
+            function changePct(current, previous) {
+                if (!previous) return current ? 100 : 0;
+                return ((current - previous) / previous) * 100;
+            }
 
-        function getAllMapItems() {
-            const items = [];
-            Object.entries(mapData).forEach(([floor, data]) => {
-                data.rooms.forEach(room => {
-                    room.items.forEach((item, idx) => {
-                        items.push({
-                            id: `${room.id}-${idx}`,
-                            floor: parseInt(floor),
-                            room: room.name,
-                            roomId: room.id,
-                            itemIndex: idx,
-                            ...item
+            function withSign(value, digits = 0, suffix = '%') {
+                const rounded = Number(value).toFixed(digits);
+                const sign = Number(value) > 0 ? '+' : Number(value) < 0 ? '' : '';
+                return `${sign}${rounded}${suffix}`;
+            }
+
+            function inferSchoolFromEmail(email) {
+                const e = String(email || '').toLowerCase();
+                if (!e) return 'Unknown';
+                if (e.includes('denmark')) return 'Denmark HS';
+                if (e.includes('alliance')) return 'Alliance Academy';
+                if (e.includes('south')) return 'South Forsyth';
+                const domain = e.split('@')[1] || '';
+                if (domain.includes('denmark')) return 'Denmark HS';
+                if (domain.includes('alliance')) return 'Alliance Academy';
+                if (domain.includes('south')) return 'South Forsyth';
+                return 'Unknown';
+            }
+
+            function inferFloorFromLocation(location) {
+                const loc = String(location || '').toLowerCase();
+                if (!loc) return 1;
+                if (/\b2\d{2}\b/.test(loc) || loc.includes('floor 2') || loc.includes('second floor') || loc.includes('2nd')) return 2;
+                if (/\b1\d{2}\b/.test(loc) || loc.includes('floor 1') || loc.includes('first floor') || loc.includes('1st')) return 1;
+                if (/(biology|chemistry|physics|media center|library|computer lab|science)/.test(loc)) return 2;
+                if (/(main office|cafeteria|commons|gym|auditorium|attendance|clinic|counseling)/.test(loc)) return 1;
+                return 1;
+            }
+
+            function toMapItems(items) {
+                return items
+                    .filter((item) => String(item.location || '').trim().length > 0)
+                    .map((item) => ({
+                        id: item.id,
+                        floor: inferFloorFromLocation(item.location),
+                        name: item.name || 'Unnamed item',
+                        location: item.location || 'Unknown location',
+                        description: item.description || '',
+                        status: item.status || 'pending',
+                        created_at: item.created_at
+                    }));
+            }
+
+            function buildUsers(items, claims, admins) {
+                const adminsByEmail = new Set(
+                    (admins || [])
+                        .map((row) => String(row.email || '').toLowerCase())
+                        .filter(Boolean)
+                );
+                if (state.user?.email) adminsByEmail.add(String(state.user.email).toLowerCase());
+
+                const map = new Map();
+
+                function ensureUser(key, email, nameSeed) {
+                    if (!key) return null;
+                    if (!map.has(key)) {
+                        const emailValue = String(email || '').trim();
+                        const fallbackName = emailValue ? emailValue.split('@')[0] : 'User';
+                        map.set(key, {
+                            key,
+                            name: String(nameSeed || '').trim() || fallbackName,
+                            email: emailValue,
+                            school: inferSchoolFromEmail(emailValue),
+                            items: 0,
+                            claims: 0,
+                            joinedAt: null,
+                            lastActivityAt: null,
+                            role: 'user'
                         });
+                    }
+                    return map.get(key);
+                }
+
+                items.forEach((item) => {
+                    const email = item.contact_email || '';
+                    const key = email ? `email:${email.toLowerCase()}` : (item.submitted_by ? `uid:${item.submitted_by}` : null);
+                    const user = ensureUser(key, email, item.finder_name || item.contact_email);
+                    if (!user) return;
+                    user.items += 1;
+                    const createdAt = asDate(item.created_at);
+                    if (createdAt) {
+                        if (!user.joinedAt || createdAt < user.joinedAt) user.joinedAt = createdAt;
+                        if (!user.lastActivityAt || createdAt > user.lastActivityAt) user.lastActivityAt = createdAt;
+                    }
+                    if (user.email && adminsByEmail.has(user.email.toLowerCase())) user.role = 'admin';
+                });
+
+                claims.forEach((claim) => {
+                    const email = claim.claimer_email || '';
+                    const key = email ? `email:${email.toLowerCase()}` : (claim.claimer_id ? `uid:${claim.claimer_id}` : null);
+                    const user = ensureUser(key, email, claim.claimer_name || claim.claimer_email);
+                    if (!user) return;
+                    user.claims += 1;
+                    const createdAt = asDate(claim.created_at);
+                    if (createdAt) {
+                        if (!user.joinedAt || createdAt < user.joinedAt) user.joinedAt = createdAt;
+                        if (!user.lastActivityAt || createdAt > user.lastActivityAt) user.lastActivityAt = createdAt;
+                    }
+                    if (user.email && adminsByEmail.has(user.email.toLowerCase())) user.role = 'admin';
+                });
+
+                return Array.from(map.values()).sort((a, b) => {
+                    const aTime = a.lastActivityAt ? a.lastActivityAt.getTime() : 0;
+                    const bTime = b.lastActivityAt ? b.lastActivityAt.getTime() : 0;
+                    return bTime - aTime;
+                });
+            }
+
+            function buildActivityData(items, claims, messages) {
+                const entries = [];
+
+                items.forEach((item) => {
+                    const createdAt = item.created_at || item.updated_at;
+                    const itemName = escapeHtml(item.name || 'Item');
+                    const location = escapeHtml(item.location || 'Unknown location');
+                    const status = String(item.status || '').toLowerCase();
+
+                    if (status === 'pending') {
+                        entries.push({
+                            type: 'approval',
+                            icon: '📝',
+                            desc: `<strong>New submission</strong>: <strong>${itemName}</strong> at ${location}`,
+                            created_at: createdAt
+                        });
+                    } else if (status === 'found') {
+                        entries.push({
+                            type: 'approval',
+                            icon: '✅',
+                            desc: `<strong>Approved item</strong>: <strong>${itemName}</strong>`,
+                            created_at: createdAt
+                        });
+                    } else if (status === 'claimed') {
+                        entries.push({
+                            type: 'claim',
+                            icon: '🔑',
+                            desc: `<strong>Item claimed</strong>: <strong>${itemName}</strong>`,
+                            created_at: createdAt
+                        });
+                    } else if (status === 'bounty') {
+                        entries.push({
+                            type: 'system',
+                            icon: '🎯',
+                            desc: `<strong>Bounty posted</strong>: <strong>${itemName}</strong>`,
+                            created_at: createdAt
+                        });
+                    }
+                });
+
+                claims.forEach((claim) => {
+                    const itemName = escapeHtml(claim.items?.name || 'Unknown item');
+                    const claimer = escapeHtml(claim.claimer_name || claim.claimer_email || 'Student');
+                    const status = String(claim.status || '').toLowerCase();
+                    let desc = `<strong>${claimer}</strong> submitted a claim for <strong>${itemName}</strong>`;
+                    if (status === 'approved') desc = `<strong>Claim approved</strong> for <strong>${itemName}</strong> (${claimer})`;
+                    if (status === 'rejected') desc = `<strong>Claim rejected</strong> for <strong>${itemName}</strong> (${claimer})`;
+                    entries.push({
+                        type: 'claim',
+                        icon: status === 'approved' ? '✅' : status === 'rejected' ? '❌' : '🔑',
+                        desc,
+                        created_at: claim.updated_at || claim.created_at
                     });
                 });
-            });
-            return items;
-        }
 
-        function filterMapItems(filter) {
-            currentFilter = filter;
-            // Update filter button styles
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            loadMapItems();
-        }
+                messages.forEach((msg) => {
+                    const recipient = escapeHtml(msg.recipient_label || msg.recipient_value || msg.recipient_type || 'Students');
+                    const subject = escapeHtml(msg.subject || 'Message');
+                    entries.push({
+                        type: 'message',
+                        icon: '💬',
+                        desc: `Message sent to <strong>${recipient}</strong>: "${subject}"`,
+                        created_at: msg.created_at
+                    });
+                });
 
-        function loadMapItems() {
-            const mapItemsEl = document.getElementById('mapItems');
-            let items = getAllMapItems();
+                entries.push({
+                    type: 'system',
+                    icon: '⚙️',
+                    desc: `System snapshot: <strong>${items.length}</strong> items, <strong>${claims.length}</strong> claims`,
+                    created_at: new Date().toISOString()
+                });
 
-            if (currentFilter !== 'all') {
-                items = items.filter(item => item.floor === currentFilter);
+                entries.sort((a, b) => {
+                    const at = asDate(a.created_at)?.getTime() || 0;
+                    const bt = asDate(b.created_at)?.getTime() || 0;
+                    return bt - at;
+                });
+
+                return entries.slice(0, 120);
             }
 
-            document.getElementById('mapItemsCountBadge').textContent = items.length;
-            document.getElementById('sidebarMapBadge').textContent = items.length;
+            function summarize() {
+                const allItems = state.allItems;
+                const allClaims = state.allClaims;
+                const pendingCount = state.pendingItems.length;
+                const claimPendingCount = state.pendingClaims.length;
+                const bountyCount = state.bounties.length;
+                const foundCount = allItems.filter((item) => item.status === 'found').length;
+                const claimedCount = allItems.filter((item) => item.status === 'claimed').length;
+                const activeCount = foundCount + claimedCount;
+                const recoveryRate = activeCount ? (claimedCount / activeCount) * 100 : 0;
 
-            if (items.length === 0) {
-                mapItemsEl.innerHTML = '<div class="empty-state"><p>No map items found.</p></div>';
-                return;
+                const thisMonthStart = daysAgo(29);
+                const prevMonthStart = daysAgo(59);
+                const prevMonthEnd = daysAgo(30);
+
+                function countItemsBetween(start, end) {
+                    return allItems.filter((item) => {
+                        const d = asDate(item.created_at);
+                        return d && d >= start && d <= end;
+                    }).length;
+                }
+
+                const thisPeriodItems = countItemsBetween(thisMonthStart, new Date());
+                const prevPeriodItems = countItemsBetween(prevMonthStart, prevMonthEnd);
+
+                const thisWeekStart = daysAgo(6);
+                const thisWeekItems = allItems.filter((item) => {
+                    const d = asDate(item.created_at);
+                    return d && d >= thisWeekStart;
+                }).length;
+                const prevWeekStart = daysAgo(13);
+                const prevWeekEnd = daysAgo(7);
+                const prevWeekItems = allItems.filter((item) => {
+                    const d = asDate(item.created_at);
+                    return d && d >= prevWeekStart && d <= prevWeekEnd;
+                }).length;
+
+                let avgResolutionDays = 0;
+                let resolvedCount = 0;
+                const approvedClaimsByItem = new Map();
+                allClaims.forEach((claim) => {
+                    if (claim.status !== 'approved' || !claim.item_id) return;
+                    const claimDate = asDate(claim.updated_at || claim.created_at);
+                    if (!claimDate) return;
+                    const key = String(claim.item_id);
+                    const existing = approvedClaimsByItem.get(key);
+                    if (!existing || claimDate < existing) approvedClaimsByItem.set(key, claimDate);
+                });
+                allItems.forEach((item) => {
+                    if (item.status !== 'claimed') return;
+                    const itemDate = asDate(item.created_at);
+                    const claimDate = approvedClaimsByItem.get(String(item.id));
+                    if (!itemDate || !claimDate) return;
+                    const days = Math.max(0, (claimDate.getTime() - itemDate.getTime()) / (1000 * 60 * 60 * 24));
+                    avgResolutionDays += days;
+                    resolvedCount += 1;
+                });
+                avgResolutionDays = resolvedCount ? avgResolutionDays / resolvedCount : 0;
+
+                const activeUsers = state.users.filter((u) => {
+                    const d = u.lastActivityAt;
+                    return d && d >= thisMonthStart;
+                }).length;
+                const prevActiveUsers = state.users.filter((u) => {
+                    const d = u.lastActivityAt;
+                    return d && d >= prevMonthStart && d <= prevMonthEnd;
+                }).length;
+
+                return {
+                    pendingCount,
+                    claimPendingCount,
+                    bountyCount,
+                    activeCount,
+                    foundCount,
+                    claimedCount,
+                    recoveryRate,
+                    thisPeriodItems,
+                    prevPeriodItems,
+                    thisWeekItems,
+                    prevWeekItems,
+                    avgResolutionDays,
+                    activeUsers,
+                    prevActiveUsers
+                };
             }
 
-            mapItemsEl.innerHTML = items.map(item => `
-                <div class="review-card" id="mapitem-${item.id}">
-                    <div class="card-top">
-                        <div class="card-info">
-                            <div class="card-title">${item.name}</div>
-                            <div class="card-meta">
-                                Floor ${item.floor} &middot; ${item.room}
+            function setChangeLabel(id, current, previous, unit, betterDirection = 'up') {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const delta = current - previous;
+                let valueText = '—';
+                if (unit === '%') {
+                    valueText = withSign(changePct(current, previous), 0, '%');
+                } else if (unit === 'count') {
+                    valueText = `${delta > 0 ? '+' : ''}${delta}`;
+                } else if (unit === 'days') {
+                    valueText = `${delta > 0 ? '+' : ''}${delta.toFixed(1)}d`;
+                }
+                el.textContent = valueText;
+                const good = betterDirection === 'down' ? delta <= 0 : delta >= 0;
+                el.classList.toggle('positive', good);
+                el.classList.toggle('negative', !good);
+            }
+
+            function renderDashboardStats(summary) {
+                setText('pendingCount', summary.pendingCount);
+                setText('claimsCount', summary.claimPendingCount);
+                setText('bountiesCount', summary.bountyCount);
+                setText('itemsCountBadge', summary.pendingCount);
+                setText('claimsCountBadge', summary.claimPendingCount);
+                setText('bountiesCountBadge', summary.bountyCount);
+                setText('sidebarItemsBadge', summary.pendingCount);
+                setText('sidebarClaimsBadge', summary.claimPendingCount);
+                setText('sidebarBountiesBadge', summary.bountyCount);
+                setText('qaSubmissions', summary.pendingCount);
+                setText('qaClaims', summary.claimPendingCount);
+                setText('qaBounties', summary.bountyCount);
+                setText('qaMap', state.mapItems.length);
+
+                const recoveryRounded = Math.round(summary.recoveryRate);
+                setText('recoveryRateKpi', recoveryRounded);
+                const recoveryBadge = document.getElementById('recoveryRateBadge');
+                if (recoveryBadge) recoveryBadge.textContent = withSign(changePct(summary.claimedCount, summary.foundCount || 0), 0, '%');
+
+                setText('metricTotalItems', state.allItems.length);
+                setText('metricThisWeek', summary.thisWeekItems);
+                setText('metricRecoveryRate', `${recoveryRounded}%`);
+                setText('metricAvgResolution', `${summary.avgResolutionDays.toFixed(1)}d`);
+                setText('metricActiveUsers', summary.activeUsers);
+
+                setChangeLabel('metricTotalItemsChange', summary.thisPeriodItems, summary.prevPeriodItems, '%', 'up');
+                setChangeLabel('metricThisWeekChange', summary.thisWeekItems, summary.prevWeekItems, 'count', 'up');
+                setChangeLabel('metricRecoveryRateChange', summary.claimedCount, summary.foundCount || 0, '%', 'up');
+                setChangeLabel('metricAvgResolutionChange', summary.avgResolutionDays, 2.8, 'days', 'down');
+                setChangeLabel('metricActiveUsersChange', summary.activeUsers, summary.prevActiveUsers, 'count', 'up');
+            }
+
+            function renderPendingItems() {
+                if (!state.pendingItems.length) {
+                    renderEmpty(pendingItemsEl, 'No pending submissions. All caught up!');
+                    return;
+                }
+
+                pendingItemsEl.innerHTML = state.pendingItems.map((item) => {
+                    const title = escapeHtml(item.name || 'Untitled Item');
+                    const category = escapeHtml(item.category || 'Uncategorized');
+                    const location = escapeHtml(item.location || 'Unknown location');
+                    const dateLost = escapeHtml(item.date_lost || 'No date');
+                    const contact = escapeHtml(item.contact_email || 'N/A');
+                    const phone = item.contact_phone ? ` &middot; ${escapeHtml(item.contact_phone)}` : '';
+                    const description = item.description ? `<div class="card-proof">${escapeHtml(item.description)}</div>` : '';
+                    return `
+                        <div class="review-card" id="item-card-${item.id}">
+                            <div class="card-top">
+                                <div class="card-info">
+                                    <div class="card-title">${title}</div>
+                                    <div class="card-meta">${category} &middot; ${location} &middot; ${dateLost}</div>
+                                    <div class="card-meta">Contact: ${contact}${phone}</div>
+                                    ${description}
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn btn-approve" onclick="approveItem('${item.id}')">Approve</button>
+                                    <button class="btn btn-reject" onclick="rejectItem('${item.id}')">Reject</button>
+                                </div>
                             </div>
-                            ${item.desc ? `<div class="card-proof">${item.desc}</div>` : ''}
+                            <div class="card-status" id="item-status-${item.id}"></div>
                         </div>
-                        <div class="card-actions">
-                            <button class="btn btn-reject" onclick="removeMapItem('${item.id}', ${item.floor}, '${item.roomId}', ${item.itemIndex})">Remove</button>
+                    `;
+                }).join('');
+            }
+
+            function renderPendingClaims() {
+                if (!state.pendingClaims.length) {
+                    renderEmpty(pendingClaimsEl, 'No pending claims to review.');
+                    return;
+                }
+
+                pendingClaimsEl.innerHTML = state.pendingClaims.map((claim) => {
+                    const itemName = escapeHtml(claim.items?.name || 'Unknown Item');
+                    const category = escapeHtml(claim.items?.category || 'N/A');
+                    const location = escapeHtml(claim.items?.location || 'N/A');
+                    const claimer = escapeHtml(claim.claimer_name || 'Unknown');
+                    const email = escapeHtml(claim.claimer_email || 'N/A');
+                    const proof = claim.proof_description ? `<div class="card-proof"><strong>Proof:</strong> ${escapeHtml(claim.proof_description)}</div>` : '';
+                    return `
+                        <div class="review-card" id="claim-card-${claim.id}">
+                            <div class="card-top">
+                                <div class="card-info">
+                                    <div class="card-title">${itemName}</div>
+                                    <div class="card-meta">${category} &middot; ${location}</div>
+                                    <div class="card-meta">Claimed by: <strong style="color:#ccc">${claimer}</strong> (${email})</div>
+                                    ${proof}
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn btn-approve" onclick="approveClaim('${claim.id}', '${claim.item_id || ''}')">Approve</button>
+                                    <button class="btn btn-reject" onclick="rejectClaim('${claim.id}')">Reject</button>
+                                </div>
+                            </div>
+                            <div class="card-status" id="claim-status-${claim.id}"></div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            function renderBounties() {
+                if (!state.bounties.length) {
+                    renderEmpty(bountyItemsEl, 'No active bounties.');
+                    return;
+                }
+
+                bountyItemsEl.innerHTML = state.bounties.map((item) => {
+                    const urgencyRaw = String(item.urgency || '').toLowerCase();
+                    const urgency = urgencyRaw ? `<span class="urgency-badge urgency-${escapeHtml(urgencyRaw)}">${escapeHtml(urgencyRaw)}</span>` : '';
+                    return `
+                        <div class="review-card" id="bounty-card-${item.id}">
+                            <div class="card-top">
+                                <div class="card-info">
+                                    <div class="card-title">${escapeHtml(item.name || 'Untitled')} ${urgency}</div>
+                                    <div class="card-meta">${escapeHtml(item.category || 'N/A')} &middot; Last seen: ${escapeHtml(item.location || 'N/A')} &middot; ${escapeHtml(item.date_lost || 'No date')}</div>
+                                    <div class="card-meta">Posted by: ${escapeHtml(item.contact_email || 'N/A')}${item.contact_phone ? ` &middot; ${escapeHtml(item.contact_phone)}` : ''}</div>
+                                    ${item.description ? `<div class="card-proof">${escapeHtml(item.description)}</div>` : ''}
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn btn-reject" onclick="removeBounty('${item.id}')">Remove</button>
+                                </div>
+                            </div>
+                            <div class="card-status" id="bounty-status-${item.id}"></div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            function renderMapItems() {
+                let items = state.mapItems;
+                if (state.currentMapFilter !== 'all') {
+                    items = items.filter((item) => item.floor === Number(state.currentMapFilter));
+                }
+
+                setText('mapItemsCountBadge', items.length);
+                setText('sidebarMapBadge', state.mapItems.length);
+
+                if (!items.length) {
+                    renderEmpty(mapItemsEl, 'No map items found.');
+                    return;
+                }
+
+                mapItemsEl.innerHTML = items.map((item) => `
+                    <div class="review-card" id="mapitem-${item.id}">
+                        <div class="card-top">
+                            <div class="card-info">
+                                <div class="card-title">${escapeHtml(item.name)}</div>
+                                <div class="card-meta">Floor ${item.floor} &middot; ${escapeHtml(item.location)}</div>
+                                ${item.description ? `<div class="card-proof">${escapeHtml(item.description)}</div>` : ''}
+                                <div class="card-meta">Status: ${escapeHtml(item.status)} &middot; ${formatDateShort(item.created_at)}</div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-reject" onclick="removeMapItem('${item.id}')">Remove</button>
+                            </div>
+                        </div>
+                        <div class="card-status" id="mapitem-status-${item.id}"></div>
+                    </div>
+                `).join('');
+            }
+
+            function renderUsersTable() {
+                if (!usersTableBody) return;
+                if (!state.users.length) {
+                    usersTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#666;padding:20px">No users found yet.</td></tr>';
+                    setText('usersTotalStat', 0);
+                    setText('usersActiveTodayStat', 0);
+                    setText('usersNewWeekStat', 0);
+                    setText('usersCountBadge', 0);
+                    return;
+                }
+
+                const todayStart = startOfDay(new Date());
+                const weekStart = daysAgo(6);
+                const activeToday = state.users.filter((u) => u.lastActivityAt && u.lastActivityAt >= todayStart).length;
+                const newThisWeek = state.users.filter((u) => u.joinedAt && u.joinedAt >= weekStart).length;
+
+                setText('usersTotalStat', state.users.length);
+                setText('usersActiveTodayStat', activeToday);
+                setText('usersNewWeekStat', newThisWeek);
+                setText('usersCountBadge', state.users.length);
+
+                usersTableBody.innerHTML = state.users.map((u) => `
+                    <tr>
+                        <td><strong>${escapeHtml(u.name || 'User')}</strong></td>
+                        <td style="color:#888">${escapeHtml(u.email || '—')}</td>
+                        <td>${escapeHtml(u.school || 'Unknown')}</td>
+                        <td>${u.items}</td>
+                        <td>${u.claims}</td>
+                        <td style="color:#888">${u.joinedAt ? formatDateShort(u.joinedAt) : '—'}</td>
+                        <td><span class="role-badge ${u.role}">${escapeHtml(u.role)}</span></td>
+                    </tr>
+                `).join('');
+            }
+
+            function renderActivity() {
+                const feed = document.getElementById('activityFeed');
+                if (!feed) return;
+
+                const filtered = state.currentActivityFilter === 'all'
+                    ? state.activityData
+                    : state.activityData.filter((entry) => entry.type === state.currentActivityFilter);
+
+                if (!filtered.length) {
+                    feed.innerHTML = '<div class="empty-state">No activity matching this filter</div>';
+                    return;
+                }
+
+                feed.innerHTML = filtered.map((entry) => `
+                    <div class="activity-item" data-type="${escapeHtml(entry.type)}">
+                        <div class="activity-icon ${escapeHtml(entry.type)}">${entry.icon}</div>
+                        <div class="activity-content">
+                            <div class="activity-desc">${entry.desc}</div>
+                            <div class="activity-meta">${formatRelative(entry.created_at)}</div>
                         </div>
                     </div>
-                    <div class="card-status" id="mapitem-status-${item.id}"></div>
-                </div>
-            `).join('');
-        }
-
-        function removeMapItem(id, floor, roomId, itemIndex) {
-            if (!confirm('Remove this item from the map?')) return;
-
-            const statusEl = document.getElementById(`mapitem-status-${id}`);
-            statusEl.textContent = 'Removing...';
-            statusEl.className = 'card-status';
-
-            const room = mapData[floor].rooms.find(r => r.id === roomId);
-            if (room && room.items[itemIndex]) {
-                room.items.splice(itemIndex, 1);
-                statusEl.textContent = 'Removed successfully.';
-                setTimeout(() => {
-                    loadMapItems();
-                }, 800);
-            } else {
-                statusEl.textContent = 'Error removing item.';
-                statusEl.className = 'card-status error';
+                `).join('');
             }
-        }
 
-        // ==========================================
-        // MESSAGES
-        // ==========================================
-        const sentMessages = [];
+            function renderDashRecent() {
+                const recentList = document.getElementById('dashRecentList');
+                if (!recentList) return;
 
-        document.getElementById('msgRecipient')?.addEventListener('change', function () {
-            const emailGroup = document.getElementById('individualEmailGroup');
-            emailGroup.style.display = this.value === 'individual' ? 'block' : 'none';
-        });
+                const recent = state.activityData.slice(0, 6);
+                if (!recent.length) {
+                    recentList.innerHTML = '<div class="empty-state">No recent activity</div>';
+                    return;
+                }
 
-        function useTemplate(type) {
+                const colorForType = {
+                    approval: '#f59e0b',
+                    claim: '#22c55e',
+                    message: '#60a5fa',
+                    system: '#a78bfa'
+                };
+
+                recentList.innerHTML = recent.map((entry) => `
+                    <div class="dash-recent-item">
+                        <span class="dash-recent-dot" style="background:${colorForType[entry.type] || '#64748b'}"></span>
+                        <span class="dash-recent-text">${entry.desc.replace(/<[^>]+>/g, '')}</span>
+                        <span class="dash-recent-time">${formatRelative(entry.created_at)}</span>
+                    </div>
+                `).join('');
+            }
+
+            function renderSentMessages() {
+                const list = document.getElementById('sentMessagesList');
+                if (!list) return;
+
+                setText('sentMsgCount', state.sentMessages.length);
+                if (!state.sentMessages.length) {
+                    list.innerHTML = '<div class="empty-state">No messages sent yet</div>';
+                    return;
+                }
+
+                list.innerHTML = state.sentMessages.map((msg) => {
+                    const recipient = escapeHtml(msg.recipient_label || msg.recipient_value || msg.recipient_type || 'Students');
+                    const unsynced = msg.localOnly ? '<span style="color:#f59e0b;font-size:11px"> (local draft)</span>' : '';
+                    return `
+                        <div class="sent-msg-card">
+                            <div class="sent-msg-header">
+                                <div class="sent-msg-subject">${escapeHtml(msg.subject || 'Message')}${unsynced}</div>
+                                <div class="sent-msg-time">${formatDateTime(msg.created_at)}</div>
+                            </div>
+                            <div class="sent-msg-recipient">To: ${recipient}</div>
+                            <div class="sent-msg-body">${escapeHtml(msg.body || '').replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // ==========================================
+            // DATABASE LOADING
+            // ==========================================
+            async function loadAdminData() {
+                if (typeof BackTrackDB === 'undefined') {
+                    showStatus('Supabase is not configured.');
+                    return false;
+                }
+
+                state.user = await BackTrackDB.getCurrentUser();
+                state.isAdmin = await BackTrackDB.isAdmin();
+                const isOwnerFallback = String(state.user?.email || '').toLowerCase() === 'rushwanthmahendran1@gmail.com';
+
+                if (!state.user || (!state.isAdmin && !isOwnerFallback)) {
+                    showStatus('Admin access required. Sign in with an admin account.');
+                    return false;
+                }
+
+                showStatus('');
+                if (dashStats) dashStats.style.display = 'grid';
+
+                const allStatuses = ['pending', 'found', 'claimed', 'lost', 'bounty'];
+                const [pendingItems, pendingClaims, allItems, allClaims, admins, messages] = await Promise.all([
+                    BackTrackDB.getPendingItems(),
+                    BackTrackDB.getPendingClaims(),
+                    BackTrackDB.getItems({ status: allStatuses }),
+                    typeof BackTrackDB.getClaims === 'function' ? BackTrackDB.getClaims() : BackTrackDB.getPendingClaims(),
+                    typeof BackTrackDB.getAdmins === 'function' ? BackTrackDB.getAdmins() : Promise.resolve([]),
+                    typeof BackTrackDB.getAdminMessages === 'function' ? BackTrackDB.getAdminMessages(100) : Promise.resolve([])
+                ]);
+
+                state.pendingItems = Array.isArray(pendingItems) ? pendingItems : [];
+                state.pendingClaims = Array.isArray(pendingClaims) ? pendingClaims : [];
+                state.allItems = Array.isArray(allItems) ? allItems : [];
+                state.allClaims = Array.isArray(allClaims) ? allClaims : [];
+                state.admins = Array.isArray(admins) ? admins : [];
+                state.sentMessages = Array.isArray(messages) ? messages : [];
+                state.bounties = state.allItems.filter((item) => item.status === 'bounty');
+                state.mapItems = toMapItems(state.allItems.filter((item) => ['pending', 'found', 'claimed', 'bounty'].includes(String(item.status || ''))));
+                state.users = buildUsers(state.allItems, state.allClaims, state.admins);
+                state.activityData = buildActivityData(state.allItems, state.allClaims, state.sentMessages);
+
+                return true;
+            }
+
+            async function refreshDashboard() {
+                const ok = await loadAdminData();
+                if (!ok) return;
+
+                const summary = summarize();
+                renderDashboardStats(summary);
+                renderPendingItems();
+                renderPendingClaims();
+                renderBounties();
+                renderMapItems();
+                renderUsersTable();
+                renderActivity();
+                renderDashRecent();
+                renderSentMessages();
+
+                drawDashboardSparklines();
+                drawDashTrend();
+                renderAnalyticsCharts();
+            }
+
+            // ==========================================
+            // ACTIONS
+            // ==========================================
+            async function approveItem(id) {
+                const statusEl = document.getElementById(`item-status-${id}`);
+                if (statusEl) statusEl.textContent = 'Approving...';
+                const updated = await BackTrackDB.setItemStatus(id, 'found');
+                if (!updated) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Failed.';
+                        statusEl.className = 'card-status error';
+                    }
+                    return;
+                }
+                await refreshDashboard();
+            }
+
+            async function rejectItem(id) {
+                if (!confirm('Remove this submission?')) return;
+                const statusEl = document.getElementById(`item-status-${id}`);
+                if (statusEl) statusEl.textContent = 'Removing...';
+                const ok = await BackTrackDB.deleteItem(id);
+                if (!ok) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Failed.';
+                        statusEl.className = 'card-status error';
+                    }
+                    return;
+                }
+                await refreshDashboard();
+            }
+
+            async function approveClaim(claimId, itemId) {
+                const statusEl = document.getElementById(`claim-status-${claimId}`);
+                if (statusEl) statusEl.textContent = 'Approving...';
+                const claim = await BackTrackDB.updateClaimStatus(claimId, 'approved');
+                if (!claim) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Failed.';
+                        statusEl.className = 'card-status error';
+                    }
+                    return;
+                }
+                if (itemId) await BackTrackDB.setItemStatus(itemId, 'claimed');
+                await refreshDashboard();
+            }
+
+            async function rejectClaim(claimId) {
+                if (!confirm('Reject this claim?')) return;
+                const statusEl = document.getElementById(`claim-status-${claimId}`);
+                if (statusEl) statusEl.textContent = 'Rejecting...';
+                const claim = await BackTrackDB.updateClaimStatus(claimId, 'rejected');
+                if (!claim) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Failed.';
+                        statusEl.className = 'card-status error';
+                    }
+                    return;
+                }
+                await refreshDashboard();
+            }
+
+            async function removeBounty(id) {
+                if (!confirm('Remove this bounty?')) return;
+                const statusEl = document.getElementById(`bounty-status-${id}`);
+                if (statusEl) statusEl.textContent = 'Removing...';
+                const ok = await BackTrackDB.deleteItem(id);
+                if (!ok) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Failed.';
+                        statusEl.className = 'card-status error';
+                    }
+                    return;
+                }
+                await refreshDashboard();
+            }
+
+            async function removeMapItem(id) {
+                if (!confirm('Remove this map item?')) return;
+                const statusEl = document.getElementById(`mapitem-status-${id}`);
+                if (statusEl) statusEl.textContent = 'Removing...';
+                const ok = await BackTrackDB.deleteItem(id);
+                if (!ok) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Failed.';
+                        statusEl.className = 'card-status error';
+                    }
+                    return;
+                }
+                await refreshDashboard();
+            }
+
+            window.approveItem = approveItem;
+            window.rejectItem = rejectItem;
+            window.approveClaim = approveClaim;
+            window.rejectClaim = rejectClaim;
+            window.removeBounty = removeBounty;
+            window.removeMapItem = removeMapItem;
+
+            // ==========================================
+            // MAP + ACTIVITY FILTERS
+            // ==========================================
+            function filterMapItems(filter, button) {
+                state.currentMapFilter = filter === 'all' ? 'all' : Number(filter);
+                document.querySelectorAll('#panel-map .filter-btn').forEach((btn) => btn.classList.remove('active'));
+                if (button) button.classList.add('active');
+                renderMapItems();
+            }
+
+            function filterActivity(type, button) {
+                state.currentActivityFilter = type;
+                document.querySelectorAll('#panel-activity .filter-btn').forEach((btn) => btn.classList.remove('active'));
+                if (button) button.classList.add('active');
+                renderActivity();
+            }
+
+            window.filterMapItems = filterMapItems;
+            window.filterActivity = filterActivity;
+
+            // ==========================================
+            // MESSAGES
+            // ==========================================
             const templates = {
                 new_items: {
                     subject: 'New Items Found Today!',
-                    body: 'Hello! New lost items have been turned in today. Please visit the BackTrack website or the Lost & Found office to check if any of them belong to you. Browse items at backtrack.app/browse'
+                    body: 'Hello! New lost items have been turned in today. Please check BackTrack for details.'
                 },
                 claim_reminder: {
                     subject: 'Reminder: Check Your Pending Claims',
-                    body: 'This is a friendly reminder to check on your pending claims. If you have submitted a claim, please visit the front office to verify and pick up your item. Unclaimed items will be donated after 30 days.'
+                    body: 'This is a reminder to verify your pending claims with the front office.'
                 },
                 office_hours: {
                     subject: 'Lost & Found Office Hours Update',
-                    body: 'The Lost & Found office is open:\n• Monday–Friday: 7:30 AM – 3:30 PM\n• Located in the Main Office, Room 100\n\nPlease bring your student ID when claiming items.'
+                    body: 'Office hours:\n- Monday-Friday: 7:30 AM - 3:30 PM\n- Main Office'
                 },
                 weekly_digest: {
                     subject: 'Weekly Lost & Found Digest',
-                    body: 'Here is your weekly summary:\n• New items this week: 23\n• Items claimed: 15\n• Recovery rate: 68%\n\nMost common locations: Cafeteria, Gymnasium, Media Center. Remember to label your belongings!'
+                    body: 'Weekly summary:\n- New items\n- Claims approved\n- Recovery rate'
                 }
             };
-            const t = templates[type];
-            if (t) {
-                document.getElementById('msgSubject').value = t.subject;
-                document.getElementById('msgBody').value = t.body;
-            }
-        }
 
-        function sendMessage() {
-            const recipient = document.getElementById('msgRecipient').value;
-            const subject = document.getElementById('msgSubject').value.trim();
-            const body = document.getElementById('msgBody').value.trim();
-            const email = document.getElementById('msgEmail')?.value.trim();
-
-            if (!subject || !body) {
-                alert('Please fill in subject and message.');
-                return;
-            }
-            if (recipient === 'individual' && !email) {
-                alert('Please enter the student email.');
-                return;
-            }
-
-            const recipientLabels = {
-                all: 'All Students',
-                denmark: 'Denmark High School',
-                alliance: 'Alliance Academy',
-                south: 'South Forsyth',
-                individual: email
-            };
-
-            const msg = {
-                recipient: recipientLabels[recipient],
-                subject,
-                body,
-                time: new Date().toLocaleString()
-            };
-            sentMessages.unshift(msg);
-            renderSentMessages();
-
-            // Clear form
-            document.getElementById('msgSubject').value = '';
-            document.getElementById('msgBody').value = '';
-            document.getElementById('msgEmail').value = '';
-
-            // Add to activity log
-            activityData.unshift({
-                type: 'message',
-                icon: '💬',
-                desc: `Message sent to <strong>${msg.recipient}</strong>: "${msg.subject}"`,
-                time: 'Just now'
+            document.getElementById('msgRecipient')?.addEventListener('change', function () {
+                const emailGroup = document.getElementById('individualEmailGroup');
+                if (emailGroup) emailGroup.style.display = this.value === 'individual' ? 'block' : 'none';
             });
-            renderActivity('all');
-        }
 
-        function renderSentMessages() {
-            const list = document.getElementById('sentMessagesList');
-            document.getElementById('sentMsgCount').textContent = sentMessages.length;
-            if (sentMessages.length === 0) {
-                list.innerHTML = '<div class="empty-state">No messages sent yet</div>';
-                return;
+            function useTemplate(type) {
+                const template = templates[type];
+                if (!template) return;
+                const subjectEl = document.getElementById('msgSubject');
+                const bodyEl = document.getElementById('msgBody');
+                if (subjectEl) subjectEl.value = template.subject;
+                if (bodyEl) bodyEl.value = template.body;
             }
-            list.innerHTML = sentMessages.map(m => `
-                <div class="sent-msg-card">
-                    <div class="sent-msg-header">
-                        <div class="sent-msg-subject">${m.subject}</div>
-                        <div class="sent-msg-time">${m.time}</div>
-                    </div>
-                    <div class="sent-msg-recipient">To: ${m.recipient}</div>
-                    <div class="sent-msg-body">${m.body.replace(/\n/g, '<br>')}</div>
-                </div>
-            `).join('');
-        }
 
-        // ==========================================
-        // USERS TABLE
-        // ==========================================
-        const demoUsers = [
-            { name: 'Sarah Chen', email: 'schen@denmark.edu', school: 'Denmark HS', items: 8, claims: 3, joined: 'Jan 2025', role: 'admin' },
-            { name: 'Marcus Johnson', email: 'mjohnson@denmark.edu', school: 'Denmark HS', items: 5, claims: 7, joined: 'Sep 2024', role: 'user' },
-            { name: 'Priya Patel', email: 'ppatel@alliance.edu', school: 'Alliance Academy', items: 12, claims: 2, joined: 'Oct 2024', role: 'user' },
-            { name: 'Jordan Williams', email: 'jwilliams@south.edu', school: 'South Forsyth', items: 3, claims: 1, joined: 'Nov 2024', role: 'user' },
-            { name: 'Emily Rodriguez', email: 'erodriguez@denmark.edu', school: 'Denmark HS', items: 6, claims: 4, joined: 'Aug 2024', role: 'admin' },
-            { name: 'Tyler Kim', email: 'tkim@alliance.edu', school: 'Alliance Academy', items: 2, claims: 5, joined: 'Dec 2024', role: 'user' },
-            { name: 'Aisha Thompson', email: 'athompson@denmark.edu', school: 'Denmark HS', items: 9, claims: 6, joined: 'Sep 2024', role: 'user' },
-            { name: 'David Lee', email: 'dlee@south.edu', school: 'South Forsyth', items: 4, claims: 2, joined: 'Jan 2025', role: 'user' },
-            { name: 'Sofia Martinez', email: 'smartinez@denmark.edu', school: 'Denmark HS', items: 7, claims: 3, joined: 'Oct 2024', role: 'user' },
-            { name: 'Ryan O\'Brien', email: 'robrien@alliance.edu', school: 'Alliance Academy', items: 1, claims: 8, joined: 'Nov 2024', role: 'user' }
-        ];
+            async function sendMessage() {
+                const recipientEl = document.getElementById('msgRecipient');
+                const subjectEl = document.getElementById('msgSubject');
+                const bodyEl = document.getElementById('msgBody');
+                const emailEl = document.getElementById('msgEmail');
 
-        function renderUsersTable() {
-            const tbody = document.getElementById('usersTableBody');
-            if (!tbody) return;
-            tbody.innerHTML = demoUsers.map(u => `
-                <tr>
-                    <td><strong>${u.name}</strong></td>
-                    <td style="color:#888">${u.email}</td>
-                    <td>${u.school}</td>
-                    <td>${u.items}</td>
-                    <td>${u.claims}</td>
-                    <td style="color:#888">${u.joined}</td>
-                    <td><span class="role-badge ${u.role}">${u.role}</span></td>
-                </tr>
-            `).join('');
-        }
-        renderUsersTable();
+                const recipientType = recipientEl ? recipientEl.value : 'all';
+                const subject = subjectEl ? subjectEl.value.trim() : '';
+                const body = bodyEl ? bodyEl.value.trim() : '';
+                const email = emailEl ? emailEl.value.trim() : '';
 
-        // ==========================================
-        // ACTIVITY LOG
-        // ==========================================
-        const activityData = [
-            { type: 'approval', icon: '✅', desc: '<strong>Admin</strong> approved submission <strong>Blue Nike Backpack</strong>', time: '5 min ago' },
-            { type: 'claim', icon: '🔑', desc: '<strong>Marcus Johnson</strong> claimed <strong>MacBook Charger</strong> in Cafeteria', time: '18 min ago' },
-            { type: 'approval', icon: '✅', desc: '<strong>Admin</strong> approved submission <strong>Water Bottle — Green Hydroflask</strong>', time: '35 min ago' },
-            { type: 'message', icon: '💬', desc: 'Announcement sent to <strong>All Students</strong>: "New items found today"', time: '1 hour ago' },
-            { type: 'system', icon: '⚙️', desc: 'System auto-archived <strong>3 items</strong> older than 30 days', time: '2 hours ago' },
-            { type: 'claim', icon: '🔑', desc: '<strong>Priya Patel</strong> submitted claim for <strong>Calculator TI-84</strong>', time: '3 hours ago' },
-            { type: 'approval', icon: '✅', desc: '<strong>Admin</strong> rejected submission due to insufficient proof', time: '4 hours ago' },
-            { type: 'claim', icon: '🔑', desc: '<strong>Sarah Chen</strong> verified and picked up <strong>AirPods Pro</strong>', time: '5 hours ago' },
-            { type: 'system', icon: '⚙️', desc: 'Daily backup completed. <strong>156 items</strong> in database', time: '6 hours ago' },
-            { type: 'message', icon: '💬', desc: 'Weekly digest sent to <strong>Denmark HS</strong> students', time: 'Yesterday' }
-        ];
+                if (!subject || !body) {
+                    alert('Please fill in subject and message.');
+                    return;
+                }
+                if (recipientType === 'individual' && !email) {
+                    alert('Please enter the student email.');
+                    return;
+                }
 
-        function renderActivity(filter) {
-            const feed = document.getElementById('activityFeed');
-            if (!feed) return;
-            const filtered = filter === 'all' ? activityData : activityData.filter(a => a.type === filter);
-            if (filtered.length === 0) {
-                feed.innerHTML = '<div class="empty-state">No activity matching this filter</div>';
-                return;
+                const recipientLabelMap = {
+                    all: 'All Students',
+                    denmark: 'Denmark High School',
+                    alliance: 'Alliance Academy',
+                    south: 'South Forsyth',
+                    individual: email
+                };
+
+                const payload = {
+                    sender_id: state.user?.id || null,
+                    sender_email: state.user?.email || null,
+                    recipient_type: recipientType,
+                    recipient_value: recipientType === 'individual' ? email : recipientType,
+                    subject,
+                    body
+                };
+
+                let saved = null;
+                if (typeof BackTrackDB.addAdminMessage === 'function') {
+                    saved = await BackTrackDB.addAdminMessage(payload);
+                }
+
+                if (saved) {
+                    await refreshDashboard();
+                    showStatus('Message sent.');
+                    setTimeout(() => showStatus(''), 1600);
+                } else {
+                    state.sentMessages.unshift({
+                        ...payload,
+                        recipient_label: recipientLabelMap[recipientType] || recipientType,
+                        created_at: new Date().toISOString(),
+                        localOnly: true
+                    });
+                    renderSentMessages();
+                    showStatus('Message saved locally only. Run SQL migration for admin_messages table.');
+                }
+
+                if (subjectEl) subjectEl.value = '';
+                if (bodyEl) bodyEl.value = '';
+                if (emailEl) emailEl.value = '';
             }
-            feed.innerHTML = filtered.map(a => `
-                <div class="activity-item" data-type="${a.type}">
-                    <div class="activity-icon ${a.type}">${a.icon}</div>
-                    <div class="activity-content">
-                        <div class="activity-desc">${a.desc}</div>
-                        <div class="activity-meta">${a.time}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        renderActivity('all');
 
-        function filterActivity(type) {
-            // Update buttons
-            document.querySelectorAll('.activity-filters .filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            renderActivity(type);
-        }
+            window.useTemplate = useTemplate;
+            window.sendMessage = sendMessage;
 
-        // ==========================================
-        // DASHBOARD & ANALYTICS CANVAS CHARTS
-        // ==========================================
+            // ==========================================
+            // CHART DATA HELPERS
+            // ==========================================
+            function buildDailySeries(records, days, predicate, dateField = 'created_at') {
+                const result = new Array(days).fill(0);
+                const start = daysAgo(days - 1);
+                const startTime = start.getTime();
+                const dayMs = 24 * 60 * 60 * 1000;
 
-        function drawSparkline(canvasId, data, color) {
-            const c = document.getElementById(canvasId);
-            if (!c) return;
-            const ctx = c.getContext('2d');
-            const w = c.width, h = c.height;
-            ctx.clearRect(0, 0, w, h);
-            const max = Math.max(...data);
-            const min = Math.min(...data);
-            const range = max - min || 1;
-            const step = w / (data.length - 1);
-            ctx.beginPath();
-            data.forEach((v, i) => {
-                const x = i * step;
-                const y = h - ((v - min) / range) * (h - 4) - 2;
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 1.5;
-            ctx.lineJoin = 'round';
-            ctx.stroke();
-        }
+                records.forEach((record) => {
+                    if (predicate && !predicate(record)) return;
+                    const d = asDate(record[dateField]);
+                    if (!d) return;
+                    const dayTime = startOfDay(d).getTime();
+                    const index = Math.floor((dayTime - startTime) / dayMs);
+                    if (index >= 0 && index < days) result[index] += 1;
+                });
 
-        function drawDashTrend() {
-            const c = document.getElementById('dashTrendChart');
-            if (!c) return;
-            const ctx = c.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const rect = c.getBoundingClientRect();
-            c.width = rect.width * dpr;
-            c.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
-            const w = rect.width, h = rect.height;
-            const pad = { t: 10, r: 10, b: 24, l: 32 };
-            const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
+                return result;
+            }
 
-            const found = [5, 8, 6, 12, 9, 14, 11, 18, 15, 7, 10, 13, 16, 8, 20, 17, 12, 9, 15, 22, 18, 11, 14, 19, 25, 21, 16, 13, 23, 19];
-            const claimed = [3, 5, 4, 8, 6, 10, 7, 12, 10, 5, 7, 9, 11, 5, 14, 12, 8, 6, 10, 15, 12, 7, 9, 13, 17, 14, 11, 9, 16, 13];
-            const days = found.length;
-            const max = Math.max(...found, ...claimed);
+            function buildBinnedSeries(records, days, bins, predicate, dateField = 'created_at') {
+                const safeBins = Math.max(1, bins);
+                const values = new Array(safeBins).fill(0);
+                const labels = new Array(safeBins).fill('');
+                const start = daysAgo(days - 1);
+                const end = new Date();
+                const totalMs = end.getTime() - start.getTime();
+                const binMs = totalMs / safeBins;
 
-            // Grid lines
-            ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= 4; i++) {
-                const y = pad.t + (ch / 4) * i;
+                records.forEach((record) => {
+                    if (predicate && !predicate(record)) return;
+                    const d = asDate(record[dateField]);
+                    if (!d || d < start || d > end) return;
+                    const idx = Math.min(safeBins - 1, Math.floor((d.getTime() - start.getTime()) / Math.max(binMs, 1)));
+                    values[idx] += 1;
+                });
+
+                for (let i = 0; i < safeBins; i += 1) {
+                    const labelDate = new Date(start.getTime() + ((i + 1) * binMs));
+                    labels[i] = `${labelDate.getMonth() + 1}/${labelDate.getDate()}`;
+                }
+
+                return { labels, values };
+            }
+
+            function setupCanvas(id, fallbackHeight) {
+                const canvas = document.getElementById(id);
+                if (!canvas) return null;
+                const rect = canvas.getBoundingClientRect();
+                const width = Math.max(280, rect.width || canvas.width || 280);
+                const height = fallbackHeight || rect.height || canvas.height || 180;
+                const dpr = window.devicePixelRatio || 1;
+
+                canvas.width = Math.round(width * dpr);
+                canvas.height = Math.round(height * dpr);
+
+                const ctx = canvas.getContext('2d');
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, width, height);
+
+                return { canvas, ctx, width, height };
+            }
+
+            function drawSparkline(canvasId, data, color) {
+                const setup = setupCanvas(canvasId, 28);
+                if (!setup) return;
+                const { ctx, width, height } = setup;
+
+                if (!data.length) return;
+                const max = Math.max(...data);
+                const min = Math.min(...data);
+                const range = max - min || 1;
+                const step = width / Math.max(1, data.length - 1);
+
                 ctx.beginPath();
-                ctx.moveTo(pad.l, y);
-                ctx.lineTo(w - pad.r, y);
-                ctx.stroke();
-                // Y-axis labels
-                ctx.fillStyle = '#444';
-                ctx.font = '10px Inter';
-                ctx.textAlign = 'right';
-                ctx.fillText(Math.round(max - (max / 4) * i), pad.l - 6, y + 3);
-            }
-
-            // X-axis labels
-            ctx.fillStyle = '#444';
-            ctx.font = '10px Inter';
-            ctx.textAlign = 'center';
-            [0, 6, 13, 20, 29].forEach(i => {
-                const x = pad.l + (i / (days - 1)) * cw;
-                ctx.fillText('D' + (i + 1), x, h - 4);
-            });
-
-            function drawLine(data, color, fillColor) {
-                const step = cw / (days - 1);
-                ctx.beginPath();
-                data.forEach((v, i) => {
-                    const x = pad.l + i * step;
-                    const y = pad.t + ch - (v / max) * ch;
-                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                data.forEach((value, index) => {
+                    const x = index * step;
+                    const y = height - ((value - min) / range) * (height - 4) - 2;
+                    if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 });
                 ctx.strokeStyle = color;
+                ctx.lineWidth = 1.6;
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+            }
+
+            function drawDashboardSparklines() {
+                const pendingSeries = buildDailySeries(state.allItems, 10, (item) => item.status === 'pending');
+                const claimsSeries = buildDailySeries(state.allClaims, 10, (claim) => claim.status === 'pending');
+                const bountySeries = buildDailySeries(state.allItems, 10, (item) => item.status === 'bounty');
+                drawSparkline('sparkPending', pendingSeries, '#f59e0b');
+                drawSparkline('sparkClaims', claimsSeries, '#818cf8');
+                drawSparkline('sparkBounties', bountySeries, '#ec4899');
+            }
+
+            function drawLineChart(canvasId, labels, data, options = {}) {
+                const setup = setupCanvas(canvasId, options.height || 220);
+                if (!setup) return;
+
+                const { ctx, width, height } = setup;
+                const pad = { t: 12, r: 12, b: 26, l: 34 };
+                const cw = width - pad.l - pad.r;
+                const ch = height - pad.t - pad.b;
+                const max = Math.max(1, ...data);
+
+                ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= 4; i += 1) {
+                    const y = pad.t + (ch / 4) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(pad.l, y);
+                    ctx.lineTo(width - pad.r, y);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#4b5563';
+                    ctx.font = '10px Inter';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(String(Math.round(max - (max / 4) * i)), pad.l - 6, y + 3);
+                }
+
+                const step = cw / Math.max(1, data.length - 1);
+                ctx.fillStyle = '#4b5563';
+                ctx.font = '10px Inter';
+                ctx.textAlign = 'center';
+                labels.forEach((label, index) => {
+                    if (index % Math.ceil(labels.length / 6) !== 0 && index !== labels.length - 1) return;
+                    ctx.fillText(label, pad.l + index * step, height - 6);
+                });
+
+                ctx.beginPath();
+                data.forEach((value, index) => {
+                    const x = pad.l + index * step;
+                    const y = pad.t + ch - (value / max) * ch;
+                    if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                });
+
+                const fill = ctx.createLinearGradient(0, pad.t, 0, pad.t + ch);
+                fill.addColorStop(0, options.fillTop || 'rgba(59,130,246,0.18)');
+                fill.addColorStop(1, 'rgba(0,0,0,0)');
+
+                ctx.lineTo(pad.l + (data.length - 1) * step, pad.t + ch);
+                ctx.lineTo(pad.l, pad.t + ch);
+                ctx.closePath();
+                ctx.fillStyle = fill;
+                ctx.fill();
+
+                ctx.beginPath();
+                data.forEach((value, index) => {
+                    const x = pad.l + index * step;
+                    const y = pad.t + ch - (value / max) * ch;
+                    if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                });
+                ctx.strokeStyle = options.stroke || '#3b82f6';
                 ctx.lineWidth = 2;
                 ctx.lineJoin = 'round';
                 ctx.stroke();
-                // Fill
-                const lastX = pad.l + (days - 1) * step;
-                ctx.lineTo(lastX, pad.t + ch);
-                ctx.lineTo(pad.l, pad.t + ch);
-                ctx.closePath();
-                const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + ch);
-                grad.addColorStop(0, fillColor);
-                grad.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = grad;
-                ctx.fill();
             }
 
-            drawLine(found, '#3b82f6', 'rgba(59,130,246,0.12)');
-            drawLine(claimed, '#22c55e', 'rgba(34,197,94,0.08)');
-        }
+            function drawDashTrend() {
+                const days = 30;
+                const found = buildDailySeries(state.allItems, days, (item) => item.status === 'found');
+                const claimed = buildDailySeries(state.allItems, days, (item) => item.status === 'claimed');
+                const labels = new Array(days).fill('').map((_, idx) => {
+                    const d = daysAgo(days - idx - 1);
+                    return `${d.getMonth() + 1}/${d.getDate()}`;
+                });
 
-        function drawAnalyticsLine() {
-            const c = document.getElementById('analyticsLineChart');
-            if (!c) return;
-            const ctx = c.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const rect = c.getBoundingClientRect();
-            c.width = rect.width * dpr;
-            c.height = 220 * dpr;
-            ctx.scale(dpr, dpr);
-            const w = rect.width, h = 220;
-            const pad = { t: 10, r: 10, b: 28, l: 36 };
-            const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
+                const setup = setupCanvas('dashTrendChart', 200);
+                if (!setup) return;
+                const { ctx, width, height } = setup;
+                const pad = { t: 10, r: 12, b: 24, l: 32 };
+                const cw = width - pad.l - pad.r;
+                const ch = height - pad.t - pad.b;
+                const max = Math.max(1, ...found, ...claimed);
+                const step = cw / Math.max(1, days - 1);
 
-            const labels = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12'];
-            const data = [12, 19, 15, 28, 22, 35, 29, 38, 32, 45, 41, 48];
-            const max = Math.max(...data);
+                ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= 4; i += 1) {
+                    const y = pad.t + (ch / 4) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(pad.l, y);
+                    ctx.lineTo(width - pad.r, y);
+                    ctx.stroke();
+                    ctx.fillStyle = '#444';
+                    ctx.font = '10px Inter';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(String(Math.round(max - (max / 4) * i)), pad.l - 6, y + 3);
+                }
 
-            // Grid
-            ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= 4; i++) {
-                const y = pad.t + (ch / 4) * i;
-                ctx.beginPath();
-                ctx.moveTo(pad.l, y);
-                ctx.lineTo(w - pad.r, y);
-                ctx.stroke();
+                function drawSeries(data, stroke, fillTop) {
+                    ctx.beginPath();
+                    data.forEach((value, index) => {
+                        const x = pad.l + index * step;
+                        const y = pad.t + ch - (value / max) * ch;
+                        if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                    });
+                    ctx.strokeStyle = stroke;
+                    ctx.lineWidth = 2;
+                    ctx.lineJoin = 'round';
+                    ctx.stroke();
+
+                    ctx.lineTo(pad.l + (days - 1) * step, pad.t + ch);
+                    ctx.lineTo(pad.l, pad.t + ch);
+                    ctx.closePath();
+                    const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + ch);
+                    grad.addColorStop(0, fillTop);
+                    grad.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.fillStyle = grad;
+                    ctx.fill();
+                }
+
+                drawSeries(found, '#3b82f6', 'rgba(59,130,246,0.12)');
+                drawSeries(claimed, '#22c55e', 'rgba(34,197,94,0.08)');
+
                 ctx.fillStyle = '#444';
                 ctx.font = '10px Inter';
-                ctx.textAlign = 'right';
-                ctx.fillText(Math.round(max - (max / 4) * i), pad.l - 6, y + 3);
+                ctx.textAlign = 'center';
+                [0, 7, 14, 21, 29].forEach((idx) => {
+                    const x = pad.l + idx * step;
+                    ctx.fillText(labels[idx], x, height - 4);
+                });
             }
 
-            // X labels
-            ctx.fillStyle = '#444';
-            ctx.font = '10px Inter';
-            ctx.textAlign = 'center';
-            const step = cw / (labels.length - 1);
-            labels.forEach((l, i) => {
-                ctx.fillText(l, pad.l + i * step, h - 6);
-            });
-
-            // Area fill
-            ctx.beginPath();
-            data.forEach((v, i) => {
-                const x = pad.l + i * step;
-                const y = pad.t + ch - (v / max) * ch;
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
-            ctx.lineTo(pad.l + (data.length - 1) * step, pad.t + ch);
-            ctx.lineTo(pad.l, pad.t + ch);
-            ctx.closePath();
-            const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + ch);
-            grad.addColorStop(0, 'rgba(59,130,246,0.18)');
-            grad.addColorStop(1, 'rgba(59,130,246,0)');
-            ctx.fillStyle = grad;
-            ctx.fill();
-
-            // Line
-            ctx.beginPath();
-            data.forEach((v, i) => {
-                const x = pad.l + i * step;
-                const y = pad.t + ch - (v / max) * ch;
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
-            ctx.strokeStyle = '#3b82f6';
-            ctx.lineWidth = 2;
-            ctx.lineJoin = 'round';
-            ctx.stroke();
-
-            // Dots
-            data.forEach((v, i) => {
-                const x = pad.l + i * step;
-                const y = pad.t + ch - (v / max) * ch;
-                ctx.beginPath();
-                ctx.arc(x, y, 3, 0, Math.PI * 2);
-                ctx.fillStyle = '#3b82f6';
-                ctx.fill();
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-            });
-        }
-
-        function drawDoughnut() {
-            const c = document.getElementById('analyticsDoughnut');
-            if (!c) return;
-            const ctx = c.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            c.width = 200 * dpr;
-            c.height = 200 * dpr;
-            ctx.scale(dpr, dpr);
-            const cx = 100, cy = 100, r = 75, thickness = 22;
-
-            const categories = [
-                { name: 'Electronics', value: 42, color: '#3b82f6' },
-                { name: 'Clothing', value: 31, color: '#8b5cf6' },
-                { name: 'Books', value: 22, color: '#f59e0b' },
-                { name: 'Water Bottles', value: 19, color: '#22c55e' },
-                { name: 'Keys', value: 17, color: '#ef4444' },
-                { name: 'ID Cards', value: 14, color: '#06b6d4' },
-                { name: 'Other', value: 11, color: '#64748b' }
-            ];
-            const total = categories.reduce((s, c) => s + c.value, 0);
-            let angle = -Math.PI / 2;
-
-            categories.forEach(cat => {
-                const sweep = (cat.value / total) * Math.PI * 2;
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, angle, angle + sweep);
-                ctx.arc(cx, cy, r - thickness, angle + sweep, angle, true);
-                ctx.closePath();
-                ctx.fillStyle = cat.color;
-                ctx.fill();
-                angle += sweep;
-                // Gap
-                angle += 0.03;
-            });
-
-            // Legend
-            const legend = document.getElementById('doughnutLegend');
-            if (legend) {
-                legend.innerHTML = categories.map(c =>
-                    `<span class="legend-item"><span class="legend-swatch" style="background:${c.color}"></span>${c.name} (${c.value})</span>`
-                ).join('');
+            function drawAnalyticsLine() {
+                const days = state.analyticsDays;
+                const metric = state.analyticsMetric;
+                const series = buildBinnedSeries(
+                    state.allItems,
+                    days,
+                    12,
+                    (item) => item.status === metric
+                );
+                drawLineChart('analyticsLineChart', series.labels, series.values, {
+                    height: 220,
+                    stroke: metric === 'claimed' ? '#22c55e' : '#3b82f6',
+                    fillTop: metric === 'claimed' ? 'rgba(34,197,94,0.15)' : 'rgba(59,130,246,0.18)'
+                });
             }
-        }
 
-        function renderLocations() {
-            const el = document.getElementById('analyticsLocations');
-            if (!el) return;
-            const locs = [
-                { name: 'Cafeteria', count: 28 },
-                { name: 'Gymnasium', count: 22 },
-                { name: 'Media Center', count: 17 },
-                { name: 'Front Lobby', count: 12 },
-                { name: 'Hallway A', count: 9 },
-                { name: 'Parking Lot', count: 7 },
-                { name: 'Field House', count: 5 }
-            ];
-            const max = locs[0].count;
-            el.innerHTML = locs.map((l, i) =>
-                `<div class="loc-row">
-                    <span class="loc-row-rank">${i + 1}</span>
-                    <span class="loc-row-name">${l.name}</span>
-                    <div class="loc-row-bar-bg"><div class="loc-row-bar" style="width:${(l.count / max * 100).toFixed(0)}%"></div></div>
-                    <span class="loc-row-val">${l.count}</span>
-                </div>`
-            ).join('');
-        }
+            function drawDoughnut() {
+                const setup = setupCanvas('analyticsDoughnut', 200);
+                if (!setup) return;
+                const { ctx, width, height } = setup;
+                const cx = width / 2;
+                const cy = height / 2;
+                const radius = Math.min(width, height) * 0.38;
+                const thickness = 24;
 
-        function drawHeatmap() {
-            const c = document.getElementById('analyticsHeatmap');
-            if (!c) return;
-            const ctx = c.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const rect = c.getBoundingClientRect();
-            c.width = rect.width * dpr;
-            c.height = 180 * dpr;
-            ctx.scale(dpr, dpr);
-            const w = rect.width, h = 180;
-            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-            const hours = ['7a', '8a', '9a', '10a', '11a', '12p', '1p', '2p', '3p'];
-            const padL = 32, padT = 16;
-            const cellW = (w - padL - 10) / hours.length;
-            const cellH = (h - padT - 10) / days.length;
-            const data = [
-                [2, 5, 3, 1, 0, 4, 2, 1, 1],
-                [1, 4, 2, 2, 1, 5, 3, 2, 1],
-                [3, 6, 4, 2, 1, 8, 6, 3, 2],
-                [2, 5, 3, 1, 1, 7, 5, 2, 1],
-                [1, 3, 2, 1, 0, 3, 2, 1, 0]
-            ];
-            const max = Math.max(...data.flat());
+                const rangeStart = daysAgo(state.analyticsDays - 1);
+                const categoriesMap = new Map();
+                state.allItems.forEach((item) => {
+                    const d = asDate(item.created_at);
+                    if (!d || d < rangeStart) return;
+                    const key = String(item.category || 'Other');
+                    categoriesMap.set(key, (categoriesMap.get(key) || 0) + 1);
+                });
 
-            // Hour headers
-            ctx.fillStyle = '#444';
-            ctx.font = '9px Inter';
-            ctx.textAlign = 'center';
-            hours.forEach((hr, j) => {
-                ctx.fillText(hr, padL + j * cellW + cellW / 2, 10);
-            });
+                let categories = Array.from(categoriesMap.entries()).map(([name, value]) => ({ name, value }));
+                categories.sort((a, b) => b.value - a.value);
+                categories = categories.slice(0, 7);
 
-            // Day labels + cells
-            days.forEach((day, i) => {
-                ctx.fillStyle = '#444';
-                ctx.font = '9px Inter';
-                ctx.textAlign = 'right';
-                ctx.fillText(day, padL - 4, padT + i * cellH + cellH / 2 + 3);
+                if (!categories.length) {
+                    categories = [{ name: 'No Data', value: 1 }];
+                }
 
-                hours.forEach((_, j) => {
-                    const val = data[i][j];
-                    const intensity = val / max;
-                    ctx.fillStyle = `rgba(59,130,246,${intensity * 0.85 + 0.05})`;
+                const palette = ['#3b82f6', '#8b5cf6', '#f59e0b', '#22c55e', '#ef4444', '#06b6d4', '#64748b'];
+                const total = categories.reduce((sum, c) => sum + c.value, 0);
+
+                let angle = -Math.PI / 2;
+                categories.forEach((cat, idx) => {
+                    const sweep = (cat.value / total) * Math.PI * 2;
+                    const color = palette[idx % palette.length];
                     ctx.beginPath();
-                    ctx.roundRect(padL + j * cellW + 1, padT + i * cellH + 1, cellW - 2, cellH - 2, 3);
+                    ctx.arc(cx, cy, radius, angle, angle + sweep);
+                    ctx.arc(cx, cy, radius - thickness, angle + sweep, angle, true);
+                    ctx.closePath();
+                    ctx.fillStyle = color;
                     ctx.fill();
+                    angle += sweep + 0.03;
+                    cat.color = color;
+                });
+
+                setText('doughnutTotal', total);
+                const legend = document.getElementById('doughnutLegend');
+                if (legend) {
+                    legend.innerHTML = categories.map((cat) =>
+                        `<span class="legend-item"><span class="legend-swatch" style="background:${cat.color}"></span>${escapeHtml(cat.name)} (${cat.value})</span>`
+                    ).join('');
+                }
+            }
+
+            function renderLocations() {
+                const el = document.getElementById('analyticsLocations');
+                if (!el) return;
+
+                const rangeStart = daysAgo(state.analyticsDays - 1);
+                const locMap = new Map();
+                state.allItems.forEach((item) => {
+                    const d = asDate(item.created_at);
+                    if (!d || d < rangeStart) return;
+                    const key = String(item.location || 'Unknown');
+                    locMap.set(key, (locMap.get(key) || 0) + 1);
+                });
+
+                const rows = Array.from(locMap.entries())
+                    .map(([name, count]) => ({ name, count }))
+                    .sort((a, b) => b.count - a.count)
+                    .slice(0, 7);
+
+                if (!rows.length) {
+                    el.innerHTML = '<div class="empty-state">No location data available.</div>';
+                    return;
+                }
+
+                const max = rows[0].count || 1;
+                el.innerHTML = rows.map((row, index) => `
+                    <div class="loc-row">
+                        <span class="loc-row-rank">${index + 1}</span>
+                        <span class="loc-row-name">${escapeHtml(row.name)}</span>
+                        <div class="loc-row-bar-bg"><div class="loc-row-bar" style="width:${((row.count / max) * 100).toFixed(0)}%"></div></div>
+                        <span class="loc-row-val">${row.count}</span>
+                    </div>
+                `).join('');
+            }
+
+            function drawHeatmap() {
+                const setup = setupCanvas('analyticsHeatmap', 180);
+                if (!setup) return;
+
+                const { ctx, width, height } = setup;
+                const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+                const hours = ['7a', '8a', '9a', '10a', '11a', '12p', '1p', '2p', '3p'];
+                const matrix = Array.from({ length: days.length }, () => new Array(hours.length).fill(0));
+
+                const rangeStart = daysAgo(state.analyticsDays - 1);
+                state.allItems.forEach((item) => {
+                    const d = asDate(item.created_at);
+                    if (!d || d < rangeStart) return;
+                    const day = d.getDay();
+                    const hour = d.getHours();
+                    if (day < 1 || day > 5) return;
+                    if (hour < 7 || hour > 15) return;
+                    matrix[day - 1][hour - 7] += 1;
+                });
+
+                const max = Math.max(1, ...matrix.flat());
+                const padL = 32;
+                const padT = 16;
+                const cellW = (width - padL - 8) / hours.length;
+                const cellH = (height - padT - 8) / days.length;
+
+                ctx.fillStyle = '#4b5563';
+                ctx.font = '9px Inter';
+                ctx.textAlign = 'center';
+                hours.forEach((hr, j) => {
+                    ctx.fillText(hr, padL + j * cellW + cellW / 2, 10);
+                });
+
+                days.forEach((dayLabel, i) => {
+                    ctx.fillStyle = '#4b5563';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(dayLabel, padL - 4, padT + i * cellH + cellH / 2 + 3);
+
+                    hours.forEach((_, j) => {
+                        const v = matrix[i][j];
+                        const alpha = (v / max) * 0.85 + 0.06;
+                        ctx.fillStyle = `rgba(59,130,246,${alpha.toFixed(3)})`;
+                        const x = padL + j * cellW + 1;
+                        const y = padT + i * cellH + 1;
+                        const w = cellW - 2;
+                        const h = cellH - 2;
+                        if (ctx.roundRect) {
+                            ctx.beginPath();
+                            ctx.roundRect(x, y, w, h, 3);
+                            ctx.fill();
+                        } else {
+                            ctx.fillRect(x, y, w, h);
+                        }
+                    });
+                });
+            }
+
+            function renderAnalyticsCharts() {
+                drawAnalyticsLine();
+                drawDoughnut();
+                renderLocations();
+                drawHeatmap();
+            }
+
+            // ==========================================
+            // RANGE/TABS
+            // ==========================================
+            analyticsRangeEl?.addEventListener('change', () => {
+                state.analyticsDays = Number(analyticsRangeEl.value) || 30;
+                const summary = summarize();
+                renderDashboardStats(summary);
+                renderAnalyticsCharts();
+            });
+
+            document.querySelectorAll('.chart-tab[data-metric]').forEach((tab) => {
+                tab.addEventListener('click', () => {
+                    state.analyticsMetric = tab.dataset.metric || 'found';
+                    document.querySelectorAll('.chart-tab[data-metric]').forEach((btn) => btn.classList.remove('active'));
+                    tab.classList.add('active');
+                    drawAnalyticsLine();
                 });
             });
-        }
 
-        function initDashboard() {
-            // Set date
-            const dateEl = document.getElementById('dashDate');
-            if (dateEl) {
-                const now = new Date();
-                dateEl.textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            // ==========================================
+            // INIT
+            // ==========================================
+            async function init() {
+                const dateEl = document.getElementById('dashDate');
+                if (dateEl) {
+                    const now = new Date();
+                    dateEl.textContent = now.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                }
+
+                await refreshDashboard();
             }
 
-            // Sparklines
-            drawSparkline('sparkPending', [3, 5, 4, 7, 6, 8, 5, 3, 4, 6], '#f59e0b');
-            drawSparkline('sparkClaims', [2, 4, 3, 5, 4, 6, 3, 5, 4, 3], '#818cf8');
-            drawSparkline('sparkBounties', [1, 3, 2, 4, 5, 3, 4, 6, 5, 4], '#ec4899');
-
-            // Dashboard trend chart
-            drawDashTrend();
-
-            // Recent activity
-            const recentList = document.getElementById('dashRecentList');
-            if (recentList) {
-                const items = [
-                    { text: 'AirPods Pro submitted by student', color: '#f59e0b', time: '2m ago' },
-                    { text: 'Water bottle claim approved', color: '#4ade80', time: '15m ago' },
-                    { text: 'New bounty posted: Blue backpack', color: '#ec4899', time: '1h ago' },
-                    { text: 'Weekly digest sent to all students', color: '#60a5fa', time: '3h ago' },
-                    { text: 'iPhone charger marked as recovered', color: '#4ade80', time: '5h ago' }
-                ];
-                recentList.innerHTML = items.map(i =>
-                    `<div class="dash-recent-item">
-                        <span class="dash-recent-dot" style="background:${i.color}"></span>
-                        <span class="dash-recent-text">${i.text}</span>
-                        <span class="dash-recent-time">${i.time}</span>
-                    </div>`
-                ).join('');
-            }
-
-            // Analytics charts (drawn when panel becomes visible, but init data now)
-            drawAnalyticsLine();
-            drawDoughnut();
-            renderLocations();
-            drawHeatmap();
-        }
-
-        // Redraw charts on panel switch (canvas needs visible dimensions)
-        const origSwitchPanel = window.switchPanel || switchPanel;
-        const _switchPanelOrig = switchPanel;
-        function switchPanelWithCharts(name) {
-            _switchPanelOrig(name);
-            if (name === 'analytics') {
-                setTimeout(() => {
-                    drawAnalyticsLine();
-                    drawDoughnut();
-                    renderLocations();
-                    drawHeatmap();
-                }, 50);
-            }
-            if (name === 'dashboard') {
-                setTimeout(() => {
+            window.addEventListener('resize', () => {
+                const active = document.querySelector('.admin-panel.active')?.id || '';
+                if (active === 'panel-analytics') {
+                    renderAnalyticsCharts();
+                }
+                if (active === 'panel-dashboard') {
                     drawDashTrend();
-                }, 50);
-            }
-        }
+                    drawDashboardSparklines();
+                }
+            });
 
-        // ==========================================
-        // INIT
-        // ==========================================
-        loadAdminData();
-        loadMapItems();
-        initDashboard();
-        window.switchPanel = switchPanelWithCharts;
+            init();
+        })();
     </script>
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>

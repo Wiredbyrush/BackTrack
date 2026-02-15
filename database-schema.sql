@@ -74,6 +74,148 @@ INSERT INTO locations (name, building) VALUES
     ('Auditorium', 'Performing Arts Center');
 
 -- ============================================
+-- MAP TABLES (Denmark HS layout + alias mapping)
+-- ============================================
+CREATE TABLE map_rooms (
+    id BIGSERIAL PRIMARY KEY,
+    school VARCHAR(120) NOT NULL DEFAULT 'Denmark High School',
+    floor SMALLINT NOT NULL CHECK (floor IN (0, 1, 2)),
+    room_id VARCHAR(20) NOT NULL,
+    name VARCHAR(120) NOT NULL,
+    room_type VARCHAR(60) NOT NULL,
+    x INTEGER NOT NULL,
+    y INTEGER NOT NULL,
+    w INTEGER NOT NULL,
+    h INTEGER NOT NULL,
+    clickable BOOLEAN DEFAULT false,
+    sort_order INTEGER DEFAULT 0,
+    UNIQUE (school, floor, room_id)
+);
+
+CREATE TABLE map_location_aliases (
+    id BIGSERIAL PRIMARY KEY,
+    school VARCHAR(120) NOT NULL DEFAULT 'Denmark High School',
+    alias VARCHAR(120) NOT NULL,
+    room_id VARCHAR(20) NOT NULL,
+    UNIQUE (school, alias)
+);
+
+-- Alias seed data used by map.html location parser.
+INSERT INTO map_location_aliases (school, alias, room_id) VALUES
+    ('Denmark High School', 'main office', 'ADM'),
+    ('Denmark High School', 'attendance', 'ATT'),
+    ('Denmark High School', 'counseling', 'CNS'),
+    ('Denmark High School', 'clinic', 'CLN'),
+    ('Denmark High School', 'media center', 'LIB'),
+    ('Denmark High School', 'media commons', 'MCF'),
+    ('Denmark High School', 'library', 'LIB'),
+    ('Denmark High School', 'cafeteria', 'CAF'),
+    ('Denmark High School', 'commons', 'COM'),
+    ('Denmark High School', 'auditorium', 'AUD'),
+    ('Denmark High School', 'band room', 'BND'),
+    ('Denmark High School', 'chorus room', 'CHR'),
+    ('Denmark High School', 'engineering lab', 'ENG'),
+    ('Denmark High School', 'broadcast studio', 'BRD'),
+    ('Denmark High School', 'main gym', 'GYM'),
+    ('Denmark High School', 'aux gym', 'AUX'),
+    ('Denmark High School', 'weight room', 'WT'),
+    ('Denmark High School', 'locker room a', 'LK1'),
+    ('Denmark High School', 'locker room b', 'LK2'),
+    ('Denmark High School', 'biology lab', 'BIO'),
+    ('Denmark High School', 'chemistry lab', 'CHEM'),
+    ('Denmark High School', 'physics lab', 'PHYS'),
+    ('Denmark High School', 'computer lab a', 'CL1'),
+    ('Denmark High School', 'computer lab b', 'CL2'),
+    ('Denmark High School', 'mac lab', 'CL3'),
+    ('Denmark High School', 'teacher lounge', 'TLC'),
+    ('Denmark High School', 'collaboration hub', 'COL'),
+    ('Denmark High School', 'stadium', 'STADIUM'),
+    ('Denmark High School', 'tennis courts', 'TENNIS'),
+    ('Denmark High School', 'baseball field', 'BASE'),
+    ('Denmark High School', 'softball field', 'SOFT'),
+    ('Denmark High School', 'field house', 'FIELD'),
+    ('Denmark High School', 'the barn', 'BARN')
+ON CONFLICT (school, alias) DO NOTHING;
+
+-- Denmark map room seed data.
+INSERT INTO map_rooms (school, floor, room_id, name, room_type, x, y, w, h, clickable, sort_order) VALUES
+    ('Denmark High School', 0, 'BUS', 'Bus Loop', 'Road', 30, 60, 220, 90, false, 1),
+    ('Denmark High School', 0, 'VISPK', 'Visitor Parking', 'Parking', 30, 160, 220, 120, false, 2),
+    ('Denmark High School', 0, 'STUPK', 'Student Parking', 'Parking', 30, 285, 220, 210, false, 3),
+    ('Denmark High School', 0, 'MAIN', 'Main Building', 'Building', 275, 155, 320, 360, true, 4),
+    ('Denmark High School', 0, 'ENTRY', 'Entry Plaza', 'Facility', 360, 120, 150, 34, false, 5),
+    ('Denmark High School', 0, 'ROAD1', 'Mullinax Dr Entrance', 'Road', 250, 120, 640, 24, false, 6),
+    ('Denmark High School', 0, 'ROAD2', 'Campus Spine', 'Road', 565, 144, 24, 390, false, 7),
+    ('Denmark High School', 0, 'STADIUM', 'Stadium', 'Athletic', 620, 30, 250, 160, false, 8),
+    ('Denmark High School', 0, 'TRACK', 'Track', 'Athletic', 875, 50, 95, 130, false, 9),
+    ('Denmark High School', 0, 'TENNIS', 'Tennis Courts', 'Athletic', 620, 205, 250, 108, false, 10),
+    ('Denmark High School', 0, 'BASE', 'Baseball Field', 'Athletic', 620, 330, 190, 170, false, 11),
+    ('Denmark High School', 0, 'SOFT', 'Softball Field', 'Athletic', 815, 330, 155, 150, false, 12),
+    ('Denmark High School', 0, 'BARN', 'The Barn', 'Facility', 300, 530, 130, 90, false, 13),
+    ('Denmark High School', 0, 'FIELD', 'Field House', 'Athletic', 830, 510, 140, 96, false, 14),
+    ('Denmark High School', 1, 'ADM', 'Main Office', 'Administration', 60, 52, 130, 96, false, 1),
+    ('Denmark High School', 1, 'ATT', 'Attendance', 'Administration', 190, 52, 120, 96, false, 2),
+    ('Denmark High School', 1, 'CNS', 'Counseling', 'Administration', 310, 52, 130, 96, false, 3),
+    ('Denmark High School', 1, 'CLN', 'Clinic', 'Medical', 440, 52, 130, 96, false, 4),
+    ('Denmark High School', 1, 'STA1', 'Stairwell West', 'Facilities', 570, 52, 78, 96, false, 5),
+    ('Denmark High School', 1, 'MCF', 'Media Commons', 'Academic', 648, 52, 262, 96, false, 6),
+    ('Denmark High School', 1, 'H1S', 'Main Spine', 'Corridor', 60, 160, 850, 38, false, 7),
+    ('Denmark High School', 1, '101', 'Room 101', 'Classroom', 60, 202, 120, 92, false, 8),
+    ('Denmark High School', 1, '102', 'Room 102', 'Classroom', 180, 202, 120, 92, false, 9),
+    ('Denmark High School', 1, '103', 'Room 103', 'Classroom', 300, 202, 120, 92, false, 10),
+    ('Denmark High School', 1, '104', 'Room 104', 'Classroom', 420, 202, 120, 92, false, 11),
+    ('Denmark High School', 1, 'COM', 'Student Commons', 'Common Area', 540, 202, 370, 122, false, 12),
+    ('Denmark High School', 1, 'H1W', 'West Hall', 'Corridor', 60, 296, 480, 30, false, 13),
+    ('Denmark High School', 1, '105', 'Room 105', 'Classroom', 60, 330, 120, 90, false, 14),
+    ('Denmark High School', 1, '106', 'Room 106', 'Classroom', 180, 330, 120, 90, false, 15),
+    ('Denmark High School', 1, '107', 'Room 107', 'Classroom', 300, 330, 120, 90, false, 16),
+    ('Denmark High School', 1, '108', 'Room 108', 'Classroom', 420, 330, 120, 90, false, 17),
+    ('Denmark High School', 1, 'ENG', 'Engineering Lab', 'CTAE', 540, 338, 180, 82, false, 18),
+    ('Denmark High School', 1, 'BRD', 'Broadcast Studio', 'CTAE', 720, 338, 190, 82, false, 19),
+    ('Denmark High School', 1, 'H1A', 'Arts Corridor', 'Corridor', 540, 422, 370, 30, false, 20),
+    ('Denmark High School', 1, 'AUD', 'Auditorium', 'Performance', 540, 456, 220, 124, false, 21),
+    ('Denmark High School', 1, 'BND', 'Band Room', 'Elective', 760, 456, 150, 58, false, 22),
+    ('Denmark High School', 1, 'CHR', 'Chorus Room', 'Elective', 760, 522, 150, 58, false, 23),
+    ('Denmark High School', 1, 'CAF', 'Cafeteria', 'Dining', 60, 456, 220, 124, false, 24),
+    ('Denmark High School', 1, 'KIT', 'Kitchen', 'Dining', 280, 456, 90, 124, false, 25),
+    ('Denmark High School', 1, 'GYM', 'Main Gym', 'Athletic', 370, 456, 220, 124, false, 26),
+    ('Denmark High School', 1, 'AUX', 'Aux Gym', 'Athletic', 600, 456, 140, 124, false, 27),
+    ('Denmark High School', 1, 'WT', 'Weight Room', 'Athletic', 740, 456, 90, 58, false, 28),
+    ('Denmark High School', 1, 'LK1', 'Locker Room A', 'Athletic', 830, 456, 80, 58, false, 29),
+    ('Denmark High School', 1, 'LK2', 'Locker Room B', 'Athletic', 740, 522, 170, 58, false, 30),
+    ('Denmark High School', 2, 'BIO', 'Biology Lab', 'Science', 60, 52, 170, 96, false, 1),
+    ('Denmark High School', 2, 'CHEM', 'Chemistry Lab', 'Science', 230, 52, 170, 96, false, 2),
+    ('Denmark High School', 2, 'PHYS', 'Physics Lab', 'Science', 400, 52, 170, 96, false, 3),
+    ('Denmark High School', 2, 'SCI4', 'Science Prep', 'Science', 570, 52, 120, 96, false, 4),
+    ('Denmark High School', 2, 'STA2', 'Stairwell East', 'Facilities', 690, 52, 70, 96, false, 5),
+    ('Denmark High School', 2, 'LIB', 'Media Center', 'Academic', 760, 52, 150, 96, false, 6),
+    ('Denmark High School', 2, 'H2S', 'Main Spine', 'Corridor', 60, 160, 850, 38, false, 7),
+    ('Denmark High School', 2, '201', 'Room 201', 'Classroom', 60, 202, 120, 90, false, 8),
+    ('Denmark High School', 2, '202', 'Room 202', 'Classroom', 180, 202, 120, 90, false, 9),
+    ('Denmark High School', 2, '203', 'Room 203', 'Classroom', 300, 202, 120, 90, false, 10),
+    ('Denmark High School', 2, '204', 'Room 204', 'Classroom', 420, 202, 120, 90, false, 11),
+    ('Denmark High School', 2, '205', 'Room 205', 'Classroom', 540, 202, 120, 90, false, 12),
+    ('Denmark High School', 2, 'CL1', 'Computer Lab A', 'Technology', 660, 202, 120, 90, false, 13),
+    ('Denmark High School', 2, 'CL2', 'Computer Lab B', 'Technology', 780, 202, 130, 90, false, 14),
+    ('Denmark High School', 2, 'H2M', 'Middle Hall', 'Corridor', 60, 294, 850, 30, false, 15),
+    ('Denmark High School', 2, '206', 'Room 206', 'Classroom', 60, 328, 120, 90, false, 16),
+    ('Denmark High School', 2, '207', 'Room 207', 'Classroom', 180, 328, 120, 90, false, 17),
+    ('Denmark High School', 2, '208', 'Room 208', 'Classroom', 300, 328, 120, 90, false, 18),
+    ('Denmark High School', 2, '209', 'Room 209', 'Classroom', 420, 328, 120, 90, false, 19),
+    ('Denmark High School', 2, 'WL1', 'World Language 1', 'Classroom', 540, 328, 120, 90, false, 20),
+    ('Denmark High School', 2, 'WL2', 'World Language 2', 'Classroom', 660, 328, 120, 90, false, 21),
+    ('Denmark High School', 2, 'CL3', 'Mac Lab', 'Technology', 780, 328, 130, 90, false, 22),
+    ('Denmark High School', 2, 'H2L', 'Lower Hall', 'Corridor', 60, 420, 850, 30, false, 23),
+    ('Denmark High School', 2, '210', 'Room 210', 'Classroom', 60, 454, 120, 90, false, 24),
+    ('Denmark High School', 2, '211', 'Room 211', 'Classroom', 180, 454, 120, 90, false, 25),
+    ('Denmark High School', 2, '212', 'Room 212', 'Classroom', 300, 454, 120, 90, false, 26),
+    ('Denmark High School', 2, '213', 'Room 213', 'Classroom', 420, 454, 120, 90, false, 27),
+    ('Denmark High School', 2, '214', 'Room 214', 'Classroom', 540, 454, 120, 90, false, 28),
+    ('Denmark High School', 2, 'COL', 'Collaboration Hub', 'Academic', 660, 454, 120, 90, false, 29),
+    ('Denmark High School', 2, 'TLC', 'Teacher Lounge', 'Staff', 780, 454, 130, 90, false, 30)
+ON CONFLICT (school, floor, room_id) DO NOTHING;
+
+-- ============================================
 -- CLAIMS TABLE (for tracking item claims)
 -- ============================================
 CREATE TABLE claims (
@@ -131,6 +273,17 @@ CREATE POLICY "Admins can update items" ON items
 CREATE POLICY "Users can delete own items" ON items
     FOR DELETE USING (auth.uid() = submitted_by);
 
+-- Enable RLS on map tables
+ALTER TABLE map_rooms ENABLE ROW LEVEL SECURITY;
+ALTER TABLE map_location_aliases ENABLE ROW LEVEL SECURITY;
+
+-- Map data is read-only for clients (managed by admins/service role)
+CREATE POLICY "Map rooms are viewable by everyone" ON map_rooms
+    FOR SELECT USING (true);
+
+CREATE POLICY "Map aliases are viewable by everyone" ON map_location_aliases
+    FOR SELECT USING (true);
+
 -- Enable RLS on claims table
 ALTER TABLE claims ENABLE ROW LEVEL SECURITY;
 
@@ -159,6 +312,8 @@ CREATE INDEX idx_items_date_lost ON items(date_lost);
 CREATE INDEX idx_items_status ON items(status);
 CREATE INDEX idx_items_created_at ON items(created_at DESC);
 CREATE INDEX idx_items_embedding ON items USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+CREATE INDEX idx_map_rooms_school_floor ON map_rooms(school, floor);
+CREATE INDEX idx_map_aliases_school_alias ON map_location_aliases(school, alias);
 
 -- ============================================
 -- SEMANTIC SEARCH FUNCTION (VECTOR)
@@ -284,3 +439,27 @@ CREATE POLICY "Users can view own redemptions" ON redemptions
 CREATE POLICY "Users can insert own redemptions" ON redemptions
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+-- ============================================
+-- ADMIN MESSAGES TABLE (for dashboard messaging)
+-- ============================================
+CREATE TABLE admin_messages (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    sender_id UUID REFERENCES auth.users(id),
+    sender_email VARCHAR(255),
+    recipient_type VARCHAR(32) NOT NULL,
+    recipient_value VARCHAR(255),
+    subject VARCHAR(255) NOT NULL,
+    body TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE admin_messages ENABLE ROW LEVEL SECURITY;
+
+-- Admins can read/send dashboard messages.
+CREATE POLICY "Admins can view admin messages" ON admin_messages
+    FOR SELECT USING (auth.uid() IN (SELECT user_id FROM admins));
+
+CREATE POLICY "Admins can insert admin messages" ON admin_messages
+    FOR INSERT WITH CHECK (auth.uid() IN (SELECT user_id FROM admins));
+
+CREATE INDEX idx_admin_messages_created_at ON admin_messages(created_at DESC);

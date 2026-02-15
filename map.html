@@ -24,7 +24,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #000;
+            background: radial-gradient(circle at 45% 20%, #0e1738 0%, #040816 42%, #010207 100%);
             color: #fff;
             min-height: 100vh;
             overflow: hidden;
@@ -124,7 +124,8 @@
             display: flex;
             height: calc(100vh - 70px);
             position: relative;
-            background: linear-gradient(135deg, #000 0%, #0a0a0a 100%);
+            background: linear-gradient(135deg, #01040e 0%, #020714 45%, #010205 100%);
+            transition: all 0.35s ease;
         }
 
         /* Sidebar */
@@ -150,6 +151,7 @@
             font-weight: 800;
             margin-bottom: 8px;
             background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
@@ -330,8 +332,11 @@
         .map-container {
             flex: 1;
             position: relative;
-            background: #050505;
+            background:
+                radial-gradient(circle at 52% 30%, rgba(25, 74, 180, 0.25) 0%, rgba(9, 19, 50, 0.14) 28%, transparent 62%),
+                linear-gradient(140deg, rgba(7, 16, 44, 0.92), rgba(3, 8, 22, 0.96));
             overflow: hidden;
+            transition: all 0.35s ease;
         }
 
         .map-canvas-wrapper {
@@ -353,6 +358,30 @@
             transform-origin: center center;
             transition: transform 0.15s ease-out;
             position: relative;
+            z-index: 3;
+        }
+
+        .map-canvas-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(79, 140, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79, 140, 255, 0.08) 1px, transparent 1px),
+                radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.14), transparent 58%);
+            background-size: 26px 26px, 26px 26px, cover;
+            pointer-events: none;
+            opacity: 0.42;
+            z-index: 1;
+        }
+
+        .map-canvas-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 45%, transparent 42%, rgba(0, 0, 0, 0.38) 100%);
+            pointer-events: none;
+            z-index: 2;
         }
 
         /* Map Controls */
@@ -369,8 +398,8 @@
         .control-btn {
             width: 44px;
             height: 44px;
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(6, 11, 27, 0.92);
+            border: 1px solid rgba(125, 211, 252, 0.22);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -381,8 +410,8 @@
         }
 
         .control-btn:hover {
-            background: rgba(25, 25, 25, 0.98);
-            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(12, 24, 50, 0.98);
+            border-color: rgba(125, 211, 252, 0.42);
             transform: scale(1.05);
         }
 
@@ -393,12 +422,12 @@
         .control-btn svg {
             width: 20px;
             height: 20px;
-            color: #999;
+            color: rgba(191, 219, 254, 0.82);
             transition: color 0.3s;
         }
 
         .control-btn:hover svg {
-            color: #fff;
+            color: #f8fafc;
         }
 
         /* Floor Switcher */
@@ -409,12 +438,12 @@
             transform: translateX(-50%);
             display: flex;
             gap: 10px;
-            background: rgba(15, 15, 15, 0.95);
-            padding: 6px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(8, 14, 32, 0.9);
+            padding: 7px;
+            border-radius: 16px;
+            border: 1px solid rgba(125, 211, 252, 0.22);
             backdrop-filter: blur(20px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.72);
             z-index: 50;
         }
 
@@ -441,8 +470,8 @@
 
         .floor-tab.active {
             color: #fff;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            background: linear-gradient(135deg, rgba(44, 126, 255, 0.32) 0%, rgba(6, 182, 212, 0.22) 100%);
+            border: 1px solid rgba(125, 211, 252, 0.38);
         }
 
         .floor-tab.active::after {
@@ -473,8 +502,8 @@
         /* Room Popup */
         .room-popup {
             position: absolute;
-            background: rgba(10, 10, 10, 0.98);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(4, 10, 24, 0.96);
+            border: 1px solid rgba(125, 211, 252, 0.28);
             border-radius: 14px;
             padding: 16px 20px;
             min-width: 220px;
@@ -485,7 +514,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
             backdrop-filter: blur(30px);
-            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 32px rgba(37, 99, 235, 0.25);
         }
 
         .room-popup.show {
@@ -549,10 +578,115 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #555;
+            color: #8eb6ff;
             font-size: 13px;
             font-weight: 600;
             z-index: 5;
+        }
+
+        .campus-hud {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            width: 300px;
+            background: rgba(6, 11, 27, 0.9);
+            border: 1px solid rgba(125, 211, 252, 0.22);
+            border-radius: 16px;
+            padding: 14px 14px 12px;
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.72), inset 0 0 28px rgba(37, 99, 235, 0.14);
+            backdrop-filter: blur(16px);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 55;
+        }
+
+        .campus-hud-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: rgba(191, 219, 254, 0.82);
+            margin-bottom: 8px;
+        }
+
+        .campus-hud-legend {
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(to right, #4ade80, #facc15, #f97316, #ef4444);
+            margin-bottom: 8px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+
+        .campus-hud-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: rgba(203, 213, 225, 0.7);
+            margin-bottom: 12px;
+        }
+
+        .campus-hud-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .campus-hud-stat {
+            background: rgba(13, 24, 50, 0.82);
+            border: 1px solid rgba(59, 130, 246, 0.22);
+            border-radius: 10px;
+            padding: 8px 6px;
+            text-align: center;
+        }
+
+        .campus-hud-value {
+            font-size: 27px;
+            line-height: 1;
+            font-weight: 800;
+            color: #8fd4ff;
+            letter-spacing: -0.8px;
+        }
+
+        .campus-hud-label {
+            margin-top: 4px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(191, 219, 254, 0.64);
+        }
+
+        .map-page.campus-mode .campus-hud {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .map-page.campus-mode .sidebar {
+            width: 0;
+            min-width: 0;
+            opacity: 0;
+            transform: translateX(-26px);
+            pointer-events: none;
+            border-right: none;
+            overflow: hidden;
+        }
+
+        .map-page.campus-mode .map-controls {
+            top: 18px;
+            right: 18px;
+        }
+
+        .map-page.campus-mode .floor-switcher {
+            bottom: 22px;
+            min-width: min(640px, calc(100% - 360px));
+            justify-content: space-between;
+        }
+
+        .map-page.campus-mode .floor-tab {
+            min-width: 0;
+            flex: 1;
         }
 
         /* Responsive */
@@ -565,6 +699,18 @@
         @media (max-width: 768px) {
             .sidebar {
                 display: none;
+            }
+
+            .map-page.campus-mode .floor-switcher {
+                min-width: 0;
+                width: calc(100% - 24px);
+            }
+
+            .campus-hud {
+                left: 10px;
+                right: 10px;
+                width: auto;
+                bottom: 118px;
             }
 
             .floor-switcher {
@@ -684,6 +830,31 @@
                 </button>
             </div>
 
+            <div class="campus-hud" id="campusHud">
+                <div class="campus-hud-title">Item Density</div>
+                <div class="campus-hud-legend"></div>
+                <div class="campus-hud-labels">
+                    <span>No items</span>
+                    <span>Low</span>
+                    <span>High</span>
+                    <span>Hot</span>
+                </div>
+                <div class="campus-hud-stats">
+                    <div class="campus-hud-stat">
+                        <div class="campus-hud-value" id="campusTotalItems">0</div>
+                        <div class="campus-hud-label">Items</div>
+                    </div>
+                    <div class="campus-hud-stat">
+                        <div class="campus-hud-value" id="campusTotalRooms">0</div>
+                        <div class="campus-hud-label">Rooms</div>
+                    </div>
+                    <div class="campus-hud-stat">
+                        <div class="campus-hud-value" id="campusHotZones">0</div>
+                        <div class="campus-hud-label">Hot Zones</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Floor Switcher -->
             <div class="floor-switcher">
                 <button class="floor-tab active" data-floor="0">
@@ -692,11 +863,11 @@
                 </button>
                 <button class="floor-tab" data-floor="1">
                     <div>First Floor</div>
-                    <div class="floor-label">Main Office, Gym, Cafeteria</div>
+                    <div class="floor-label">Admin, Commons, CTAE, Arts, Athletics</div>
                 </button>
                 <button class="floor-tab" data-floor="2">
                     <div>Second Floor</div>
-                    <div class="floor-label">Classrooms, Library, Labs</div>
+                    <div class="floor-label">Science Labs, Classrooms, Media Center</div>
                 </button>
             </div>
 
@@ -726,86 +897,99 @@
         // Rooms are arranged to look like a real school building
         // with connecting hallways, proper adjacency, and room numbers.
         // ============================================================
-        const schoolData = {
+        const defaultSchoolData = {
             0: {
                 name: "Campus",
                 rooms: [
-                    { id: "TENNIS", name: "Tennis Courts", type: "Athletic", x: 40, y: 30, w: 220, h: 120 },
-                    { id: "PARKING", name: "Parking", type: "Parking", x: 40, y: 170, w: 220, h: 160 },
-                    { id: "MAIN", name: "Main Building", type: "Building", x: 280, y: 170, w: 280, h: 320, clickable: true },
-                    { id: "STADIUM", name: "Stadium", type: "Athletic", x: 620, y: 30, w: 240, h: 180 },
-                    { id: "TRACK", name: "Track", type: "Athletic", x: 870, y: 50, w: 100, h: 140 },
-                    { id: "ROAD1", name: "Access Road", type: "Road", x: 280, y: 140, w: 580, h: 24 },
-                    { id: "ROAD2", name: "Main Road", type: "Road", x: 560, y: 164, w: 24, h: 340 },
-                    { id: "SOFTBALL", name: "Softball Field", type: "Athletic", x: 420, y: 510, w: 160, h: 130 },
-                    { id: "BASEBALL", name: "Baseball Field", type: "Athletic", x: 620, y: 420, w: 200, h: 180 },
-                    { id: "BARN", name: "The Barn", type: "Facility", x: 280, y: 510, w: 130, h: 100 },
-                    { id: "FIELDHOUSE", name: "Field House", type: "Athletic", x: 830, y: 420, w: 130, h: 100 },
-                ],
+                    { id: "BUS", name: "Bus Loop", type: "Road", x: 30, y: 60, w: 220, h: 90 },
+                    { id: "VISPK", name: "Visitor Parking", type: "Parking", x: 30, y: 160, w: 220, h: 120 },
+                    { id: "STUPK", name: "Student Parking", type: "Parking", x: 30, y: 285, w: 220, h: 210 },
+                    { id: "MAIN", name: "Main Building", type: "Building", x: 275, y: 155, w: 320, h: 360, clickable: true },
+                    { id: "ENTRY", name: "Entry Plaza", type: "Facility", x: 360, y: 120, w: 150, h: 34 },
+                    { id: "ROAD1", name: "Mullinax Dr Entrance", type: "Road", x: 250, y: 120, w: 640, h: 24 },
+                    { id: "ROAD2", name: "Campus Spine", type: "Road", x: 565, y: 144, w: 24, h: 390 },
+                    { id: "STADIUM", name: "Stadium", type: "Athletic", x: 620, y: 30, w: 250, h: 160 },
+                    { id: "TRACK", name: "Track", type: "Athletic", x: 875, y: 50, w: 95, h: 130 },
+                    { id: "TENNIS", name: "Tennis Courts", type: "Athletic", x: 620, y: 205, w: 250, h: 108 },
+                    { id: "BASE", name: "Baseball Field", type: "Athletic", x: 620, y: 330, w: 190, h: 170 },
+                    { id: "SOFT", name: "Softball Field", type: "Athletic", x: 815, y: 330, w: 155, h: 150 },
+                    { id: "BARN", name: "The Barn", type: "Facility", x: 300, y: 530, w: 130, h: 90 },
+                    { id: "FIELD", name: "Field House", type: "Athletic", x: 830, y: 510, w: 140, h: 96 }
+                ]
             },
             1: {
                 name: "First Floor",
                 rooms: [
-                    { id: "100", name: "Main Office", type: "Administration", x: 60, y: 40, w: 180, h: 110 },
-                    { id: "101", name: "Attendance", type: "Administration", x: 240, y: 40, w: 110, h: 110 },
-                    { id: "102", name: "Counseling", type: "Administration", x: 350, y: 40, w: 140, h: 110 },
-                    { id: "103", name: "Front Lobby", type: "Common Area", x: 490, y: 40, w: 180, h: 110 },
-                    { id: "104", name: "Admin Suite", type: "Administration", x: 670, y: 40, w: 140, h: 110 },
-                    { id: "105", name: "Nurse", type: "Medical", x: 810, y: 40, w: 110, h: 110 },
-                    { id: "H1A", name: "Hallway A", type: "Corridor", x: 60, y: 150, w: 860, h: 40 },
-                    { id: "106", name: "Room 106", type: "Classroom", x: 60, y: 190, w: 140, h: 100 },
-                    { id: "107", name: "Room 107", type: "Classroom", x: 200, y: 190, w: 140, h: 100 },
-                    { id: "108", name: "Room 108", type: "Classroom", x: 340, y: 190, w: 140, h: 100 },
-                    { id: "109", name: "Room 109", type: "Classroom", x: 480, y: 190, w: 140, h: 100 },
-                    { id: "CAF", name: "Cafeteria", type: "Dining", x: 620, y: 190, w: 300, h: 160 },
-                    { id: "H1B", name: "Hallway B", type: "Corridor", x: 60, y: 290, w: 560, h: 35 },
-                    { id: "110", name: "Room 110", type: "Classroom", x: 60, y: 325, w: 140, h: 100 },
-                    { id: "111", name: "Room 111", type: "Classroom", x: 200, y: 325, w: 140, h: 100 },
-                    { id: "112", name: "Art Room", type: "Elective", x: 340, y: 325, w: 160, h: 100 },
-                    { id: "113", name: "Band Room", type: "Elective", x: 500, y: 325, w: 120, h: 100 },
-                    { id: "GYM", name: "Gymnasium", type: "Athletic", x: 620, y: 350, w: 300, h: 200 },
-                    { id: "H1C", name: "Hallway C", type: "Corridor", x: 60, y: 425, w: 560, h: 35 },
-                    { id: "114", name: "Room 114", type: "Classroom", x: 60, y: 460, w: 140, h: 90 },
-                    { id: "115", name: "Room 115", type: "Classroom", x: 200, y: 460, w: 140, h: 90 },
-                    { id: "116", name: "Auditorium", type: "Performance", x: 340, y: 460, w: 280, h: 130 },
-                    { id: "RR1", name: "Restrooms", type: "Facilities", x: 60, y: 550, w: 140, h: 60 },
-                    { id: "LK1", name: "Locker Room", type: "Athletic", x: 200, y: 550, w: 140, h: 60 },
-                    { id: "117", name: "Weight Room", type: "Athletic", x: 620, y: 550, w: 150, h: 60 },
-                    { id: "118", name: "Locker Room B", type: "Athletic", x: 770, y: 550, w: 150, h: 60 },
-                ],
+                    { id: "ADM", name: "Main Office", type: "Administration", x: 60, y: 52, w: 130, h: 96 },
+                    { id: "ATT", name: "Attendance", type: "Administration", x: 190, y: 52, w: 120, h: 96 },
+                    { id: "CNS", name: "Counseling", type: "Administration", x: 310, y: 52, w: 130, h: 96 },
+                    { id: "CLN", name: "Clinic", type: "Medical", x: 440, y: 52, w: 130, h: 96 },
+                    { id: "STA1", name: "Stairwell West", type: "Facilities", x: 570, y: 52, w: 78, h: 96 },
+                    { id: "MCF", name: "Media Commons", type: "Academic", x: 648, y: 52, w: 262, h: 96 },
+                    { id: "H1S", name: "Main Spine", type: "Corridor", x: 60, y: 160, w: 850, h: 38 },
+                    { id: "101", name: "Room 101", type: "Classroom", x: 60, y: 202, w: 120, h: 92 },
+                    { id: "102", name: "Room 102", type: "Classroom", x: 180, y: 202, w: 120, h: 92 },
+                    { id: "103", name: "Room 103", type: "Classroom", x: 300, y: 202, w: 120, h: 92 },
+                    { id: "104", name: "Room 104", type: "Classroom", x: 420, y: 202, w: 120, h: 92 },
+                    { id: "COM", name: "Student Commons", type: "Common Area", x: 540, y: 202, w: 370, h: 122 },
+                    { id: "H1W", name: "West Hall", type: "Corridor", x: 60, y: 296, w: 480, h: 30 },
+                    { id: "105", name: "Room 105", type: "Classroom", x: 60, y: 330, w: 120, h: 90 },
+                    { id: "106", name: "Room 106", type: "Classroom", x: 180, y: 330, w: 120, h: 90 },
+                    { id: "107", name: "Room 107", type: "Classroom", x: 300, y: 330, w: 120, h: 90 },
+                    { id: "108", name: "Room 108", type: "Classroom", x: 420, y: 330, w: 120, h: 90 },
+                    { id: "ENG", name: "Engineering Lab", type: "CTAE", x: 540, y: 338, w: 180, h: 82 },
+                    { id: "BRD", name: "Broadcast Studio", type: "CTAE", x: 720, y: 338, w: 190, h: 82 },
+                    { id: "H1A", name: "Arts Corridor", type: "Corridor", x: 540, y: 422, w: 370, h: 30 },
+                    { id: "AUD", name: "Auditorium", type: "Performance", x: 540, y: 456, w: 220, h: 124 },
+                    { id: "BND", name: "Band Room", type: "Elective", x: 760, y: 456, w: 150, h: 58 },
+                    { id: "CHR", name: "Chorus Room", type: "Elective", x: 760, y: 522, w: 150, h: 58 },
+                    { id: "CAF", name: "Cafeteria", type: "Dining", x: 60, y: 456, w: 220, h: 124 },
+                    { id: "KIT", name: "Kitchen", type: "Dining", x: 280, y: 456, w: 90, h: 124 },
+                    { id: "GYM", name: "Main Gym", type: "Athletic", x: 370, y: 456, w: 220, h: 124 },
+                    { id: "AUX", name: "Aux Gym", type: "Athletic", x: 600, y: 456, w: 140, h: 124 },
+                    { id: "WT", name: "Weight Room", type: "Athletic", x: 740, y: 456, w: 90, h: 58 },
+                    { id: "LK1", name: "Locker Room A", type: "Athletic", x: 830, y: 456, w: 80, h: 58 },
+                    { id: "LK2", name: "Locker Room B", type: "Athletic", x: 740, y: 522, w: 170, h: 58 }
+                ]
             },
             2: {
                 name: "Second Floor",
                 rooms: [
-                    { id: "200", name: "Biology Lab", type: "Science", x: 60, y: 40, w: 170, h: 110 },
-                    { id: "201", name: "Chemistry Lab", type: "Science", x: 230, y: 40, w: 170, h: 110 },
-                    { id: "202", name: "Physics Lab", type: "Science", x: 400, y: 40, w: 170, h: 110 },
-                    { id: "203", name: "AP Science", type: "Science", x: 570, y: 40, w: 140, h: 110 },
-                    { id: "204", name: "Science Prep", type: "Science", x: 710, y: 40, w: 100, h: 110 },
-                    { id: "205", name: "Room 205", type: "Classroom", x: 810, y: 40, w: 110, h: 110 },
-                    { id: "H2A", name: "Hallway D", type: "Corridor", x: 60, y: 150, w: 860, h: 40 },
-                    { id: "206", name: "Room 206", type: "Classroom", x: 60, y: 190, w: 140, h: 100 },
-                    { id: "207", name: "Room 207", type: "Classroom", x: 200, y: 190, w: 140, h: 100 },
-                    { id: "208", name: "Room 208", type: "Classroom", x: 340, y: 190, w: 140, h: 100 },
-                    { id: "209", name: "Room 209", type: "Classroom", x: 480, y: 190, w: 140, h: 100 },
-                    { id: "LIB", name: "Media Center", type: "Academic", x: 620, y: 190, w: 300, h: 160 },
-                    { id: "H2B", name: "Hallway E", type: "Corridor", x: 60, y: 290, w: 560, h: 35 },
-                    { id: "210", name: "Room 210", type: "Classroom", x: 60, y: 325, w: 140, h: 100 },
-                    { id: "211", name: "Room 211", type: "Classroom", x: 200, y: 325, w: 140, h: 100 },
-                    { id: "212", name: "Room 212", type: "Classroom", x: 340, y: 325, w: 140, h: 100 },
-                    { id: "213", name: "Room 213", type: "Classroom", x: 480, y: 325, w: 140, h: 100 },
-                    { id: "CL1", name: "Computer Lab A", type: "Technology", x: 620, y: 350, w: 150, h: 110 },
-                    { id: "CL2", name: "Computer Lab B", type: "Technology", x: 770, y: 350, w: 150, h: 110 },
-                    { id: "H2C", name: "Hallway F", type: "Corridor", x: 60, y: 425, w: 560, h: 35 },
-                    { id: "214", name: "Room 214", type: "Classroom", x: 60, y: 460, w: 140, h: 100 },
-                    { id: "215", name: "Room 215", type: "Classroom", x: 200, y: 460, w: 140, h: 100 },
-                    { id: "216", name: "Room 216", type: "Classroom", x: 340, y: 460, w: 140, h: 100 },
-                    { id: "217", name: "Teacher Lounge", type: "Staff", x: 480, y: 460, w: 140, h: 100 },
-                    { id: "CL3", name: "Mac Lab", type: "Technology", x: 620, y: 460, w: 150, h: 100 },
-                    { id: "RR2", name: "Restrooms", type: "Facilities", x: 770, y: 460, w: 150, h: 100 },
-                ],
-            },
+                    { id: "BIO", name: "Biology Lab", type: "Science", x: 60, y: 52, w: 170, h: 96 },
+                    { id: "CHEM", name: "Chemistry Lab", type: "Science", x: 230, y: 52, w: 170, h: 96 },
+                    { id: "PHYS", name: "Physics Lab", type: "Science", x: 400, y: 52, w: 170, h: 96 },
+                    { id: "SCI4", name: "Science Prep", type: "Science", x: 570, y: 52, w: 120, h: 96 },
+                    { id: "STA2", name: "Stairwell East", type: "Facilities", x: 690, y: 52, w: 70, h: 96 },
+                    { id: "LIB", name: "Media Center", type: "Academic", x: 760, y: 52, w: 150, h: 96 },
+                    { id: "H2S", name: "Main Spine", type: "Corridor", x: 60, y: 160, w: 850, h: 38 },
+                    { id: "201", name: "Room 201", type: "Classroom", x: 60, y: 202, w: 120, h: 90 },
+                    { id: "202", name: "Room 202", type: "Classroom", x: 180, y: 202, w: 120, h: 90 },
+                    { id: "203", name: "Room 203", type: "Classroom", x: 300, y: 202, w: 120, h: 90 },
+                    { id: "204", name: "Room 204", type: "Classroom", x: 420, y: 202, w: 120, h: 90 },
+                    { id: "205", name: "Room 205", type: "Classroom", x: 540, y: 202, w: 120, h: 90 },
+                    { id: "CL1", name: "Computer Lab A", type: "Technology", x: 660, y: 202, w: 120, h: 90 },
+                    { id: "CL2", name: "Computer Lab B", type: "Technology", x: 780, y: 202, w: 130, h: 90 },
+                    { id: "H2M", name: "Middle Hall", type: "Corridor", x: 60, y: 294, w: 850, h: 30 },
+                    { id: "206", name: "Room 206", type: "Classroom", x: 60, y: 328, w: 120, h: 90 },
+                    { id: "207", name: "Room 207", type: "Classroom", x: 180, y: 328, w: 120, h: 90 },
+                    { id: "208", name: "Room 208", type: "Classroom", x: 300, y: 328, w: 120, h: 90 },
+                    { id: "209", name: "Room 209", type: "Classroom", x: 420, y: 328, w: 120, h: 90 },
+                    { id: "WL1", name: "World Language 1", type: "Classroom", x: 540, y: 328, w: 120, h: 90 },
+                    { id: "WL2", name: "World Language 2", type: "Classroom", x: 660, y: 328, w: 120, h: 90 },
+                    { id: "CL3", name: "Mac Lab", type: "Technology", x: 780, y: 328, w: 130, h: 90 },
+                    { id: "H2L", name: "Lower Hall", type: "Corridor", x: 60, y: 420, w: 850, h: 30 },
+                    { id: "210", name: "Room 210", type: "Classroom", x: 60, y: 454, w: 120, h: 90 },
+                    { id: "211", name: "Room 211", type: "Classroom", x: 180, y: 454, w: 120, h: 90 },
+                    { id: "212", name: "Room 212", type: "Classroom", x: 300, y: 454, w: 120, h: 90 },
+                    { id: "213", name: "Room 213", type: "Classroom", x: 420, y: 454, w: 120, h: 90 },
+                    { id: "214", name: "Room 214", type: "Classroom", x: 540, y: 454, w: 120, h: 90 },
+                    { id: "COL", name: "Collaboration Hub", type: "Academic", x: 660, y: 454, w: 120, h: 90 },
+                    { id: "TLC", name: "Teacher Lounge", type: "Staff", x: 780, y: 454, w: 130, h: 90 }
+                ]
+            }
         };
+
+        let schoolData = JSON.parse(JSON.stringify(defaultSchoolData));
 
         // ============================================================
         // State
@@ -825,60 +1009,87 @@
         const roomList = document.getElementById('roomList');
         const currentFloorNum = document.getElementById('currentFloorNum');
         const mapLoading = document.getElementById('mapLoading');
+        const mapPage = document.querySelector('.map-page');
 
         // ============================================================
         // Map location -> room ID mapping
         // (Maps Supabase location strings to room IDs)
         // ============================================================
-        const locationToRoom = {
-            'main office': '100',
-            'attendance': '101',
-            'counseling': '102',
-            'front lobby': '103',
-            'lobby': '103',
-            'admin': '104',
-            'nurse': '105',
-            'cafeteria': 'CAF',
-            'café': 'CAF',
-            'gym': 'GYM',
-            'gymnasium': 'GYM',
-            'auditorium': '116',
-            'library': 'LIB',
+        const defaultLocationToRoom = {
+            'main office': 'ADM',
+            'office': 'ADM',
+            'attendance': 'ATT',
+            'counseling': 'CNS',
+            'counselor': 'CNS',
+            'clinic': 'CLN',
+            'nurse': 'CLN',
             'media center': 'LIB',
-            'art room': '112',
-            'art': '112',
-            'band room': '113',
-            'band': '113',
-            'biology': '200',
-            'biology lab': '200',
-            'chemistry': '201',
-            'chemistry lab': '201',
-            'physics': '202',
-            'physics lab': '202',
-            'computer lab': 'CL1',
+            'media commons': 'MCF',
+            'library': 'LIB',
+            'cafeteria': 'CAF',
+            'cafe': 'CAF',
+            'commons': 'COM',
+            'student commons': 'COM',
+            'auditorium': 'AUD',
+            'theater': 'AUD',
+            'band': 'BND',
+            'chorus': 'CHR',
+            'engineering': 'ENG',
+            'broadcast': 'BRD',
+            'ctae': 'ENG',
+            'main gym': 'GYM',
+            'gym': 'GYM',
+            'aux gym': 'AUX',
+            'weight room': 'WT',
+            'locker room a': 'LK1',
+            'locker room b': 'LK2',
+            'locker room': 'LK1',
+            'biology lab': 'BIO',
+            'biology': 'BIO',
+            'chemistry lab': 'CHEM',
+            'chemistry': 'CHEM',
+            'physics lab': 'PHYS',
+            'physics': 'PHYS',
+            'science prep': 'SCI4',
             'computer lab a': 'CL1',
             'computer lab b': 'CL2',
+            'computer lab': 'CL1',
             'mac lab': 'CL3',
-            'weight room': '117',
-            'locker room': 'LK1',
-            'restroom': 'RR1',
-            'restrooms': 'RR1',
-            'teacher lounge': '217',
-            'hallway': 'H1A',
-            'hallway a': 'H1A',
-            'hallway b': 'H1B',
-            'hallway c': 'H1C',
+            'world language': 'WL1',
+            'teacher lounge': 'TLC',
+            'collaboration hub': 'COL',
+            'hallway': 'H1S',
+            'main spine': 'H1S',
+            'west hall': 'H1W',
+            'arts corridor': 'H1A',
+            'campus': 'MAIN',
+            'main building': 'MAIN',
+            'entry plaza': 'ENTRY',
+            'stadium': 'STADIUM',
+            'track': 'TRACK',
+            'tennis': 'TENNIS',
+            'baseball': 'BASE',
+            'softball': 'SOFT',
+            'the barn': 'BARN',
+            'barn': 'BARN',
+            'field house': 'FIELD',
+            'bus loop': 'BUS',
+            'visitor parking': 'VISPK',
+            'student parking': 'STUPK',
+            'parking': 'STUPK'
         };
+
+        let locationToRoom = { ...defaultLocationToRoom };
 
         // ============================================================
         // Heat map color utils
         // ============================================================
         function getHeatColor(count) {
-            if (count === 0) return { fill: 'rgba(255,255,255,0.02)', stroke: 'rgba(255,255,255,0.1)', class: 'heat-0' };
-            if (count <= 1) return { fill: 'rgba(34, 197, 94, 0.1)', stroke: 'rgba(34, 197, 94, 0.4)', class: 'heat-1' };
-            if (count <= 2) return { fill: 'rgba(234, 179, 8, 0.12)', stroke: 'rgba(234, 179, 8, 0.45)', class: 'heat-2' };
-            if (count <= 4) return { fill: 'rgba(249, 115, 22, 0.14)', stroke: 'rgba(249, 115, 22, 0.5)', class: 'heat-3' };
-            return { fill: 'rgba(239, 68, 68, 0.18)', stroke: 'rgba(239, 68, 68, 0.55)', class: 'heat-4' };
+            if (count === 0) return { fill: 'rgba(0,217,255,0.03)', stroke: 'rgba(0,217,255,0.15)', class: 'heat-0' };
+            if (count <= 1) return { fill: 'rgba(0, 255, 136, 0.12)', stroke: '#00FF88', class: 'heat-1' };
+            if (count <= 2) return { fill: 'rgba(234, 179, 8, 0.15)', stroke: '#eab308', class: 'heat-2' };
+            if (count <= 4) return { fill: 'rgba(249, 115, 22, 0.18)', stroke: '#f97316', class: 'heat-3' };
+            return { fill: 'rgba(239, 68, 68, 0.22)', stroke: '#ef4444', class: 'heat-4' };
         }
 
         function getHeatGlow(count) {
@@ -889,75 +1100,191 @@
             return '0 0 40px rgba(239, 68, 68, 0.3)';
         }
 
+        const SVG_NS = 'http://www.w3.org/2000/svg';
+
+        function createSvgNode(tagName, attrs = {}) {
+            const node = document.createElementNS(SVG_NS, tagName);
+            Object.entries(attrs).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) node.setAttribute(key, String(value));
+            });
+            return node;
+        }
+
+        function addLinearGradient(defs, id, stops, x1 = '0%', y1 = '0%', x2 = '100%', y2 = '100%') {
+            const gradient = createSvgNode('linearGradient', { id, x1, y1, x2, y2 });
+            stops.forEach((stop) => {
+                const [offset, color, opacity] = stop;
+                const stopNode = createSvgNode('stop', { offset, 'stop-color': color });
+                if (opacity !== undefined) stopNode.setAttribute('stop-opacity', String(opacity));
+                gradient.appendChild(stopNode);
+            });
+            defs.appendChild(gradient);
+        }
+
+        function roundedRectPath(x, y, w, h, radius) {
+            const r = Math.max(0, Math.min(radius, w / 2, h / 2));
+            return `M ${x + r} ${y} H ${x + w - r} A ${r} ${r} 0 0 1 ${x + w} ${y + r} V ${y + h - r} A ${r} ${r} 0 0 1 ${x + w - r} ${y + h} H ${x + r} A ${r} ${r} 0 0 1 ${x} ${y + h - r} V ${y + r} A ${r} ${r} 0 0 1 ${x + r} ${y} Z`;
+        }
+
+        function getRoomMetaLabel(room, floorNumber) {
+            const floor = Number.isFinite(floorNumber) ? floorNumber : currentFloor;
+            if (/^\d{3}$/.test(room.id)) return `#${room.id}`;
+            if (floor === 0) return room.type;
+            return room.id;
+        }
+
+        function getRoomPopupSubheading(room) {
+            if (/^\d{3}$/.test(room.id)) return `Room #${room.id} - ${room.type}`;
+            if (currentFloor === 0) return `${room.type} area`;
+            return `${room.type} - ${room.id}`;
+        }
+
+        function pseudoRandom(seed) {
+            const value = Math.sin(seed * 12.9898) * 43758.5453;
+            return value - Math.floor(value);
+        }
+
+        function syncCampusMode() {
+            if (!mapPage) return;
+            mapPage.classList.toggle('campus-mode', currentFloor === 0);
+        }
+
+        function cloneSchoolData(source) {
+            return JSON.parse(JSON.stringify(source));
+        }
+
+        function normalizeLocationText(value) {
+            return String(value || '')
+                .toLowerCase()
+                .replace(/[^a-z0-9#\s-]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        async function loadBackendMapLayout() {
+            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured() || typeof BackTrackDB.getMapRooms !== 'function') {
+                return;
+            }
+
+            const rows = await BackTrackDB.getMapRooms('Denmark High School');
+            if (!Array.isArray(rows) || rows.length === 0) return;
+
+            const grouped = { 0: [], 1: [], 2: [] };
+            rows.forEach((row) => {
+                const floor = Number(row.floor);
+                if (!Number.isFinite(floor) || !grouped[floor]) return;
+                grouped[floor].push({
+                    id: String(row.room_id || '').trim(),
+                    name: String(row.name || '').trim() || 'Unnamed',
+                    type: String(row.room_type || 'Classroom').trim(),
+                    x: Number(row.x) || 0,
+                    y: Number(row.y) || 0,
+                    w: Number(row.w) || 80,
+                    h: Number(row.h) || 60,
+                    clickable: !!row.clickable
+                });
+            });
+
+            if (grouped[0].length && grouped[1].length && grouped[2].length) {
+                schoolData = {
+                    0: { name: 'Campus', rooms: grouped[0] },
+                    1: { name: 'First Floor', rooms: grouped[1] },
+                    2: { name: 'Second Floor', rooms: grouped[2] }
+                };
+            }
+        }
+
+        async function loadBackendAliases() {
+            locationToRoom = { ...defaultLocationToRoom };
+            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured() || typeof BackTrackDB.getMapLocationAliases !== 'function') {
+                return;
+            }
+
+            const aliases = await BackTrackDB.getMapLocationAliases('Denmark High School');
+            if (!Array.isArray(aliases) || aliases.length === 0) return;
+
+            aliases.forEach((row) => {
+                const alias = normalizeLocationText(row.alias);
+                const roomId = String(row.room_id || '').trim();
+                if (alias && roomId) {
+                    locationToRoom[alias] = roomId;
+                }
+            });
+        }
+
+        function findRoomById(roomId) {
+            for (const floor of Object.values(schoolData)) {
+                const room = floor.rooms.find((entry) => entry.id === roomId);
+                if (room) return room;
+            }
+            return null;
+        }
+
+        function resolveRoomFromLocation(rawLocation) {
+            const location = normalizeLocationText(rawLocation);
+            if (!location) return null;
+
+            // Prefer specific aliases first (longer text wins).
+            const aliasEntries = Object.entries(locationToRoom).sort((a, b) => b[0].length - a[0].length);
+            for (const [alias, roomId] of aliasEntries) {
+                if (location.includes(alias)) {
+                    const room = findRoomById(roomId);
+                    if (room) return room;
+                }
+            }
+
+            // Handle explicit room numbers like "room 212".
+            const roomNumMatch = location.match(/\b(\d{3})\b/);
+            if (roomNumMatch) {
+                const room = findRoomById(roomNumMatch[1]);
+                if (room) return room;
+            }
+
+            // Handle short coded rooms like CL1 / CL2 / AUX / GYM.
+            const codeMatch = location.match(/\b(cl[1-3]|aux|gym|caf|aud|lib|adm|att|cns|cln|eng|brd|wt|lk1|lk2|bio|chem|phys)\b/i);
+            if (codeMatch) {
+                const code = codeMatch[1].toUpperCase();
+                const normalizedCode = code === 'PHYS' ? 'PHYS' : code;
+                const room = findRoomById(normalizedCode);
+                if (room) return room;
+            }
+
+            return null;
+        }
+
         // ============================================================
         // Load items from Supabase and distribute to rooms
         // ============================================================
         async function loadItems() {
-            // Reset all room items
-            Object.values(schoolData).forEach(floor => {
-                floor.rooms.forEach(room => { room.items = []; });
+            schoolData = cloneSchoolData(defaultSchoolData);
+            await loadBackendMapLayout();
+            await loadBackendAliases();
+
+            Object.values(schoolData).forEach((floor) => {
+                floor.rooms.forEach((room) => { room.items = []; });
             });
 
             try {
                 if (typeof BackTrackDB !== 'undefined' && BackTrackDB.isSupabaseConfigured()) {
-                    const items = await BackTrackDB.getItems({ status: 'pending' });
-                    if (items && items.length > 0) {
+                    const items = await BackTrackDB.getMapItems({ status: ['pending', 'found', 'claimed', 'bounty'] });
+                    if (Array.isArray(items) && items.length > 0) {
                         supabaseItems = items;
-                        items.forEach(item => {
-                            const location = (item.location || '').toLowerCase().trim();
-                            let assigned = false;
+                        items.forEach((item) => {
+                            const matchedRoom = resolveRoomFromLocation(item.location || '');
+                            const entry = {
+                                name: item.name || 'Unknown Item',
+                                desc: item.description || (item.location ? `Reported near: ${item.location}` : 'No description'),
+                                id: item.id
+                            };
 
-                            // Try direct mapping
-                            for (const [key, roomId] of Object.entries(locationToRoom)) {
-                                if (location.includes(key)) {
-                                    // Find room across floors
-                                    for (const floor of Object.values(schoolData)) {
-                                        const room = floor.rooms.find(r => r.id === roomId);
-                                        if (room) {
-                                            room.items.push({
-                                                name: item.name || 'Unknown Item',
-                                                desc: item.description || 'No description',
-                                                id: item.id
-                                            });
-                                            assigned = true;
-                                            break;
-                                        }
-                                    }
-                                    if (assigned) break;
-                                }
+                            if (matchedRoom) {
+                                matchedRoom.items.push(entry);
+                                return;
                             }
 
-                            // Try room number match (e.g., "Room 106", "106")
-                            if (!assigned) {
-                                const roomNumMatch = location.match(/\b(\d{3})\b/);
-                                if (roomNumMatch) {
-                                    const num = roomNumMatch[1];
-                                    for (const floor of Object.values(schoolData)) {
-                                        const room = floor.rooms.find(r => r.id === num);
-                                        if (room) {
-                                            room.items.push({
-                                                name: item.name || 'Unknown Item',
-                                                desc: item.description || 'No description',
-                                                id: item.id
-                                            });
-                                            assigned = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-
-                            // Fallback: assign to hallway
-                            if (!assigned) {
-                                const hallway = schoolData[1].rooms.find(r => r.id === 'H1A');
-                                if (hallway) {
-                                    hallway.items.push({
-                                        name: item.name || 'Unknown Item',
-                                        desc: item.description || (location ? `Found near: ${item.location}` : 'No description'),
-                                        id: item.id
-                                    });
-                                }
-                            }
+                            // Fallback to main hallway if location cannot be parsed.
+                            const fallback = findRoomById('H1S') || findRoomById('COM');
+                            if (fallback) fallback.items.push(entry);
                         });
                     }
                 }
@@ -965,9 +1292,8 @@
                 console.warn('Could not load items from Supabase:', e);
             }
 
-            // If no items loaded, use demo data
-            const totalItems = Object.values(schoolData).reduce((sum, f) =>
-                sum + f.rooms.reduce((s, r) => s + (r.items ? r.items.length : 0), 0), 0);
+            const totalItems = Object.values(schoolData).reduce((sum, floor) =>
+                sum + floor.rooms.reduce((subtotal, room) => subtotal + (room.items ? room.items.length : 0), 0), 0);
 
             if (totalItems === 0) {
                 loadDemoData();
@@ -982,17 +1308,18 @@
             const demoItems = [
                 { room: 'CAF', items: [{ name: 'Black Wallet', desc: 'Found near lunch line' }, { name: 'Red Lunch Box', desc: 'With superhero stickers' }, { name: 'Water Bottle', desc: 'Blue Hydro Flask' }] },
                 { room: 'GYM', items: [{ name: 'AirPods Case', desc: 'White, 3rd gen' }, { name: 'Nike Hoodie', desc: 'Gray size M' }, { name: 'Basketball Shoes', desc: 'Jordan size 10' }, { name: 'Gym Bag', desc: 'Under Armour black' }, { name: 'Sports Watch', desc: 'Fitbit Versa' }] },
+                { room: 'AUX', items: [{ name: 'Volleyball Knee Pads', desc: 'Black pair, left in aux gym' }] },
                 { room: '106', items: [{ name: 'TI-84 Calculator', desc: 'Name scratched off' }] },
                 { room: '108', items: [{ name: 'Textbook', desc: 'AP Chemistry, 7th ed.' }, { name: 'Pencil Pouch', desc: 'Clear with markers' }] },
-                { room: 'H1A', items: [{ name: 'Student ID', desc: 'Found in A-wing' }, { name: 'Keys', desc: 'Car keys with lanyard' }, { name: 'Earbuds', desc: 'Samsung Galaxy Buds' }] },
-                { room: '116', items: [{ name: 'Jacket', desc: 'Denim jacket size S' }] },
-                { room: '200', items: [{ name: 'Lab Goggles', desc: 'Clear safety goggles' }, { name: 'Notebook', desc: 'Composition, labeled Bio' }] },
+                { room: 'H1S', items: [{ name: 'Student ID', desc: 'Found in main hallway' }, { name: 'Keys', desc: 'Car keys with lanyard' }, { name: 'Earbuds', desc: 'Samsung Galaxy Buds' }] },
+                { room: 'AUD', items: [{ name: 'Jacket', desc: 'Denim jacket size S' }] },
+                { room: 'BIO', items: [{ name: 'Lab Goggles', desc: 'Clear safety goggles' }, { name: 'Notebook', desc: 'Composition, labeled Bio' }] },
                 { room: 'LIB', items: [{ name: 'Backpack', desc: 'Black Jansport' }, { name: 'Laptop Charger', desc: 'USB-C Macbook charger' }, { name: 'AirPods Max', desc: 'Silver' }] },
                 { room: 'CL1', items: [{ name: 'USB Drive', desc: '32GB SanDisk Cruzer' }, { name: 'Mouse', desc: 'Logitech wireless' }] },
                 { room: '210', items: [{ name: 'Graphing Calculator', desc: 'TI-Nspire CX' }] },
-                { room: 'H2A', items: [{ name: 'Umbrella', desc: 'Black compact' }, { name: 'Phone Case', desc: 'Clear iPhone 15 case' }] },
-                { room: '112', items: [{ name: 'Art Supplies', desc: 'Set of Prismacolor pencils' }] },
-                { room: '100', items: [{ name: 'Glasses', desc: 'Ray-Ban frames, brown' }] },
+                { room: 'H2S', items: [{ name: 'Umbrella', desc: 'Black compact' }, { name: 'Phone Case', desc: 'Clear iPhone 15 case' }] },
+                { room: 'ENG', items: [{ name: 'Project Board', desc: 'CTAE engineering board left by printer' }] },
+                { room: 'ADM', items: [{ name: 'Glasses', desc: 'Ray-Ban frames, brown' }] },
             ];
 
             demoItems.forEach(d => {
@@ -1010,6 +1337,7 @@
         // Drawing
         // ============================================================
         function drawFloor() {
+            syncCampusMode();
             const floor = schoolData[currentFloor];
             currentFloorNum.textContent = currentFloor === 0 ? 'C' : currentFloor;
             mapCanvas.innerHTML = '';
@@ -1024,7 +1352,7 @@
 
             const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
 
-            // Grid pattern — prominent blueprint style
+            // Grid pattern — subtle circuit-board style
             const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
             pattern.setAttribute('id', 'grid');
             pattern.setAttribute('width', '30');
@@ -1033,8 +1361,8 @@
             const gridPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             gridPath.setAttribute('d', 'M 30 0 L 0 0 0 30');
             gridPath.setAttribute('fill', 'none');
-            gridPath.setAttribute('stroke', 'rgba(100,160,255,0.07)');
-            gridPath.setAttribute('stroke-width', '0.8');
+            gridPath.setAttribute('stroke', 'rgba(0,217,255,0.03)');
+            gridPath.setAttribute('stroke-width', '0.5');
             pattern.appendChild(gridPath);
             defs.appendChild(pattern);
 
@@ -1047,47 +1375,89 @@
             const lgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             lgPath.setAttribute('d', 'M 150 0 L 0 0 0 150');
             lgPath.setAttribute('fill', 'none');
-            lgPath.setAttribute('stroke', 'rgba(100,160,255,0.12)');
-            lgPath.setAttribute('stroke-width', '1');
+            lgPath.setAttribute('stroke', 'rgba(0,217,255,0.05)');
+            lgPath.setAttribute('stroke-width', '0.8');
             lgPattern.appendChild(lgPath);
             defs.appendChild(lgPattern);
 
-            // Glow filters
+            // Enhanced glow filters for neon effect
             ['green', 'yellow', 'orange', 'red', 'blue'].forEach((color, i) => {
                 const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
                 filter.setAttribute('id', `glow-${color}`);
-                filter.setAttribute('x', '-20%'); filter.setAttribute('y', '-20%');
-                filter.setAttribute('width', '140%'); filter.setAttribute('height', '140%');
+                filter.setAttribute('x', '-50%'); filter.setAttribute('y', '-50%');
+                filter.setAttribute('width', '200%'); filter.setAttribute('height', '200%');
                 const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
-                blur.setAttribute('stdDeviation', String(2 + i));
+                blur.setAttribute('stdDeviation', String(4 + i * 1.5));
                 blur.setAttribute('result', 'blur');
                 filter.appendChild(blur);
                 const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
                 const mn1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
                 mn1.setAttribute('in', 'blur');
                 const mn2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
-                mn2.setAttribute('in', 'SourceGraphic');
-                merge.appendChild(mn1); merge.appendChild(mn2);
+                mn2.setAttribute('in', 'blur');
+                const mn3 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+                mn3.setAttribute('in', 'SourceGraphic');
+                merge.appendChild(mn1); merge.appendChild(mn2); merge.appendChild(mn3);
                 filter.appendChild(merge);
                 defs.appendChild(filter);
             });
 
-            // Text glow filter
+            // Enhanced text glow filter for neon text
             const txtGlow = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
             txtGlow.setAttribute('id', 'textGlow');
-            txtGlow.setAttribute('x', '-30%'); txtGlow.setAttribute('y', '-30%');
-            txtGlow.setAttribute('width', '160%'); txtGlow.setAttribute('height', '160%');
+            txtGlow.setAttribute('x', '-50%'); txtGlow.setAttribute('y', '-50%');
+            txtGlow.setAttribute('width', '200%'); txtGlow.setAttribute('height', '200%');
             const tBlur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
-            tBlur.setAttribute('stdDeviation', '3'); tBlur.setAttribute('result', 'blur');
+            tBlur.setAttribute('stdDeviation', '4'); tBlur.setAttribute('result', 'blur');
             txtGlow.appendChild(tBlur);
             const tMerge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
             const tmn1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
             tmn1.setAttribute('in', 'blur');
             const tmn2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
-            tmn2.setAttribute('in', 'SourceGraphic');
-            tMerge.appendChild(tmn1); tMerge.appendChild(tmn2);
+            tmn2.setAttribute('in', 'blur');
+            const tmn3 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+            tmn3.setAttribute('in', 'SourceGraphic');
+            tMerge.appendChild(tmn1); tMerge.appendChild(tmn2); tMerge.appendChild(tmn3);
             txtGlow.appendChild(tMerge);
             defs.appendChild(txtGlow);
+
+            // Campus gradients with futuristic neon colors
+            addLinearGradient(defs, 'campusRoadGradient', [
+                ['0%', '#0a0a1a', 0.88],
+                ['50%', '#1a1a2e', 0.6],
+                ['100%', '#0a0a1a', 0.88]
+            ]);
+            addLinearGradient(defs, 'campusParkingGradient', [
+                ['0%', '#0a0a1a', 0.55],
+                ['100%', '#1a1a2e', 0.82]
+            ], '0%', '0%', '100%', '0%');
+            addLinearGradient(defs, 'campusBuildingGradient', [
+                ['0%', '#00D9FF', 0.15],
+                ['100%', '#0a0a1a', 0.85]
+            ]);
+            addLinearGradient(defs, 'campusAthleticGradient', [
+                ['0%', '#00FF88', 0.12],
+                ['100%', '#0a0a1a', 0.75]
+            ]);
+            addLinearGradient(defs, 'campusFacilityGradient', [
+                ['0%', '#2563eb', 0.18],
+                ['100%', '#0a0a1a', 0.8]
+            ]);
+            addLinearGradient(defs, 'campusFieldGradient', [
+                ['0%', '#00FF88', 0.2],
+                ['100%', '#0a0a1a', 0.65]
+            ], '0%', '100%', '100%', '0%');
+
+            const campusGlow = createSvgNode('radialGradient', {
+                id: 'campusGlowGradient',
+                cx: '52%',
+                cy: '34%',
+                r: '62%'
+            });
+            campusGlow.appendChild(createSvgNode('stop', { offset: '0%', 'stop-color': '#00D9FF', 'stop-opacity': '0.12' }));
+            campusGlow.appendChild(createSvgNode('stop', { offset: '65%', 'stop-color': '#0a0a1a', 'stop-opacity': '0.06' }));
+            campusGlow.appendChild(createSvgNode('stop', { offset: '100%', 'stop-color': '#000000', 'stop-opacity': '0' }));
+            defs.appendChild(campusGlow);
 
             svg.appendChild(defs);
 
@@ -1103,174 +1473,509 @@
 
             if (currentFloor === 0) {
                 // ===== CAMPUS VIEW =====
-                floor.rooms.forEach(room => {
-                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                const glowBackdrop = createSvgNode('rect', {
+                    x: 0,
+                    y: 0,
+                    width: svgW,
+                    height: svgH,
+                    fill: 'url(#campusGlowGradient)'
+                });
+                svg.appendChild(glowBackdrop);
+
+                // Subtle nebula and stars to match the blueprint look
+                const nebula = createSvgNode('g', { opacity: '0.42' });
+                [
+                    { x: 505, y: 188, r: 180, color: '#60a5fa' },
+                    { x: 540, y: 230, r: 130, color: '#a78bfa' },
+                    { x: 470, y: 205, r: 110, color: '#38bdf8' }
+                ].forEach((blob) => {
+                    nebula.appendChild(createSvgNode('circle', {
+                        cx: blob.x,
+                        cy: blob.y,
+                        r: blob.r,
+                        fill: blob.color,
+                        'fill-opacity': '0.08',
+                        filter: 'url(#glow-blue)'
+                    }));
+                });
+                svg.appendChild(nebula);
+
+                const stars = createSvgNode('g', { opacity: '0.34' });
+                for (let i = 0; i < 72; i += 1) {
+                    const x = 200 + pseudoRandom(i + 2) * 520;
+                    const y = 40 + pseudoRandom(i + 103) * 280;
+                    const radius = 0.4 + pseudoRandom(i + 207) * 1.1;
+                    stars.appendChild(createSvgNode('circle', {
+                        cx: x.toFixed(2),
+                        cy: y.toFixed(2),
+                        r: radius.toFixed(2),
+                        fill: '#bfdbfe'
+                    }));
+                }
+                svg.appendChild(stars);
+
+                const arterialRoads = createSvgNode('g');
+                [
+                    'M 20 40 C 190 40 210 20 360 20 L 720 20 C 780 20 800 36 860 36 L 980 36',
+                    'M 15 95 C 80 130 150 136 250 136 C 350 136 400 170 460 190 L 565 190',
+                    'M 250 640 C 370 620 470 620 560 622 C 648 624 736 616 810 560 C 860 522 900 500 988 500',
+                    'M 588 214 C 600 214 608 224 608 238 L 608 548 C 608 570 628 588 650 588 L 760 588'
+                ].forEach((d) => {
+                    const outer = createSvgNode('path', {
+                        d,
+                        fill: 'none',
+                        stroke: 'rgba(96, 165, 250, 0.22)',
+                        'stroke-width': '24',
+                        'stroke-linecap': 'round',
+                        'stroke-linejoin': 'round'
+                    });
+                    const inner = createSvgNode('path', {
+                        d,
+                        fill: 'none',
+                        stroke: 'rgba(191, 219, 254, 0.2)',
+                        'stroke-width': '2.2',
+                        'stroke-linecap': 'round',
+                        'stroke-linejoin': 'round'
+                    });
+                    arterialRoads.appendChild(outer);
+                    arterialRoads.appendChild(inner);
+                });
+                svg.appendChild(arterialRoads);
+
+                floor.rooms.forEach((room) => {
+                    const g = createSvgNode('g');
                     const isRoad = room.type === 'Road';
                     const isBuilding = room.type === 'Building';
+                    const isParking = room.type === 'Parking';
+                    const isAthletic = room.type === 'Athletic';
+                    const isFacility = room.type === 'Facility';
+                    const itemCount = (room.items || []).length;
+                    let highlightShape = null;
+                    let baseStrokeWidth = 1.5;
+
+                    g.style.transition = 'transform 0.25s ease';
 
                     if (isRoad) {
-                        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                        rect.setAttribute('x', room.x); rect.setAttribute('y', room.y);
-                        rect.setAttribute('width', room.w); rect.setAttribute('height', room.h);
-                        rect.setAttribute('rx', '2');
-                        rect.setAttribute('fill', 'rgba(80,80,80,0.3)');
-                        rect.setAttribute('stroke', 'rgba(120,120,120,0.3)');
-                        rect.setAttribute('stroke-width', '1');
-                        rect.setAttribute('stroke-dasharray', '8 4');
-                        g.appendChild(rect);
-                    } else {
-                        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                        rect.setAttribute('x', room.x); rect.setAttribute('y', room.y);
-                        rect.setAttribute('width', room.w); rect.setAttribute('height', room.h);
-                        rect.setAttribute('rx', isBuilding ? '4' : '8');
+                        const road = createSvgNode('path', {
+                            d: roundedRectPath(room.x, room.y, room.w, room.h, Math.min(room.h, room.w) * 0.45),
+                            fill: 'url(#campusRoadGradient)',
+                            stroke: 'rgba(0, 217, 255, 0.2)',
+                            'stroke-width': '1.2'
+                        });
+                        g.appendChild(road);
 
-                        if (isBuilding) {
-                            rect.setAttribute('fill', 'rgba(37, 99, 235, 0.08)');
-                            rect.setAttribute('stroke', 'rgba(100, 160, 255, 0.5)');
-                            rect.setAttribute('stroke-width', '2');
-                            rect.setAttribute('filter', 'url(#glow-blue)');
-                            g.style.cursor = 'pointer';
-                        } else if (room.type === 'Athletic') {
-                            rect.setAttribute('fill', 'rgba(34, 197, 94, 0.06)');
-                            rect.setAttribute('stroke', 'rgba(34, 197, 94, 0.3)');
-                            rect.setAttribute('stroke-width', '1.5');
-                        } else if (room.type === 'Parking') {
-                            rect.setAttribute('fill', 'rgba(255,255,255,0.03)');
-                            rect.setAttribute('stroke', 'rgba(255,255,255,0.15)');
-                            rect.setAttribute('stroke-width', '1');
-                            rect.setAttribute('stroke-dasharray', '6 3');
-                        } else {
-                            rect.setAttribute('fill', 'rgba(245, 158, 11, 0.06)');
-                            rect.setAttribute('stroke', 'rgba(245, 158, 11, 0.3)');
-                            rect.setAttribute('stroke-width', '1.5');
+                        const lane = createSvgNode('line', {
+                            x1: room.w >= room.h ? room.x + 14 : room.x + room.w / 2,
+                            y1: room.w >= room.h ? room.y + room.h / 2 : room.y + 14,
+                            x2: room.w >= room.h ? room.x + room.w - 14 : room.x + room.w / 2,
+                            y2: room.w >= room.h ? room.y + room.h / 2 : room.y + room.h - 14,
+                            stroke: 'rgba(0, 217, 255, 0.25)',
+                            'stroke-width': '1',
+                            'stroke-dasharray': '10 8',
+                            'pointer-events': 'none'
+                        });
+                        g.appendChild(lane);
+                    } else if (isParking) {
+                        const lot = createSvgNode('polygon', {
+                            points: `${room.x + 12},${room.y} ${room.x + room.w},${room.y + 6} ${room.x + room.w - 12},${room.y + room.h} ${room.x},${room.y + room.h - 6}`,
+                            fill: 'url(#campusParkingGradient)',
+                            stroke: 'rgba(0, 217, 255, 0.25)',
+                            'stroke-width': '1.5'
+                        });
+                        g.appendChild(lot);
+                        highlightShape = lot;
+                        baseStrokeWidth = 1.5;
+
+                        for (let px = room.x + 26; px < room.x + room.w - 10; px += 18) {
+                            const slot = createSvgNode('line', {
+                                x1: px,
+                                y1: room.y + 18,
+                                x2: px - 8,
+                                y2: room.y + room.h - 18,
+                                stroke: 'rgba(0, 217, 255, 0.15)',
+                                'stroke-width': '0.8',
+                                'pointer-events': 'none'
+                            });
+                            g.appendChild(slot);
                         }
-                        rect.style.transition = 'all 0.3s ease';
-                        g.appendChild(rect);
+                    } else if (isBuilding) {
+                        const outlinePath = room.id === 'MAIN'
+                            ? `M ${room.x + 30} ${room.y + room.h}
+                               V ${room.y + room.h * 0.82}
+                               H ${room.x + 4}
+                               V ${room.y + room.h * 0.52}
+                               H ${room.x + 34}
+                               V ${room.y + room.h * 0.22}
+                               H ${room.x + room.w * 0.28}
+                               V ${room.y + 26}
+                               H ${room.x + room.w * 0.42}
+                               V ${room.y + room.h * 0.16}
+                               H ${room.x + room.w * 0.58}
+                               V ${room.y + 26}
+                               H ${room.x + room.w * 0.72}
+                               V ${room.y + room.h * 0.22}
+                               H ${room.x + room.w - 34}
+                               V ${room.y + room.h * 0.52}
+                               H ${room.x + room.w - 4}
+                               V ${room.y + room.h * 0.82}
+                               H ${room.x + room.w - 30}
+                               V ${room.y + room.h}
+                               H ${room.x + room.w * 0.62}
+                               V ${room.y + room.h * 0.87}
+                               H ${room.x + room.w * 0.38}
+                               V ${room.y + room.h}
+                               Z`
+                            : `M ${room.x + 24} ${room.y}
+                               H ${room.x + room.w - 24}
+                               L ${room.x + room.w} ${room.y + 24}
+                               V ${room.y + room.h - 24}
+                               L ${room.x + room.w - 24} ${room.y + room.h}
+                               H ${room.x + 24}
+                               L ${room.x} ${room.y + room.h - 24}
+                               V ${room.y + 24}
+                               Z`;
+                        const shell = createSvgNode('path', {
+                            d: outlinePath,
+                            fill: 'url(#campusBuildingGradient)',
+                            stroke: '#00D9FF',
+                            'stroke-width': '3',
+                            filter: 'url(#glow-blue)'
+                        });
+                        g.appendChild(shell);
+                        highlightShape = shell;
+                        baseStrokeWidth = 3;
 
-                        // Stadium oval overlay
+                        const core = createSvgNode('rect', {
+                            x: room.x + 32,
+                            y: room.y + 34,
+                            width: room.w - 64,
+                            height: room.h - 110,
+                            rx: '14',
+                            fill: 'rgba(0, 217, 255, 0.08)',
+                            stroke: 'rgba(0, 217, 255, 0.4)',
+                            'stroke-width': '1.5'
+                        });
+                        g.appendChild(core);
+
+                        const entry = createSvgNode('rect', {
+                            x: room.x + room.w / 2 - 24,
+                            y: room.y + room.h - 46,
+                            width: '48',
+                            height: '28',
+                            rx: '8',
+                            fill: 'rgba(0, 217, 255, 0.2)',
+                            stroke: 'rgba(0, 217, 255, 0.7)',
+                            'stroke-width': '1.5'
+                        });
+                        g.appendChild(entry);
+                    } else if (isAthletic) {
                         if (room.id === 'STADIUM') {
-                            const el = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-                            el.setAttribute('cx', room.x + room.w / 2);
-                            el.setAttribute('cy', room.y + room.h / 2);
-                            el.setAttribute('rx', room.w / 2 - 20);
-                            el.setAttribute('ry', room.h / 2 - 15);
-                            el.setAttribute('fill', 'none');
-                            el.setAttribute('stroke', 'rgba(34,197,94,0.2)');
-                            el.setAttribute('stroke-width', '1');
-                            el.setAttribute('stroke-dasharray', '4 3');
-                            g.appendChild(el);
-                        }
+                            const bowl = createSvgNode('ellipse', {
+                                cx: room.x + room.w / 2,
+                                cy: room.y + room.h / 2,
+                                rx: room.w / 2 - 2,
+                                ry: room.h / 2 - 2,
+                                fill: 'url(#campusAthleticGradient)',
+                                stroke: '#00FF88',
+                                'stroke-width': '2.5',
+                                filter: 'url(#glow-green)'
+                            });
+                            g.appendChild(bowl);
+                            highlightShape = bowl;
+                            baseStrokeWidth = 2.5;
 
-                        // Track oval
-                        if (room.id === 'TRACK') {
-                            const el = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-                            el.setAttribute('cx', room.x + room.w / 2);
-                            el.setAttribute('cy', room.y + room.h / 2);
-                            el.setAttribute('rx', room.w / 2 - 10);
-                            el.setAttribute('ry', room.h / 2 - 10);
-                            el.setAttribute('fill', 'none');
-                            el.setAttribute('stroke', 'rgba(34,197,94,0.25)');
-                            el.setAttribute('stroke-width', '2');
-                            g.appendChild(el);
-                        }
+                            const field = createSvgNode('ellipse', {
+                                cx: room.x + room.w / 2,
+                                cy: room.y + room.h / 2,
+                                rx: room.w / 2 - 30,
+                                ry: room.h / 2 - 22,
+                                fill: 'url(#campusFieldGradient)',
+                                stroke: 'rgba(0, 255, 136, 0.5)',
+                                'stroke-width': '1.5'
+                            });
+                            g.appendChild(field);
+                        } else if (room.id === 'TRACK') {
+                            const trackOuter = createSvgNode('ellipse', {
+                                cx: room.x + room.w / 2,
+                                cy: room.y + room.h / 2,
+                                rx: room.w / 2 - 2,
+                                ry: room.h / 2 - 2,
+                                fill: 'rgba(0, 217, 255, 0.15)',
+                                stroke: '#00D9FF',
+                                'stroke-width': '2.2',
+                                filter: 'url(#glow-blue)'
+                            });
+                            g.appendChild(trackOuter);
+                            highlightShape = trackOuter;
+                            baseStrokeWidth = 2.2;
 
-                        // Baseball diamond
-                        if (room.id === 'BASEBALL' || room.id === 'SOFTBALL') {
-                            const cx = room.x + room.w / 2;
-                            const cy = room.y + room.h / 2;
-                            const sz = Math.min(room.w, room.h) * 0.3;
-                            const diamond = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-                            diamond.setAttribute('points', `${cx},${cy - sz} ${cx + sz},${cy} ${cx},${cy + sz} ${cx - sz},${cy}`);
-                            diamond.setAttribute('fill', 'none');
-                            diamond.setAttribute('stroke', 'rgba(34,197,94,0.2)');
-                            diamond.setAttribute('stroke-width', '1');
-                            g.appendChild(diamond);
-                        }
+                            const trackInner = createSvgNode('ellipse', {
+                                cx: room.x + room.w / 2,
+                                cy: room.y + room.h / 2,
+                                rx: room.w / 2 - 18,
+                                ry: room.h / 2 - 18,
+                                fill: 'url(#campusFieldGradient)',
+                                stroke: 'rgba(0, 255, 136, 0.5)',
+                                'stroke-width': '1.5'
+                            });
+                            g.appendChild(trackInner);
 
-                        // Label with glow
-                        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                        label.setAttribute('x', room.x + room.w / 2);
-                        label.setAttribute('y', room.y + room.h / 2);
-                        label.setAttribute('text-anchor', 'middle');
-                        label.setAttribute('dominant-baseline', 'middle');
-                        label.setAttribute('fill', isBuilding ? 'rgba(160,200,255,0.95)' : 'rgba(255,255,255,0.7)');
-                        label.setAttribute('font-size', isBuilding ? '15' : room.w > 150 ? '13' : '11');
-                        label.setAttribute('font-weight', '700');
-                        label.setAttribute('font-family', 'Inter, sans-serif');
-                        label.setAttribute('letter-spacing', '1.5');
-                        label.setAttribute('pointer-events', 'none');
-                        label.setAttribute('filter', 'url(#textGlow)');
+                            [9, 13].forEach((laneInset) => {
+                                const lane = createSvgNode('ellipse', {
+                                    cx: room.x + room.w / 2,
+                                    cy: room.y + room.h / 2,
+                                    rx: room.w / 2 - laneInset,
+                                    ry: room.h / 2 - laneInset,
+                                    fill: 'none',
+                                    stroke: 'rgba(0, 217, 255, 0.4)',
+                                    'stroke-width': '1'
+                                });
+                                g.appendChild(lane);
+                            });
+                        } else if (room.id === 'TENNIS') {
+                            const courtWrap = createSvgNode('path', {
+                                d: roundedRectPath(room.x, room.y, room.w, room.h, 12),
+                                fill: 'url(#campusAthleticGradient)',
+                                stroke: '#00FF88',
+                                'stroke-width': '2.2',
+                                filter: 'url(#glow-green)'
+                            });
+                            g.appendChild(courtWrap);
+                            highlightShape = courtWrap;
+                            baseStrokeWidth = 2.2;
+
+                            const splitX = room.x + room.w / 2;
+                            g.appendChild(createSvgNode('line', {
+                                x1: splitX,
+                                y1: room.y + 10,
+                                x2: splitX,
+                                y2: room.y + room.h - 10,
+                                stroke: 'rgba(226, 232, 240, 0.32)',
+                                'stroke-width': '1'
+                            }));
+                            [room.x + room.w * 0.25, room.x + room.w * 0.75].forEach((netX) => {
+                                g.appendChild(createSvgNode('line', {
+                                    x1: netX,
+                                    y1: room.y + room.h * 0.32,
+                                    x2: netX,
+                                    y2: room.y + room.h * 0.68,
+                                    stroke: 'rgba(226, 232, 240, 0.28)',
+                                    'stroke-width': '0.9'
+                                }));
+                            });
+                        } else if (room.id === 'BASE' || room.id === 'SOFT') {
+                            const outfield = createSvgNode('ellipse', {
+                                cx: room.x + room.w / 2,
+                                cy: room.y + room.h * 0.62,
+                                rx: room.w * 0.46,
+                                ry: room.h * 0.36,
+                                fill: 'url(#campusFieldGradient)',
+                                stroke: '#00FF88',
+                                'stroke-width': '2.2',
+                                filter: 'url(#glow-green)'
+                            });
+                            g.appendChild(outfield);
+                            highlightShape = outfield;
+                            baseStrokeWidth = 2.2;
+
+                            const cx = room.x + room.w * 0.5;
+                            const cy = room.y + room.h * 0.62;
+                            const infieldSize = Math.min(room.w, room.h) * 0.18;
+                            const infield = createSvgNode('polygon', {
+                                points: `${cx},${cy - infieldSize} ${cx + infieldSize},${cy} ${cx},${cy + infieldSize} ${cx - infieldSize},${cy}`,
+                                fill: 'rgba(194, 120, 47, 0.38)',
+                                stroke: 'rgba(254, 215, 170, 0.48)',
+                                'stroke-width': '1'
+                            });
+                            g.appendChild(infield);
+
+                            g.appendChild(createSvgNode('line', {
+                                x1: cx,
+                                y1: cy,
+                                x2: room.x + room.w * 0.15,
+                                y2: room.y + room.h * 0.22,
+                                stroke: 'rgba(254, 243, 199, 0.45)',
+                                'stroke-width': '0.9'
+                            }));
+                            g.appendChild(createSvgNode('line', {
+                                x1: cx,
+                                y1: cy,
+                                x2: room.x + room.w * 0.85,
+                                y2: room.y + room.h * 0.22,
+                                stroke: 'rgba(254, 243, 199, 0.45)',
+                                'stroke-width': '0.9'
+                            }));
+                        } else {
+                            const fieldHouse = createSvgNode('path', {
+                                d: roundedRectPath(room.x, room.y, room.w, room.h, 14),
+                                fill: 'url(#campusAthleticGradient)',
+                                stroke: '#00FF88',
+                                'stroke-width': '2.2',
+                                filter: 'url(#glow-green)'
+                            });
+                            g.appendChild(fieldHouse);
+                            highlightShape = fieldHouse;
+                            baseStrokeWidth = 2.2;
+                        }
+                    } else if (isFacility) {
+                        if (room.id === 'ENTRY') {
+                            const entryHex = createSvgNode('polygon', {
+                                points: `${room.x + 14},${room.y} ${room.x + room.w - 14},${room.y} ${room.x + room.w},${room.y + room.h / 2} ${room.x + room.w - 14},${room.y + room.h} ${room.x + 14},${room.y + room.h} ${room.x},${room.y + room.h / 2}`,
+                                fill: 'url(#campusFacilityGradient)',
+                                stroke: '#2563eb',
+                                'stroke-width': '2.2',
+                                filter: 'url(#glow-blue)'
+                            });
+                            g.appendChild(entryHex);
+                            highlightShape = entryHex;
+                            baseStrokeWidth = 2.2;
+                        } else if (room.id === 'BARN') {
+                            const roof = createSvgNode('polygon', {
+                                points: `${room.x + 10},${room.y + 26} ${room.x + room.w / 2},${room.y - 4} ${room.x + room.w - 10},${room.y + 26}`,
+                                fill: 'rgba(37, 99, 235, 0.25)',
+                                stroke: 'rgba(37, 99, 235, 0.7)',
+                                'stroke-width': '1.5'
+                            });
+                            g.appendChild(roof);
+                            const body = createSvgNode('rect', {
+                                x: room.x + 8,
+                                y: room.y + 24,
+                                width: room.w - 16,
+                                height: room.h - 24,
+                                rx: '10',
+                                fill: 'url(#campusFacilityGradient)',
+                                stroke: '#2563eb',
+                                'stroke-width': '2',
+                                filter: 'url(#glow-blue)'
+                            });
+                            g.appendChild(body);
+                            highlightShape = body;
+                            baseStrokeWidth = 2;
+                        } else {
+                            const facility = createSvgNode('path', {
+                                d: roundedRectPath(room.x, room.y, room.w, room.h, 10),
+                                fill: 'url(#campusFacilityGradient)',
+                                stroke: '#2563eb',
+                                'stroke-width': '2',
+                                filter: 'url(#glow-blue)'
+                            });
+                            g.appendChild(facility);
+                            highlightShape = facility;
+                            baseStrokeWidth = 2;
+                        }
+                    }
+
+                    if (!isRoad) {
+                        const label = createSvgNode('text', {
+                            x: room.x + room.w / 2,
+                            y: room.y + room.h / 2 + (isBuilding ? -6 : 0),
+                            'text-anchor': 'middle',
+                            'dominant-baseline': 'middle',
+                            fill: isBuilding ? '#00D9FF' : (isAthletic ? '#00FF88' : 'rgba(100, 200, 255, 0.85)'),
+                            'font-size': isBuilding ? '15' : room.w > 170 ? '12' : '10',
+                            'font-weight': '700',
+                            'font-family': 'Inter, sans-serif',
+                            'letter-spacing': isBuilding ? '1.2' : '0.8',
+                            'pointer-events': 'none',
+                            filter: 'url(#textGlow)'
+                        });
                         label.textContent = room.name.toUpperCase();
                         g.appendChild(label);
 
-                        // Sub-label for building
                         if (isBuilding) {
-                            const sub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                            sub.setAttribute('x', room.x + room.w / 2);
-                            sub.setAttribute('y', room.y + room.h / 2 + 20);
-                            sub.setAttribute('text-anchor', 'middle');
-                            sub.setAttribute('dominant-baseline', 'middle');
-                            sub.setAttribute('fill', 'rgba(100,160,255,0.6)');
-                            sub.setAttribute('font-size', '10');
-                            sub.setAttribute('font-weight', '500');
-                            sub.setAttribute('font-family', 'Inter, sans-serif');
-                            sub.setAttribute('pointer-events', 'none');
-                            sub.textContent = 'Click to enter';
-                            g.appendChild(sub);
-
-                            g.addEventListener('click', () => {
-                                currentFloor = 1;
-                                document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active'));
-                                document.querySelector('.floor-tab[data-floor="1"]').classList.add('active');
-                                scale = 1; translateX = 0; translateY = 0;
-                                updateTransform();
-                                drawFloor();
+                            const subLabel = createSvgNode('text', {
+                                x: room.x + room.w / 2,
+                                y: room.y + room.h / 2 + 16,
+                                'text-anchor': 'middle',
+                                'dominant-baseline': 'middle',
+                                fill: 'rgba(0, 217, 255, 0.7)',
+                                'font-size': '10',
+                                'font-weight': '600',
+                                'font-family': 'Inter, sans-serif',
+                                'pointer-events': 'none'
                             });
-
-                            g.addEventListener('mouseenter', () => {
-                                rect.setAttribute('fill', 'rgba(37, 99, 235, 0.15)');
-                                rect.setAttribute('stroke', 'rgba(100, 160, 255, 0.7)');
-                            });
-                            g.addEventListener('mouseleave', () => {
-                                rect.setAttribute('fill', 'rgba(37, 99, 235, 0.08)');
-                                rect.setAttribute('stroke', 'rgba(100, 160, 255, 0.5)');
-                            });
+                            subLabel.textContent = 'CLICK TO ENTER';
+                            g.appendChild(subLabel);
                         }
 
-                        // Parking lot lines
-                        if (room.type === 'Parking') {
-                            for (let px = room.x + 20; px < room.x + room.w - 10; px += 18) {
-                                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                                line.setAttribute('x1', px); line.setAttribute('y1', room.y + 20);
-                                line.setAttribute('x2', px); line.setAttribute('y2', room.y + room.h - 20);
-                                line.setAttribute('stroke', 'rgba(255,255,255,0.06)');
-                                line.setAttribute('stroke-width', '0.5');
-                                g.appendChild(line);
-                            }
+                        if (itemCount > 0) {
+                            const badge = createSvgNode('circle', {
+                                cx: room.x + room.w - 12,
+                                cy: room.y + 12,
+                                r: '10',
+                                fill: '#00D9FF',
+                                stroke: '#00D9FF',
+                                'stroke-width': '2',
+                                filter: 'url(#glow-blue)',
+                                'pointer-events': 'none'
+                            });
+                            g.appendChild(badge);
+                            const badgeText = createSvgNode('text', {
+                                x: room.x + room.w - 12,
+                                y: room.y + 12,
+                                'text-anchor': 'middle',
+                                'dominant-baseline': 'middle',
+                                fill: '#000',
+                                'font-size': '10',
+                                'font-weight': '800',
+                                'font-family': 'Inter, sans-serif',
+                                'pointer-events': 'none'
+                            });
+                            badgeText.textContent = String(itemCount);
+                            g.appendChild(badgeText);
                         }
                     }
+
+                    if (!isRoad) {
+                        g.style.cursor = isBuilding ? 'pointer' : 'default';
+                        g.addEventListener('mouseenter', (e) => {
+                            if (highlightShape) {
+                                highlightShape.setAttribute('stroke-width', String(baseStrokeWidth + 0.7));
+                            }
+                            g.setAttribute('transform', 'translate(0 -2)');
+                            showRoomPopup(room, e);
+                        });
+                        g.addEventListener('mouseleave', () => {
+                            if (highlightShape) {
+                                highlightShape.setAttribute('stroke-width', String(baseStrokeWidth));
+                            }
+                            g.removeAttribute('transform');
+                            hideRoomPopup();
+                        });
+                    }
+
+                    if (isBuilding) {
+                        g.addEventListener('click', () => {
+                            currentFloor = 1;
+                            document.querySelectorAll('.floor-tab').forEach((button) => button.classList.remove('active'));
+                            document.querySelector('.floor-tab[data-floor="1"]').classList.add('active');
+                            scale = 1;
+                            translateX = 0;
+                            translateY = 0;
+                            updateTransform();
+                            drawFloor();
+                        });
+                    }
+
                     svg.appendChild(g);
                 });
 
-                // Compass
-                const compassG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                compassG.setAttribute('transform', `translate(${svgW - 50}, ${svgH - 50})`);
-                const compassC = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                compassC.setAttribute('r', '20'); compassC.setAttribute('fill', 'rgba(0,0,0,0.5)');
-                compassC.setAttribute('stroke', 'rgba(255,255,255,0.15)'); compassC.setAttribute('stroke-width', '1');
-                compassG.appendChild(compassC);
-                ['N', 'S', 'E', 'W'].forEach((dir, i) => {
-                    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    const positions = [[0, -8], [0, 14], [10, 4], [-10, 4]];
-                    t.setAttribute('x', positions[i][0]); t.setAttribute('y', positions[i][1]);
-                    t.setAttribute('text-anchor', 'middle'); t.setAttribute('dominant-baseline', 'middle');
-                    t.setAttribute('fill', dir === 'N' ? '#ef4444' : 'rgba(255,255,255,0.5)');
-                    t.setAttribute('font-size', dir === 'N' ? '11' : '8');
-                    t.setAttribute('font-weight', '700'); t.setAttribute('font-family', 'Inter, sans-serif');
-                    t.textContent = dir;
-                    compassG.appendChild(t);
-                });
-                svg.appendChild(compassG);
+                // Star marker (bottom-right)
+                const marker = createSvgNode('g', { transform: `translate(${svgW - 42} ${svgH - 42})` });
+                marker.appendChild(createSvgNode('path', {
+                    d: 'M 0 -16 L 4 -4 L 16 0 L 4 4 L 0 16 L -4 4 L -16 0 L -4 -4 Z',
+                    fill: 'rgba(226, 232, 240, 0.9)',
+                    stroke: 'rgba(255, 255, 255, 0.65)',
+                    'stroke-width': '0.9',
+                    filter: 'url(#glow-blue)'
+                }));
+                marker.appendChild(createSvgNode('circle', {
+                    cx: 0,
+                    cy: 0,
+                    r: 2.6,
+                    fill: 'rgba(255, 255, 255, 0.95)'
+                }));
+                svg.appendChild(marker);
 
             } else {
                 // ===== BUILDING INTERIOR VIEW (Floor 1 or 2) =====
@@ -1279,9 +1984,10 @@
                 outline.setAttribute('x', '50'); outline.setAttribute('y', '30');
                 outline.setAttribute('width', '880'); outline.setAttribute('height', '590');
                 outline.setAttribute('rx', '8'); outline.setAttribute('fill', 'none');
-                outline.setAttribute('stroke', 'rgba(100,160,255,0.1)');
-                outline.setAttribute('stroke-width', '2');
+                outline.setAttribute('stroke', 'rgba(0,217,255,0.15)');
+                outline.setAttribute('stroke-width', '2.5');
                 outline.setAttribute('stroke-dasharray', '8 4');
+                outline.setAttribute('filter', 'url(#glow-blue)');
                 svg.appendChild(outline);
 
                 // Draw rooms
@@ -1300,14 +2006,14 @@
                     rect.setAttribute('rx', isCorr ? '4' : '6');
 
                     if (isCorr) {
-                        rect.setAttribute('fill', 'rgba(255,255,255,0.015)');
-                        rect.setAttribute('stroke', 'rgba(255,255,255,0.05)');
+                        rect.setAttribute('fill', 'rgba(0,217,255,0.02)');
+                        rect.setAttribute('stroke', 'rgba(0,217,255,0.08)');
                         rect.setAttribute('stroke-width', '0.5');
                         rect.setAttribute('stroke-dasharray', '4 3');
                     } else {
                         rect.setAttribute('fill', heat.fill);
                         rect.setAttribute('stroke', heat.stroke);
-                        rect.setAttribute('stroke-width', count > 0 ? '2' : '1');
+                        rect.setAttribute('stroke-width', count > 0 ? '2.5' : '1.5');
                         if (count > 0) {
                             const fn = count <= 1 ? 'green' : count <= 2 ? 'yellow' : count <= 4 ? 'orange' : 'red';
                             rect.setAttribute('filter', `url(#glow-${fn})`);
@@ -1322,21 +2028,22 @@
                         nameText.setAttribute('y', room.y + room.h / 2 - (count > 0 ? 4 : 0));
                         nameText.setAttribute('text-anchor', 'middle');
                         nameText.setAttribute('dominant-baseline', 'middle');
-                        nameText.setAttribute('fill', count > 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.4)');
+                        nameText.setAttribute('fill', count > 0 ? 'rgba(255,255,255,0.95)' : 'rgba(0,217,255,0.5)');
                         nameText.setAttribute('font-size', room.w > 200 ? '13' : '11');
                         nameText.setAttribute('font-weight', '700');
                         nameText.setAttribute('font-family', 'Inter, sans-serif');
                         nameText.setAttribute('pointer-events', 'none');
+                        if (count > 0) nameText.setAttribute('filter', 'url(#textGlow)');
                         nameText.textContent = room.name;
                         g.appendChild(nameText);
 
-                        if (!room.id.startsWith('H') && !['CAF', 'GYM', 'LIB', 'CL1', 'CL2', 'CL3', 'RR1', 'RR2', 'LK1'].includes(room.id)) {
+                        if (/^\d{3}$/.test(room.id)) {
                             const numText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                             numText.setAttribute('x', room.x + room.w / 2);
                             numText.setAttribute('y', room.y + room.h / 2 + 14);
                             numText.setAttribute('text-anchor', 'middle');
                             numText.setAttribute('dominant-baseline', 'middle');
-                            numText.setAttribute('fill', 'rgba(255,255,255,0.2)');
+                            numText.setAttribute('fill', 'rgba(0,217,255,0.35)');
                             numText.setAttribute('font-size', '9');
                             numText.setAttribute('font-weight', '600');
                             numText.setAttribute('font-family', 'Inter, sans-serif');
@@ -1350,7 +2057,7 @@
                         corrText.setAttribute('y', room.y + room.h / 2);
                         corrText.setAttribute('text-anchor', 'middle');
                         corrText.setAttribute('dominant-baseline', 'middle');
-                        corrText.setAttribute('fill', 'rgba(255,255,255,0.08)');
+                        corrText.setAttribute('fill', 'rgba(0,217,255,0.12)');
                         corrText.setAttribute('font-size', '9'); corrText.setAttribute('font-weight', '600');
                         corrText.setAttribute('font-family', 'Inter, sans-serif');
                         corrText.setAttribute('letter-spacing', '2');
@@ -1366,7 +2073,21 @@
                         const badge = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                         badge.setAttribute('cx', bx); badge.setAttribute('cy', by);
                         badge.setAttribute('r', '12');
-                        badge.setAttribute('fill', heat.stroke.replace(/[\d.]+\)$/, '1)'));
+                        badge.setAttribute('fill', heat.stroke.replace(/[\d.]+\)$/, '1)').replace('#', 'rgba(').replace(/^rgba\(([\d,\s]+)/, (m, rgb) => {
+                            const parts = rgb.split(',').map(s => s.trim());
+                            if (parts.length === 1) {
+                                const hex = heat.stroke.replace('#', '');
+                                const r = parseInt(hex.substr(0, 2), 16);
+                                const g = parseInt(hex.substr(2, 2), 16);
+                                const b = parseInt(hex.substr(4, 2), 16);
+                                return `rgba(${r}, ${g}, ${b}`;
+                            }
+                            return m;
+                        }) + ', 1)');
+                        badge.setAttribute('stroke', heat.stroke);
+                        badge.setAttribute('stroke-width', '2');
+                        const fn = count <= 1 ? 'green' : count <= 2 ? 'yellow' : count <= 4 ? 'orange' : 'red';
+                        badge.setAttribute('filter', `url(#glow-${fn})`);
                         badge.setAttribute('pointer-events', 'none');
                         g.appendChild(badge);
 
@@ -1387,13 +2108,13 @@
                         g.addEventListener('mouseenter', (e) => {
                             rect.setAttribute('fill', count > 0
                                 ? heat.fill.replace(/[\d.]+\)$/, `${parseFloat(heat.fill.match(/[\d.]+\)$/)[0]) + 0.1})`)
-                                : 'rgba(255,255,255,0.06)');
-                            rect.setAttribute('stroke-width', '2.5');
+                                : 'rgba(0,217,255,0.08)');
+                            rect.setAttribute('stroke-width', '3.5');
                             showRoomPopup(room, e);
                         });
                         g.addEventListener('mouseleave', () => {
                             rect.setAttribute('fill', heat.fill);
-                            rect.setAttribute('stroke-width', count > 0 ? '2' : '1');
+                            rect.setAttribute('stroke-width', count > 0 ? '2.5' : '1.5');
                             hideRoomPopup();
                         });
                     }
@@ -1411,7 +2132,7 @@
         // ============================================================
         function updateRoomList() {
             const floor = schoolData[currentFloor];
-            const nonCorridors = floor.rooms.filter(r => r.type !== 'Corridor');
+            const nonCorridors = floor.rooms.filter((room) => room.type !== 'Corridor' && room.type !== 'Road');
 
             // Sort: rooms with items first, then by count desc
             nonCorridors.sort((a, b) => (b.items || []).length - (a.items || []).length);
@@ -1423,7 +2144,7 @@
                     <div class="room-item ${heat.class}" data-room="${room.id}">
                         <div>
                             <span class="room-name">${room.name}</span>
-                            <span class="room-number">#${room.id}</span>
+                            <span class="room-number">${getRoomMetaLabel(room, currentFloor)}</span>
                         </div>
                         ${count > 0 ? `<span class="item-count">${count}</span>` : ''}
                     </div>
@@ -1454,7 +2175,7 @@
 
             Object.values(schoolData).forEach(floor => {
                 floor.rooms.forEach(room => {
-                    if (room.type !== 'Corridor') {
+                    if (room.type !== 'Corridor' && room.type !== 'Road') {
                         totalRoomCount++;
                         const c = (room.items || []).length;
                         totalItemCount += c;
@@ -1463,9 +2184,18 @@
                 });
             });
 
-            document.getElementById('totalItems').textContent = totalItemCount;
-            document.getElementById('totalRooms').textContent = totalRoomCount;
-            document.getElementById('hotZones').textContent = hotZoneCount;
+            ['totalItems', 'campusTotalItems'].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = totalItemCount;
+            });
+            ['totalRooms', 'campusTotalRooms'].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = totalRoomCount;
+            });
+            ['hotZones', 'campusHotZones'].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = hotZoneCount;
+            });
         }
 
         // ============================================================
@@ -1473,7 +2203,7 @@
         // ============================================================
         function showRoomPopup(room, event) {
             document.getElementById('popupRoomName').textContent = room.name;
-            document.getElementById('popupRoomNumber').textContent = `Room #${room.id} — ${room.type}`;
+            document.getElementById('popupRoomNumber').textContent = getRoomPopupSubheading(room);
             document.getElementById('popupRoomType').textContent =
                 (room.items || []).length > 0
                     ? `${room.items.length} item${room.items.length > 1 ? 's' : ''} found here`
@@ -1492,10 +2222,23 @@
                 itemsContainer.innerHTML = '<div class="popup-no-items">No items found here</div>';
             }
 
-            const rect = mapWrapper.getBoundingClientRect();
-            roomPopup.style.left = `${event.clientX - rect.left + 16}px`;
-            roomPopup.style.top = `${event.clientY - rect.top - 16}px`;
             roomPopup.classList.add('show');
+            const wrapperRect = mapWrapper.getBoundingClientRect();
+            const popupWidth = roomPopup.offsetWidth || 240;
+            const popupHeight = roomPopup.offsetHeight || 160;
+
+            let left = event.clientX - wrapperRect.left + 16;
+            let top = event.clientY - wrapperRect.top - popupHeight - 12;
+
+            if (left + popupWidth > wrapperRect.width - 12) left = wrapperRect.width - popupWidth - 12;
+            if (left < 12) left = 12;
+
+            if (top < 12) top = event.clientY - wrapperRect.top + 18;
+            if (top + popupHeight > wrapperRect.height - 12) top = wrapperRect.height - popupHeight - 12;
+            if (top < 12) top = 12;
+
+            roomPopup.style.left = `${left}px`;
+            roomPopup.style.top = `${top}px`;
         }
 
         function hideRoomPopup() {
@@ -1561,10 +2304,39 @@
             updateTransform();
         }, { passive: false });
 
+        let mapRealtimeChannel = null;
+        let mapRefreshTimer = null;
+
+        function scheduleMapRefresh() {
+            if (mapRefreshTimer) clearTimeout(mapRefreshTimer);
+            mapRefreshTimer = setTimeout(() => {
+                loadItems();
+            }, 350);
+        }
+
+        function setupRealtimeMapSync() {
+            if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured() || !BackTrackDB.supabase) {
+                return;
+            }
+
+            mapRealtimeChannel = BackTrackDB.supabase
+                .channel('map-items-live')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'items' }, scheduleMapRefresh)
+                .subscribe();
+
+            window.addEventListener('beforeunload', () => {
+                if (mapRealtimeChannel) {
+                    BackTrackDB.supabase.removeChannel(mapRealtimeChannel);
+                    mapRealtimeChannel = null;
+                }
+            });
+        }
+
         // ============================================================
         // Initialize — load from Supabase then draw
         // ============================================================
         loadItems();
+        setupRealtimeMapSync();
     </script>
 </body>
 
