@@ -279,24 +279,14 @@
 /* --- User Info Overlay --- */
 .lb-user-info {
     position: absolute;
-    bottom: 20px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     z-index: 5;
     text-align: center;
     width: 100%;
     padding: 0 10px;
     pointer-events: none;
-    /* Let clicks pass to cylinder if interactive later */
-}
-
-/* Position info higher for clarity? No, let's put it on top of cylinder for readability */
-.lb-user-info {
-    bottom: auto;
-    top: 50%;
-    /* Center on cylinder */
-    transform: translate(-50%, -50%);
-    margin-top: 20px;
 }
 
 .lb-name {
