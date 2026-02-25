@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/leaderboard.css?v=2">
+    <link rel="stylesheet" href="css/leaderboard.css?v=3">
 
     <link rel="stylesheet" href="css/rewards.css">
 </head>
@@ -41,7 +41,7 @@
             <a href="sources.html" class="nav-link">Sources</a>
         </div>
         <div class="nav-right">
-            <a href="login.html" class="sign-in-btn">Sign In</a>
+            <a href="login.html" class="sign-in-btn">Log In</a>
         </div>
     </nav>
     <div class="nav-spacer"></div>
@@ -338,11 +338,11 @@
                     <button class="lb-range-btn" type="button" data-range="all">All Time</button>
                 </div>
 
-                <div class="lb-podium" id="lbPodium">
+                <div class="lb-podium-wrap" id="lbPodium">
                     <!-- Populated by JS -->
                 </div>
 
-                <p class="lb-summary" id="lbSummary">Loading leaderboard...</p>
+
 
                 <div class="lb-table-wrap">
                     <div class="lb-table-head" aria-hidden="true">
@@ -357,7 +357,7 @@
                     </div>
                 </div>
 
-                <p class="lb-note" id="lbNote">Loading leaderboard...</p>
+
             </div>
         </section>
 
@@ -373,6 +373,7 @@
     <script src="js/supabase.js"></script>
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="js/leaderboard.js?v=3"></script>
     <script>
         const POINTS_PER_RETURN = 20;
@@ -447,6 +448,130 @@
             return new Intl.NumberFormat().format(value);
         }
 
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function normalizeRewardCategory(value) {
+            const raw = String(value || 'other').trim().toLowerCase();
+            const map = {
+                event: 'events',
+                events: 'events',
+                merch: 'merch',
+                merchandise: 'merch',
+                food: 'food',
+                privilege: 'privilege',
+                privileges: 'privilege',
+                other: 'other'
+            };
+            return map[raw] || raw || 'other';
+        }
+
+        function rewardCategoryLabel(value) {
+            const category = normalizeRewardCategory(value);
+            return category.charAt(0).toUpperCase() + category.slice(1);
+        }
+
+        function rewardIconMarkup(category) {
+            const kind = normalizeRewardCategory(category);
+
+            if (kind === 'food') {
+                return `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    </svg>
+                `;
+            }
+
+            if (kind === 'merch') {
+                return `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4"></path>
+                        <path d="M17 9l-5 5-5-5"></path>
+                        <path d="M12 14V3"></path>
+                    </svg>
+                `;
+            }
+
+            if (kind === 'privilege') {
+                return `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    </svg>
+                `;
+            }
+
+            if (kind === 'events') {
+                return `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                        <path d="M6 6v12"></path>
+                        <path d="M18 6v12"></path>
+                    </svg>
+                `;
+            }
+
+            return `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 3l2.2 4.46 4.92.72-3.56 3.46.84 4.89L12 14.2l-4.4 2.32.84-4.89L4.88 8.18l4.92-.72L12 3z"></path>
+                </svg>
+            `;
+        }
+
+        async function loadRewardCatalogFromBackend() {
+            if (typeof BackTrackDB === 'undefined' || typeof BackTrackDB.getRewardCatalog !== 'function') {
+                return false;
+            }
+
+            const rewards = await BackTrackDB.getRewardCatalog({ activeOnly: true });
+            if (!Array.isArray(rewards) || rewards.length === 0) {
+                return false;
+            }
+
+            ui.rewardsGrid.innerHTML = rewards
+                .sort((a, b) => {
+                    const costDelta = Number(a.points_cost || 0) - Number(b.points_cost || 0);
+                    if (costDelta !== 0) return costDelta;
+                    return String(a.name || '').localeCompare(String(b.name || ''));
+                })
+                .map((reward) => {
+                    const category = normalizeRewardCategory(reward.category);
+                    const name = escapeHtml(reward.name || 'Reward');
+                    const description = escapeHtml(reward.description || 'Redeem this reward from the BackTrack store.');
+                    const cost = Number(reward.points_cost || 0);
+                    return `
+                        <article class="reward-card" data-category="${escapeHtml(category)}" data-cost="${cost}" data-name="${name}">
+                            <div class="reward-body">
+                                <div class="reward-head">
+                                    <div class="reward-mini-icon">${rewardIconMarkup(category)}</div>
+                                    <h3 class="reward-title">${name}</h3>
+                                    <span class="reward-chip-inline">${escapeHtml(rewardCategoryLabel(category))}</span>
+                                </div>
+                                <p class="reward-desc">${description}</p>
+                                <div class="reward-footer">
+                                    <div class="reward-cost">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="9"></circle>
+                                            <path d="M12 7v5l3 3"></path>
+                                        </svg>
+                                        ${cost} pts
+                                    </div>
+                                    <button class="redeem-btn" type="button">Redeem</button>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+
+            return true;
+        }
+
         function renderRewardsDashboard() {
             if (ui.pointsValue) ui.pointsValue.textContent = formatNumber(state.points);
             if (ui.returnsValue) ui.returnsValue.textContent = formatNumber(state.stats.returns);
@@ -484,7 +609,7 @@
 
                 if (!state.user) {
                     button.disabled = false;
-                    button.textContent = 'Sign in';
+                    button.textContent = 'Log In';
                     return;
                 }
 
@@ -600,19 +725,47 @@
                 }
 
                 state.user = user;
+                const statuses = ['found', 'claimed'];
+                const email = String(user.email || '').trim();
 
                 const [
-                    { count: returnCount, error: returnError },
-                    { count: claimsCount, error: claimsError },
+                    { data: returnsByUserId, error: returnsByUserIdError },
+                    { data: returnsByEmail, error: returnsByEmailError },
+                    { data: claimsByUserId, error: claimsByUserIdError },
+                    { data: claimsByEmail, error: claimsByEmailError },
                     { data: redemptions, error: redemptionsError }
                 ] = await Promise.all([
-                    BackTrackDB.supabase.from('items').select('id', { count: 'exact', head: true }).eq('submitted_by', user.id).in('status', ['found', 'claimed']),
-                    BackTrackDB.supabase.from('claims').select('id', { count: 'exact', head: true }).eq('claimer_id', user.id).eq('status', 'approved'),
+                    BackTrackDB.supabase.from('items').select('id').eq('submitted_by', user.id).in('status', statuses),
+                    email
+                        ? BackTrackDB.supabase.from('items').select('id').ilike('contact_email', email).in('status', statuses)
+                        : Promise.resolve({ data: [], error: null }),
+                    BackTrackDB.supabase.from('claims').select('id').eq('claimer_id', user.id).eq('status', 'approved'),
+                    email
+                        ? BackTrackDB.supabase.from('claims').select('id').ilike('claimer_email', email).eq('status', 'approved')
+                        : Promise.resolve({ data: [], error: null }),
                     BackTrackDB.supabase.from('redemptions').select('id, points_cost').eq('user_id', user.id)
                 ]);
 
-                if (returnError) throw returnError;
-                if (claimsError) throw claimsError;
+                if (returnsByUserIdError) throw returnsByUserIdError;
+                if (returnsByEmailError) throw returnsByEmailError;
+                if (claimsByUserIdError) throw claimsByUserIdError;
+                if (claimsByEmailError) throw claimsByEmailError;
+
+                const returnIds = new Set();
+                (returnsByUserId || []).forEach(row => {
+                    if (row && row.id) returnIds.add(row.id);
+                });
+                (returnsByEmail || []).forEach(row => {
+                    if (row && row.id) returnIds.add(row.id);
+                });
+
+                const claimIds = new Set();
+                (claimsByUserId || []).forEach(row => {
+                    if (row && row.id) claimIds.add(row.id);
+                });
+                (claimsByEmail || []).forEach(row => {
+                    if (row && row.id) claimIds.add(row.id);
+                });
 
                 let spentPoints = 0;
                 let redeemedCount = 0;
@@ -621,8 +774,8 @@
                     spentPoints = redemptions.reduce((sum, row) => sum + Number(row.points_cost || 0), 0);
                 }
 
-                const returns = Number(returnCount || 0);
-                const claims = Number(claimsCount || 0);
+                const returns = returnIds.size;
+                const claims = claimIds.size;
                 const earned = (returns * POINTS_PER_RETURN) + (claims * POINTS_PER_APPROVED_CLAIM);
 
                 state.points = Math.max(0, earned - spentPoints);
@@ -661,8 +814,14 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
+            await loadRewardCatalogFromBackend();
             setupEvents();
             applyFilter('all');
+            if (typeof BackTrackDB !== 'undefined' && BackTrackDB.onAuthStateChange) {
+                BackTrackDB.onAuthStateChange(() => {
+                    loadPointsAndStats();
+                });
+            }
             await loadPointsAndStats();
         });
     </script>

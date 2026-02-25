@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>AccessDenied</Code><Message>User: arn:aws:iam::019115613759:user/fastly/fastly.s3.images is not authorized to perform: s3:ListBucket on resource: "arn:aws:s3:::mxp-site-images-production" because no identity-based policy allows the s3:ListBucket action</Message><RequestId>PAD9FCGHAN7B4R5M</RequestId><HostId>xECjlAk4cHNgxu4BEmD1M37jmF/0+OdqwtR2iNmqRkZuVhgdzuczOIBaEwx0cIKRiPkmn/HZJt+5m0VbvCjK1hXcW/w/K+tu</HostId></Error>

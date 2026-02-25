@@ -37,7 +37,7 @@
       signIn = document.createElement('a');
       signIn.className = 'sign-in-btn';
       signIn.href = 'login.html';
-      signIn.textContent = 'Sign In';
+      signIn.textContent = 'Log In';
       navRight.appendChild(signIn);
     }
     return signIn;

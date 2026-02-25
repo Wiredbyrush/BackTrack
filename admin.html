@@ -136,51 +136,83 @@
         .sidebar-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
+            gap: 12px;
+            padding: 11px 12px;
             border-radius: 10px;
             color: rgba(255, 255, 255, 0.5);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all var(--transition-base);
             border: none;
             background: none;
             width: 100%;
             text-align: left;
             font-family: inherit;
+            position: relative;
+        }
+
+        /* Animated left border */
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #3b82f6, #60a5fa);
+            transform: scaleY(0);
+            transition: transform var(--transition-base);
+        }
+
+        .sidebar-link:hover::before,
+        .sidebar-link.active::before {
+            transform: scaleY(1);
         }
 
         .sidebar-link:hover {
-            color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(59, 130, 246, 0.08);
+            transform: translateX(2px);
         }
 
         .sidebar-link.active {
             color: #fff;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(59, 130, 246, 0.12);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
         }
 
         .sidebar-link .link-icon {
             font-size: 16px;
             width: 20px;
             text-align: center;
+            transition: transform var(--transition-base);
+        }
+
+        .sidebar-link:hover .link-icon,
+        .sidebar-link.active .link-icon {
+            transform: scale(1.1);
         }
 
         .sidebar-link .link-badge {
             margin-left: auto;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 2px 8px;
+            background: rgba(148, 163, 184, 0.15);
+            padding: 3px 9px;
             border-radius: 99px;
             font-size: 11px;
             font-weight: 700;
-            color: #888;
+            color: #94a3b8;
+            transition: all var(--transition-base);
         }
 
         .sidebar-link.active .link-badge {
-            background: rgba(37, 99, 235, 0.15);
+            background: rgba(37, 99, 235, 0.2);
             color: #60a5fa;
+        }
+
+        .sidebar-link:hover .link-badge {
+            transform: scale(1.05);
         }
 
         /* Main Content */
@@ -653,22 +685,24 @@
         /* KPI Cards */
         .dash-stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+            gap: clamp(10px, 2vw, 14px);
             margin-bottom: 20px;
         }
 
         @media (max-width: 900px) {
             .dash-stats {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
             }
         }
 
         .dash-kpi {
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            padding: 16px 18px;
+            background: var(--gradient-card);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: var(--radius-md);
+            padding: clamp(14px, 3vw, 20px);
+            position: relative;
+            overflow: hidden;
         }
 
         .kpi-top {
@@ -703,11 +737,17 @@
         }
 
         .kpi-value {
-            font-size: 30px;
+            font-size: clamp(24px, 5vw, 32px);
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -1.2px;
             line-height: 1;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
         }
 
         .kpi-unit {
@@ -775,8 +815,8 @@
         /* Bottom Grid */
         .dash-bottom-grid {
             display: grid;
-            grid-template-columns: 1.3fr 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+            gap: clamp(12px, 2vw, 16px);
         }
 
         @media (max-width: 900px) {
@@ -973,8 +1013,8 @@
 
         .analytics-grid {
             display: grid;
-            grid-template-columns: 1.3fr 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+            gap: clamp(12px, 2vw, 16px);
             margin-bottom: 16px;
         }
 
@@ -1115,10 +1155,14 @@
         }
 
         .loc-row-name {
-            width: 100px;
+            min-width: 100px;
+            flex: 0 0 auto;
             font-size: 12px;
             color: #bbb;
             font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .loc-row-bar-bg {
@@ -1170,8 +1214,8 @@
         /* ===== MESSAGES ===== */
         .messages-layout {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+            gap: clamp(12px, 2vw, 16px);
         }
 
         @media (max-width: 900px) {
@@ -1346,7 +1390,8 @@
         .users-table-wrap {
             overflow-x: auto;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: var(--admin-bg-card);
         }
 
         .users-table {
@@ -1392,6 +1437,67 @@
         .role-badge.user {
             background: rgba(255, 255, 255, 0.06);
             color: #888;
+        }
+
+        /* Mobile: Switch users table to card layout */
+        @media (max-width: 900px) {
+            .users-table {
+                display: block;
+            }
+
+            .users-table thead {
+                display: none;
+            }
+
+            .users-table tbody,
+            .users-table tr {
+                display: block;
+            }
+
+            .users-table tr {
+                margin-bottom: 16px;
+                border-radius: var(--radius-md);
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                background: var(--admin-bg-card);
+                padding: 16px;
+            }
+
+            .users-table tr:hover {
+                border-color: rgba(96, 165, 250, 0.4);
+            }
+
+            .users-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                border: none;
+                border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            }
+
+            .users-table td:last-child {
+                border-bottom: none;
+            }
+
+            .users-table td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                font-size: 11px;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .users-table-wrap {
+                border-radius: 10px;
+                border: none;
+            }
+
+            .users-table tr {
+                padding: 14px;
+            }
         }
 
         /* ===== ACTIVITY LOG ===== */
@@ -1469,6 +1575,368 @@
             color: #666;
             margin-top: 4px;
         }
+
+        /* ===== PAGE POLISH + REWARDS ADMIN ===== */
+        body {
+            background:
+                radial-gradient(1400px 800px at 25% -15%, rgba(30, 64, 175, 0.28), transparent 70%),
+                radial-gradient(1100px 600px at 105% 25%, rgba(6, 182, 212, 0.18), transparent 65%),
+                radial-gradient(900px 700px at 50% 100%, rgba(99, 102, 241, 0.12), transparent 68%),
+                linear-gradient(180deg, rgba(4, 6, 11, 0.98), rgba(4, 6, 11, 0.95)),
+                #04060b;
+            background-attachment: fixed;
+        }
+
+        .admin-layout {
+            width: min(1600px, 100%);
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        .admin-sidebar {
+            width: 256px;
+            background: linear-gradient(180deg, rgba(10, 14, 24, 0.95), rgba(8, 11, 20, 0.88));
+        }
+
+        .admin-main {
+            max-width: none;
+            width: 100%;
+            padding: 28px clamp(18px, 3vw, 36px) 70px;
+        }
+
+        .admin-main-title {
+            letter-spacing: -0.7px;
+        }
+
+        .admin-main-desc {
+            color: #93a3bf;
+            margin-bottom: 22px;
+        }
+
+        .review-card,
+        .chart-card,
+        .dash-kpi,
+        .dash-chart-wrap,
+        .dash-recent-card,
+        .dash-actions-card,
+        .compose-card,
+        .templates-card {
+            background: var(--admin-glass-bg);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            box-shadow: var(--shadow-card);
+            backdrop-filter: var(--admin-glass-blur);
+            -webkit-backdrop-filter: var(--admin-glass-blur);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle top gradient on hover */
+        .review-card::before,
+        .chart-card::before,
+        .dash-kpi::before,
+        .dash-chart-wrap::before,
+        .dash-recent-card::before,
+        .dash-actions-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.3) 50%, transparent);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .review-card:hover::before,
+        .chart-card:hover::before,
+        .dash-kpi:hover::before,
+        .dash-chart-wrap:hover::before,
+        .dash-recent-card:hover::before,
+        .dash-actions-card:hover::before {
+            opacity: 1;
+        }
+
+        .review-card:hover,
+        .chart-card:hover,
+        .dash-kpi:hover,
+        .dash-chart-wrap:hover,
+        .dash-recent-card:hover,
+        .dash-actions-card:hover {
+            border-color: rgba(96, 165, 250, 0.35);
+            box-shadow: var(--shadow-elevated), 0 0 0 1px rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .rewards-admin-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .reward-stat-card {
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(10, 14, 24, 0.88);
+        }
+
+        .reward-stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #8fa0be;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .reward-stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.6px;
+        }
+
+        .rewards-admin-grid {
+            display: grid;
+            grid-template-columns: minmax(320px, 0.95fr) minmax(420px, 1.2fr);
+            gap: 14px;
+        }
+
+        .reward-editor-card,
+        .reward-catalog-card {
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+            background: rgba(10, 14, 24, 0.88);
+        }
+
+        .reward-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 12px;
+            color: #b6c2d8;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .checkbox-wrap input {
+            accent-color: #3b82f6;
+        }
+
+        .reward-form-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-neutral {
+            background: rgba(148, 163, 184, 0.12);
+            color: #dbe4f4;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+        }
+
+        .btn-neutral:hover {
+            border-color: rgba(96, 165, 250, 0.5);
+            color: #fff;
+        }
+
+        .reward-item-card {
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+            padding: 14px;
+            background: rgba(5, 9, 18, 0.82);
+        }
+
+        .reward-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .reward-item-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .reward-item-meta {
+            color: #a6b2c8;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .reward-item-desc {
+            color: #8d9ab2;
+            font-size: 12px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .reward-item-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .reward-chip {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            border: 1px solid rgba(96, 165, 250, 0.45);
+            color: #7cb1ff;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 2px 7px;
+            margin-left: 8px;
+        }
+
+        .reward-pill {
+            display: inline-flex;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            letter-spacing: 0.4px;
+        }
+
+        .reward-pill.active {
+            color: #86efac;
+            background: rgba(34, 197, 94, 0.16);
+        }
+
+        .reward-pill.inactive {
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .redemption-row {
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(10, 14, 24, 0.88);
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .redemption-title {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .redemption-meta {
+            font-size: 12px;
+            color: #9aa8c0;
+            margin-top: 3px;
+        }
+
+        .status-pill {
+            border-radius: 999px;
+            padding: 3px 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+
+        .status-pill.pending {
+            color: #fde68a;
+            border-color: rgba(245, 158, 11, 0.5);
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .status-pill.approved,
+        .status-pill.delivered {
+            color: #86efac;
+            border-color: rgba(34, 197, 94, 0.5);
+            background: rgba(34, 197, 94, 0.15);
+        }
+
+        .status-pill.rejected,
+        .status-pill.canceled {
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .status-pill.other {
+            color: #cbd5e1;
+            border-color: rgba(148, 163, 184, 0.42);
+            background: rgba(148, 163, 184, 0.13);
+        }
+
+        @media (max-width: 1150px) {
+            .rewards-admin-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .rewards-admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-main {
+                padding: 22px 14px 60px;
+            }
+
+            .reward-form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== ADMIN DESIGN TOKENS ===== */
+        :root {
+            /* Enhanced backgrounds */
+            --admin-bg-base: #04060b;
+            --admin-bg-card: rgba(10, 14, 24, 0.88);
+            --admin-glass-bg: rgba(15, 23, 42, 0.7);
+            --admin-glass-border: rgba(148, 163, 184, 0.15);
+            --admin-glass-blur: blur(16px);
+
+            /* Enhanced shadows */
+            --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.2);
+            --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+
+            /* Gradients */
+            --gradient-card: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 14, 24, 0.9) 100%);
+            --gradient-border: linear-gradient(135deg, rgba(96, 165, 250, 0.3), rgba(37, 99, 235, 0.1));
+
+            /* Spacing */
+            --spacing-section: clamp(20px, 4vw, 36px);
+            --spacing-card: clamp(16px, 3vw, 24px);
+
+            /* Border radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+
+            /* Transitions */
+            --transition-base: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
     <link rel="stylesheet" href="css/theme.css">
 </head>
@@ -1487,7 +1955,7 @@
             <a class="nav-link" href="sources.html">Sources</a>
         </div>
         <div class="nav-right">
-            <a class="sign-in-btn" href="login.html">Sign In</a>
+            <a class="sign-in-btn" href="login.html">Log In</a>
         </div>
     </nav>
     <div class="nav-spacer"></div>
@@ -1498,6 +1966,7 @@
         <button class="mobile-tab" data-panel="submissions">Submissions</button>
         <button class="mobile-tab" data-panel="claims">Claims</button>
         <button class="mobile-tab" data-panel="bounties">Bounties</button>
+        <button class="mobile-tab" data-panel="rewards">Rewards</button>
         <button class="mobile-tab" data-panel="map">Map</button>
         <button class="mobile-tab" data-panel="analytics">Analytics</button>
         <button class="mobile-tab" data-panel="messages">Messages</button>
@@ -1550,6 +2019,15 @@
                         </svg>
                     </span> Bounties
                     <span class="link-badge" id="sidebarBountiesBadge">0</span>
+                </button>
+                <button class="sidebar-link" data-panel="rewards">
+                    <span class="link-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3l2.2 4.46 4.92.72-3.56 3.46.84 4.89L12 14.2l-4.4 2.32.84-4.89L4.88 8.18l4.92-.72L12 3z" />
+                        </svg>
+                    </span> Rewards
+                    <span class="link-badge" id="sidebarRewardsBadge">0</span>
                 </button>
                 <button class="sidebar-link" data-panel="users">
                     <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -1691,10 +2169,15 @@
                                 <span class="qa-text">Manage Bounties</span>
                                 <span class="qa-count" id="qaBounties">0</span>
                             </button>
+                            <button class="dash-qa" onclick="switchPanel('rewards')">
+                                <span class="qa-icon" style="color:#f59e0b">✦</span>
+                                <span class="qa-text">Rewards Catalog</span>
+                                <span class="qa-count" id="qaRewards">0</span>
+                            </button>
                             <button class="dash-qa" onclick="switchPanel('map')">
                                 <span class="qa-icon" style="color:#22c55e">◈</span>
                                 <span class="qa-text">Map Items</span>
-                                <span class="qa-count" id="qaMap">11</span>
+                                <span class="qa-count" id="qaMap">0</span>
                             </button>
                             <button class="dash-qa" onclick="switchPanel('messages')">
                                 <span class="qa-icon" style="color:#60a5fa">▣</span>
@@ -1744,6 +2227,104 @@
                     <span class="section-count" id="bountiesCountBadge">0</span>
                 </div>
                 <div class="cards-list" id="bountyItems">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Rewards Panel -->
+            <div class="admin-panel" id="panel-rewards">
+                <h1 class="admin-main-title">Rewards &amp; Prizes</h1>
+                <p class="admin-main-desc">Set live rewards, adjust points cost, and review redemption activity</p>
+
+                <div class="rewards-admin-stats">
+                    <div class="reward-stat-card">
+                        <div class="reward-stat-label">Active Rewards</div>
+                        <div class="reward-stat-value" id="rewardsActiveCount">0</div>
+                    </div>
+                    <div class="reward-stat-card">
+                        <div class="reward-stat-label">Archived</div>
+                        <div class="reward-stat-value" id="rewardsArchivedCount">0</div>
+                    </div>
+                    <div class="reward-stat-card">
+                        <div class="reward-stat-label">Total Redemptions</div>
+                        <div class="reward-stat-value" id="rewardsRedeemedCount">0</div>
+                    </div>
+                    <div class="reward-stat-card">
+                        <div class="reward-stat-label">Pending Redemptions</div>
+                        <div class="reward-stat-value" id="rewardsPendingCount">0</div>
+                    </div>
+                </div>
+
+                <div class="rewards-admin-grid">
+                    <div class="reward-editor-card">
+                        <div class="section-header">
+                            <h2 class="section-title" id="rewardFormTitle">Create Reward</h2>
+                        </div>
+                        <form id="rewardForm" class="reward-form">
+                            <div class="form-group">
+                                <label class="form-label" for="rewardName">Reward Name</label>
+                                <input class="form-input" id="rewardName" type="text" maxlength="120" required
+                                    placeholder="e.g. School Hoodie">
+                            </div>
+                            <div class="reward-form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="rewardCategory">Category</label>
+                                    <select class="form-select" id="rewardCategory" required>
+                                        <option value="food">Food</option>
+                                        <option value="merch">Merch</option>
+                                        <option value="privilege">Privilege</option>
+                                        <option value="events">Events</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="rewardPoints">Points Cost</label>
+                                    <input class="form-input" id="rewardPoints" type="number" min="1" max="5000"
+                                        required placeholder="80">
+                                </div>
+                            </div>
+                            <div class="reward-form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="rewardStock">Stock (optional)</label>
+                                    <input class="form-input" id="rewardStock" type="number" min="0"
+                                        placeholder="Leave blank for unlimited">
+                                </div>
+                                <div class="form-group checkbox-group">
+                                    <label class="checkbox-wrap" for="rewardActive">
+                                        <input id="rewardActive" type="checkbox" checked>
+                                        <span>Visible to students right now</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="rewardDescription">Description</label>
+                                <textarea class="form-textarea" id="rewardDescription" rows="4"
+                                    placeholder="Short details students should see when redeeming."></textarea>
+                            </div>
+                            <div class="reward-form-actions">
+                                <button class="send-btn" id="rewardSaveBtn" type="submit">Save Reward</button>
+                                <button class="btn btn-neutral" id="rewardCancelBtn" type="button"
+                                    onclick="clearRewardForm()">Cancel Edit</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="reward-catalog-card">
+                        <div class="section-header">
+                            <h2 class="section-title">Catalog</h2>
+                            <span class="section-count" id="rewardsCatalogCountBadge">0</span>
+                        </div>
+                        <div class="cards-list" id="rewardsCatalog">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header" style="margin-top:24px">
+                    <h2 class="section-title">Recent Redemptions</h2>
+                    <span class="section-count" id="rewardsRedemptionCountBadge">0</span>
+                </div>
+                <div class="cards-list" id="rewardRedemptions">
                     <div class="loading">Loading...</div>
                 </div>
             </div>
@@ -1819,8 +2400,10 @@
                         <div class="chart-card-header">
                             <div class="chart-card-title">Weekly Submissions</div>
                             <div class="chart-card-tabs">
-                                <button class="chart-tab active" id="analyticsTabFound" data-metric="found">Found</button>
-                                <button class="chart-tab" id="analyticsTabClaimed" data-metric="claimed">Claimed</button>
+                                <button class="chart-tab active" id="analyticsTabFound"
+                                    data-metric="found">Found</button>
+                                <button class="chart-tab" id="analyticsTabClaimed"
+                                    data-metric="claimed">Claimed</button>
                             </div>
                         </div>
                         <canvas id="analyticsLineChart" height="220"></canvas>
@@ -2053,6 +2636,17 @@
             const usersTableBody = document.getElementById('usersTableBody');
             const mapItemsEl = document.getElementById('mapItems');
             const analyticsRangeEl = document.getElementById('analyticsRange');
+            const rewardsCatalogEl = document.getElementById('rewardsCatalog');
+            const rewardRedemptionsEl = document.getElementById('rewardRedemptions');
+            const rewardFormEl = document.getElementById('rewardForm');
+            const rewardNameEl = document.getElementById('rewardName');
+            const rewardCategoryEl = document.getElementById('rewardCategory');
+            const rewardPointsEl = document.getElementById('rewardPoints');
+            const rewardStockEl = document.getElementById('rewardStock');
+            const rewardDescriptionEl = document.getElementById('rewardDescription');
+            const rewardActiveEl = document.getElementById('rewardActive');
+            const rewardFormTitleEl = document.getElementById('rewardFormTitle');
+            const rewardSaveBtnEl = document.getElementById('rewardSaveBtn');
 
             const state = {
                 currentMapFilter: 'all',
@@ -2068,6 +2662,9 @@
                 allClaims: [],
                 admins: [],
                 mapItems: [],
+                rewardCatalog: [],
+                redemptions: [],
+                editingRewardId: null,
                 users: [],
                 activityData: [],
                 sentMessages: []
@@ -2134,6 +2731,26 @@
             function setText(id, value) {
                 const el = document.getElementById(id);
                 if (el) el.textContent = String(value);
+            }
+
+            function normalizeRewardCategory(value) {
+                const raw = String(value || 'other').trim().toLowerCase();
+                const map = {
+                    event: 'events',
+                    events: 'events',
+                    merch: 'merch',
+                    merchandise: 'merch',
+                    food: 'food',
+                    privilege: 'privilege',
+                    privileges: 'privilege',
+                    other: 'other'
+                };
+                return map[raw] || raw || 'other';
+            }
+
+            function formatRewardCategory(value) {
+                const category = normalizeRewardCategory(value);
+                return category.charAt(0).toUpperCase() + category.slice(1);
             }
 
             function asDate(value) {
@@ -2495,9 +3112,11 @@
                 setText('sidebarItemsBadge', summary.pendingCount);
                 setText('sidebarClaimsBadge', summary.claimPendingCount);
                 setText('sidebarBountiesBadge', summary.bountyCount);
+                setText('sidebarRewardsBadge', state.rewardCatalog.filter((reward) => reward.is_active !== false).length);
                 setText('qaSubmissions', summary.pendingCount);
                 setText('qaClaims', summary.claimPendingCount);
                 setText('qaBounties', summary.bountyCount);
+                setText('qaRewards', state.rewardCatalog.filter((reward) => reward.is_active !== false).length);
                 setText('qaMap', state.mapItems.length);
 
                 const recoveryRounded = Math.round(summary.recoveryRate);
@@ -2645,6 +3264,119 @@
                 `).join('');
             }
 
+            function redemptionStatusClass(value) {
+                const status = String(value || '').toLowerCase();
+                if (status === 'pending') return 'pending';
+                if (status === 'approved' || status === 'delivered') return 'approved';
+                if (status === 'rejected' || status === 'canceled' || status === 'cancelled') return 'rejected';
+                return 'other';
+            }
+
+            function setRewardFormMode(isEdit) {
+                if (rewardFormTitleEl) rewardFormTitleEl.textContent = isEdit ? 'Edit Reward' : 'Create Reward';
+                if (rewardSaveBtnEl) rewardSaveBtnEl.textContent = isEdit ? 'Update Reward' : 'Save Reward';
+                const cancelBtn = document.getElementById('rewardCancelBtn');
+                if (cancelBtn) cancelBtn.style.display = isEdit ? 'inline-flex' : 'none';
+            }
+
+            function clearRewardForm() {
+                state.editingRewardId = null;
+                if (rewardFormEl) rewardFormEl.reset();
+                if (rewardCategoryEl) rewardCategoryEl.value = 'food';
+                if (rewardActiveEl) rewardActiveEl.checked = true;
+                setRewardFormMode(false);
+            }
+
+            function renderRewardsPanel() {
+                if (!rewardsCatalogEl || !rewardRedemptionsEl) return;
+
+                const rewards = [...state.rewardCatalog].sort((a, b) => {
+                    const costDelta = Number(a.points_cost || 0) - Number(b.points_cost || 0);
+                    if (costDelta !== 0) return costDelta;
+                    return String(a.name || '').localeCompare(String(b.name || ''));
+                });
+
+                const activeRewards = rewards.filter((reward) => reward.is_active !== false).length;
+                const archivedRewards = Math.max(0, rewards.length - activeRewards);
+                const redemptionCount = state.redemptions.length;
+                const pendingRedemptions = state.redemptions.filter((row) => String(row.status || '').toLowerCase() === 'pending').length;
+
+                setText('rewardsActiveCount', activeRewards);
+                setText('rewardsArchivedCount', archivedRewards);
+                setText('rewardsRedeemedCount', redemptionCount);
+                setText('rewardsPendingCount', pendingRedemptions);
+                setText('rewardsCatalogCountBadge', rewards.length);
+                setText('rewardsRedemptionCountBadge', redemptionCount);
+
+                if (!rewards.length) {
+                    renderEmpty(rewardsCatalogEl, 'No rewards in the catalog yet.');
+                } else {
+                    rewardsCatalogEl.innerHTML = rewards.map((reward) => {
+                        const statusClass = reward.is_active === false ? 'inactive' : 'active';
+                        const statusLabel = reward.is_active === false ? 'Inactive' : 'Active';
+                        const stock = reward.stock === null || reward.stock === undefined || reward.stock === ''
+                            ? 'Unlimited'
+                            : String(Number(reward.stock));
+                        const category = formatRewardCategory(reward.category);
+
+                        return `
+                            <div class="reward-item-card" id="reward-card-${reward.id}">
+                                <div class="reward-item-top">
+                                    <div>
+                                        <div class="reward-item-title">
+                                            ${escapeHtml(reward.name || 'Untitled Reward')}
+                                            <span class="reward-chip">${escapeHtml(category)}</span>
+                                        </div>
+                                        <div class="reward-item-meta">${Number(reward.points_cost || 0)} points &middot; Stock: ${escapeHtml(stock)}</div>
+                                    </div>
+                                    <span class="reward-pill ${statusClass}">${statusLabel}</span>
+                                </div>
+                                ${reward.description ? `<div class="reward-item-desc">${escapeHtml(reward.description)}</div>` : ''}
+                                <div class="reward-item-actions" style="margin-top:12px">
+                                    <button class="btn btn-neutral" onclick="editReward('${reward.id}')">Edit</button>
+                                    <button class="btn ${reward.is_active === false ? 'btn-approve' : 'btn-neutral'}" onclick="toggleRewardActive('${reward.id}')">${reward.is_active === false ? 'Activate' : 'Hide'}</button>
+                                    <button class="btn btn-reject" onclick="deleteReward('${reward.id}')">Delete</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                const recent = [...state.redemptions].slice(0, 40);
+                if (!recent.length) {
+                    renderEmpty(rewardRedemptionsEl, 'No redemptions yet.');
+                    return;
+                }
+
+                rewardRedemptionsEl.innerHTML = recent.map((row) => {
+                    const status = String(row.status || 'approved').toLowerCase();
+                    const badgeClass = redemptionStatusClass(status);
+                    const user = escapeHtml(row.user_id ? `User ${String(row.user_id).slice(0, 8)}` : 'Unknown user');
+                    const createdAt = formatDateTime(row.created_at);
+                    const actions = status === 'pending'
+                        ? `
+                            <button class="btn btn-approve" onclick="setRedemptionStatus('${row.id}', 'approved')">Approve</button>
+                            <button class="btn btn-reject" onclick="setRedemptionStatus('${row.id}', 'rejected')">Reject</button>
+                        `
+                        : '';
+
+                    return `
+                        <div class="redemption-row" id="redemption-${row.id}">
+                            <div>
+                                <div class="redemption-title">${escapeHtml(row.reward_name || 'Reward')}</div>
+                                <div class="redemption-meta">${user} &middot; ${Number(row.points_cost || 0)} pts &middot; ${createdAt}</div>
+                            </div>
+                            <div class="card-actions">
+                                <span class="status-pill ${badgeClass}">${escapeHtml(status)}</span>
+                                ${actions}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            window.clearRewardForm = clearRewardForm;
+
             function renderUsersTable() {
                 if (!usersTableBody) return;
                 if (!state.users.length) {
@@ -2668,13 +3400,13 @@
 
                 usersTableBody.innerHTML = state.users.map((u) => `
                     <tr>
-                        <td><strong>${escapeHtml(u.name || 'User')}</strong></td>
-                        <td style="color:#888">${escapeHtml(u.email || '—')}</td>
-                        <td>${escapeHtml(u.school || 'Unknown')}</td>
-                        <td>${u.items}</td>
-                        <td>${u.claims}</td>
-                        <td style="color:#888">${u.joinedAt ? formatDateShort(u.joinedAt) : '—'}</td>
-                        <td><span class="role-badge ${u.role}">${escapeHtml(u.role)}</span></td>
+                        <td data-label="Name"><strong>${escapeHtml(u.name || 'User')}</strong></td>
+                        <td data-label="Email" style="color:#888">${escapeHtml(u.email || '—')}</td>
+                        <td data-label="School">${escapeHtml(u.school || 'Unknown')}</td>
+                        <td data-label="Items">${u.items}</td>
+                        <td data-label="Claims">${u.claims}</td>
+                        <td data-label="Joined" style="color:#888">${u.joinedAt ? formatDateShort(u.joinedAt) : '—'}</td>
+                        <td data-label="Role"><span class="role-badge ${u.role}">${escapeHtml(u.role)}</span></td>
                     </tr>
                 `).join('');
             }
@@ -2769,7 +3501,7 @@
                 const isOwnerFallback = String(state.user?.email || '').toLowerCase() === 'rushwanthmahendran1@gmail.com';
 
                 if (!state.user || (!state.isAdmin && !isOwnerFallback)) {
-                    showStatus('Admin access required. Sign in with an admin account.');
+                    showStatus('Admin access required. Log in with an admin account.');
                     return false;
                 }
 
@@ -2777,13 +3509,15 @@
                 if (dashStats) dashStats.style.display = 'grid';
 
                 const allStatuses = ['pending', 'found', 'claimed', 'lost', 'bounty'];
-                const [pendingItems, pendingClaims, allItems, allClaims, admins, messages] = await Promise.all([
+                const [pendingItems, pendingClaims, allItems, allClaims, admins, messages, rewardCatalog, redemptions] = await Promise.all([
                     BackTrackDB.getPendingItems(),
                     BackTrackDB.getPendingClaims(),
                     BackTrackDB.getItems({ status: allStatuses }),
                     typeof BackTrackDB.getClaims === 'function' ? BackTrackDB.getClaims() : BackTrackDB.getPendingClaims(),
                     typeof BackTrackDB.getAdmins === 'function' ? BackTrackDB.getAdmins() : Promise.resolve([]),
-                    typeof BackTrackDB.getAdminMessages === 'function' ? BackTrackDB.getAdminMessages(100) : Promise.resolve([])
+                    typeof BackTrackDB.getAdminMessages === 'function' ? BackTrackDB.getAdminMessages(100) : Promise.resolve([]),
+                    typeof BackTrackDB.getRewardCatalog === 'function' ? BackTrackDB.getRewardCatalog() : Promise.resolve([]),
+                    typeof BackTrackDB.getRedemptions === 'function' ? BackTrackDB.getRedemptions({ limit: 200 }) : Promise.resolve([])
                 ]);
 
                 state.pendingItems = Array.isArray(pendingItems) ? pendingItems : [];
@@ -2792,6 +3526,8 @@
                 state.allClaims = Array.isArray(allClaims) ? allClaims : [];
                 state.admins = Array.isArray(admins) ? admins : [];
                 state.sentMessages = Array.isArray(messages) ? messages : [];
+                state.rewardCatalog = Array.isArray(rewardCatalog) ? rewardCatalog : [];
+                state.redemptions = Array.isArray(redemptions) ? redemptions : [];
                 state.bounties = state.allItems.filter((item) => item.status === 'bounty');
                 state.mapItems = toMapItems(state.allItems.filter((item) => ['pending', 'found', 'claimed', 'bounty'].includes(String(item.status || ''))));
                 state.users = buildUsers(state.allItems, state.allClaims, state.admins);
@@ -2809,6 +3545,7 @@
                 renderPendingItems();
                 renderPendingClaims();
                 renderBounties();
+                renderRewardsPanel();
                 renderMapItems();
                 renderUsersTable();
                 renderActivity();
@@ -2912,12 +3649,140 @@
                 await refreshDashboard();
             }
 
+            function editReward(id) {
+                const reward = state.rewardCatalog.find((row) => String(row.id) === String(id));
+                if (!reward) return;
+
+                state.editingRewardId = reward.id;
+                if (rewardNameEl) rewardNameEl.value = reward.name || '';
+                if (rewardCategoryEl) rewardCategoryEl.value = normalizeRewardCategory(reward.category);
+                if (rewardPointsEl) rewardPointsEl.value = Number(reward.points_cost || 0);
+                if (rewardStockEl) rewardStockEl.value = reward.stock === null || reward.stock === undefined ? '' : Number(reward.stock);
+                if (rewardDescriptionEl) rewardDescriptionEl.value = reward.description || '';
+                if (rewardActiveEl) rewardActiveEl.checked = reward.is_active !== false;
+
+                setRewardFormMode(true);
+                switchPanel('rewards');
+                rewardFormEl?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            async function saveReward(event) {
+                event.preventDefault();
+
+                if (typeof BackTrackDB.addRewardCatalogItem !== 'function' || typeof BackTrackDB.updateRewardCatalogItem !== 'function') {
+                    showStatus('Reward catalog is not configured in this environment.');
+                    return;
+                }
+
+                const name = String(rewardNameEl?.value || '').trim();
+                const category = normalizeRewardCategory(rewardCategoryEl?.value || 'other');
+                const pointsCost = Number(rewardPointsEl?.value || 0);
+                const stockRaw = String(rewardStockEl?.value || '').trim();
+                const stock = stockRaw === '' ? null : Number(stockRaw);
+                const description = String(rewardDescriptionEl?.value || '').trim();
+                const isActive = Boolean(rewardActiveEl?.checked);
+
+                if (!name) {
+                    showStatus('Reward name is required.');
+                    return;
+                }
+                if (!Number.isFinite(pointsCost) || pointsCost < 1) {
+                    showStatus('Points cost must be at least 1.');
+                    return;
+                }
+                if (stock !== null && (!Number.isFinite(stock) || stock < 0)) {
+                    showStatus('Stock must be blank or a non-negative number.');
+                    return;
+                }
+
+                const payload = {
+                    name,
+                    category,
+                    points_cost: Math.round(pointsCost),
+                    stock: stock === null ? null : Math.round(stock),
+                    description,
+                    is_active: isActive
+                };
+
+                let saved = null;
+                if (state.editingRewardId) {
+                    saved = await BackTrackDB.updateRewardCatalogItem(state.editingRewardId, payload);
+                } else {
+                    saved = await BackTrackDB.addRewardCatalogItem({
+                        ...payload,
+                        created_by: state.user?.id || null
+                    });
+                }
+
+                if (!saved) {
+                    showStatus('Could not save reward. Run the latest SQL migration for reward_catalog.');
+                    return;
+                }
+
+                clearRewardForm();
+                await refreshDashboard();
+                showStatus('Reward saved.');
+                setTimeout(() => showStatus(''), 1500);
+            }
+
+            async function toggleRewardActive(id) {
+                const reward = state.rewardCatalog.find((row) => String(row.id) === String(id));
+                if (!reward) return;
+                if (typeof BackTrackDB.updateRewardCatalogItem !== 'function') return;
+
+                const updated = await BackTrackDB.updateRewardCatalogItem(id, { is_active: reward.is_active === false });
+                if (!updated) {
+                    showStatus('Failed to update reward status.');
+                    return;
+                }
+
+                await refreshDashboard();
+            }
+
+            async function deleteReward(id) {
+                if (!confirm('Delete this reward from the catalog?')) return;
+                if (typeof BackTrackDB.deleteRewardCatalogItem !== 'function') return;
+
+                const ok = await BackTrackDB.deleteRewardCatalogItem(id);
+                if (!ok) {
+                    showStatus('Failed to delete reward.');
+                    return;
+                }
+
+                if (state.editingRewardId && String(state.editingRewardId) === String(id)) {
+                    clearRewardForm();
+                }
+                await refreshDashboard();
+            }
+
+            async function setRedemptionStatus(id, status) {
+                if (typeof BackTrackDB.updateRedemptionStatus !== 'function') {
+                    showStatus('Redemption status updates are not configured.');
+                    return;
+                }
+
+                const updated = await BackTrackDB.updateRedemptionStatus(id, status);
+                if (!updated) {
+                    showStatus('Failed to update redemption.');
+                    return;
+                }
+
+                await refreshDashboard();
+            }
+
             window.approveItem = approveItem;
             window.rejectItem = rejectItem;
             window.approveClaim = approveClaim;
             window.rejectClaim = rejectClaim;
             window.removeBounty = removeBounty;
             window.removeMapItem = removeMapItem;
+            window.editReward = editReward;
+            window.toggleRewardActive = toggleRewardActive;
+            window.deleteReward = deleteReward;
+            window.setRedemptionStatus = setRedemptionStatus;
+
+            rewardFormEl?.addEventListener('submit', saveReward);
+            setRewardFormMode(false);
 
             // ==========================================
             // MAP + ACTIVITY FILTERS

@@ -135,10 +135,11 @@
             border-right: 1px solid rgba(255, 255, 255, 0.06);
             padding: 0;
             overflow-y: auto;
-            display: flex;
             flex-direction: column;
             backdrop-filter: blur(20px);
             flex-shrink: 0;
+            display: none;
+            /* User requested pure image map view */
         }
 
         .sidebar-header {
@@ -359,29 +360,30 @@
             transition: transform 0.15s ease-out;
             position: relative;
             z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .map-canvas-wrapper::before {
-            content: '';
+        .map-background-layer {
             position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(79, 140, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(79, 140, 255, 0.08) 1px, transparent 1px),
-                radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.14), transparent 58%);
-            background-size: 26px 26px, 26px 26px, cover;
-            pointer-events: none;
-            opacity: 0.42;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             z-index: 1;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.4s ease;
         }
 
-        .map-canvas-wrapper::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 45%, transparent 42%, rgba(0, 0, 0, 0.38) 100%);
-            pointer-events: none;
-            z-index: 2;
+        .map-canvas svg {
+            position: relative;
+            z-index: 5;
+            display: none;
         }
 
         /* Map Controls */
@@ -901,20 +903,14 @@
             0: {
                 name: "Campus",
                 rooms: [
-                    { id: "BUS", name: "Bus Loop", type: "Road", x: 30, y: 60, w: 220, h: 90 },
-                    { id: "VISPK", name: "Visitor Parking", type: "Parking", x: 30, y: 160, w: 220, h: 120 },
-                    { id: "STUPK", name: "Student Parking", type: "Parking", x: 30, y: 285, w: 220, h: 210 },
-                    { id: "MAIN", name: "Main Building", type: "Building", x: 275, y: 155, w: 320, h: 360, clickable: true },
-                    { id: "ENTRY", name: "Entry Plaza", type: "Facility", x: 360, y: 120, w: 150, h: 34 },
-                    { id: "ROAD1", name: "Mullinax Dr Entrance", type: "Road", x: 250, y: 120, w: 640, h: 24 },
-                    { id: "ROAD2", name: "Campus Spine", type: "Road", x: 565, y: 144, w: 24, h: 390 },
-                    { id: "STADIUM", name: "Stadium", type: "Athletic", x: 620, y: 30, w: 250, h: 160 },
-                    { id: "TRACK", name: "Track", type: "Athletic", x: 875, y: 50, w: 95, h: 130 },
-                    { id: "TENNIS", name: "Tennis Courts", type: "Athletic", x: 620, y: 205, w: 250, h: 108 },
-                    { id: "BASE", name: "Baseball Field", type: "Athletic", x: 620, y: 330, w: 190, h: 170 },
-                    { id: "SOFT", name: "Softball Field", type: "Athletic", x: 815, y: 330, w: 155, h: 150 },
-                    { id: "BARN", name: "The Barn", type: "Facility", x: 300, y: 530, w: 130, h: 90 },
-                    { id: "FIELD", name: "Field House", type: "Athletic", x: 830, y: 510, w: 140, h: 96 }
+                    { id: "VISPK", name: "Visitor Parking", type: "Parking", x: 50, y: 700, w: 200, h: 200 },
+                    { id: "STUPK", name: "Student Parking", type: "Parking", x: 500, y: 50, w: 154, h: 420 },
+                    { id: "MAIN", name: "Main Building", type: "Building", x: 90, y: 280, w: 420, h: 340, clickable: true },
+                    { id: "STADIUM", name: "Stadium", type: "Athletic", x: 670, y: 40, w: 260, h: 340 },
+                    { id: "SOCCER", name: "Soccer Field", type: "Athletic", x: 680, y: 400, w: 230, h: 120 },
+                    { id: "TENNIS", name: "Tennis Courts", type: "Athletic", x: 90, y: 60, w: 250, h: 90 },
+                    { id: "BASE", name: "Baseball/Softball", type: "Athletic", x: 570, y: 540, w: 380, h: 300 },
+                    { id: "BARN", name: "The Barn", type: "Facility", x: 420, y: 760, w: 140, h: 70 }
                 ]
             },
             1: {
@@ -1067,6 +1063,8 @@
             'entry plaza': 'ENTRY',
             'stadium': 'STADIUM',
             'track': 'TRACK',
+            'soccer field': 'SOCCER',
+            'soccer': 'SOCCER',
             'tennis': 'TENNIS',
             'baseball': 'BASE',
             'softball': 'SOFT',
@@ -1342,12 +1340,41 @@
             currentFloorNum.textContent = currentFloor === 0 ? 'C' : currentFloor;
             mapCanvas.innerHTML = '';
 
-            const svgW = 1000;
-            const svgH = 660;
+            // Inject the background layer
+            const bgImg = document.createElement('img');
+            bgImg.className = 'map-background-layer';
+
+            // Set SVG base dimensions
+            let svgW = 1000;
+            let svgH = 660;
+
+            if (currentFloor === 0) {
+                bgImg.src = 'images/campus.png'; // Updated to look for the high-quality source file
+                svgW = 1021;
+                svgH = 940;
+            } else if (currentFloor === 1) {
+                bgImg.src = 'images/schools/denmark-floor1.jpg';
+            } else if (currentFloor === 2) {
+                bgImg.src = 'images/schools/denmark-floor2.jpg';
+            }
+
+            // Set the container size explicitly so it perfectly bounds the background image
+            mapCanvas.style.width = `${svgW}px`;
+            mapCanvas.style.height = `${svgH}px`;
+
+            // If image fails to load (user hasn't added it yet), fade it out
+            bgImg.onerror = function () {
+                this.style.opacity = '0';
+            };
+            mapCanvas.appendChild(bgImg);
 
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('width', svgW);
             svg.setAttribute('height', svgH);
+            // Ensure the SVG overlays exactly on top of the image
+            svg.style.position = 'absolute';
+            svg.style.top = '0';
+            svg.style.left = '0';
             svg.style.display = 'block';
 
             const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
@@ -1421,31 +1448,31 @@
             txtGlow.appendChild(tMerge);
             defs.appendChild(txtGlow);
 
-            // Campus gradients with futuristic neon colors
+            // Campus gradients with futuristic neon colors — low opacity to let background image shine through
             addLinearGradient(defs, 'campusRoadGradient', [
-                ['0%', '#0a0a1a', 0.88],
-                ['50%', '#1a1a2e', 0.6],
-                ['100%', '#0a0a1a', 0.88]
+                ['0%', '#0a0a1a', 0.1],
+                ['50%', '#1a1a2e', 0.2],
+                ['100%', '#0a0a1a', 0.1]
             ]);
             addLinearGradient(defs, 'campusParkingGradient', [
-                ['0%', '#0a0a1a', 0.55],
-                ['100%', '#1a1a2e', 0.82]
+                ['0%', '#0a0a1a', 0.1],
+                ['100%', '#1a1a2e', 0.15]
             ], '0%', '0%', '100%', '0%');
             addLinearGradient(defs, 'campusBuildingGradient', [
-                ['0%', '#00D9FF', 0.15],
-                ['100%', '#0a0a1a', 0.85]
+                ['0%', '#00D9FF', 0.25],
+                ['100%', '#00D9FF', 0.05]
             ]);
             addLinearGradient(defs, 'campusAthleticGradient', [
-                ['0%', '#00FF88', 0.12],
-                ['100%', '#0a0a1a', 0.75]
+                ['0%', '#00FF88', 0.2],
+                ['100%', '#00FF88', 0.05]
             ]);
             addLinearGradient(defs, 'campusFacilityGradient', [
-                ['0%', '#2563eb', 0.18],
-                ['100%', '#0a0a1a', 0.8]
+                ['0%', '#2563eb', 0.25],
+                ['100%', '#2563eb', 0.05]
             ]);
             addLinearGradient(defs, 'campusFieldGradient', [
-                ['0%', '#00FF88', 0.2],
-                ['100%', '#0a0a1a', 0.65]
+                ['0%', '#00FF88', 0.25],
+                ['100%', '#0a0a1a', 0.1]
             ], '0%', '100%', '100%', '0%');
 
             const campusGlow = createSvgNode('radialGradient', {
@@ -1482,65 +1509,6 @@
                 });
                 svg.appendChild(glowBackdrop);
 
-                // Subtle nebula and stars to match the blueprint look
-                const nebula = createSvgNode('g', { opacity: '0.42' });
-                [
-                    { x: 505, y: 188, r: 180, color: '#60a5fa' },
-                    { x: 540, y: 230, r: 130, color: '#a78bfa' },
-                    { x: 470, y: 205, r: 110, color: '#38bdf8' }
-                ].forEach((blob) => {
-                    nebula.appendChild(createSvgNode('circle', {
-                        cx: blob.x,
-                        cy: blob.y,
-                        r: blob.r,
-                        fill: blob.color,
-                        'fill-opacity': '0.08',
-                        filter: 'url(#glow-blue)'
-                    }));
-                });
-                svg.appendChild(nebula);
-
-                const stars = createSvgNode('g', { opacity: '0.34' });
-                for (let i = 0; i < 72; i += 1) {
-                    const x = 200 + pseudoRandom(i + 2) * 520;
-                    const y = 40 + pseudoRandom(i + 103) * 280;
-                    const radius = 0.4 + pseudoRandom(i + 207) * 1.1;
-                    stars.appendChild(createSvgNode('circle', {
-                        cx: x.toFixed(2),
-                        cy: y.toFixed(2),
-                        r: radius.toFixed(2),
-                        fill: '#bfdbfe'
-                    }));
-                }
-                svg.appendChild(stars);
-
-                const arterialRoads = createSvgNode('g');
-                [
-                    'M 20 40 C 190 40 210 20 360 20 L 720 20 C 780 20 800 36 860 36 L 980 36',
-                    'M 15 95 C 80 130 150 136 250 136 C 350 136 400 170 460 190 L 565 190',
-                    'M 250 640 C 370 620 470 620 560 622 C 648 624 736 616 810 560 C 860 522 900 500 988 500',
-                    'M 588 214 C 600 214 608 224 608 238 L 608 548 C 608 570 628 588 650 588 L 760 588'
-                ].forEach((d) => {
-                    const outer = createSvgNode('path', {
-                        d,
-                        fill: 'none',
-                        stroke: 'rgba(96, 165, 250, 0.22)',
-                        'stroke-width': '24',
-                        'stroke-linecap': 'round',
-                        'stroke-linejoin': 'round'
-                    });
-                    const inner = createSvgNode('path', {
-                        d,
-                        fill: 'none',
-                        stroke: 'rgba(191, 219, 254, 0.2)',
-                        'stroke-width': '2.2',
-                        'stroke-linecap': 'round',
-                        'stroke-linejoin': 'round'
-                    });
-                    arterialRoads.appendChild(outer);
-                    arterialRoads.appendChild(inner);
-                });
-                svg.appendChild(arterialRoads);
 
                 floor.rooms.forEach((room) => {
                     const g = createSvgNode('g');
@@ -1598,304 +1566,54 @@
                             });
                             g.appendChild(slot);
                         }
-                    } else if (isBuilding) {
-                        const outlinePath = room.id === 'MAIN'
-                            ? `M ${room.x + 30} ${room.y + room.h}
-                               V ${room.y + room.h * 0.82}
-                               H ${room.x + 4}
-                               V ${room.y + room.h * 0.52}
-                               H ${room.x + 34}
-                               V ${room.y + room.h * 0.22}
-                               H ${room.x + room.w * 0.28}
-                               V ${room.y + 26}
-                               H ${room.x + room.w * 0.42}
-                               V ${room.y + room.h * 0.16}
-                               H ${room.x + room.w * 0.58}
-                               V ${room.y + 26}
-                               H ${room.x + room.w * 0.72}
-                               V ${room.y + room.h * 0.22}
-                               H ${room.x + room.w - 34}
-                               V ${room.y + room.h * 0.52}
-                               H ${room.x + room.w - 4}
-                               V ${room.y + room.h * 0.82}
-                               H ${room.x + room.w - 30}
-                               V ${room.y + room.h}
-                               H ${room.x + room.w * 0.62}
-                               V ${room.y + room.h * 0.87}
-                               H ${room.x + room.w * 0.38}
-                               V ${room.y + room.h}
-                               Z`
-                            : `M ${room.x + 24} ${room.y}
-                               H ${room.x + room.w - 24}
-                               L ${room.x + room.w} ${room.y + 24}
-                               V ${room.y + room.h - 24}
-                               L ${room.x + room.w - 24} ${room.y + room.h}
-                               H ${room.x + 24}
-                               L ${room.x} ${room.y + room.h - 24}
-                               V ${room.y + 24}
-                               Z`;
-                        const shell = createSvgNode('path', {
-                            d: outlinePath,
-                            fill: 'url(#campusBuildingGradient)',
-                            stroke: '#00D9FF',
-                            'stroke-width': '3',
-                            filter: 'url(#glow-blue)'
+                    } else if (isBuilding || isAthletic || isFacility) {
+                        const hitBox = createSvgNode('rect', {
+                            x: room.x,
+                            y: room.y,
+                            width: room.w,
+                            height: room.h,
+                            rx: 8,
+                            fill: 'transparent',
+                            stroke: 'none'
                         });
-                        g.appendChild(shell);
-                        highlightShape = shell;
-                        baseStrokeWidth = 3;
-
-                        const core = createSvgNode('rect', {
-                            x: room.x + 32,
-                            y: room.y + 34,
-                            width: room.w - 64,
-                            height: room.h - 110,
-                            rx: '14',
-                            fill: 'rgba(0, 217, 255, 0.08)',
-                            stroke: 'rgba(0, 217, 255, 0.4)',
-                            'stroke-width': '1.5'
-                        });
-                        g.appendChild(core);
-
-                        const entry = createSvgNode('rect', {
-                            x: room.x + room.w / 2 - 24,
-                            y: room.y + room.h - 46,
-                            width: '48',
-                            height: '28',
-                            rx: '8',
-                            fill: 'rgba(0, 217, 255, 0.2)',
-                            stroke: 'rgba(0, 217, 255, 0.7)',
-                            'stroke-width': '1.5'
-                        });
-                        g.appendChild(entry);
-                    } else if (isAthletic) {
-                        if (room.id === 'STADIUM') {
-                            const bowl = createSvgNode('ellipse', {
-                                cx: room.x + room.w / 2,
-                                cy: room.y + room.h / 2,
-                                rx: room.w / 2 - 2,
-                                ry: room.h / 2 - 2,
-                                fill: 'url(#campusAthleticGradient)',
-                                stroke: '#00FF88',
-                                'stroke-width': '2.5',
-                                filter: 'url(#glow-green)'
-                            });
-                            g.appendChild(bowl);
-                            highlightShape = bowl;
-                            baseStrokeWidth = 2.5;
-
-                            const field = createSvgNode('ellipse', {
-                                cx: room.x + room.w / 2,
-                                cy: room.y + room.h / 2,
-                                rx: room.w / 2 - 30,
-                                ry: room.h / 2 - 22,
-                                fill: 'url(#campusFieldGradient)',
-                                stroke: 'rgba(0, 255, 136, 0.5)',
-                                'stroke-width': '1.5'
-                            });
-                            g.appendChild(field);
-                        } else if (room.id === 'TRACK') {
-                            const trackOuter = createSvgNode('ellipse', {
-                                cx: room.x + room.w / 2,
-                                cy: room.y + room.h / 2,
-                                rx: room.w / 2 - 2,
-                                ry: room.h / 2 - 2,
-                                fill: 'rgba(0, 217, 255, 0.15)',
-                                stroke: '#00D9FF',
-                                'stroke-width': '2.2',
-                                filter: 'url(#glow-blue)'
-                            });
-                            g.appendChild(trackOuter);
-                            highlightShape = trackOuter;
-                            baseStrokeWidth = 2.2;
-
-                            const trackInner = createSvgNode('ellipse', {
-                                cx: room.x + room.w / 2,
-                                cy: room.y + room.h / 2,
-                                rx: room.w / 2 - 18,
-                                ry: room.h / 2 - 18,
-                                fill: 'url(#campusFieldGradient)',
-                                stroke: 'rgba(0, 255, 136, 0.5)',
-                                'stroke-width': '1.5'
-                            });
-                            g.appendChild(trackInner);
-
-                            [9, 13].forEach((laneInset) => {
-                                const lane = createSvgNode('ellipse', {
-                                    cx: room.x + room.w / 2,
-                                    cy: room.y + room.h / 2,
-                                    rx: room.w / 2 - laneInset,
-                                    ry: room.h / 2 - laneInset,
-                                    fill: 'none',
-                                    stroke: 'rgba(0, 217, 255, 0.4)',
-                                    'stroke-width': '1'
-                                });
-                                g.appendChild(lane);
-                            });
-                        } else if (room.id === 'TENNIS') {
-                            const courtWrap = createSvgNode('path', {
-                                d: roundedRectPath(room.x, room.y, room.w, room.h, 12),
-                                fill: 'url(#campusAthleticGradient)',
-                                stroke: '#00FF88',
-                                'stroke-width': '2.2',
-                                filter: 'url(#glow-green)'
-                            });
-                            g.appendChild(courtWrap);
-                            highlightShape = courtWrap;
-                            baseStrokeWidth = 2.2;
-
-                            const splitX = room.x + room.w / 2;
-                            g.appendChild(createSvgNode('line', {
-                                x1: splitX,
-                                y1: room.y + 10,
-                                x2: splitX,
-                                y2: room.y + room.h - 10,
-                                stroke: 'rgba(226, 232, 240, 0.32)',
-                                'stroke-width': '1'
-                            }));
-                            [room.x + room.w * 0.25, room.x + room.w * 0.75].forEach((netX) => {
-                                g.appendChild(createSvgNode('line', {
-                                    x1: netX,
-                                    y1: room.y + room.h * 0.32,
-                                    x2: netX,
-                                    y2: room.y + room.h * 0.68,
-                                    stroke: 'rgba(226, 232, 240, 0.28)',
-                                    'stroke-width': '0.9'
-                                }));
-                            });
-                        } else if (room.id === 'BASE' || room.id === 'SOFT') {
-                            const outfield = createSvgNode('ellipse', {
-                                cx: room.x + room.w / 2,
-                                cy: room.y + room.h * 0.62,
-                                rx: room.w * 0.46,
-                                ry: room.h * 0.36,
-                                fill: 'url(#campusFieldGradient)',
-                                stroke: '#00FF88',
-                                'stroke-width': '2.2',
-                                filter: 'url(#glow-green)'
-                            });
-                            g.appendChild(outfield);
-                            highlightShape = outfield;
-                            baseStrokeWidth = 2.2;
-
-                            const cx = room.x + room.w * 0.5;
-                            const cy = room.y + room.h * 0.62;
-                            const infieldSize = Math.min(room.w, room.h) * 0.18;
-                            const infield = createSvgNode('polygon', {
-                                points: `${cx},${cy - infieldSize} ${cx + infieldSize},${cy} ${cx},${cy + infieldSize} ${cx - infieldSize},${cy}`,
-                                fill: 'rgba(194, 120, 47, 0.38)',
-                                stroke: 'rgba(254, 215, 170, 0.48)',
-                                'stroke-width': '1'
-                            });
-                            g.appendChild(infield);
-
-                            g.appendChild(createSvgNode('line', {
-                                x1: cx,
-                                y1: cy,
-                                x2: room.x + room.w * 0.15,
-                                y2: room.y + room.h * 0.22,
-                                stroke: 'rgba(254, 243, 199, 0.45)',
-                                'stroke-width': '0.9'
-                            }));
-                            g.appendChild(createSvgNode('line', {
-                                x1: cx,
-                                y1: cy,
-                                x2: room.x + room.w * 0.85,
-                                y2: room.y + room.h * 0.22,
-                                stroke: 'rgba(254, 243, 199, 0.45)',
-                                'stroke-width': '0.9'
-                            }));
-                        } else {
-                            const fieldHouse = createSvgNode('path', {
-                                d: roundedRectPath(room.x, room.y, room.w, room.h, 14),
-                                fill: 'url(#campusAthleticGradient)',
-                                stroke: '#00FF88',
-                                'stroke-width': '2.2',
-                                filter: 'url(#glow-green)'
-                            });
-                            g.appendChild(fieldHouse);
-                            highlightShape = fieldHouse;
-                            baseStrokeWidth = 2.2;
-                        }
-                    } else if (isFacility) {
-                        if (room.id === 'ENTRY') {
-                            const entryHex = createSvgNode('polygon', {
-                                points: `${room.x + 14},${room.y} ${room.x + room.w - 14},${room.y} ${room.x + room.w},${room.y + room.h / 2} ${room.x + room.w - 14},${room.y + room.h} ${room.x + 14},${room.y + room.h} ${room.x},${room.y + room.h / 2}`,
-                                fill: 'url(#campusFacilityGradient)',
-                                stroke: '#2563eb',
-                                'stroke-width': '2.2',
-                                filter: 'url(#glow-blue)'
-                            });
-                            g.appendChild(entryHex);
-                            highlightShape = entryHex;
-                            baseStrokeWidth = 2.2;
-                        } else if (room.id === 'BARN') {
-                            const roof = createSvgNode('polygon', {
-                                points: `${room.x + 10},${room.y + 26} ${room.x + room.w / 2},${room.y - 4} ${room.x + room.w - 10},${room.y + 26}`,
-                                fill: 'rgba(37, 99, 235, 0.25)',
-                                stroke: 'rgba(37, 99, 235, 0.7)',
-                                'stroke-width': '1.5'
-                            });
-                            g.appendChild(roof);
-                            const body = createSvgNode('rect', {
-                                x: room.x + 8,
-                                y: room.y + 24,
-                                width: room.w - 16,
-                                height: room.h - 24,
-                                rx: '10',
-                                fill: 'url(#campusFacilityGradient)',
-                                stroke: '#2563eb',
-                                'stroke-width': '2',
-                                filter: 'url(#glow-blue)'
-                            });
-                            g.appendChild(body);
-                            highlightShape = body;
-                            baseStrokeWidth = 2;
-                        } else {
-                            const facility = createSvgNode('path', {
-                                d: roundedRectPath(room.x, room.y, room.w, room.h, 10),
-                                fill: 'url(#campusFacilityGradient)',
-                                stroke: '#2563eb',
-                                'stroke-width': '2',
-                                filter: 'url(#glow-blue)'
-                            });
-                            g.appendChild(facility);
-                            highlightShape = facility;
-                            baseStrokeWidth = 2;
-                        }
+                        g.appendChild(hitBox);
+                        highlightShape = hitBox;
+                        baseStrokeWidth = 0;
                     }
 
                     if (!isRoad) {
-                        const label = createSvgNode('text', {
-                            x: room.x + room.w / 2,
-                            y: room.y + room.h / 2 + (isBuilding ? -6 : 0),
-                            'text-anchor': 'middle',
-                            'dominant-baseline': 'middle',
-                            fill: isBuilding ? '#00D9FF' : (isAthletic ? '#00FF88' : 'rgba(100, 200, 255, 0.85)'),
-                            'font-size': isBuilding ? '15' : room.w > 170 ? '12' : '10',
-                            'font-weight': '700',
-                            'font-family': 'Inter, sans-serif',
-                            'letter-spacing': isBuilding ? '1.2' : '0.8',
-                            'pointer-events': 'none',
-                            filter: 'url(#textGlow)'
-                        });
-                        label.textContent = room.name.toUpperCase();
-                        g.appendChild(label);
-
-                        if (isBuilding) {
-                            const subLabel = createSvgNode('text', {
+                        if (currentFloor !== 0) {
+                            const label = createSvgNode('text', {
                                 x: room.x + room.w / 2,
-                                y: room.y + room.h / 2 + 16,
+                                y: room.y + room.h / 2 + (isBuilding ? -6 : 0),
                                 'text-anchor': 'middle',
                                 'dominant-baseline': 'middle',
-                                fill: 'rgba(0, 217, 255, 0.7)',
-                                'font-size': '10',
-                                'font-weight': '600',
+                                fill: isBuilding ? '#00D9FF' : (isAthletic ? '#00FF88' : 'rgba(100, 200, 255, 0.85)'),
+                                'font-size': isBuilding ? '15' : room.w > 170 ? '12' : '10',
+                                'font-weight': '700',
                                 'font-family': 'Inter, sans-serif',
-                                'pointer-events': 'none'
+                                'letter-spacing': isBuilding ? '1.2' : '0.8',
+                                'pointer-events': 'none',
+                                filter: 'url(#textGlow)'
                             });
-                            subLabel.textContent = 'CLICK TO ENTER';
-                            g.appendChild(subLabel);
+                            label.textContent = room.name.toUpperCase();
+                            g.appendChild(label);
+
+                            if (isBuilding) {
+                                const subLabel = createSvgNode('text', {
+                                    x: room.x + room.w / 2,
+                                    y: room.y + room.h / 2 + 16,
+                                    'text-anchor': 'middle',
+                                    'dominant-baseline': 'middle',
+                                    fill: 'rgba(0, 217, 255, 0.7)',
+                                    'font-size': '10',
+                                    'font-weight': '600',
+                                    'font-family': 'Inter, sans-serif',
+                                    'pointer-events': 'none'
+                                });
+                                subLabel.textContent = 'CLICK TO ENTER';
+                                g.appendChild(subLabel);
+                            }
                         }
 
                         if (itemCount > 0) {

@@ -619,7 +619,7 @@
             <div class="status" id="statusMsg" role="alert"></div>
 
             <p class="login-text">
-                Already have an account? <a href="login.html" class="login-link">Sign in</a>
+                Already have an account? <a href="login.html" class="login-link">Log in</a>
             </p>
 
             <div class="warning" id="configWarning" style="display: none;">
@@ -851,7 +851,10 @@
                 configWarning.style.display = 'block';
                 return;
             }
-            await BackTrackDB.signInWithGoogle();
+            const result = await BackTrackDB.signInWithGoogle('login.html');
+            if (result?.error) {
+                showStatus(result.error, 'error');
+            }
         });
 
         // Email/Password Sign Up

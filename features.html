@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +9,6 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <title>Features - BackTrack</title>
-        <script>
-            // Disable pulsing/flashing animations site-wide
-            window.__DISABLE_ANIMATIONS__ = true;
-        </script>
-        <style>
-            /* Disable CSS animations (stops pulsing/flashing indicators) but keep final states visible */
-            * { animation: none !important; -webkit-animation: none !important; }
-        </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -42,6 +35,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -66,7 +60,8 @@
             pointer-events: all;
         }
 
-        a, button {
+        a,
+        button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -203,24 +198,24 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
+            top: -40px;
             left: 50%;
             transform: translateX(-50%);
-            width: 600px;
-            height: 400px;
-            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            width: 700px;
+            height: 500px;
+            background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.06) 0%, transparent 70%);
             pointer-events: none;
         }
 
         .hero-label {
             display: inline-block;
             padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(37, 99, 235, 0.08);
+            border: 1px solid rgba(37, 99, 235, 0.2);
             border-radius: 100px;
             font-size: 13px;
             font-weight: 500;
-            color: #888888;
+            color: #60a5fa;
             margin-bottom: 24px;
             letter-spacing: 0.5px;
         }
@@ -231,7 +226,7 @@
             letter-spacing: -2.5px;
             line-height: 1.1;
             margin-bottom: 20px;
-            background: linear-gradient(180deg, #ffffff 0%, #666666 100%);
+            background: linear-gradient(180deg, #ffffff 0%, #60a5fa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -239,7 +234,7 @@
 
         .hero-description {
             font-size: 18px;
-            color: #666666;
+            color: #94a3b8;
             max-width: 500px;
             margin: 0 auto;
             line-height: 1.6;
@@ -255,53 +250,42 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 16px;
+            grid-auto-flow: dense;
         }
 
         /* Feature Card - Glass Morphism */
         .feature-card {
             position: relative;
             background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.03) 0%,
-                rgba(255, 255, 255, 0.01) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 24px;
-            padding: 32px;
+                    rgba(15, 23, 42, 0.5) 0%,
+                    rgba(10, 15, 30, 0.3) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.08);
+            border-radius: 20px;
+            padding: 22px;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            animation: slideInUp 0.6s ease-out;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
         }
 
         .feature-card:hover {
-            border-color: rgba(255, 255, 255, 0.12);
-            transform: translateY(-6px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            border-color: rgba(37, 99, 235, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.34), 0 0 28px rgba(37, 99, 235, 0.08);
         }
 
         .feature-card:hover .feature-visual {
-            transform: scale(1.04);
+            transform: scale(1.02);
         }
 
         /* Feature Visual Container */
         .feature-visual {
-            height: 200px;
-            margin-bottom: 28px;
+            height: 168px;
+            margin-bottom: 16px;
             border-radius: 16px;
             background: linear-gradient(135deg,
-                rgba(20, 20, 20, 0.8) 0%,
-                rgba(10, 10, 10, 0.9) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+                    rgba(15, 23, 42, 0.9) 0%,
+                    rgba(8, 12, 25, 0.95) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.1);
             position: relative;
             overflow: hidden;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -315,8 +299,8 @@
             right: 0;
             height: 50%;
             background: linear-gradient(180deg,
-                rgba(255, 255, 255, 0.02) 0%,
-                transparent 100%);
+                    rgba(37, 99, 235, 0.03) 0%,
+                    transparent 100%);
             pointer-events: none;
         }
 
@@ -325,30 +309,113 @@
             z-index: 2;
         }
 
+        .feature-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .feature-mini-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            border: 1px solid rgba(96, 165, 250, 0.28);
+            background: rgba(37, 99, 235, 0.12);
+            display: grid;
+            place-items: center;
+            color: #93c5fd;
+            flex-shrink: 0;
+            transform: scale(0.92);
+            opacity: 0.84;
+            transition: transform 0.35s ease, opacity 0.35s ease, border-color 0.35s ease;
+        }
+
+        .feature-mini-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-card.is-visible .feature-mini-icon {
+            transform: scale(1);
+            opacity: 1;
+            border-color: rgba(96, 165, 250, 0.42);
+        }
+
+        .feature-card.is-visible .feature-mini-icon svg {
+            animation: iconPop 0.45s ease-out both;
+        }
+
+        @keyframes iconPop {
+            from {
+                opacity: 0;
+                transform: scale(0.65);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
         .feature-tag {
             display: inline-block;
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 10px;
+            background: rgba(37, 99, 235, 0.1);
             border-radius: 6px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: #666666;
-            margin-bottom: 16px;
+            color: #60a5fa;
+            margin-bottom: 10px;
         }
 
         .feature-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+            margin: 0;
+            line-height: 1.2;
         }
 
         .feature-text {
-            font-size: 15px;
-            color: #666666;
-            line-height: 1.6;
+            font-size: 13px;
+            color: #a6b4c8;
+            line-height: 1.45;
+            margin: 0 0 8px;
+        }
+
+        .feature-points {
+            margin-top: 0;
+            display: grid;
+            gap: 4px;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-point {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.3;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .feature-point::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(96, 165, 250, 0.75);
+            margin-top: 5px;
+            flex: 0 0 auto;
         }
 
         /* ============================================
@@ -368,8 +435,8 @@
             position: absolute;
             width: 120px;
             height: 80px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #0f172a 0%, #0a0f1e 100%);
+            border: 1px solid rgba(37, 99, 235, 0.15);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -395,24 +462,45 @@
         }
 
         @keyframes cardFloat1 {
-            0%, 100% { transform: translateY(-30px) translateX(-20px) rotateY(-5deg); }
-            50% { transform: translateY(-35px) translateX(-25px) rotateY(-8deg); }
+
+            0%,
+            100% {
+                transform: translateY(-30px) translateX(-20px) rotateY(-5deg);
+            }
+
+            50% {
+                transform: translateY(-35px) translateX(-25px) rotateY(-8deg);
+            }
         }
 
         @keyframes cardFloat2 {
-            0%, 100% { transform: translateY(0px) translateX(0px); }
-            50% { transform: translateY(-5px) translateX(0px); }
+
+            0%,
+            100% {
+                transform: translateY(0px) translateX(0px);
+            }
+
+            50% {
+                transform: translateY(-5px) translateX(0px);
+            }
         }
 
         @keyframes cardFloat3 {
-            0%, 100% { transform: translateY(30px) translateX(20px) rotateY(5deg); }
-            50% { transform: translateY(25px) translateX(25px) rotateY(8deg); }
+
+            0%,
+            100% {
+                transform: translateY(30px) translateX(20px) rotateY(5deg);
+            }
+
+            50% {
+                transform: translateY(25px) translateX(25px) rotateY(8deg);
+            }
         }
 
         .browse-card-img {
             width: 24px;
             height: 24px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(37, 99, 235, 0.2);
             border-radius: 6px;
             flex-shrink: 0;
         }
@@ -423,7 +511,7 @@
 
         .browse-card-line {
             height: 6px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(96, 165, 250, 0.15);
             border-radius: 3px;
             margin-bottom: 6px;
         }
@@ -459,20 +547,35 @@
         }
 
         .filter-pill.active {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
+            background: rgba(37, 99, 235, 0.15);
+            border-color: rgba(37, 99, 235, 0.3);
+            color: #60a5fa;
             animation: pillPulse 2s ease-in-out infinite;
         }
 
         @keyframes pillPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1); }
-            50% { box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.05); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.15);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 2px rgba(37, 99, 235, 0.08);
+            }
         }
 
-        .filter-pill:nth-child(1) { animation-delay: 0s; }
-        .filter-pill:nth-child(2) { animation-delay: 0.5s; }
-        .filter-pill:nth-child(3) { animation-delay: 1s; }
+        .filter-pill:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .filter-pill:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .filter-pill:nth-child(3) {
+            animation-delay: 1s;
+        }
 
         /* 3. Map - Animated Location Pins */
         .visual-map {
@@ -487,11 +590,11 @@
             width: 160px;
             height: 120px;
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.1);
             border-radius: 12px;
             background:
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(37, 99, 235, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.04) 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
@@ -506,10 +609,11 @@
             position: absolute;
             width: 12px;
             height: 12px;
-            background: rgba(255, 255, 255, 0.8);
+            background: #3b82f6;
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
             animation: pinBounce 2s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
         }
 
         .map-pin::after {
@@ -520,21 +624,50 @@
             transform: translateX(-50%);
             width: 16px;
             height: 6px;
-            background: radial-gradient(ellipse, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
             border-radius: 50%;
         }
 
-        .map-pin:nth-child(1) { top: 20%; left: 25%; animation-delay: 0s; }
-        .map-pin:nth-child(2) { top: 50%; left: 60%; animation-delay: 0.3s; }
-        .map-pin:nth-child(3) { top: 70%; left: 30%; animation-delay: 0.6s; }
+        .map-pin:nth-child(1) {
+            top: 20%;
+            left: 25%;
+            animation-delay: 0s;
+        }
 
-        .map-pin:nth-child(1)::before { animation-delay: 0s; }
-        .map-pin:nth-child(2)::before { animation-delay: 0.3s; }
-        .map-pin:nth-child(3)::before { animation-delay: 0.6s; }
+        .map-pin:nth-child(2) {
+            top: 50%;
+            left: 60%;
+            animation-delay: 0.3s;
+        }
+
+        .map-pin:nth-child(3) {
+            top: 70%;
+            left: 30%;
+            animation-delay: 0.6s;
+        }
+
+        .map-pin:nth-child(1)::before {
+            animation-delay: 0s;
+        }
+
+        .map-pin:nth-child(2)::before {
+            animation-delay: 0.3s;
+        }
+
+        .map-pin:nth-child(3)::before {
+            animation-delay: 0.6s;
+        }
 
         @keyframes pinBounce {
-            0%, 100% { transform: rotate(-45deg) translateY(0); }
-            50% { transform: rotate(-45deg) translateY(-8px); }
+
+            0%,
+            100% {
+                transform: rotate(-45deg) translateY(0);
+            }
+
+            50% {
+                transform: rotate(-45deg) translateY(-8px);
+            }
         }
 
         /* 4. Submit - Animated Upload */
@@ -548,7 +681,7 @@
         .upload-box {
             width: 140px;
             height: 100px;
-            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border: 2px dashed rgba(37, 99, 235, 0.25);
             border-radius: 16px;
             display: flex;
             flex-direction: column;
@@ -574,7 +707,7 @@
             transform: translateX(-50%);
             width: 24px;
             height: 3px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(96, 165, 250, 0.4);
             border-radius: 2px;
         }
 
@@ -588,7 +721,7 @@
             height: 0;
             border-left: 10px solid transparent;
             border-right: 10px solid transparent;
-            border-bottom: 14px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 14px solid rgba(96, 165, 250, 0.6);
         }
 
         .upload-arrow {
@@ -598,12 +731,19 @@
             transform: translateX(-50%);
             width: 3px;
             height: 12px;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(96, 165, 250, 0.6);
         }
 
         @keyframes uploadFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
         }
 
         .upload-text {
@@ -616,14 +756,22 @@
             bottom: 0;
             left: 0;
             height: 3px;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+            background: linear-gradient(90deg, #2563eb 0%, #60a5fa 50%, rgba(37, 99, 235, 0.2) 100%);
             animation: progressBar 3s ease-in-out infinite;
         }
 
         @keyframes progressBar {
-            0% { width: 0%; }
-            50% { width: 100%; }
-            100% { width: 0%; }
+            0% {
+                width: 0%;
+            }
+
+            50% {
+                width: 100%;
+            }
+
+            100% {
+                width: 0%;
+            }
         }
 
         /* 5. Photos - Animated Image Gallery */
@@ -638,8 +786,8 @@
         .photo-frame {
             width: 60px;
             height: 70px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #0f172a 0%, #0a0f1e 100%);
+            border: 1px solid rgba(37, 99, 235, 0.15);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -666,25 +814,46 @@
         }
 
         @keyframes photoTilt1 {
-            0%, 100% { transform: rotate(-8deg) translateY(0); }
-            50% { transform: rotate(-10deg) translateY(-5px); }
+
+            0%,
+            100% {
+                transform: rotate(-8deg) translateY(0);
+            }
+
+            50% {
+                transform: rotate(-10deg) translateY(-5px);
+            }
         }
 
         @keyframes photoScale {
-            0%, 100% { transform: scale(1.1) translateY(0); }
-            50% { transform: scale(1.15) translateY(-5px); }
+
+            0%,
+            100% {
+                transform: scale(1.1) translateY(0);
+            }
+
+            50% {
+                transform: scale(1.15) translateY(-5px);
+            }
         }
 
         @keyframes photoTilt2 {
-            0%, 100% { transform: rotate(8deg) translateY(0); }
-            50% { transform: rotate(10deg) translateY(-5px); }
+
+            0%,
+            100% {
+                transform: rotate(8deg) translateY(0);
+            }
+
+            50% {
+                transform: rotate(10deg) translateY(-5px);
+            }
         }
 
         .photo-placeholder {
             width: 30px;
             height: 30px;
             border-radius: 6px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(37, 99, 235, 0.12);
         }
 
         .photo-shimmer {
@@ -693,18 +862,32 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.08), transparent);
             animation: shimmer 3s ease-in-out infinite;
         }
 
         @keyframes shimmer {
-            0% { left: -100%; }
-            50%, 100% { left: 100%; }
+            0% {
+                left: -100%;
+            }
+
+            50%,
+            100% {
+                left: 100%;
+            }
         }
 
-        .photo-frame:nth-child(1) .photo-shimmer { animation-delay: 0s; }
-        .photo-frame:nth-child(2) .photo-shimmer { animation-delay: 0.5s; }
-        .photo-frame:nth-child(3) .photo-shimmer { animation-delay: 1s; }
+        .photo-frame:nth-child(1) .photo-shimmer {
+            animation-delay: 0s;
+        }
+
+        .photo-frame:nth-child(2) .photo-shimmer {
+            animation-delay: 0.5s;
+        }
+
+        .photo-frame:nth-child(3) .photo-shimmer {
+            animation-delay: 1s;
+        }
 
         /* 6. Database - Animated Sync */
         .visual-database {
@@ -718,8 +901,8 @@
         .db-node {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #0f172a 0%, #0a0f1e 100%);
+            border: 1px solid rgba(37, 99, 235, 0.2);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -732,7 +915,7 @@
             position: absolute;
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(96, 165, 250, 0.4);
             border-radius: 4px;
         }
 
@@ -745,25 +928,43 @@
         .db-dot {
             width: 6px;
             height: 6px;
-            background: rgba(255, 255, 255, 0.3);
+            background: #3b82f6;
             border-radius: 50%;
             animation: dotPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
         }
 
-        .db-dot:nth-child(1) { animation-delay: 0s; }
-        .db-dot:nth-child(2) { animation-delay: 0.2s; }
-        .db-dot:nth-child(3) { animation-delay: 0.4s; }
+        .db-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .db-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .db-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
 
         @keyframes dotPulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
         }
 
         .db-server {
             width: 60px;
             height: 70px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #0f172a 0%, #0a0f1e 100%);
+            border: 1px solid rgba(37, 99, 235, 0.2);
             border-radius: 12px;
             display: flex;
             flex-direction: column;
@@ -776,7 +977,7 @@
         .db-bar {
             width: 100%;
             height: 4px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(37, 99, 235, 0.1);
             border-radius: 2px;
             position: relative;
             overflow: hidden;
@@ -788,17 +989,662 @@
             top: 0;
             left: 0;
             height: 100%;
-            background: rgba(255, 255, 255, 0.4);
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
             animation: dbSync 2s ease-in-out infinite;
         }
 
-        .db-bar:nth-child(1)::after { animation-delay: 0s; width: 70%; }
-        .db-bar:nth-child(2)::after { animation-delay: 0.3s; width: 50%; }
-        .db-bar:nth-child(3)::after { animation-delay: 0.6s; width: 85%; }
+        .db-bar:nth-child(1)::after {
+            animation-delay: 0s;
+            width: 70%;
+        }
+
+        .db-bar:nth-child(2)::after {
+            animation-delay: 0.3s;
+            width: 50%;
+        }
+
+        .db-bar:nth-child(3)::after {
+            animation-delay: 0.6s;
+            width: 85%;
+        }
 
         @keyframes dbSync {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* 7. AI Match Suggestions */
+        .visual-ai {
+            height: 100%;
+            display: grid;
+            align-content: center;
+            gap: 10px;
+            padding: 22px;
+        }
+
+        .ai-row {
+            border: 1px solid rgba(37, 99, 235, 0.16);
+            background: rgba(10, 14, 28, 0.6);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-item {
+            color: #cbd5e1;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ai-score {
+            color: #60a5fa;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        /* 8. Claim Timeline */
+        .visual-timeline {
+            height: 100%;
+            padding: 20px 22px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .timeline-step {
+            display: grid;
+            grid-template-columns: 20px 1fr;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid rgba(59, 130, 246, 0.65);
+            background: rgba(59, 130, 246, 0.16);
+            justify-self: center;
+        }
+
+        .timeline-label {
+            font-size: 12px;
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: rgba(15, 23, 42, 0.45);
+        }
+
+        .timeline-step.done .timeline-dot {
+            background: #3b82f6;
+        }
+
+        .timeline-step.done .timeline-label {
+            color: #dbeafe;
+            border-color: rgba(37, 99, 235, 0.35);
+        }
+
+        /* 9. Saved Search Alerts */
+        .visual-alerts {
+            height: 100%;
+            display: grid;
+            align-content: center;
+            gap: 10px;
+            padding: 24px;
+        }
+
+        .alert-chip {
+            border: 1px solid rgba(37, 99, 235, 0.26);
+            background: rgba(37, 99, 235, 0.12);
+            color: #bfdbfe;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            width: fit-content;
+        }
+
+        .alert-row {
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(10, 15, 30, 0.58);
+            border-radius: 9px;
+            padding: 10px 12px;
+            color: #cbd5e1;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        /* 10. Personal Dashboard */
+        .visual-dashboard {
+            height: 100%;
+            padding: 20px;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 12px;
+        }
+
+        .dashboard-head {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .dashboard-pill {
+            border: 1px solid rgba(37, 99, 235, 0.24);
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 9px;
+            padding: 8px;
+            font-size: 11px;
+            color: #bfdbfe;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .dashboard-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .dashboard-row {
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 9px;
+            background: rgba(10, 15, 30, 0.55);
+            padding: 8px 10px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-bar {
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(96, 165, 250, 0.14);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, rgba(96, 165, 250, 0.85), rgba(37, 99, 235, 0.22));
+            width: 66%;
+            animation: dashboardPulse 3s ease-in-out infinite;
+        }
+
+        .dashboard-row:nth-child(2) .dashboard-bar::after {
+            width: 82%;
+            animation-delay: 0.35s;
+        }
+
+        .dashboard-row:nth-child(3) .dashboard-bar::after {
+            width: 54%;
+            animation-delay: 0.7s;
+        }
+
+        .dashboard-meta {
+            font-size: 10px;
+            color: #93c5fd;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        @keyframes dashboardPulse {
+
+            0%,
+            100% {
+                opacity: 0.72;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* 11. Security + Verification */
+        .visual-security {
+            height: 100%;
+            display: grid;
+            align-content: center;
+            justify-items: center;
+            gap: 12px;
+            padding: 22px;
+        }
+
+        .shield-core {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            display: grid;
+            place-items: center;
+            color: #93c5fd;
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .shield-list {
+            display: grid;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .shield-item {
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 8px;
+            padding: 7px 10px;
+            color: #a5b4fc;
+            font-size: 12px;
+            background: rgba(10, 14, 28, 0.55);
+        }
+
+        /* 12. Admin Queue */
+        .visual-admin-queue {
+            height: 100%;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .queue-col {
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 10px;
+            background: rgba(9, 14, 26, 0.55);
+            padding: 8px;
+            display: grid;
+            align-content: start;
+            gap: 6px;
+            min-height: 120px;
+        }
+
+        .queue-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #60a5fa;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .queue-card {
+            border: 1px solid rgba(37, 99, 235, 0.18);
+            border-radius: 7px;
+            background: rgba(15, 23, 42, 0.62);
+            height: 18px;
+        }
+
+        /* 13. Bulk Actions */
+        .visual-bulk {
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1.3fr 0.8fr;
+            gap: 12px;
+            padding: 14px;
+        }
+
+        .bulk-main {
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 12px;
+            background: linear-gradient(160deg, rgba(8, 14, 30, 0.82), rgba(6, 11, 22, 0.9));
+            padding: 10px;
+            display: grid;
+            gap: 7px;
+            align-content: start;
+        }
+
+        .bulk-row {
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 8px;
+            background: rgba(10, 15, 30, 0.76);
+            padding: 8px 9px;
+            display: grid;
+            grid-template-columns: 14px 1fr auto;
+            align-items: center;
+            gap: 8px;
+            animation: bulkShift 2.8s ease-in-out infinite;
+        }
+
+        .bulk-row:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .bulk-row:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .bulk-check {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            border: 1px solid rgba(96, 165, 250, 0.55);
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .bulk-text {
+            height: 5px;
+            border-radius: 999px;
+            background: rgba(203, 213, 225, 0.2);
+        }
+
+        .bulk-badge {
+            font-size: 10px;
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 999px;
+            padding: 3px 7px;
+        }
+
+        .bulk-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 1px;
+        }
+
+        .bulk-btn {
+            height: 22px;
+            border-radius: 6px;
+            border: 1px solid rgba(37, 99, 235, 0.28);
+            background: rgba(37, 99, 235, 0.12);
+        }
+
+        .bulk-btn.primary {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.55), rgba(96, 165, 250, 0.28));
+        }
+
+        .bulk-progress {
+            margin-top: 2px;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, 0.12);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bulk-progress::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            width: 72%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.85), rgba(96, 165, 250, 0.5));
+            animation: progressSweep 2.4s ease-in-out infinite;
+        }
+
+        .bulk-side {
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            border-radius: 12px;
+            background: rgba(8, 13, 26, 0.68);
+            padding: 10px;
+            display: grid;
+            gap: 8px;
+            align-content: start;
+        }
+
+        .bulk-side-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #60a5fa;
+        }
+
+        .bulk-tool {
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 8px;
+            display: grid;
+            grid-template-columns: 12px 1fr;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #bfdbfe;
+        }
+
+        .bulk-tool-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #60a5fa 0%, #1d4ed8 100%);
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.35);
+        }
+
+        .bulk-queue-meter {
+            margin-top: 2px;
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            border-radius: 8px;
+            padding: 8px;
+            display: grid;
+            gap: 5px;
+        }
+
+        .bulk-meter-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: #9fb0c8;
+        }
+
+        .bulk-meter-line {
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bulk-meter-line::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            width: 64%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, rgba(96, 165, 250, 0.8), rgba(37, 99, 235, 0.35));
+        }
+
+        .bulk-meter-row:nth-child(2) .bulk-meter-line::after {
+            width: 48%;
+        }
+
+        @keyframes progressSweep {
+
+            0%,
+            100% {
+                opacity: 0.62;
+                width: 68%;
+            }
+
+            50% {
+                opacity: 1;
+                width: 78%;
+            }
+        }
+
+        @keyframes bulkShift {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-2px);
+            }
+        }
+
+        /* 14. Admin Analytics */
+        .visual-analytics {
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1.25fr 0.9fr;
+            gap: 12px;
+            align-items: stretch;
+            padding: 14px;
+        }
+
+        .chart-stage {
+            border: 1px solid rgba(37, 99, 235, 0.18);
+            border-radius: 12px;
+            background: linear-gradient(165deg, rgba(8, 13, 26, 0.85), rgba(10, 16, 32, 0.68));
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            align-content: end;
+        }
+
+        .chart-stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent 44%);
+            pointer-events: none;
+        }
+
+        .chart-grid-lines {
+            position: absolute;
+            inset: 10px 10px 10px 10px;
+            border-radius: 10px;
+            background:
+                linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+            background-size: 100% 26px, 26px 100%;
+            opacity: 0.36;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: end;
+            gap: 6px;
+            height: 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chart-bar {
+            flex: 1;
+            border-radius: 6px 6px 3px 3px;
+            background: linear-gradient(180deg, rgba(96, 165, 250, 0.98), rgba(37, 99, 235, 0.42));
+            border: 1px solid rgba(37, 99, 235, 0.32);
+            box-shadow: inset 0 1px 0 rgba(191, 219, 254, 0.2);
+        }
+
+        .chart-bar:nth-child(1) {
+            height: 34%;
+        }
+
+        .chart-bar:nth-child(2) {
+            height: 49%;
+        }
+
+        .chart-bar:nth-child(3) {
+            height: 63%;
+        }
+
+        .chart-bar:nth-child(4) {
+            height: 76%;
+        }
+
+        .chart-bar:nth-child(5) {
+            height: 88%;
+        }
+
+        .chart-line {
+            margin-top: -74px;
+            height: 40px;
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .chart-line svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .line-track {
+            fill: none;
+            stroke: rgba(125, 211, 252, 0.85);
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 220;
+            stroke-dashoffset: 220;
+            animation: lineDraw 2.2s ease-in-out infinite;
+            filter: drop-shadow(0 0 4px rgba(125, 211, 252, 0.25));
+        }
+
+        .line-point {
+            fill: #dbeafe;
+            stroke: rgba(59, 130, 246, 0.65);
+            stroke-width: 1.5;
+        }
+
+        @keyframes lineDraw {
+            0% {
+                stroke-dashoffset: 220;
+                opacity: 0.62;
+            }
+
+            45% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+        }
+
+        .chart-side {
+            display: grid;
+            gap: 8px;
+        }
+
+        .mini-stat {
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            background: rgba(10, 14, 30, 0.56);
+            border-radius: 8px;
+            padding: 8px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 8px;
+            color: #9fb0c8;
+            font-size: 10px;
+        }
+
+        .mini-stat strong {
+            color: #dbeafe;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .admin-lock-note {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #7dd3fc;
         }
 
         /* Large Feature Card */
@@ -807,7 +1653,7 @@
         }
 
         .feature-card.large .feature-visual {
-            height: 240px;
+            height: 190px;
         }
 
         /* Responsive */
@@ -860,22 +1706,58 @@
             }
 
             .feature-visual {
-                height: 160px;
+                height: 150px;
                 margin-bottom: 20px;
             }
 
             .feature-title {
-                font-size: 20px;
+                font-size: 18px;
             }
 
             .feature-text {
-                font-size: 14px;
+                font-size: 12px;
+            }
+
+            .visual-admin-queue {
+                grid-template-columns: 1fr;
+                gap: 6px;
+                padding: 10px;
+            }
+
+            .visual-bulk {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .visual-analytics {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .chart-bars {
+                height: 84px;
+            }
+
+            .chart-line {
+                margin-top: -62px;
+            }
+
+            .queue-col {
+                min-height: auto;
+                grid-template-columns: repeat(4, 1fr);
+                align-items: center;
+            }
+
+            .queue-title {
+                grid-column: 1 / -1;
             }
         }
     </style>
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
 </head>
+
 <body>
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition"></div>
@@ -893,6 +1775,7 @@
             <a href="browse.html" class="nav-link">Browse</a>
             <a href="map.html" class="nav-link">Map</a>
             <a href="submit.html" class="nav-link">Submit</a>
+            <a href="rewards.html" class="nav-link">Rewards</a>
             <a href="features.html" class="nav-link active">Features</a>
             <a href="sources.html" class="nav-link">Sources</a>
         </div>
@@ -906,15 +1789,15 @@
     <!-- Hero Section -->
     <section class="hero">
         <span class="hero-label">Platform Features</span>
-        <h1 class="hero-title">Built for speed.<br>Designed for clarity.</h1>
-        <p class="hero-description">Everything you need to reconnect people with their lost belongings, nothing you don't.</p>
+        <h1 class="hero-title">Everything you need<br>to reunite students with their stuff.</h1>
+        <p class="hero-description">Simple tools that work together: browse listings, submit items, track claims, and manage recoveries—all in one platform.</p>
     </section>
 
     <!-- Features Grid -->
     <section class="features-section">
         <div class="features-grid">
 
-            <!-- Feature 1: Browse -->
+            <!-- Student Features -->
             <article class="feature-card">
                 <div class="feature-visual">
                     <div class="visual-browse">
@@ -942,39 +1825,58 @@
                     </div>
                 </div>
                 <div class="feature-content">
-                    <span class="feature-tag">Browse</span>
-                    <h2 class="feature-title">Browse Verified Listings</h2>
-                    <p class="feature-text">Scan recent finds with clean cards, photos, and clear details. Every listing is verified and organized.</p>
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="7"></circle>
+                                <path d="M21 21l-4.3-4.3"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Search Listings</h2>
+                    </div>
+                    <p class="feature-text">Browse all lost items in one feed. Every listing shows a photo, location, and current status.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Photo thumbnails</li>
+                        <li class="feature-point">Real-time updates</li>
+                    </ul>
                 </div>
             </article>
 
-            <!-- Feature 2: Smart Filters -->
             <article class="feature-card">
                 <div class="feature-visual">
                     <div class="visual-filters">
                         <div class="filter-row">
-                            <span class="filter-pill active">Electronics</span>
-                            <span class="filter-pill">Clothing</span>
-                            <span class="filter-pill">Books</span>
+                            <div class="filter-pill active">All</div>
+                            <div class="filter-pill">Electronics</div>
+                            <div class="filter-pill">Books</div>
                         </div>
                         <div class="filter-row">
-                            <span class="filter-pill">Today</span>
-                            <span class="filter-pill active">This Week</span>
-                        </div>
-                        <div class="filter-row">
-                            <span class="filter-pill">Found</span>
-                            <span class="filter-pill active">Claimed</span>
+                            <div class="filter-pill">Found Today</div>
+                            <div class="filter-pill active">North Hall</div>
                         </div>
                     </div>
                 </div>
                 <div class="feature-content">
-                    <span class="feature-tag">Filters</span>
-                    <h2 class="feature-title">Smart Filters</h2>
-                    <p class="feature-text">Narrow by category, date, or status to spot matches quickly. Find what you're looking for in seconds.</p>
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 7h16"></path>
+                                <path d="M7 12h10"></path>
+                                <path d="M10 17h4"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Smart Filters</h2>
+                    </div>
+                    <p class="feature-text">Narrow down results instantly by category, building, or date. Find exactly what you're looking for.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Filter by location & category</li>
+                        <li class="feature-point">Sort by newest first</li>
+                    </ul>
                 </div>
             </article>
 
-            <!-- Feature 3: Map Discovery (Large) -->
             <article class="feature-card large">
                 <div class="feature-visual">
                     <div class="visual-map">
@@ -986,13 +1888,24 @@
                     </div>
                 </div>
                 <div class="feature-content">
-                    <span class="feature-tag">Map</span>
-                    <h2 class="feature-title">Interactive Map Discovery</h2>
-                    <p class="feature-text">Pinpoint items by location across campus. See exactly where items were found with our interactive floor plans and building maps. Navigate between floors and zoom into specific areas.</p>
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Campus Map</h2>
+                    </div>
+                    <p class="feature-text">Visual map shows exactly where each item was found on campus with pins for every building.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Interactive campus view</li>
+                        <li class="feature-point">Quick location lookup</li>
+                    </ul>
                 </div>
             </article>
 
-            <!-- Feature 4: Submit -->
             <article class="feature-card">
                 <div class="feature-visual">
                     <div class="visual-submit">
@@ -1000,19 +1913,31 @@
                             <div class="upload-icon">
                                 <div class="upload-arrow"></div>
                             </div>
-                            <span class="upload-text">Drop to upload</span>
+                            <div class="upload-text">Drop image + details</div>
                             <div class="upload-progress"></div>
                         </div>
                     </div>
                 </div>
                 <div class="feature-content">
-                    <span class="feature-tag">Submit</span>
-                    <h2 class="feature-title">One-Tap Submissions</h2>
-                    <p class="feature-text">Share a found item with photos, location, and time in under a minute. Simple form, instant posting.</p>
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 16V4"></path>
+                                <path d="M7 9l5-5 5 5"></path>
+                                <rect x="4" y="16" width="16" height="4" rx="1.5"></rect>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Quick Submit</h2>
+                    </div>
+                    <p class="feature-text">Found something? Upload a photo, add location and description, then publish in seconds.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Mobile-optimized</li>
+                        <li class="feature-point">Instant publishing</li>
+                    </ul>
                 </div>
             </article>
 
-            <!-- Feature 5: Photos -->
             <article class="feature-card">
                 <div class="feature-visual">
                     <div class="visual-photos">
@@ -1031,13 +1956,180 @@
                     </div>
                 </div>
                 <div class="feature-content">
-                    <span class="feature-tag">Photos</span>
-                    <h2 class="feature-title">Image-First Records</h2>
-                    <p class="feature-text">Upload photos to improve matching accuracy. Visual identification makes finding items faster and reduces confusion.</p>
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                                <circle cx="8" cy="10" r="1.4"></circle>
+                                <path d="M21 15l-5-5-6 6-3-3-4 4"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Photo-First Listings</h2>
+                    </div>
+                    <p class="feature-text">Every item includes a clear photo so students can identify their belongings instantly.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Visual identification</li>
+                        <li class="feature-point">Accurate matching</li>
+                    </ul>
                 </div>
             </article>
 
-            <!-- Feature 6: Database (Large) -->
+            <article class="feature-card">
+                <div class="feature-visual">
+                    <div class="visual-ai">
+                        <div class="ai-row">
+                            <span class="ai-item">Blue Nike backpack</span>
+                            <span class="ai-score">92%</span>
+                        </div>
+                        <div class="ai-row">
+                            <span class="ai-item">Navy Adidas drawstring</span>
+                            <span class="ai-score">74%</span>
+                        </div>
+                        <div class="ai-row">
+                            <span class="ai-item">Dark laptop sleeve</span>
+                            <span class="ai-score">61%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 3l1.8 3.8L18 8.2l-3 2.9.7 4L12 13.2 8.3 15l.7-4-3-2.8 4.2-1.4z"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">AI Matches</h2>
+                    </div>
+                    <p class="feature-text">Smart AI suggests the most likely matches based on item descriptions and photos with confidence scores.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Text & image analysis</li>
+                        <li class="feature-point">Ranked suggestions</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-visual">
+                    <div class="visual-timeline">
+                        <div class="timeline-step done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Claim submitted</div>
+                        </div>
+                        <div class="timeline-step done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Admin reviewed proof</div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Pickup window assigned</div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Item returned</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8 6h12"></path>
+                                <path d="M8 12h12"></path>
+                                <path d="M8 18h12"></path>
+                                <circle cx="4" cy="6" r="1.5"></circle>
+                                <circle cx="4" cy="12" r="1.5"></circle>
+                                <circle cx="4" cy="18" r="1.5"></circle>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Claim Tracking</h2>
+                    </div>
+                    <p class="feature-text">See exactly where your claim is: submitted, under review, approved, or ready for pickup.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Live status updates</li>
+                        <li class="feature-point">Timeline view</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-visual">
+                    <div class="visual-alerts">
+                        <div class="alert-chip">Saved: "blue bottle + gym"</div>
+                        <div class="alert-row">
+                            <span>New likely match in Main Gym</span>
+                            <span>Now</span>
+                        </div>
+                        <div class="alert-row">
+                            <span>Similar listing in North Hall</span>
+                            <span>12m</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"></path>
+                                <path d="M10.5 20a1.5 1.5 0 0 0 3 0"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Saved Alerts</h2>
+                    </div>
+                    <p class="feature-text">Save keywords like "blue backpack" and get notified instantly when matching items are posted.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Auto notifications</li>
+                        <li class="feature-point">Custom keywords</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-visual">
+                    <div class="visual-dashboard">
+                        <div class="dashboard-head">
+                            <div class="dashboard-pill">Claims 4</div>
+                            <div class="dashboard-pill">Recovered 9</div>
+                        </div>
+                        <div class="dashboard-list">
+                            <div class="dashboard-row">
+                                <div class="dashboard-bar"></div>
+                                <div class="dashboard-meta">Today</div>
+                            </div>
+                            <div class="dashboard-row">
+                                <div class="dashboard-bar"></div>
+                                <div class="dashboard-meta">Week</div>
+                            </div>
+                            <div class="dashboard-row">
+                                <div class="dashboard-bar"></div>
+                                <div class="dashboard-meta">Month</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Student</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Your Dashboard</h2>
+                    </div>
+                    <p class="feature-text">View all your submitted items, active claims, and recovery stats in one convenient place.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Track your items</li>
+                        <li class="feature-point">View claim history</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Shared/System Features -->
             <article class="feature-card large">
                 <div class="feature-visual">
                     <div class="visual-database">
@@ -1052,18 +2144,270 @@
                             <div class="db-bar"></div>
                             <div class="db-bar"></div>
                         </div>
-                        <div class="db-connection">
-                            <div class="db-dot"></div>
-                            <div class="db-dot"></div>
-                            <div class="db-dot"></div>
-                        </div>
-                        <div class="db-node"></div>
                     </div>
                 </div>
                 <div class="feature-content">
-                    <span class="feature-tag">Real-time</span>
-                    <h2 class="feature-title">Live Data Sync</h2>
-                    <p class="feature-text">Powered by Supabase for instant updates across all devices. When someone posts a found item or claims a listing, everyone sees it immediately. No refreshing needed.</p>
+                    <span class="feature-tag">System</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M21 12a9 9 0 0 1-15 6.7"></path>
+                                <path d="M3 12a9 9 0 0 1 15-6.7"></path>
+                                <path d="M3 18v-4h4"></path>
+                                <path d="M21 6v4h-4"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Live Sync</h2>
+                    </div>
+                    <p class="feature-text">Real-time database ensures all students and staff see the latest listings and status changes instantly.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Instant updates</li>
+                        <li class="feature-point">Always current</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-visual">
+                    <div class="visual-security">
+                        <div class="shield-core">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 3l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path>
+                                <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <div class="shield-list">
+                            <div class="shield-item">Identity check</div>
+                            <div class="shield-item">Proof review</div>
+                            <div class="shield-item">Action audit log</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">System</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 3l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path>
+                                <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Claim Checks</h2>
+                    </div>
+                    <p class="feature-text">Every claim requires student ID verification and proof of ownership before items are released.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Identity verification</li>
+                        <li class="feature-point">Audit trail</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Admin Features -->
+            <article class="feature-card large">
+                <div class="feature-visual">
+                    <div class="visual-admin-queue">
+                        <div class="queue-col">
+                            <div class="queue-title">New</div>
+                            <div class="queue-card"></div>
+                            <div class="queue-card"></div>
+                        </div>
+                        <div class="queue-col">
+                            <div class="queue-title">Reviewing</div>
+                            <div class="queue-card"></div>
+                            <div class="queue-card"></div>
+                            <div class="queue-card"></div>
+                        </div>
+                        <div class="queue-col">
+                            <div class="queue-title">Ready</div>
+                            <div class="queue-card"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Admin</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="5" height="14" rx="1"></rect>
+                                <rect x="10" y="5" width="5" height="14" rx="1"></rect>
+                                <rect x="17" y="5" width="4" height="14" rx="1"></rect>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Moderation Queue</h2>
+                    </div>
+                    <p class="feature-text">Staff manage all claims in one organized kanban board sorted by priority and status.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Drag-and-drop workflow</li>
+                        <li class="feature-point">Priority sorting</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-visual">
+                    <div class="visual-timeline">
+                        <div class="timeline-step done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Open claim details</div>
+                        </div>
+                        <div class="timeline-step done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Validate identity + evidence</div>
+                        </div>
+                        <div class="timeline-step done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Approve pickup window</div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-label">Mark item returned</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Admin</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8 7h12"></path>
+                                <path d="M8 12h12"></path>
+                                <path d="M8 17h12"></path>
+                                <path d="M3 7l1.5 1.5L6.5 6.5"></path>
+                                <path d="M3 12l1.5 1.5L6.5 11.5"></path>
+                                <path d="M3 17l1.5 1.5L6.5 16.5"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Claim Checklist</h2>
+                    </div>
+                    <p class="feature-text">Standardized verification steps guide admins through claim review ensuring nothing gets missed.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Step-by-step process</li>
+                        <li class="feature-point">Consistent review</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="feature-card large">
+                <div class="feature-visual">
+                    <div class="visual-bulk">
+                        <div class="bulk-main">
+                            <div class="bulk-row">
+                                <div class="bulk-check"></div>
+                                <div class="bulk-text"></div>
+                                <span class="bulk-badge">Ready</span>
+                            </div>
+                            <div class="bulk-row">
+                                <div class="bulk-check"></div>
+                                <div class="bulk-text"></div>
+                                <span class="bulk-badge">Queue</span>
+                            </div>
+                            <div class="bulk-row">
+                                <div class="bulk-check"></div>
+                                <div class="bulk-text"></div>
+                                <span class="bulk-badge">Archive</span>
+                            </div>
+                            <div class="bulk-actions">
+                                <div class="bulk-btn"></div>
+                                <div class="bulk-btn primary"></div>
+                            </div>
+                            <div class="bulk-progress"></div>
+                        </div>
+                        <div class="bulk-side">
+                            <div class="bulk-side-title">Quick tools</div>
+                            <div class="bulk-tool">
+                                <span class="bulk-tool-dot"></span>
+                                <span>Approve selected</span>
+                            </div>
+                            <div class="bulk-tool">
+                                <span class="bulk-tool-dot"></span>
+                                <span>Request more proof</span>
+                            </div>
+                            <div class="bulk-tool">
+                                <span class="bulk-tool-dot"></span>
+                                <span>Move to archive</span>
+                            </div>
+                            <div class="bulk-queue-meter">
+                                <div class="bulk-meter-row">
+                                    <div class="bulk-meter-line"></div>
+                                    <span>14 open</span>
+                                </div>
+                                <div class="bulk-meter-row">
+                                    <div class="bulk-meter-line"></div>
+                                    <span>7 queued</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Admin</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="8" height="6" rx="1"></rect>
+                                <rect x="13" y="5" width="8" height="6" rx="1"></rect>
+                                <rect x="3" y="13" width="8" height="6" rx="1"></rect>
+                                <rect x="13" y="13" width="8" height="6" rx="1"></rect>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Bulk Actions</h2>
+                    </div>
+                    <p class="feature-text">Select multiple claims and update their status, archive, or take action all at once to save time.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Multi-select interface</li>
+                        <li class="feature-point">Batch processing</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="feature-card large">
+                <div class="feature-visual">
+                    <div class="visual-analytics">
+                        <div class="chart-stage">
+                            <div class="chart-grid-lines"></div>
+                            <div class="chart-bars">
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                                <div class="chart-bar"></div>
+                            </div>
+                            <div class="chart-line">
+                                <svg viewBox="0 0 240 40" preserveAspectRatio="none" aria-hidden="true">
+                                    <path class="line-track" d="M6 30 L58 24 L108 18 L160 14 L234 8"></path>
+                                    <circle class="line-point" cx="6" cy="30" r="2.8"></circle>
+                                    <circle class="line-point" cx="58" cy="24" r="2.8"></circle>
+                                    <circle class="line-point" cx="108" cy="18" r="2.8"></circle>
+                                    <circle class="line-point" cx="160" cy="14" r="2.8"></circle>
+                                    <circle class="line-point" cx="234" cy="8" r="2.8"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="chart-side">
+                            <div class="mini-stat"><span>Recovery rate</span><strong>82%</strong></div>
+                            <div class="mini-stat"><span>Avg review</span><strong>11m</strong></div>
+                            <div class="mini-stat"><span>Queue load</span><strong>14</strong></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="feature-tag">Admin</span>
+                    <div class="feature-head">
+                        <span class="feature-mini-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 20V11"></path>
+                                <path d="M10 20V7"></path>
+                                <path d="M16 20v-9"></path>
+                                <path d="M22 20v-5"></path>
+                            </svg>
+                        </span>
+                        <h2 class="feature-title">Recovery Analytics</h2>
+                    </div>
+                    <p class="feature-text">Track success metrics like recovery rates, average review time, and queue load with visual charts.</p>
+                    <ul class="feature-points">
+                        <li class="feature-point">Success metrics</li>
+                        <li class="feature-point">Performance insights</li>
+                    </ul>
                 </div>
             </article>
 
@@ -1072,47 +2416,250 @@
 
     <!-- Chatbot Widget -->
     <style>
-        .chatbot-widget { position: fixed; right: 24px; bottom: 24px; z-index: 200; font-family: inherit; }
-        .chatbot-toggle { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1s backwards; position: relative; overflow: hidden; }
-        .chatbot-toggle::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 60%); pointer-events: none; }
-        @keyframes chatPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.8; } }
-        @keyframes popIn { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
-        .chatbot-toggle:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.2); }
-        .chatbot-toggle:active { transform: scale(0.95); }
-        .chatbot-toggle svg { width: 28px; height: 28px; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)); }
-        .chatbot-panel { position: absolute; right: 0; bottom: 70px; width: 320px; max-height: 440px; display: none; flex-direction: column; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); opacity: 0; transform: translateY(10px) scale(0.95); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .chatbot-panel.open { display: flex; opacity: 1; transform: translateY(0) scale(1); }
-        .chatbot-header { padding: 14px 16px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
-        .chatbot-title { font-size: 14px; font-weight: 700; letter-spacing: 0.4px; }
-        .chatbot-close { background: none; border: none; color: #8a8a8a; cursor: pointer; font-size: 18px; }
-        .chatbot-messages { padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; max-height: 280px; }
-        .chatbot-message { font-size: 13px; line-height: 1.4; padding: 10px 12px; border-radius: 12px; background: #141414; color: #e5e5e5; }
-        .chatbot-message.user { align-self: flex-end; background: #202020; color: #ffffff; }
-        .chatbot-footer { border-top: 1px solid #1a1a1a; padding: 12px; display: flex; gap: 8px; }
-        .chatbot-input { flex: 1; background: #0f0f0f; border: 1px solid #262626; border-radius: 10px; color: #ffffff; padding: 10px 12px; font-size: 13px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .chatbot-input:focus { outline: none; border-color: #404040; background: #161616; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05); }
-        .chatbot-send { background: #ffffff; color: #111111; border: none; padding: 10px 12px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .chatbot-send:hover { background: #e8e8e8; transform: scale(1.05); }
-        .chatbot-send:active { transform: scale(0.95); }
-        .chatbot-hint { color: #7a7a7a; font-size: 12px; padding: 0 16px 14px; }
-        .chatbot-status { min-height: 16px; padding: 0 16px 10px; font-size: 12px; color: #6f6f6f; }
-        .chatbot-status.error { color: #fca5a5; }
-        @media (max-width: 768px) { .chatbot-widget { right: 16px; bottom: 16px; } .chatbot-panel { width: 280px; } }
+        .chatbot-widget {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 200;
+            font-family: inherit;
+        }
+
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1e3a5f 0%, #0f172a 100%);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.2), 0 0 0 1px rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1s backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chatbot-toggle::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(96, 165, 250, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        @keyframes chatPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.3), 0 0 0 1px rgba(37, 99, 235, 0.2);
+            border-color: rgba(37, 99, 235, 0.5);
+        }
+
+        .chatbot-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .chatbot-toggle svg {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .chatbot-panel {
+            position: absolute;
+            right: 0;
+            bottom: 70px;
+            width: 320px;
+            max-height: 440px;
+            display: none;
+            flex-direction: column;
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .chatbot-panel.open {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .chatbot-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: #8a8a8a;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .chatbot-messages {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            max-height: 280px;
+        }
+
+        .chatbot-message {
+            font-size: 13px;
+            line-height: 1.4;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #141414;
+            color: #e5e5e5;
+        }
+
+        .chatbot-message.user {
+            align-self: flex-end;
+            background: #202020;
+            color: #ffffff;
+        }
+
+        .chatbot-footer {
+            border-top: 1px solid #1a1a1a;
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            background: #0f0f0f;
+            border: 1px solid #262626;
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 10px 12px;
+            font-size: 13px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chatbot-input:focus {
+            outline: none;
+            border-color: rgba(37, 99, 235, 0.4);
+            background: #161616;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .chatbot-send {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .chatbot-send:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transform: scale(1.05);
+        }
+
+        .chatbot-send:active {
+            transform: scale(0.95);
+        }
+
+        .chatbot-hint {
+            color: #7a7a7a;
+            font-size: 12px;
+            padding: 0 16px 14px;
+        }
+
+        .chatbot-status {
+            min-height: 16px;
+            padding: 0 16px 10px;
+            font-size: 12px;
+            color: #6f6f6f;
+        }
+
+        .chatbot-status.error {
+            color: #fca5a5;
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-widget {
+                right: 16px;
+                bottom: 16px;
+            }
+
+            .chatbot-panel {
+                width: 280px;
+            }
+        }
     </style>
 
     <div class="chatbot-widget">
         <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat assistant">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                <circle cx="9" cy="10" r="1" fill="#ffffff"/><circle cx="12" cy="10" r="1" fill="#ffffff"/><circle cx="15" cy="10" r="1" fill="#ffffff"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                <circle cx="9" cy="10" r="1" fill="#ffffff" />
+                <circle cx="12" cy="10" r="1" fill="#ffffff" />
+                <circle cx="15" cy="10" r="1" fill="#ffffff" />
             </svg>
         </button>
         <div class="chatbot-panel" id="chatbotPanel">
-            <div class="chatbot-header"><div class="chatbot-title">BackTrack Assistant</div><button class="chatbot-close" id="chatbotClose">&times;</button></div>
-            <div class="chatbot-messages" id="chatbotMessages"><div class="chatbot-message">Ask me about BackTrack's features, how to submit items, or how browsing works.</div></div>
-            <div class="chatbot-hint">Questions outside the website won't be answered.</div>
+            <div class="chatbot-header">
+                <div class="chatbot-title">BackTrack Assistant</div><button class="chatbot-close"
+                    id="chatbotClose">&times;</button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chatbot-message">Got questions about how BackTrack works? Ask me about submitting items, browsing, claims, or any features.</div>
+            </div>
+            <div class="chatbot-hint">Only answers BackTrack-related questions.</div>
             <div class="chatbot-status" id="chatbotStatus"></div>
-            <div class="chatbot-footer"><input class="chatbot-input" id="chatbotInput" type="text" placeholder="Ask about BackTrack..." /><button class="chatbot-send" id="chatbotSend">Send</button></div>
+            <div class="chatbot-footer"><input class="chatbot-input" id="chatbotInput" type="text"
+                    placeholder="Ask about BackTrack..." /><button class="chatbot-send" id="chatbotSend">Send</button>
+            </div>
         </div>
     </div>
 
@@ -1121,26 +2668,35 @@
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;">
             <div>
                 <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
-                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized lost-and-found system for students and staff. Built for FBLA Coding & Programming.</p>
+                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized
+                    lost-and-found system for Forsyth County high schools. Built for FBLA Website Coding &amp; Development.</p>
             </div>
             <div>
-                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Product</div>
+                <div
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    Product</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse Items</a>
-                    <a href="submit.html" style="color: #777777; text-decoration: none; font-size: 14px;">Submit Item</a>
+                    <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse
+                        Items</a>
+                    <a href="submit.html" style="color: #777777; text-decoration: none; font-size: 14px;">Submit
+                        Item</a>
                     <a href="claim.html" style="color: #777777; text-decoration: none; font-size: 14px;">Claim Item</a>
                     <a href="map.html" style="color: #777777; text-decoration: none; font-size: 14px;">Campus Map</a>
                 </div>
             </div>
             <div>
-                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Resources</div>
+                <div
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    Resources</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="features.html" style="color: #777777; text-decoration: none; font-size: 14px;">Features</a>
                     <a href="sources.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sources</a>
                 </div>
             </div>
             <div>
-                <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">Account</div>
+                <div
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    Account</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="login.html" style="color: #777777; text-decoration: none; font-size: 14px;">Log In</a>
                     <a href="signup.html" style="color: #777777; text-decoration: none; font-size: 14px;">Sign Up</a>
@@ -1148,8 +2704,10 @@
                 </div>
             </div>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
-            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Coding &amp; Programming.</div>
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
+            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp;
+                Development.</div>
             <div style="color: #444444; font-size: 13px;">Made by BackTrack Team</div>
         </div>
     </footer>
@@ -1170,20 +2728,26 @@
             rootMargin: '0px 0px -50px 0px'
         };
 
+        const featureCards = Array.from(document.querySelectorAll('.feature-card'));
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                    entry.target.style.filter = 'blur(0)';
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
         // Add initial styles and observe feature cards
-        document.querySelectorAll('.feature-card').forEach((card, index) => {
+        featureCards.forEach((card, index) => {
             card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            card.style.transform = 'translateY(18px) scale(0.985)';
+            card.style.filter = 'blur(7px)';
+            card.style.transition = `opacity 0.58s cubic-bezier(0.22, 1, 0.36, 1) ${index * 0.06}s, transform 0.58s cubic-bezier(0.22, 1, 0.36, 1) ${index * 0.06}s, filter 0.58s cubic-bezier(0.22, 1, 0.36, 1) ${index * 0.06}s`;
             observer.observe(card);
         });
 
@@ -1274,4 +2838,5 @@
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
 </body>
+
 </html>

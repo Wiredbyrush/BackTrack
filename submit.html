@@ -650,8 +650,8 @@
         </div>
 
         <div class="success-message" id="successMessage" role="status" aria-live="polite">
-            <h3>Item Submitted Successfully!</h3>
-            <p>Thank you for helping someone find their lost item.</p>
+            <h3>Submission Received</h3>
+            <p>Thanks for helping. An admin will review this report before it goes live.</p>
         </div>
 
         <div class="success-message" id="bountySuccessMessage" role="status" aria-live="polite">
@@ -757,7 +757,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn" id="submitBtn">Submit Item</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Submit for Review</button>
             </form>
         </div>
 
@@ -1311,7 +1311,7 @@
                     finder_name: document.getElementById('finderName').value,
                     contact_email: document.getElementById('contactEmail').value,
                     contact_phone: document.getElementById('contactPhone').value,
-                    status: 'found'
+                    status: 'pending'
                 };
 
                 // Check if Supabase is configured
@@ -1339,7 +1339,7 @@
                 alert(error.message || 'Something went wrong. Please try again.');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Item';
+                submitBtn.textContent = 'Submit for Review';
             }
         });
 

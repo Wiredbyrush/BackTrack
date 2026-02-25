@@ -1,368 +1,459 @@
 /**
- * LEADERBOARD LOGIC
- * Refactored from index.html
+ * LEADERBOARD
  */
 (function () {
-    console.log('[Leaderboard] Initializing...');
-    const BOUNTY_WEIGHT = 2;
-    const MONTH_WINDOW_DAYS = 30;
-    const podium = document.getElementById('lbPodium');
-    const tableRows = document.getElementById('lbTableRows');
-    const summary = document.getElementById('lbSummary');
-    const note = document.getElementById('lbNote');
-    const rangeButtons = Array.from(document.querySelectorAll('.lb-range-btn'));
+    var BOUNTY_WEIGHT = 2;
+    var MONTH_WINDOW_DAYS = 30;
 
-    if (!podium || !tableRows || !summary || !note || !rangeButtons.length) {
-        console.error('[Leaderboard] Missing required elements:', { podium, tableRows, summary, note, rangeButtons });
-        return;
-    }
-    console.log('[Leaderboard] Elements found. Starting...');
+    var podiumWrap = document.getElementById('lbPodium');
+    var tableRows = document.getElementById('lbTableRows');
+    var tableWrap = tableRows ? tableRows.closest('.lb-table-wrap') : null;
+    var spotlight = document.getElementById('lbSpotlight');
+    var contributorsEl = document.getElementById('lbContributors');
+    var foundEl = document.getElementById('lbItemsFound');
+    var bountiesEl = document.getElementById('lbBounties');
+    var topScoreEl = document.getElementById('lbTopScore');
+    var rangeButtons = Array.from(document.querySelectorAll('.lb-range-btn'));
 
-    const fallbackEntries = [
-        { name: 'Jolie Joie', found: 26, bounties: 10, score: 46 },
-        { name: 'Brian Ngo', found: 20, bounties: 8, score: 36 },
-        { name: 'David Do', found: 16, bounties: 6, score: 28 },
-        { name: 'Henrietta O', found: 13, bounties: 4, score: 21 },
-        { name: 'Darrel Bins', found: 12, bounties: 3, score: 18 },
-        { name: 'Mia Ross', found: 10, bounties: 3, score: 16 }
+    if (!podiumWrap || !tableRows || !rangeButtons.length) return;
+
+    var fallbackEntries = [
+        { key: 'fallback:jolie', name: 'Jolie Joie', found: 26, bounties: 10, score: 46, lastSeen: 0 },
+        { key: 'fallback:brian', name: 'Brian Ngo', found: 20, bounties: 8, score: 36, lastSeen: 0 },
+        { key: 'fallback:david', name: 'David Do', found: 16, bounties: 6, score: 28, lastSeen: 0 },
+        { key: 'fallback:henrietta', name: 'Henrietta O', found: 13, bounties: 4, score: 21, lastSeen: 0 },
+        { key: 'fallback:darrel', name: 'Darrel Bins', found: 12, bounties: 3, score: 18, lastSeen: 0 },
+        { key: 'fallback:mia', name: 'Mia Ross', found: 10, bounties: 3, score: 16, lastSeen: 0 }
     ];
 
-    const state = {
+    var state = {
         range: 'month',
         usingFallback: false,
-        items: []
+        items: [],
+        currentUser: null,
+        byRange: {
+            month: [],
+            all: []
+        }
     };
 
-    function normalizeName(value) {
-        return String(value || '').trim().replace(/\s+/g, ' ');
+    function norm(v) {
+        return String(v || '').trim().replace(/\s+/g, ' ');
     }
 
-    function formatNumber(value) {
-        return new Intl.NumberFormat('en-US').format(Number(value) || 0);
+    function fmt(v) {
+        return new Intl.NumberFormat('en-US').format(Number(v) || 0);
     }
 
-    function initialsFromName(name) {
-        const cleanName = normalizeName(name);
-        if (!cleanName) return '--';
-        const parts = cleanName.split(' ').filter(Boolean).slice(0, 2);
-        return parts.map((part) => part[0].toUpperCase()).join('');
-    }
-
-    function escapeHtml(value) {
-        return String(value || '')
+    function esc(v) {
+        return String(v || '')
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
+            .replace(/"/g, '&quot;');
     }
 
-    function prettyFromEmail(email) {
-        if (!email || !email.includes('@')) return '';
-        const local = email.split('@')[0].replace(/[._-]+/g, ' ').trim();
-        if (!local) return '';
-        return local.replace(/\b\w/g, (char) => char.toUpperCase());
+    function initials(name) {
+        var n = norm(name);
+        if (!n) return '--';
+        return n
+            .split(' ')
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(function (part) { return part[0].toUpperCase(); })
+            .join('');
     }
 
-    function getDisplayName(item) {
-        const finderName = normalizeName(item.finder_name);
+    function prettyEmail(email) {
+        if (!email || email.indexOf('@') === -1) return '';
+        var left = email.split('@')[0].replace(/[._-]+/g, ' ').trim();
+        return left ? left.replace(/\b\w/g, function (char) { return char.toUpperCase(); }) : '';
+    }
+
+    function displayName(item) {
+        var finderName = norm(item.finder_name);
         if (finderName) return finderName;
 
-        const fromEmail = prettyFromEmail(item.contact_email);
-        if (fromEmail) return fromEmail;
+        var emailName = prettyEmail(item.contact_email);
+        if (emailName) return emailName;
 
-        const uid = String(item.submitted_by || '').trim();
-        if (uid) return `User ${uid.slice(0, 6)}`;
+        var userId = String(item.submitted_by || '').trim();
+        if (userId) return 'User ' + userId.slice(0, 6);
 
         return 'Unknown Finder';
     }
 
-    function getContributorKey(item) {
-        const uid = String(item.submitted_by || '').trim();
-        if (uid) return `uid:${uid}`;
+    function contribKey(item) {
+        var userId = String(item.submitted_by || '').trim();
+        if (userId) return 'uid:' + userId;
 
-        const email = String(item.contact_email || '').trim().toLowerCase();
-        if (email) return `email:${email}`;
+        var email = String(item.contact_email || '').trim().toLowerCase();
+        if (email) return 'email:' + email;
 
-        const finderName = normalizeName(item.finder_name).toLowerCase();
-        if (finderName) return `name:${finderName}`;
+        var name = norm(item.finder_name).toLowerCase();
+        if (name) return 'name:' + name;
 
         return '';
     }
 
-    function itemTimestamp(item) {
-        const raw = item.created_at || item.updated_at || item.date_lost || '';
-        const stamp = Date.parse(raw);
+    function ts(item) {
+        var stamp = Date.parse(item.created_at || item.updated_at || item.date_lost || '');
         return Number.isFinite(stamp) ? stamp : 0;
     }
 
-    function isInSelectedRange(item, range) {
+    function inRange(item, range) {
         if (range !== 'month') return true;
-        const stamp = itemTimestamp(item);
-        if (!stamp) return true;
-        const cutoff = Date.now() - (MONTH_WINDOW_DAYS * 24 * 60 * 60 * 1000);
-        return stamp >= cutoff;
+        var stamp = ts(item);
+        return !stamp || stamp >= Date.now() - MONTH_WINDOW_DAYS * 864e5;
     }
 
-    function computeEntries(items, range) {
-        const byFinder = new Map();
+    function compute(items, range) {
+        var map = new Map();
 
-        items.forEach((item) => {
-            const status = String(item.status || '').toLowerCase();
+        items.forEach(function (item) {
+            var status = String(item.status || '').toLowerCase();
             if (status !== 'found' && status !== 'claimed') return;
-            if (!isInSelectedRange(item, range)) return;
+            if (!inRange(item, range)) return;
 
-            const key = getContributorKey(item);
+            var key = contribKey(item);
             if (!key) return;
 
-            if (!byFinder.has(key)) {
-                byFinder.set(key, {
-                    name: getDisplayName(item),
+            if (!map.has(key)) {
+                map.set(key, {
+                    key: key,
+                    name: displayName(item),
                     found: 0,
                     bounties: 0,
-                    score: 0,
                     lastSeen: 0
                 });
             }
 
-            const entry = byFinder.get(key);
-            const nextName = getDisplayName(item);
-            if ((entry.name === 'Unknown Finder' || entry.name.startsWith('User ')) && !nextName.startsWith('User ') && nextName !== 'Unknown Finder') {
-                entry.name = nextName;
+            var entry = map.get(key);
+            var bestName = displayName(item);
+            if ((entry.name === 'Unknown Finder' || entry.name.indexOf('User ') === 0)
+                && bestName !== 'Unknown Finder' && bestName.indexOf('User ') !== 0) {
+                entry.name = bestName;
             }
 
             entry.found += 1;
             if (status === 'claimed') entry.bounties += 1;
-            entry.lastSeen = Math.max(entry.lastSeen, itemTimestamp(item));
+            entry.lastSeen = Math.max(entry.lastSeen, ts(item));
         });
 
-        return Array.from(byFinder.values())
-            .map((entry) => ({
-                ...entry,
-                score: entry.found + (entry.bounties * BOUNTY_WEIGHT)
-            }))
-            .sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score;
-                if (b.found !== a.found) return b.found - a.found;
-                if (b.bounties !== a.bounties) return b.bounties - a.bounties;
-                if (b.lastSeen !== a.lastSeen) return b.lastSeen - a.lastSeen;
-                return a.name.localeCompare(b.name);
+        return Array.from(map.values())
+            .map(function (entry) {
+                return Object.assign({}, entry, {
+                    score: entry.found + entry.bounties * BOUNTY_WEIGHT
+                });
+            })
+            .sort(function (a, b) {
+                return b.score - a.score
+                    || b.found - a.found
+                    || b.bounties - a.bounties
+                    || b.lastSeen - a.lastSeen
+                    || a.name.localeCompare(b.name);
             });
     }
 
-    function countUp(el, endValue) {
+    function getUserKeys() {
+        if (!state.currentUser) return [];
+        var keys = [];
+
+        var userId = String(state.currentUser.id || '').trim();
+        if (userId) keys.push('uid:' + userId);
+
+        var email = String(state.currentUser.email || '').trim().toLowerCase();
+        if (email) keys.push('email:' + email);
+
+        return keys;
+    }
+
+    function findUserPlacement(entries) {
+        var keys = getUserKeys();
+        if (!keys.length) return null;
+
+        for (var i = 0; i < entries.length; i += 1) {
+            if (keys.indexOf(entries[i].key) !== -1) {
+                return { entry: entries[i], rank: i + 1 };
+            }
+        }
+
+        return null;
+    }
+
+    function trendFor(entry, rank, allRankMap) {
+        if (!entry) return { cls: 'flat', label: '--' };
+        if (state.range !== 'month') return { cls: 'flat', label: 'ALL' };
+
+        var allRank = allRankMap.get(entry.key);
+        if (!allRank) return { cls: 'up', label: 'NEW' };
+
+        var delta = allRank - rank;
+        if (delta > 0) return { cls: 'up', label: 'UP ' + delta };
+        if (delta < 0) return { cls: 'down', label: 'DOWN ' + Math.abs(delta) };
+        return { cls: 'flat', label: 'EVEN' };
+    }
+
+    function calcTotals(entries) {
+        return entries.reduce(function (totals, entry) {
+            totals.found += Number(entry.found || 0);
+            totals.bounties += Number(entry.bounties || 0);
+            return totals;
+        }, { found: 0, bounties: 0 });
+    }
+
+    function setInsights(entries) {
+        if (!contributorsEl || !foundEl || !bountiesEl || !topScoreEl) return;
+
+        var totals = calcTotals(entries);
+        contributorsEl.textContent = fmt(entries.length);
+        foundEl.textContent = fmt(totals.found);
+        bountiesEl.textContent = fmt(totals.bounties);
+        topScoreEl.textContent = fmt(entries[0] ? entries[0].score : 0);
+    }
+
+    function setSpotlight(entries) {
+        if (!spotlight) return;
+
+        if (!state.currentUser) {
+            spotlight.textContent = 'Log in to see your leaderboard position and movement.';
+            return;
+        }
+
+        var placement = findUserPlacement(entries);
+        if (!placement) {
+            spotlight.textContent = state.range === 'month'
+                ? 'You are not ranked this month yet. Return one item to get on the board.'
+                : 'You are not ranked all-time yet. Return one item to get on the board.';
+            return;
+        }
+
+        spotlight.textContent = 'You are #' + placement.rank
+            + ' with ' + fmt(placement.entry.score) + ' points '
+            + '(' + fmt(placement.entry.found) + ' found, '
+            + fmt(placement.entry.bounties) + ' bounties).';
+    }
+
+    function countUp(el, end) {
         if (!el) return;
-        const duration = 2000;
-        const start = 0;
-        let startTime = null;
 
-        function animation(currentTime) {
-            if (startTime === null) startTime = currentTime;
-            const timeElapsed = currentTime - startTime;
-            const progress = Math.min(timeElapsed / duration, 1);
+        var startAt = null;
 
-            // Ease out quart
-            const ease = 1 - Math.pow(1 - progress, 4);
-
-            const currentVal = Math.floor(ease * (endValue - start) + start);
-            el.textContent = formatNumber(currentVal);
-
-            if (timeElapsed < duration) {
-                requestAnimationFrame(animation);
+        function tick(now) {
+            if (!startAt) startAt = now;
+            var progress = Math.min((now - startAt) / 900, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            var value = Math.floor(eased * end);
+            el.textContent = fmt(value);
+            if (progress < 1) {
+                requestAnimationFrame(tick);
             } else {
-                el.textContent = formatNumber(endValue);
+                el.textContent = fmt(end);
             }
         }
 
-        requestAnimationFrame(animation);
+        requestAnimationFrame(tick);
     }
 
-    function renderParticles(rank) {
-        if (rank !== 1) return '';
-        let particles = '';
-        for (let i = 0; i < 6; i++) {
-            const tx = (Math.random() - 0.5) * 100 + 'px';
-            const ty = -50 - Math.random() * 100 + 'px';
-            const delay = Math.random() * 2 + 's';
-            particles += `<div class="lb-particle" style="--tx: ${tx}; --ty: ${ty}; animation-delay: ${delay}; left: ${50 + (Math.random() * 40 - 20)}%; top: ${50 + (Math.random() * 40 - 20)}%;"></div>`;
-        }
-        return particles;
+    function podiumCard(entry, rank, trend) {
+        var empty = !entry;
+        var avatar = empty ? '?' : esc(initials(entry.name));
+        var name = empty ? 'Open Spot' : esc(entry.name);
+        var scoreAttr = empty ? '' : ' data-value="' + entry.score + '"';
+        var score = empty ? '--' : '0';
+        var trendClass = empty ? 'flat' : trend.cls;
+        var trendLabel = empty ? '--' : trend.label;
+
+        return '<div class="lb-podium-place rank-' + rank + (empty ? ' empty' : '') + '">'
+            + '<div class="lb-podium-card">'
+            + '<div class="lb-avatar">' + avatar + '</div>'
+            + '<div class="lb-card-name">' + name + '</div>'
+            + '<div class="lb-card-score"' + scoreAttr + '>' + score + '</div>'
+            + '<div class="lb-card-label">points</div>'
+            + '<span class="lb-card-trend ' + trendClass + '">' + esc(trendLabel) + '</span>'
+            + '</div>'
+            + '<div class="lb-podium-bar"><span class="lb-bar-rank">' + rank + '</span></div>'
+            + '</div>';
     }
 
-    function podiumCard(entry, rank, delayMs) {
-        if (!entry) {
-            return `
-                <div class="lb-podium-place rank-${rank} empty" style="animation-delay:${delayMs}ms;">
-                    <div class="lb-avatar-box">
-                        <div class="lb-avatar">?</div>
-                    </div>
-                    <div class="lb-cylinder">
-                        <div class="lb-cylinder-top"></div>
-                        <div class="lb-cylinder-side"></div>
-                        <div class="lb-rank-badge">${rank}</div>
-                    </div>
-                    <div class="lb-user-info">
-                        <div class="lb-name">Open Spot</div>
-                        <div class="lb-score">--</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        const safeName = escapeHtml(entry.name);
-        const avatar = escapeHtml(initialsFromName(entry.name));
-        const particles = renderParticles(rank);
-
-        return `
-            <div class="lb-podium-place rank-${rank}" style="animation-delay:${delayMs}ms;">
-                <div class="lb-avatar-box">
-                    <div class="lb-avatar">${avatar}</div>
-                    ${particles}
-                </div>
-                <div class="lb-cylinder">
-                    <div class="lb-cylinder-top"></div>
-                    <div class="lb-cylinder-side"></div>
-                    <div class="lb-rank-badge">${rank}</div>
-                </div>
-                <div class="lb-user-info">
-                    <div class="lb-name">${safeName}</div>
-                    <div class="lb-score" data-value="${entry.score}">0</div>
-                    <div class="lb-score-label">Score</div>
-                    <div class="lb-metrics">
-                        <span>${formatNumber(entry.found)} Found</span>
-                        <span>${formatNumber(entry.bounties)} Bounties</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    function tableRow(entry, rank) {
+    function tableRow(entry, rank, trend, isSelf) {
         if (!entry) return '';
-        const safeName = escapeHtml(entry.name);
-        return `
-            <div class="lb-row">
-                <div class="lb-cell lb-rank">${rank}</div>
-                <div class="lb-cell lb-user">${safeName}</div>
-                <div class="lb-cell lb-stat">${formatNumber(entry.found)}</div>
-                <div class="lb-cell lb-stat">${formatNumber(entry.bounties)}</div>
-                <div class="lb-cell lb-score-cell">${formatNumber(entry.score)}</div>
-            </div>
-        `;
+
+        var rowClass = 'lb-row' + (isSelf ? ' is-self' : '');
+
+        return '<div class="' + rowClass + '">'
+            + '<div class="lb-cell-rank">' + rank + '</div>'
+            + '<div class="lb-cell lb-cell-user"><div class="lb-row-name">' + esc(entry.name) + '</div></div>'
+            + '<div class="lb-cell">' + fmt(entry.found) + '</div>'
+            + '<div class="lb-cell">' + fmt(entry.bounties) + '</div>'
+            + '<div class="lb-cell lb-cell-score">' + fmt(entry.score) + '</div>'
+            + '<div class="lb-cell lb-cell-trend"><span class="lb-table-trend ' + trend.cls + '">' + esc(trend.label) + '</span></div>'
+            + '</div>';
     }
 
-    function renderPodium(entries) {
-        // Top 3
-        const top3 = [entries[0], entries[1], entries[2]]; // 1st, 2nd, 3rd
-        // But layout is usually 2, 1, 3 or just 1, 2, 3? 
-        // CSS handles ordering usually, but here we just stamp them out.
-        // Assuming CSS flex order or grid handles 2-1-3 visual.
-        // But wait, my podiumCard has `rank-1`, `rank-2` classes.
+    function doRender() {
+        var entries = state.usingFallback
+            ? fallbackEntries.slice()
+            : (state.byRange[state.range] || []);
 
-        let html = '';
-        html += podiumCard(entries[1], 2, 200); // Silver
-        html += podiumCard(entries[0], 1, 0);   // Gold
-        html += podiumCard(entries[2], 3, 400); // Bronze
+        var allEntries = state.usingFallback
+            ? fallbackEntries
+            : (state.byRange.all || []);
 
-        podium.innerHTML = html;
-    }
+        var allRankMap = new Map(
+            allEntries.map(function (entry, idx) {
+                return [entry.key, idx + 1];
+            })
+        );
 
-    function renderRows(entries) {
-        const rest = entries.slice(3);
-        if (rest.length === 0) {
-            tableRows.innerHTML = '<div class="lb-empty-rows">No other contibutors yet.</div>';
-            return;
-        }
-        tableRows.innerHTML = rest.map((e, i) => tableRow(e, i + 4)).join('');
-    }
+        var t1 = trendFor(entries[0], 1, allRankMap);
+        var t2 = trendFor(entries[1], 2, allRankMap);
+        var t3 = trendFor(entries[2], 3, allRankMap);
 
-    function renderSummary(entries) {
-        if (state.range === 'month') {
-            summary.textContent = `Top contributors this month.`;
-        } else {
-            summary.textContent = `All-time top contributors.`;
-        }
-    }
+        podiumWrap.innerHTML = '<div class="lb-podium">'
+            + podiumCard(entries[1], 2, t2)
+            + podiumCard(entries[0], 1, t1)
+            + podiumCard(entries[2], 3, t3)
+            + '</div>';
 
-    function render() {
-        const entries = state.usingFallback ? fallbackEntries : computeEntries(state.items, state.range);
-        renderPodium(entries);
-        renderRows(entries);
-        renderSummary(entries);
+        var rest = entries.slice(3);
+        var userPlacement = findUserPlacement(entries);
 
-        // Trigger Count Up
-        document.querySelectorAll('.lb-score[data-value]').forEach(el => {
-            const val = parseInt(el.dataset.value, 10);
-            if (!isNaN(val)) countUp(el, val);
+        tableRows.innerHTML = rest.length
+            ? rest.map(function (entry, idx) {
+                var rank = idx + 4;
+                var trend = trendFor(entry, rank, allRankMap);
+                var isSelf = Boolean(userPlacement && userPlacement.entry && userPlacement.entry.key === entry.key);
+                return tableRow(entry, rank, trend, isSelf);
+            }).join('')
+            : '<div class="lb-empty-rows">No additional contributors yet.</div>';
+
+        setInsights(entries);
+        setSpotlight(entries);
+
+        document.querySelectorAll('.lb-card-score[data-value]').forEach(function (el) {
+            var value = parseInt(el.dataset.value, 10);
+            if (!isNaN(value)) countUp(el, value);
         });
-
-        if (state.usingFallback) {
-            note.textContent = 'Preview data shown. Connect Supabase for live rankings.';
-            return;
-        }
-
-        if (!entries.length) {
-            note.textContent = 'No live ranking data in this range yet.';
-            return;
-        }
-
-        note.textContent = `Live data · score = found + ${BOUNTY_WEIGHT}x bounties`;
     }
 
-    async function loadLeaderboard() {
-        note.textContent = 'Loading live data...';
-
-        // Check config
-        if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured()) {
-            console.warn('[Leaderboard] Supabase not configured. Using fallback.');
-            state.usingFallback = true;
-            render();
+    function render(isSwitch) {
+        if (!isSwitch) {
+            doRender();
             return;
         }
 
-        try {
-            console.log('[Leaderboard] Fetching items...');
-            // Add timeout to prevent hanging
-            const fetchPromise = BackTrackDB.getItems();
-            const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Timeout')), 5000)
-            );
+        podiumWrap.classList.add('lb-exit');
+        if (tableWrap) tableWrap.classList.add('lb-exit');
 
-            const items = await Promise.race([fetchPromise, timeoutPromise]);
-
-            if (!Array.isArray(items)) {
-                throw new Error('Invalid data format received');
-            }
-
-            state.items = items;
-            state.usingFallback = false;
-            console.log('[Leaderboard] Loaded items:', state.items.length);
-
-        } catch (error) {
-            console.warn('[Leaderboard] Load failed/timed out:', error);
-            state.usingFallback = true;
-        }
-
-        render();
+        setTimeout(function () {
+            doRender();
+            podiumWrap.classList.remove('lb-exit');
+            if (tableWrap) tableWrap.classList.remove('lb-exit');
+        }, 200);
     }
 
     function setRange(range) {
         if (range === state.range) return;
         state.range = range;
 
-        rangeButtons.forEach(btn => {
-            if (btn.dataset.range === range) btn.classList.add('active');
-            else btn.classList.remove('active');
+        rangeButtons.forEach(function (button) {
+            button.classList.toggle('active', button.dataset.range === range);
         });
+
+        render(true);
+    }
+
+    function buildRanges() {
+        state.byRange.month = compute(state.items, 'month');
+        state.byRange.all = compute(state.items, 'all');
+    }
+
+    async function load() {
+        if (typeof BackTrackDB === 'undefined' || !BackTrackDB.isSupabaseConfigured()) {
+            state.usingFallback = true;
+            render();
+            return;
+        }
+
+        try {
+            if (BackTrackDB.supabase && BackTrackDB.supabase.auth) {
+                var authRes = await BackTrackDB.supabase.auth.getUser();
+                state.currentUser = authRes && authRes.data ? authRes.data.user : null;
+            }
+
+            var items = await Promise.race([
+                BackTrackDB.getItems(),
+                new Promise(function (_, reject) {
+                    setTimeout(function () {
+                        reject(new Error('Timeout'));
+                    }, 5000);
+                })
+            ]);
+
+            if (!Array.isArray(items)) throw new Error('Invalid items payload');
+
+            state.items = items;
+            state.usingFallback = false;
+            buildRanges();
+        } catch (error) {
+            state.usingFallback = true;
+        }
 
         render();
     }
 
-    rangeButtons.forEach(btn => {
-        btn.addEventListener('click', () => setRange(btn.dataset.range));
+    function triggerConfetti() {
+        if (typeof confetti !== 'function') return;
+        var duration = 2500;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        var interval = setInterval(function () {
+            var timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            var particleCount = 50 * (timeLeft / duration);
+            // Fire from left and right edges
+            confetti(Object.assign({}, defaults, { particleCount: particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount: particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
+
+    function initScrollAnimations() {
+        var lbSection = document.querySelector('.lb-section');
+        if (!lbSection) return;
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    lbSection.classList.add('animated');
+
+                    // Trigger confetti once the podium rises
+                    setTimeout(triggerConfetti, 500);
+
+                    // Only animate once
+                    observer.unobserve(lbSection);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(lbSection);
+    }
+
+    rangeButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            setRange(button.dataset.range);
+        });
     });
 
-    // Start
-    loadLeaderboard();
-
+    initScrollAnimations();
+    load();
 })();

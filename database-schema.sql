@@ -18,7 +18,7 @@ CREATE TABLE items (
     location VARCHAR(100) NOT NULL,
     date_lost DATE NOT NULL,
     image_url TEXT,
-    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'lost', 'found', 'claimed')),
+    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'lost', 'found', 'claimed', 'bounty')),
     contact_email VARCHAR(255),
     contact_phone VARCHAR(20),
     finder_name VARCHAR(255),
@@ -388,6 +388,43 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- ============================================
+-- REWARD CATALOG TABLE (admin-managed prizes)
+-- ============================================
+CREATE TABLE reward_catalog (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    description TEXT,
+    category VARCHAR(32) NOT NULL DEFAULT 'other',
+    points_cost INTEGER NOT NULL CHECK (points_cost > 0),
+    stock INTEGER CHECK (stock IS NULL OR stock >= 0),
+    image_url TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_by UUID REFERENCES auth.users(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE reward_catalog ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can view active rewards" ON reward_catalog
+    FOR SELECT USING (is_active = true);
+
+CREATE POLICY "Admins can view all rewards" ON reward_catalog
+    FOR SELECT USING (auth.uid() IN (SELECT user_id FROM admins));
+
+CREATE POLICY "Admins can insert rewards" ON reward_catalog
+    FOR INSERT WITH CHECK (auth.uid() IN (SELECT user_id FROM admins));
+
+CREATE POLICY "Admins can update rewards" ON reward_catalog
+    FOR UPDATE USING (auth.uid() IN (SELECT user_id FROM admins))
+    WITH CHECK (auth.uid() IN (SELECT user_id FROM admins));
+
+CREATE POLICY "Admins can delete rewards" ON reward_catalog
+    FOR DELETE USING (auth.uid() IN (SELECT user_id FROM admins));
+
+CREATE INDEX idx_reward_catalog_active_cost ON reward_catalog(is_active, points_cost);
+
 CREATE TRIGGER update_items_updated_at
     BEFORE UPDATE ON items
     FOR EACH ROW
@@ -395,6 +432,11 @@ CREATE TRIGGER update_items_updated_at
 
 CREATE TRIGGER update_claims_updated_at
     BEFORE UPDATE ON claims
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_reward_catalog_updated_at
+    BEFORE UPDATE ON reward_catalog
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
@@ -436,8 +478,15 @@ ALTER TABLE redemptions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view own redemptions" ON redemptions
     FOR SELECT USING (auth.uid() = user_id);
 
+CREATE POLICY "Admins can view all redemptions" ON redemptions
+    FOR SELECT USING (auth.uid() IN (SELECT user_id FROM admins));
+
 CREATE POLICY "Users can insert own redemptions" ON redemptions
     FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Admins can update redemptions" ON redemptions
+    FOR UPDATE USING (auth.uid() IN (SELECT user_id FROM admins))
+    WITH CHECK (auth.uid() IN (SELECT user_id FROM admins));
 
 -- ============================================
 -- ADMIN MESSAGES TABLE (for dashboard messaging)

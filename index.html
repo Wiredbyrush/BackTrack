@@ -738,7 +738,26 @@
             margin: 0 auto;
         }
 
-        /* --- Skeletons V2 (Much Better) --- */
+        /* --- Browser Window Mockups --- */
+        .browser-window {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .step-card:hover .browser-window {
+            transform: translateY(-4px);
+            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.6);
+        }
+
         .sv-browse {
             height: 100%;
             display: flex;
@@ -747,46 +766,451 @@
             font-family: inherit;
         }
 
-        .sv-sidebar {
-            width: 220px;
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            /* Brighter border */
-            padding: 30px 24px;
+        .browser-chrome {
+            height: 52px;
+            background: rgba(255, 255, 255, 0.015);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 12px;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .browser-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .browser-dot:nth-child(1) {
+            background: #ff5f57;
+        }
+
+        .browser-dot:nth-child(2) {
+            background: #febc2e;
+        }
+
+        .browser-dot:nth-child(3) {
+            background: #28c840;
+        }
+
+        .browser-address {
+            flex: 1;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            margin-left: 16px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            font-size: 11px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .browser-content {
+            padding: 36px 40px;
+            min-height: 0;
+            flex: 1;
+            display: flex;
+            background: #000000;
+        }
+
+        .step-visual {
+            min-height: 0;
+        }
+
+
+        /* Browse Mockup */
+        .browse-layout {
+            display: grid;
+            grid-template-columns: 210px minmax(0, 1fr);
+            gap: 32px;
+            align-items: start;
+            width: 100%;
+        }
+
+        :root {
+            --how-icon-size: 42px;
+        }
+
+        .browse-filters {
             display: flex;
             flex-direction: column;
-            gap: 28px;
-            background: rgba(255, 255, 255, 0.015);
-            /* Slightly lighter */
-            backdrop-filter: blur(10px);
+            gap: 10px;
         }
 
-        .sv-sk-menu-item.active {
-            background: rgba(59, 130, 246, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+        .filter-label {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #444;
+            margin-bottom: 6px;
         }
 
-        .sv-main {
-            background: #050505;
+        .filter-option {
+            height: 36px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            gap: 10px;
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+            min-width: 0;
         }
 
-        .sv-card-ghost {
-            background: linear-gradient(145deg, #111 0%, #080808 100%);
+        .filter-option span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .filter-option.active {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+
+        .filter-checkbox {
+            width: 15px;
+            height: 15px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            margin-left: auto;
         }
 
-        .sv-card-ghost:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+        .filter-option.active .filter-checkbox {
+            background: #3b82f6;
+            border-color: #3b82f6;
         }
 
+        .browse-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(126px, 1fr));
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .item-image {
+            height: 90px;
+            background: rgba(255, 255, 255, 0.02);
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .item-icon {
+            width: var(--how-icon-size);
+            height: var(--how-icon-size);
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(59, 130, 246, 0.1));
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-icon::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+
+        .item-icon::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            bottom: 10px;
+            border-radius: 1px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-info {
+            padding: 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 0;
+        }
+
+        .item-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e5e7eb;
+            margin-bottom: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-meta {
+            font-size: 10px;
+            color: #555;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-badge {
+            display: inline-block;
+            width: fit-content;
+            padding: 3px 8px;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+            color: #4ade80;
+            margin-top: 2px;
+            letter-spacing: 0.03em;
+        }
+
+        /* Submit Mockup */
+        .submit-form {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            align-content: start;
+        }
+
+        .upload-zone {
+            grid-column: 1 / -1;
+            height: 166px;
+            border: 1px dashed rgba(148, 163, 184, 0.3);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.32), rgba(2, 6, 23, 0.24));
+        }
+
+        .upload-icon-box {
+            width: var(--how-icon-size);
+            height: var(--how-icon-size);
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.1));
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-icon-box::before {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 18px;
+            background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
+        }
+
+        .upload-icon-box::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 8px solid #34d399;
+            top: 22px;
+            filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.4));
+        }
+
+        .upload-text {
+            font-size: 12px;
+            color: #7f8da3;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 46px;
+            background: rgba(15, 23, 42, 0.18);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 11px;
+            color: #dbe7f6;
+            padding: 0 14px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .form-input::placeholder {
+            color: #64748b;
+        }
+
+        .form-input.wide {
+            grid-column: 1 / -1;
+        }
+
+        .submit-button {
+            grid-column: 1 / -1;
+            width: 100%;
+            height: 50px;
+            border: 1px solid rgba(96, 165, 250, 0.48);
+            color: #eff6ff;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 10px 24px rgba(37, 99, 235, 0.28);
+        }
+
+        /* Claims Mockup */
+        .claims-panel {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .claims-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #666;
+            margin-bottom: 28px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .claim-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 17px 20px;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .claim-image {
+            width: var(--how-icon-size);
+            height: var(--how-icon-size);
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(126, 34, 206, 0.1));
+            border: 1px solid rgba(147, 51, 234, 0.35);
+            border-radius: 11px;
+            order: 2;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .claim-image::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+            border-radius: 50%;
+            box-shadow: 0 3px 10px rgba(147, 51, 234, 0.5);
+        }
+
+        .claim-image::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 8px;
+            border-right: 2.5px solid rgba(255, 255, 255, 0.95);
+            border-bottom: 2.5px solid rgba(255, 255, 255, 0.95);
+            transform: rotate(45deg) translate(-1px, -2px);
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        .claim-details {
+            flex: 1;
+        }
+
+        .claim-item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #e5e7eb;
+            margin-bottom: 7px;
+        }
+
+        .claim-date {
+            font-size: 12px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .claim-status {
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .claim-status.approved {
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            color: #4ade80;
+        }
+
+        .claim-status.reviewing {
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            color: #fbbf24;
+        }
+
+        .claim-status.pending {
+            background: rgba(148, 163, 184, 0.08);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: #94a3b8;
+        }
 
         .steps-grid {
             display: flex;
             flex-direction: column;
-            gap: 180px;
+            gap: 140px;
             max-width: 1200px;
             /* Tighter container */
             margin: 0 auto;
@@ -797,9 +1221,10 @@
 
         .step-card {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            /* Text left, Image right */
-            gap: 120px;
+            grid-template-columns: 360px 1fr;
+            grid-template-areas: "content visual";
+            /* Text left (smaller), Mockup right (bigger) */
+            gap: 60px;
             align-items: center;
             opacity: 0;
             transform: translateY(40px);
@@ -811,23 +1236,13 @@
             transform: translateY(0);
         }
 
-        /* Zig-zag: Even children flip */
         .step-card:nth-child(even) {
-            direction: rtl;
-        }
-
-        .step-card:nth-child(even) .step-content {
-            direction: ltr;
-            /* Text stays LTR */
-            padding-left: 40px;
-            /* Offset for balance */
-        }
-
-        .step-card:nth-child(odd) .step-content {
-            padding-right: 40px;
+            grid-template-columns: 1fr 360px;
+            grid-template-areas: "visual content";
         }
 
         .step-content {
+            grid-area: content;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -874,26 +1289,27 @@
 
         .step-feature-pill {
             padding: 10px 18px;
-            background: rgba(255, 255, 255, 0.05);
-            /* Very subtle */
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(180deg, rgba(22, 28, 36, 0.74), rgba(12, 17, 24, 0.72));
+            border: 1px solid rgba(148, 163, 184, 0.24);
             border-radius: 8px;
-            /* Slightly squared pill */
             font-size: 12px;
-            color: #a0a0a0;
+            color: #cbd5e1;
             font-weight: 500;
-            transition: 0.3s ease;
+            transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
             cursor: default;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .step-feature-pill:hover {
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(148, 163, 184, 0.45);
             color: #fff;
+            transform: translateY(-1px);
         }
 
         /* --- Visual Container (High-Fidelity "Void" Window) --- */
         .step-visual {
-            height: 520px;
+            grid-area: visual;
+            height: 560px;
             width: 100%;
             background: #050505;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1347,7 +1763,55 @@
             }
 
             .step-card {
-                gap: 54px;
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "content"
+                    "visual";
+                gap: 48px;
+            }
+
+            .step-card:nth-child(even) {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "content"
+                    "visual";
+            }
+
+            .step-content {
+                text-align: center;
+                max-width: 100%;
+                padding: 0 !important;
+            }
+
+            .step-features {
+                justify-content: center;
+            }
+
+            .browser-content {
+                padding: 32px;
+                min-height: 0;
+            }
+
+            .browse-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .browse-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .submit-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-input.wide {
+                grid-column: auto;
+            }
+
+            .claim-image {
+                width: var(--how-icon-size);
+                height: var(--how-icon-size);
             }
         }
 
@@ -1527,10 +1991,6 @@
                 gap: 24px;
             }
 
-            .step-card:nth-child(even) {
-                direction: ltr;
-            }
-
             .step-visual {
                 height: 236px;
                 border-radius: 18px;
@@ -1657,8 +2117,8 @@
         <div class="features-header">
             <p class="features-label">How it works</p>
             <h2 class="features-title" id="features-title">Everything you need to find what's lost</h2>
-            <p class="features-subtitle">BackTrack is built for Forsyth County high schools. No confusing menus, no
-                waiting around—just a simple way to report and find lost stuff.</p>
+            <p class="features-subtitle">BackTrack is built for Forsyth County high schools with secure flows and
+                reliable updates, so every report and claim feels trustworthy.</p>
         </div>
 
         <div class="steps-grid">
@@ -1679,92 +2139,74 @@
                 </div>
 
                 <div class="step-visual">
-                    <div class="sv-browse">
-                        <!-- Browser Chrome -->
-                        <div class="sv-browser-chrome">
-                            <div class="sv-browser-dot"></div>
-                            <div class="sv-browser-dot"></div>
-                            <div class="sv-browser-dot"></div>
-                            <div class="sv-address-bar">
-                                <div class="sv-address-lock"></div>
-                                <div class="sv-address-line"></div>
+                    <div class="browser-window">
+                        <div class="browser-chrome">
+                            <div class="browser-dots">
+                                <div class="browser-dot"></div>
+                                <div class="browser-dot"></div>
+                                <div class="browser-dot"></div>
                             </div>
+                            <div class="browser-address">backtrack.app/browse</div>
                         </div>
-
-                        <div class="sv-browser-body">
-                            <!-- Sidebar -->
-                            <div class="sv-sidebar">
-                                <div class="sv-sk-title">FILTERS</div>
-                                <div class="sv-sk-row">
-                                    <div class="sv-sk-menu-item active">
-                                        <div class="sv-sk-icon"></div>
-                                        <div class="sv-sk-text"></div>
-                                    </div>
-                                    <div class="sv-sk-menu-item">
-                                        <div class="sv-sk-icon"></div>
-                                        <div class="sv-sk-text"></div>
-                                    </div>
-                                    <div class="sv-sk-menu-item">
-                                        <div class="sv-sk-icon"></div>
-                                        <div class="sv-sk-text"></div>
+                        <div class="browser-content">
+                            <div class="browse-layout">
+                                <div class="browse-filters">
+                                    <div>
+                                        <div class="filter-label">Category</div>
+                                        <div class="filter-option active">
+                                            <div class="filter-checkbox"></div>
+                                            <span>Electronics</span>
+                                        </div>
+                                        <div class="filter-option">
+                                            <div class="filter-checkbox"></div>
+                                            <span>Clothing</span>
+                                        </div>
+                                        <div class="filter-option">
+                                            <div class="filter-checkbox"></div>
+                                            <span>Books</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Main Grid -->
-                            <div class="sv-main">
-                                <div class="sv-grid-header">
-                                    <div class="sv-gh-title"></div>
-                                    <div class="sv-gh-actions">
-                                        <div class="sv-gh-btn"></div>
-                                        <div class="sv-gh-btn"></div>
-                                    </div>
-                                </div>
-
-                                <div class="sv-grid-ghost">
-                                    <!-- Card 1 -->
-                                    <div class="sv-card-ghost">
-                                        <div class="sv-card-badge"></div>
-                                        <div class="sv-img-ghost"></div>
-                                        <div class="sv-meta">
-                                            <div class="sv-line"></div>
-                                            <div class="sv-line short"></div>
+                                <div class="browse-grid">
+                                    <div class="item-card">
+                                        <div class="item-image">
+                                            <div class="item-icon"></div>
+                                        </div>
+                                        <div class="item-info">
+                                            <div class="item-title">iPhone</div>
+                                            <div class="item-meta">A2 • 2h ago</div>
+                                            <span class="item-badge">OPEN</span>
                                         </div>
                                     </div>
-                                    <!-- Card 2 -->
-                                    <div class="sv-card-ghost">
-                                        <div class="sv-card-badge"></div>
-                                        <div class="sv-img-ghost"></div>
-                                        <div class="sv-meta">
-                                            <div class="sv-line"></div>
-                                            <div class="sv-line short"></div>
+                                    <div class="item-card">
+                                        <div class="item-image">
+                                            <div class="item-icon"></div>
+                                        </div>
+                                        <div class="item-info">
+                                            <div class="item-title">Backpack</div>
+                                            <div class="item-meta">Library • 1d ago</div>
+                                            <span class="item-badge">OPEN</span>
                                         </div>
                                     </div>
-                                    <!-- Card 3 -->
-                                    <div class="sv-card-ghost">
-                                        <div class="sv-img-ghost"></div>
-                                        <div class="sv-meta">
-                                            <div class="sv-line"></div>
-                                            <div class="sv-line short"></div>
+                                    <div class="item-card">
+                                        <div class="item-image">
+                                            <div class="item-icon"></div>
+                                        </div>
+                                        <div class="item-info">
+                                            <div class="item-title">AirPods</div>
+                                            <div class="item-meta">Gym • 3h ago</div>
+                                            <span class="item-badge">OPEN</span>
                                         </div>
                                     </div>
-                                    <!-- Card 4 -->
-                                    <div class="sv-card-ghost">
-                                        <div class="sv-img-ghost"></div>
-                                        <div class="sv-meta">
-                                            <div class="sv-line"></div>
+                                    <div class="item-card">
+                                        <div class="item-image">
+                                            <div class="item-icon"></div>
                                         </div>
-                                    </div>
-                                    <!-- Card 5 -->
-                                    <div class="sv-card-ghost">
-                                        <div class="sv-img-ghost"></div>
-                                        <div class="sv-meta">
-                                            <div class="sv-line"></div>
+                                        <div class="item-info">
+                                            <div class="item-title">Textbook</div>
+                                            <div class="item-meta">Cafe • 5h ago</div>
+                                            <span class="item-badge">OPEN</span>
                                         </div>
-                                    </div>
-                                    <!-- Card 6 -->
-                                    <div class="sv-card-ghost">
-                                        <div class="sv-img-ghost"></div>
                                     </div>
                                 </div>
                             </div>
@@ -1777,38 +2219,38 @@
             <article class="step-card">
                 <div class="step-content">
                     <h3 class="step-num">02</h3>
-                    <h3 class="step-heading">Submit items instantly</h3>
+                    <h3 class="step-heading">Submit with confidence</h3>
                     <p class="step-desc">
-                        Found something? Upload a photo, add location and description, then publish in seconds. No
-                        complicated forms or waiting for approval.
+                        Use a clear, guided form to upload found items quickly. Structured fields keep reports accurate
+                        and dependable for everyone on campus.
                     </p>
                     <div class="step-features">
-                        <div class="step-feature-pill">Photo Upload</div>
-                        <div class="step-feature-pill">Quick Form</div>
-                        <div class="step-feature-pill">Instant Publish</div>
+                        <div class="step-feature-pill">Secure Upload</div>
+                        <div class="step-feature-pill">Guided Form</div>
+                        <div class="step-feature-pill">Reliable Publish</div>
                     </div>
                 </div>
 
                 <div class="step-visual">
-                    <div class="sv-browse">
-                        <div class="sv-browser-chrome">
-                            <div class="sv-browser-dot"></div>
-                            <div class="sv-browser-dot"></div>
-                            <div class="sv-browser-dot"></div>
+                    <div class="browser-window">
+                        <div class="browser-chrome">
+                            <div class="browser-dots">
+                                <div class="browser-dot"></div>
+                                <div class="browser-dot"></div>
+                                <div class="browser-dot"></div>
+                            </div>
+                            <div class="browser-address">backtrack.app/submit</div>
                         </div>
-                        <div class="sv-main" style="align-items: center; justify-content: center;">
-                            <div class="sv-form-wrap">
-                                <div class="sv-upload-area">
-                                    <div class="sv-upload-icon"></div>
-                                    <div class="sv-sk-text" style="width: 120px; background: rgba(255,255,255,0.2);">
-                                    </div>
+                        <div class="browser-content">
+                            <div class="submit-form">
+                                <div class="upload-zone">
+                                    <div class="upload-icon-box"></div>
+                                    <div class="upload-text">Drop photo</div>
                                 </div>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                                    <div class="sv-input"></div>
-                                    <div class="sv-input"></div>
-                                </div>
-                                <div class="sv-input" style="height: 80px;"></div>
-                                <div class="sv-btn-primary"></div>
+                                <input class="form-input" placeholder="Item name" />
+                                <input class="form-input" placeholder="Location" />
+                                <input class="form-input wide" placeholder="Category" />
+                                <button class="submit-button">Publish Securely</button>
                             </div>
                         </div>
                     </div>
@@ -1819,55 +2261,57 @@
             <article class="step-card">
                 <div class="step-content">
                     <h3 class="step-num">03</h3>
-                    <h3 class="step-heading">Track and claim with proof</h3>
+                    <h3 class="step-heading">Secure claims you can trust</h3>
                     <p class="step-desc">
-                        Submit a claim with proof of ownership. Admins verify, approve, and notify you when your item is
-                        ready for pickup. Simple and secure.
+                        Ownership proof and admin verification protect every return. You get clear status updates from
+                        review through pickup, with a reliable audit trail at every step.
                     </p>
                     <div class="step-features">
-                        <div class="step-feature-pill">Claim System</div>
-                        <div class="step-feature-pill">Admin Review</div>
-                        <div class="step-feature-pill">Status Updates</div>
+                        <div class="step-feature-pill">Verified Ownership</div>
+                        <div class="step-feature-pill">Admin Validation</div>
+                        <div class="step-feature-pill">Trusted Updates</div>
                     </div>
                 </div>
 
                 <div class="step-visual">
-                    <div class="sv-browse">
-                        <div class="sv-browser-chrome">
-                            <div class="sv-browser-dot"></div>
-                            <div class="sv-browser-dot"></div>
-                            <div class="sv-browser-dot"></div>
+                    <div class="browser-window">
+                        <div class="browser-chrome">
+                            <div class="browser-dots">
+                                <div class="browser-dot"></div>
+                                <div class="browser-dot"></div>
+                                <div class="browser-dot"></div>
+                            </div>
+                            <div class="browser-address">backtrack.app/claims</div>
                         </div>
-                        <div class="sv-main">
-                            <div class="sv-sk-title" style="margin-bottom: 20px;">YOUR CLAIMS</div>
-                            <div class="sv-list-wrap">
-                                <!-- Item 1 -->
-                                <div class="sv-list-item">
-                                    <div class="sv-list-icon"></div>
-                                    <div class="sv-list-meta">
-                                        <div class="sv-line" style="width: 120px;"></div>
-                                        <div class="sv-line short" style="width: 80px;"></div>
+                        <div class="browser-content">
+                            <div class="claims-panel">
+                                <div class="claims-title">YOUR CLAIMS</div>
+
+                                <div class="claim-card">
+                                    <div class="claim-image"></div>
+                                    <div class="claim-details">
+                                        <div class="claim-item-name">iPhone</div>
+                                        <div class="claim-date">2d ago</div>
                                     </div>
-                                    <div class="sv-status-badge sv-status-green">APPROVED</div>
+                                    <div class="claim-status approved">APPROVED</div>
                                 </div>
-                                <!-- Item 2 -->
-                                <div class="sv-list-item">
-                                    <div class="sv-list-icon"></div>
-                                    <div class="sv-list-meta">
-                                        <div class="sv-line" style="width: 100px;"></div>
-                                        <div class="sv-line short" style="width: 60px;"></div>
+
+                                <div class="claim-card">
+                                    <div class="claim-image"></div>
+                                    <div class="claim-details">
+                                        <div class="claim-item-name">Backpack</div>
+                                        <div class="claim-date">1h ago</div>
                                     </div>
-                                    <div class="sv-status-badge sv-status-yellow">REVIEWING</div>
+                                    <div class="claim-status reviewing">REVIEWING</div>
                                 </div>
-                                <!-- Item 3 -->
-                                <div class="sv-list-item" style="opacity: 0.5;">
-                                    <div class="sv-list-icon"></div>
-                                    <div class="sv-list-meta">
-                                        <div class="sv-line" style="width: 110px;"></div>
-                                        <div class="sv-line short" style="width: 90px;"></div>
+
+                                <div class="claim-card">
+                                    <div class="claim-image"></div>
+                                    <div class="claim-details">
+                                        <div class="claim-item-name">Textbook</div>
+                                        <div class="claim-date">5m ago</div>
                                     </div>
-                                    <div class="sv-status-badge"
-                                        style="background: rgba(255,255,255,0.1); color: #888;">PENDING</div>
+                                    <div class="claim-status pending">PENDING</div>
                                 </div>
                             </div>
                         </div>
@@ -2044,6 +2488,7 @@
 
         .schools-track {
             display: flex;
+            align-items: center;
             gap: 40px;
             animation: marqueeScroll 60s linear infinite;
             width: max-content;
@@ -2067,38 +2512,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 24px;
-            padding: 20px;
-            width: 140px;
-            height: 140px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            width: 150px;
+            height: 150px;
             color: rgba(255, 255, 255, 0.5);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .school-logo:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
         }
 
         .school-icon-img {
-            width: 80px;
-            height: 80px;
+            width: 150px;
+            height: 150px;
             object-fit: contain;
-            opacity: 1;
-            /* Fixed visibility */
+            opacity: 0.9;
             transition: all 0.4s ease;
-            filter: grayscale(100%) brightness(2) contrast(1.2);
-            /* Make them pop */
         }
 
         .school-logo:hover .school-icon-img {
-            filter: grayscale(0%) brightness(1) contrast(1);
+            opacity: 1;
             transform: scale(1.1);
         }
 
@@ -2461,130 +2898,7 @@
 
 
 
-    <!-- Orbital Animation Script -->
-    <script>
-        (function () {
-            const canvas = document.getElementById('orbitalCanvas');
-            if (!canvas) return;
 
-            const ctx = canvas.getContext('2d');
-            let width, height, centerX, centerY;
-
-            function resize() {
-                const parent = canvas.parentElement;
-                width = canvas.width = parent.offsetWidth;
-                height = canvas.height = parent.offsetHeight;
-                centerX = width / 2;
-                centerY = height / 2;
-            }
-
-            resize();
-            window.addEventListener('resize', resize);
-
-            // Particles for stars
-            const stars = [];
-            for (let i = 0; i < 100; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    size: Math.random() * 2,
-                    opacity: Math.random() * 0.5 + 0.3
-                });
-            }
-
-            // Orbiting particles
-            const orbitals = [];
-            for (let i = 0; i < 3; i++) {
-                orbitals.push({
-                    angle: (Math.PI * 2 / 3) * i,
-                    speed: 0.001 + i * 0.0003,
-                    radius: 150 + i * 40,
-                    size: 8 - i * 2
-                });
-            }
-
-            let time = 0;
-
-            function animate() {
-                ctx.fillStyle = 'transparent';
-                ctx.clearRect(0, 0, width, height);
-
-                // Draw stars
-                stars.forEach(star => {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-                    ctx.beginPath();
-                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-
-                // Draw central planet
-                const planetRadius = 60;
-                const gradient = ctx.createRadialGradient(
-                    centerX - planetRadius * 0.3, centerY - planetRadius * 0.3, 0,
-                    centerX, centerY, planetRadius * 1.5
-                );
-                gradient.addColorStop(0, '#38bdf8');
-                gradient.addColorStop(0.5, '#0ea5e9');
-                gradient.addColorStop(1, '#0369a1');
-
-                ctx.fillStyle = gradient;
-                ctx.shadowBlur = 40;
-                ctx.shadowColor = '#06b6d4';
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, planetRadius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-
-                // Draw glow
-                const glowGradient = ctx.createRadialGradient(
-                    centerX, centerY, planetRadius,
-                    centerX, centerY, planetRadius * 2
-                );
-                glowGradient.addColorStop(0, 'rgba(6, 182, 212, 0.3)');
-                glowGradient.addColorStop(1, 'transparent');
-                ctx.fillStyle = glowGradient;
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, planetRadius * 2, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Draw orbiting particles
-                orbitals.forEach((orbital, i) => {
-                    orbital.angle += orbital.speed;
-                    const x = centerX + Math.cos(orbital.angle) * orbital.radius;
-                    const y = centerY + Math.sin(orbital.angle) * orbital.radius * 0.4;
-
-                    // Orbital path
-                    ctx.strokeStyle = `rgba(6, 182, 212, 0.1)`;
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, orbital.radius, orbital.radius * 0.4, 0, 0, Math.PI * 2);
-                    ctx.stroke();
-
-                    // Particle
-                    const particleGradient = ctx.createRadialGradient(x, y, 0, x, y, orbital.size * 2);
-                    particleGradient.addColorStop(0, '#06b6d4');
-                    particleGradient.addColorStop(1, 'transparent');
-                    ctx.fillStyle = particleGradient;
-                    ctx.beginPath();
-                    ctx.arc(x, y, orbital.size * 2, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    ctx.fillStyle = '#38bdf8';
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = '#06b6d4';
-                    ctx.beginPath();
-                    ctx.arc(x, y, orbital.size, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                });
-
-                time++;
-                requestAnimationFrame(animate);
-            }
-
-            animate();
-        })();
-    </script>
 </body>
 
 </html>

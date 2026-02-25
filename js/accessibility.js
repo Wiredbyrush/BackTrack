@@ -251,15 +251,7 @@
                             </button>
                         </label>
                     </div>
-                    <div class="a11y-option">
-                        <label class="a11y-label">
-                            <span>Light Theme</span>
-                            <button class="a11y-switch" id="themeToggle" role="switch" aria-checked="false">
-                                <span class="switch-track"></span>
-                                <span class="switch-thumb"></span>
-                            </button>
-                        </label>
-                    </div>
+
                     <div class="a11y-option">
                         <label class="a11y-label">
                             <span>Text Size</span>
@@ -489,9 +481,6 @@
                 transition-duration: 0.01ms !important;
             }
 
-            /* Light Theme - Basic overrides (full theme in design-system.css) */
-            /* Keeping minimal styles here for accessibility toolbar specifics */
-
             /* Text Size Adjustments */
             body.text-large {
                 font-size: 18px !important;
@@ -576,15 +565,6 @@
             showToast(isEnabled ? 'Reduced motion enabled' : 'Reduced motion disabled', 'info');
         });
 
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            const isLight = document.body.classList.toggle('light-theme');
-            themeToggle.setAttribute('aria-checked', isLight);
-            setStorage(CONFIG.storageKeys.theme, isLight ? 'light' : 'dark');
-            showToast(isLight ? 'Light theme enabled' : 'Dark theme enabled', 'info');
-            announce(isLight ? 'Light theme activated' : 'Dark theme activated');
-        });
-
         textSizeUp.addEventListener('click', () => adjustTextSize(1));
         textSizeDown.addEventListener('click', () => adjustTextSize(-1));
         showShortcutsBtn.addEventListener('click', showKeyboardShortcutsModal);
@@ -625,18 +605,6 @@
             document.body.classList.add('reduced-motion');
         }
 
-        // Restore theme preference
-        const savedTheme = getStorage(CONFIG.storageKeys.theme, null);
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-theme');
-            const toggle = document.getElementById('themeToggle');
-            if (toggle) toggle.setAttribute('aria-checked', 'true');
-        } else if (savedTheme === null && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            // Follow system preference if no saved preference
-            document.body.classList.add('light-theme');
-            const toggle = document.getElementById('themeToggle');
-            if (toggle) toggle.setAttribute('aria-checked', 'true');
-        }
     }
 
     function adjustTextSize(direction) {
@@ -1129,13 +1097,6 @@
                     0%, 100% { transform: translateY(-50%) scale(1); }
                     50% { transform: translateY(-50%) scale(1.1); }
                 }
-                body.light-theme .voice-search-btn {
-                    color: #6e6e73;
-                }
-                body.light-theme .voice-search-btn:hover {
-                    color: #1d1d1f;
-                    background: rgba(0,0,0,0.05);
-                }
             `;
             document.head.appendChild(styles);
         }
@@ -1202,14 +1163,6 @@
                 border-radius: 10px;
             }
 
-            body.light-theme .skeleton {
-                background: linear-gradient(90deg, #e8e8ed 25%, #f5f5f7 50%, #e8e8ed 75%);
-                background-size: 200% 100%;
-            }
-            body.light-theme .skeleton-card {
-                background: #fff;
-                border-color: rgba(0,0,0,0.08);
-            }
         `;
         document.head.appendChild(styles);
     }
@@ -1500,9 +1453,7 @@
                 0%, 100% { opacity: 1; }
                 50% { opacity: 0.4; }
             }
-            body.light-theme #connection-indicator {
-                background: rgba(255, 255, 255, 0.95);
-            }
+
             @media (max-width: 768px) {
                 #connection-indicator {
                     top: auto;
