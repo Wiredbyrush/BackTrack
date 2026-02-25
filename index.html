@@ -684,12 +684,37 @@
            FEATURES SHOWCASE — Void / Skeleton Design
            ============================================ */
         .features-showcase {
-            padding: 160px 0;
+            padding: 180px 0 200px;
             background: #000000;
             position: relative;
             overflow: hidden;
-            /* Subtle noise texture for "premium" feel */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            /* Premium gradient overlays */
+            background-image:
+                radial-gradient(ellipse 1200px 800px at 50% 0%, rgba(59, 130, 246, 0.08), transparent 60%),
+                radial-gradient(ellipse 1000px 600px at 0% 50%, rgba(16, 185, 129, 0.04), transparent 50%),
+                radial-gradient(ellipse 1000px 600px at 100% 50%, rgba(139, 92, 246, 0.04), transparent 50%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+        }
+
+        /* Premium gradient orb effects */
+        .features-showcase::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+            filter: blur(80px);
+            opacity: 0.5;
+            pointer-events: none;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(30px); }
         }
 
         /* --- Typography Fixes --- */
@@ -704,17 +729,38 @@
 
         .features-label {
             display: inline-block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #3b82f6;
-            margin-bottom: 24px;
-            background: rgba(59, 130, 246, 0.1);
-            padding: 8px 16px;
+            letter-spacing: 2.5px;
+            color: #60a5fa;
+            margin-bottom: 28px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(37, 99, 235, 0.08));
+            padding: 10px 20px;
             border-radius: 999px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            box-shadow:
+                0 0 30px rgba(59, 130, 246, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .features-label:hover::before {
+            left: 100%;
         }
 
         .features-title {
@@ -741,21 +787,50 @@
         /* --- Browser Window Mockups --- */
         .browser-window {
             position: relative;
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
-            background: #000000;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             height: 100%;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow:
+                0 0 0 1px rgba(59, 130, 246, 0.1),
+                0 50px 100px -20px rgba(0, 0, 0, 0.7),
+                0 30px 60px -30px rgba(59, 130, 246, 0.15);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Premium glow effect on hover */
+        .browser-window::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg,
+                rgba(59, 130, 246, 0.3),
+                rgba(139, 92, 246, 0.2),
+                rgba(16, 185, 129, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .step-card:hover .browser-window {
-            transform: translateY(-4px);
-            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.6);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow:
+                0 0 0 1px rgba(59, 130, 246, 0.2),
+                0 60px 120px -20px rgba(0, 0, 0, 0.8),
+                0 40px 80px -30px rgba(59, 130, 246, 0.25);
+        }
+
+        .step-card:hover .browser-window::before {
+            opacity: 1;
         }
 
         .sv-browse {
@@ -2336,25 +2411,6 @@
                 <div class="school-logo" title="Denmark HS">
                     <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="East Forsyth HS">
-                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Forsyth Central HS">
-                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Lambert HS">
-                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="North Forsyth HS">
-                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="South Forsyth HS">
-                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="West Forsyth HS">
-                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
-                </div>
-
                 <!-- Set 2 -->
                 <div class="school-logo" title="Alliance Academy">
                     <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
@@ -2362,25 +2418,6 @@
                 <div class="school-logo" title="Denmark HS">
                     <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="East Forsyth HS">
-                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Forsyth Central HS">
-                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Lambert HS">
-                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="North Forsyth HS">
-                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="South Forsyth HS">
-                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="West Forsyth HS">
-                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
-                </div>
-
                 <!-- Set 3 -->
                 <div class="school-logo" title="Alliance Academy">
                     <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
@@ -2388,25 +2425,6 @@
                 <div class="school-logo" title="Denmark HS">
                     <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="East Forsyth HS">
-                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Forsyth Central HS">
-                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Lambert HS">
-                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="North Forsyth HS">
-                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="South Forsyth HS">
-                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="West Forsyth HS">
-                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
-                </div>
-
                 <!-- Set 4 -->
                 <div class="school-logo" title="Alliance Academy">
                     <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
@@ -2414,23 +2432,33 @@
                 <div class="school-logo" title="Denmark HS">
                     <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="East Forsyth HS">
-                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
+                <!-- Set 5 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="Forsyth Central HS">
-                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="Lambert HS">
-                    <img src="logos/Lambert.png" alt="Lambert HS" class="school-icon-img">
+                <!-- Set 6 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="North Forsyth HS">
-                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="South Forsyth HS">
-                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
+                <!-- Set 7 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="West Forsyth HS">
-                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
+                </div>
+                <!-- Set 8 -->
+                <div class="school-logo" title="Alliance Academy">
+                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Denmark HS">
+                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
             </div>
         </div>
@@ -2490,7 +2518,7 @@
             display: flex;
             align-items: center;
             gap: 40px;
-            animation: marqueeScroll 60s linear infinite;
+            animation: marqueeScroll 45s linear infinite;
             width: max-content;
         }
 
@@ -2504,7 +2532,7 @@
             }
 
             100% {
-                transform: translateX(-25%);
+                transform: translateX(-50%);
             }
         }
 
@@ -2537,39 +2565,6 @@
         .school-logo:hover .school-icon-img {
             opacity: 1;
             transform: scale(1.1);
-        }
-
-        /* Light mode */
-        body.light-theme .schools-section {
-            border-top-color: rgba(0, 0, 0, 0.06);
-        }
-
-        body.light-theme .schools-title {
-            color: #1e293b;
-        }
-
-        body.light-theme .schools-badge {
-            color: #2563eb;
-            background: rgba(37, 99, 235, 0.08);
-            border-color: rgba(37, 99, 235, 0.15);
-        }
-
-        body.light-theme .schools-subtitle {
-            color: #64748b;
-        }
-
-        body.light-theme .school-logo {
-            background: rgba(0, 0, 0, 0.02);
-            border-color: rgba(0, 0, 0, 0.08);
-            color: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        body.light-theme .school-logo:hover {
-            background: rgba(0, 0, 0, 0.04);
-            border-color: rgba(0, 0, 0, 0.15);
-            color: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
