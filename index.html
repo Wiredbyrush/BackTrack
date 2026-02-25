@@ -713,8 +713,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(30px); }
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(30px);
+            }
         }
 
         /* --- Typography Fixes --- */
@@ -811,9 +818,9 @@
             border-radius: 20px;
             padding: 2px;
             background: linear-gradient(135deg,
-                rgba(59, 130, 246, 0.3),
-                rgba(139, 92, 246, 0.2),
-                rgba(16, 185, 129, 0.2));
+                    rgba(59, 130, 246, 0.3),
+                    rgba(139, 92, 246, 0.2),
+                    rgba(16, 185, 129, 0.2));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -842,13 +849,15 @@
         }
 
         .browser-chrome {
-            height: 52px;
-            background: rgba(255, 255, 255, 0.015);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            height: 56px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             align-items: center;
             padding: 0 24px;
-            gap: 12px;
+            gap: 14px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .browser-dots {
@@ -857,45 +866,76 @@
         }
 
         .browser-dot {
-            width: 13px;
-            height: 13px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            opacity: 0.4;
+            opacity: 0.5;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .browser-window:hover .browser-dot {
+            opacity: 0.8;
         }
 
         .browser-dot:nth-child(1) {
-            background: #ff5f57;
+            background: linear-gradient(135deg, #ff5f57, #ff3b30);
+            box-shadow: 0 2px 6px rgba(255, 59, 48, 0.3);
         }
 
         .browser-dot:nth-child(2) {
-            background: #febc2e;
+            background: linear-gradient(135deg, #febc2e, #ffb000);
+            box-shadow: 0 2px 6px rgba(255, 176, 0, 0.3);
         }
 
         .browser-dot:nth-child(3) {
-            background: #28c840;
+            background: linear-gradient(135deg, #28c840, #20a038);
+            box-shadow: 0 2px 6px rgba(32, 160, 56, 0.3);
         }
 
         .browser-address {
             flex: 1;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            margin-left: 16px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            margin-left: 20px;
             display: flex;
             align-items: center;
-            padding: 0 14px;
+            padding: 0 16px;
             font-size: 11px;
-            color: #444;
+            color: #64748b;
             font-weight: 500;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .browser-window:hover .browser-address {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #94a3b8;
         }
 
         .browser-content {
-            padding: 36px 40px;
+            padding: 48px 44px;
             min-height: 0;
             flex: 1;
             display: flex;
-            background: #000000;
+            background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+            position: relative;
+        }
+
+        /* Subtle inner shadow for depth */
+        .browser-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+            pointer-events: none;
         }
 
         .step-visual {
@@ -980,11 +1020,21 @@
         }
 
         .item-card {
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
             overflow: hidden;
             min-width: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .item-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
         .item-image {
@@ -1161,18 +1211,44 @@
         .submit-button {
             grid-column: 1 / -1;
             width: 100%;
-            height: 50px;
-            border: 1px solid rgba(96, 165, 250, 0.48);
-            color: #eff6ff;
+            height: 52px;
+            border: 1px solid rgba(96, 165, 250, 0.5);
+            color: #ffffff;
             font-family: inherit;
             font-size: 13px;
             font-weight: 700;
-            letter-spacing: 0.03em;
-            background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             border-radius: 12px;
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 10px 24px rgba(37, 99, 235, 0.28);
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                0 12px 28px rgba(37, 99, 235, 0.35),
+                0 0 0 1px rgba(59, 130, 246, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 16px 36px rgba(37, 99, 235, 0.45),
+                0 0 0 1px rgba(59, 130, 246, 0.2);
+        }
+
+        .submit-button:hover::before {
+            opacity: 1;
         }
 
         /* Claims Mockup */
@@ -1302,13 +1378,27 @@
             gap: 60px;
             align-items: center;
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(60px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .step-card.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Staggered animation delays */
+        .step-card:nth-child(1) {
+            transition-delay: 0s;
+        }
+
+        .step-card:nth-child(2) {
+            transition-delay: 0.15s;
+        }
+
+        .step-card:nth-child(3) {
+            transition-delay: 0.3s;
         }
 
         .step-card:nth-child(even) {
@@ -1327,21 +1417,35 @@
         /* Distinct "01" Number */
         .step-num {
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
-            color: #ffffff;
+            color: #60a5fa;
             margin-bottom: 0;
-            letter-spacing: 0.5px;
-            opacity: 1;
-            /* Solid white as per ref */
+            letter-spacing: 1.5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 14px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(37, 99, 235, 0.08));
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 2px 8px rgba(59, 130, 246, 0.15);
         }
 
         .step-heading {
             font-size: 48px;
             font-weight: 700;
             color: #ffffff;
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
             line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin: 0;
         }
 
@@ -1364,21 +1468,44 @@
 
         .step-feature-pill {
             padding: 10px 18px;
-            background: linear-gradient(180deg, rgba(22, 28, 36, 0.74), rgba(12, 17, 24, 0.72));
-            border: 1px solid rgba(148, 163, 184, 0.24);
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 10px;
             font-size: 12px;
-            color: #cbd5e1;
-            font-weight: 500;
-            transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: default;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-feature-pill::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .step-feature-pill:hover {
-            border-color: rgba(148, 163, 184, 0.45);
-            color: #fff;
-            transform: translateY(-1px);
+            border-color: rgba(59, 130, 246, 0.4);
+            color: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-feature-pill:hover::before {
+            opacity: 1;
         }
 
         /* --- Visual Container (High-Fidelity "Void" Window) --- */
@@ -2411,6 +2538,22 @@
                 <div class="school-logo" title="Denmark HS">
                     <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
+                <div class="school-logo" title="East Forsyth HS">
+                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="Forsyth Central HS">
+                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="North Forsyth HS">
+                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="South Forsyth HS">
+                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
+                </div>
+                <div class="school-logo" title="West Forsyth HS">
+                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
+                </div>
+
                 <!-- Set 2 -->
                 <div class="school-logo" title="Alliance Academy">
                     <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
@@ -2418,47 +2561,20 @@
                 <div class="school-logo" title="Denmark HS">
                     <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
                 </div>
-                <!-- Set 3 -->
-                <div class="school-logo" title="Alliance Academy">
-                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
+                <div class="school-logo" title="East Forsyth HS">
+                    <img src="logos/East_Forsyth.png" alt="East Forsyth HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="Denmark HS">
-                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
+                <div class="school-logo" title="Forsyth Central HS">
+                    <img src="logos/Forsyth_Central.png" alt="Forsyth Central HS" class="school-icon-img">
                 </div>
-                <!-- Set 4 -->
-                <div class="school-logo" title="Alliance Academy">
-                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
+                <div class="school-logo" title="North Forsyth HS">
+                    <img src="logos/North_Forsyth.png" alt="North Forsyth HS" class="school-icon-img">
                 </div>
-                <div class="school-logo" title="Denmark HS">
-                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
+                <div class="school-logo" title="South Forsyth HS">
+                    <img src="logos/South_Forsyth.png" alt="South Forsyth HS" class="school-icon-img">
                 </div>
-                <!-- Set 5 -->
-                <div class="school-logo" title="Alliance Academy">
-                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Denmark HS">
-                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
-                </div>
-                <!-- Set 6 -->
-                <div class="school-logo" title="Alliance Academy">
-                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Denmark HS">
-                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
-                </div>
-                <!-- Set 7 -->
-                <div class="school-logo" title="Alliance Academy">
-                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Denmark HS">
-                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
-                </div>
-                <!-- Set 8 -->
-                <div class="school-logo" title="Alliance Academy">
-                    <img src="logos/Alliance.png" alt="Alliance Academy" class="school-icon-img">
-                </div>
-                <div class="school-logo" title="Denmark HS">
-                    <img src="logos/Denmark.png" alt="Denmark HS" class="school-icon-img">
+                <div class="school-logo" title="West Forsyth HS">
+                    <img src="logos/West_Forsyth.png" alt="West Forsyth HS" class="school-icon-img">
                 </div>
             </div>
         </div>
@@ -2518,7 +2634,7 @@
             display: flex;
             align-items: center;
             gap: 40px;
-            animation: marqueeScroll 45s linear infinite;
+            animation: marqueeScroll 60s linear infinite;
             width: max-content;
         }
 
