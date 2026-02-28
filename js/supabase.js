@@ -115,6 +115,11 @@ if (!window.BackTrackDB) {
             if (fullName) payload.finder_name = fullName;
         }
 
+        const isUserAdmin = await isAdmin();
+        if (!isUserAdmin) {
+            payload.status = 'pending';
+        }
+
         const { data, error } = await supabase
             .from('items')
             .insert([payload])
