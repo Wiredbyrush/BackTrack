@@ -124,10 +124,7 @@
             display: flex;
             height: calc(100vh - 70px);
             position: relative;
-            background:
-                radial-gradient(circle at 25% 20%, rgba(30, 64, 175, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 75% 80%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
-                linear-gradient(135deg, #01040e 0%, #020714 45%, #010205 100%);
+            background: linear-gradient(135deg, #01040e 0%, #020714 45%, #010205 100%);
             transition: all 0.35s ease;
         }
 
@@ -337,14 +334,10 @@
             flex: 1;
             position: relative;
             background:
-                radial-gradient(circle at 52% 30%, rgba(25, 74, 180, 0.18) 0%, rgba(9, 19, 50, 0.12) 28%, transparent 62%),
-                radial-gradient(circle at 85% 70%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
-                linear-gradient(140deg, rgba(7, 16, 44, 0.95), rgba(3, 8, 22, 0.98));
+                radial-gradient(circle at 52% 30%, rgba(25, 74, 180, 0.25) 0%, rgba(9, 19, 50, 0.14) 28%, transparent 62%),
+                linear-gradient(140deg, rgba(7, 16, 44, 0.92), rgba(3, 8, 22, 0.96));
             overflow: hidden;
             transition: all 0.35s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .map-canvas-wrapper {
@@ -380,31 +373,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             z-index: 1;
             pointer-events: none;
             opacity: 1;
             transition: opacity 0.4s ease;
-            filter: brightness(0.95) contrast(1.05);
         }
 
         .map-canvas svg {
             position: relative;
             z-index: 5;
-            display: block;
-        }
-
-        /* SVG room overlays */
-        .map-canvas svg rect,
-        .map-canvas svg polygon,
-        .map-canvas svg circle {
-            transition: all 0.3s ease;
-        }
-
-        .map-canvas svg rect:hover,
-        .map-canvas svg polygon:hover,
-        .map-canvas svg circle:hover {
-            filter: brightness(1.2);
+            display: none;
         }
 
         /* Map Controls */
@@ -418,154 +397,83 @@
             z-index: 10;
         }
 
-        /* Realtime Status Indicator */
-        .realtime-status {
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 14, 24, 0.92) 100%);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            border-radius: 12px;
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            box-shadow:
-                0 4px 16px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            z-index: 10;
-            font-size: 12px;
-            font-weight: 600;
-            color: #86efac;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-
-        .realtime-status.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .realtime-dot {
-            width: 8px;
-            height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-            }
-
-            50% {
-                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
-            }
-        }
-
         .control-btn {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 14, 24, 0.92) 100%);
-            border: 1px solid rgba(125, 211, 252, 0.3);
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            background: rgba(6, 11, 27, 0.92);
+            border: 1px solid rgba(125, 211, 252, 0.22);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            box-shadow:
-                0 4px 16px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
         }
 
         .control-btn:hover {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.95) 100%);
-            border-color: rgba(125, 211, 252, 0.5);
-            transform: translateY(-2px);
-            box-shadow:
-                0 6px 24px rgba(0, 0, 0, 0.6),
-                0 0 20px rgba(59, 130, 246, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            background: rgba(12, 24, 50, 0.98);
+            border-color: rgba(125, 211, 252, 0.42);
+            transform: scale(1.05);
         }
 
         .control-btn:active {
-            transform: translateY(0) scale(0.96);
+            transform: scale(0.95);
         }
 
         .control-btn svg {
-            width: 22px;
-            height: 22px;
-            color: rgba(191, 219, 254, 0.9);
-            transition: all 0.3s;
+            width: 20px;
+            height: 20px;
+            color: rgba(191, 219, 254, 0.82);
+            transition: color 0.3s;
         }
 
         .control-btn:hover svg {
             color: #f8fafc;
-            filter: drop-shadow(0 0 8px rgba(125, 211, 252, 0.5));
         }
 
         /* Floor Switcher */
         .floor-switcher {
             position: absolute;
-            bottom: 32px;
+            bottom: 28px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 8px;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 14, 24, 0.92) 100%);
-            padding: 8px;
-            border-radius: 18px;
-            border: 1px solid rgba(125, 211, 252, 0.35);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            box-shadow:
-                0 24px 70px rgba(0, 0, 0, 0.8),
-                0 0 30px rgba(59, 130, 246, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            gap: 10px;
+            background: rgba(8, 14, 32, 0.9);
+            padding: 7px;
+            border-radius: 16px;
+            border: 1px solid rgba(125, 211, 252, 0.22);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.72);
             z-index: 50;
         }
 
         .floor-tab {
             position: relative;
-            padding: 14px 32px;
+            padding: 12px 28px;
             background: transparent;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 13px;
-            font-weight: 700;
-            color: #64748b;
+            font-weight: 600;
+            color: #666;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Inter', sans-serif;
-            min-width: 140px;
+            min-width: 130px;
             text-align: center;
-            letter-spacing: 0.3px;
         }
 
         .floor-tab:hover {
-            color: #94a3b8;
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-1px);
+            color: #aaa;
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .floor-tab.active {
             color: #fff;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.3) 100%);
-            border: 1px solid rgba(125, 211, 252, 0.4);
-            box-shadow:
-                0 4px 16px rgba(59, 130, 246, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(44, 126, 255, 0.32) 0%, rgba(6, 182, 212, 0.22) 100%);
+            border: 1px solid rgba(125, 211, 252, 0.38);
         }
 
         .floor-tab.active::after {
@@ -596,116 +504,74 @@
         /* Room Popup */
         .room-popup {
             position: absolute;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(10, 14, 24, 0.96) 100%);
-            border: 1px solid rgba(125, 211, 252, 0.35);
-            border-radius: 16px;
-            padding: 20px 22px;
-            min-width: 240px;
-            max-width: 300px;
+            background: rgba(4, 10, 24, 0.96);
+            border: 1px solid rgba(125, 211, 252, 0.28);
+            border-radius: 14px;
+            padding: 16px 20px;
+            min-width: 220px;
+            max-width: 280px;
             z-index: 100;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(8px) scale(0.95);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            box-shadow:
-                0 24px 70px rgba(0, 0, 0, 0.9),
-                0 0 40px rgba(59, 130, 246, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .room-popup::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.5) 50%, transparent);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 32px rgba(37, 99, 235, 0.25);
         }
 
         .room-popup.show {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0) scale(1);
         }
 
         .popup-room-name {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 4px;
-            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.3px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 2px;
         }
 
         .popup-room-number {
             font-size: 11px;
-            color: #64748b;
-            margin-bottom: 6px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #555;
+            margin-bottom: 4px;
+            font-weight: 600;
         }
 
         .popup-room-type {
-            display: inline-block;
-            font-size: 10px;
-            color: #7dd3fc;
-            margin-bottom: 14px;
-            padding: 4px 10px;
-            background: rgba(125, 211, 252, 0.1);
-            border-radius: 6px;
-            border: 1px solid rgba(125, 211, 252, 0.2);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 12px;
         }
 
         .popup-items {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .popup-item {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
-            padding: 10px 12px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 8px 10px;
+            border-radius: 8px;
             font-size: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.15);
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .popup-item:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
-            border-color: rgba(125, 211, 252, 0.3);
-            transform: translateX(2px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .popup-item-name {
-            font-weight: 700;
-            color: #e2e8f0;
-            margin-bottom: 3px;
+            font-weight: 600;
+            color: #fff;
         }
 
         .popup-item-desc {
-            color: #94a3b8;
+            color: #888;
             font-size: 11px;
-            line-height: 1.4;
+            margin-top: 2px;
         }
 
         .popup-no-items {
-            color: #64748b;
+            color: #555;
             font-size: 12px;
             font-style: italic;
-            text-align: center;
-            padding: 8px;
         }
 
         /* Loading */
@@ -714,31 +580,10 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #7dd3fc;
-            font-size: 14px;
+            color: #8eb6ff;
+            font-size: 13px;
             font-weight: 600;
             z-index: 5;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .map-loading::after {
-            content: '';
-            width: 32px;
-            height: 32px;
-            border: 3px solid rgba(125, 211, 252, 0.2);
-            border-top-color: #3b82f6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
         }
 
         .campus-hud {
@@ -987,11 +832,6 @@
                 </button>
             </div>
 
-            <div class="realtime-status" id="realtimeStatus">
-                <div class="realtime-dot"></div>
-                <span>Live Updates</span>
-            </div>
-
             <div class="campus-hud" id="campusHud">
                 <div class="campus-hud-title">Item Density</div>
                 <div class="campus-hud-legend"></div>
@@ -1063,14 +903,14 @@
             0: {
                 name: "Campus",
                 rooms: [
-                    { id: "VISPK", name: "Visitor Parking", type: "Parking", x: 247, y: 550, w: 275, h: 130 },
-                    { id: "STUPK", name: "Student Parking", type: "Parking", x: 290, y: 54, w: 235, h: 220 },
-                    { id: "MAIN", name: "Main Building", type: "Building", x: 109, y: 282, w: 425, h: 333, clickable: true },
-                    { id: "STADIUM", name: "Stadium", type: "Athletic", x: 678, y: 58, w: 260, h: 322 },
-                    { id: "SOCCER", name: "Soccer Field", type: "Athletic", x: 693, y: 387, w: 212, h: 110 },
-                    { id: "TENNIS", name: "Tennis Courts", type: "Athletic", x: 60, y: 60, w: 220, h: 120 },
+                    { id: "VISPK", name: "Visitor Parking", type: "Parking", x: 50, y: 700, w: 200, h: 200 },
+                    { id: "STUPK", name: "Student Parking", type: "Parking", x: 500, y: 50, w: 154, h: 420 },
+                    { id: "MAIN", name: "Main Building", type: "Building", x: 90, y: 280, w: 420, h: 340, clickable: true },
+                    { id: "STADIUM", name: "Stadium", type: "Athletic", x: 670, y: 40, w: 260, h: 340 },
+                    { id: "SOCCER", name: "Soccer Field", type: "Athletic", x: 680, y: 400, w: 230, h: 120 },
+                    { id: "TENNIS", name: "Tennis Courts", type: "Athletic", x: 90, y: 60, w: 250, h: 90 },
                     { id: "BASE", name: "Baseball/Softball", type: "Athletic", x: 570, y: 540, w: 380, h: 300 },
-                    { id: "BARN", name: "The Barn", type: "Facility", x: 420, y: 720, w: 140, h: 70 }
+                    { id: "BARN", name: "The Barn", type: "Facility", x: 420, y: 760, w: 140, h: 70 }
                 ]
             },
             1: {
@@ -1509,9 +1349,9 @@
             let svgH = 660;
 
             if (currentFloor === 0) {
-                bgImg.src = 'images/DenmarkLayout.jpg';
-                svgW = 1000;
-                svgH = 972;
+                bgImg.src = 'images/campus.png'; // Updated to look for the high-quality source file
+                svgW = 1021;
+                svgH = 940;
             } else if (currentFloor === 1) {
                 bgImg.src = 'images/schools/denmark-floor1.jpg';
             } else if (currentFloor === 2) {
@@ -2197,16 +2037,10 @@
                 return;
             }
 
-            const realtimeStatus = document.getElementById('realtimeStatus');
-
             mapRealtimeChannel = BackTrackDB.supabase
                 .channel('map-items-live')
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'items' }, scheduleMapRefresh)
-                .subscribe((status) => {
-                    if (status === 'SUBSCRIBED' && realtimeStatus) {
-                        realtimeStatus.classList.add('active');
-                    }
-                });
+                .subscribe();
 
             window.addEventListener('beforeunload', () => {
                 if (mapRealtimeChannel) {
