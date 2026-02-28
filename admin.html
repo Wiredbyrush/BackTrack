@@ -250,6 +250,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -557,8 +558,15 @@
         }
 
         @keyframes pulse-urgent {
-            0%, 100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
-            50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.4); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+            }
         }
 
         /* Map filter buttons */
@@ -2103,7 +2111,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Loading skeleton for cards */
@@ -2115,8 +2125,13 @@
         }
 
         @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
     </style>
     <link rel="stylesheet" href="css/theme.css">
@@ -2205,7 +2220,8 @@
                     <span class="link-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 3l2.2 4.46 4.92.72-3.56 3.46.84 4.89L12 14.2l-4.4 2.32.84-4.89L4.88 8.18l4.92-.72L12 3z" />
+                            <path
+                                d="M12 3l2.2 4.46 4.92.72-3.56 3.46.84 4.89L12 14.2l-4.4 2.32.84-4.89L4.88 8.18l4.92-.72L12 3z" />
                         </svg>
                     </span> Rewards
                     <span class="link-badge" id="sidebarRewardsBadge">0</span>
@@ -3342,7 +3358,7 @@
                                     ${description}
                                 </div>
                                 <div class="card-actions">
-                                    <button class="btn btn-approve" onclick="approveItem('${item.id}')">Approve</button>
+                                    <button class="btn btn-approve" onclick="approveItem('${item.id}', '${item.isBounty ? 'bounty' : 'found'}')">Approve</button>
                                     <button class="btn btn-reject" onclick="rejectItem('${item.id}')">Reject</button>
                                 </div>
                             </div>
@@ -3741,10 +3757,10 @@
             // ==========================================
             // ACTIONS
             // ==========================================
-            async function approveItem(id) {
+            async function approveItem(id, type = 'found') {
                 const statusEl = document.getElementById(`item-status-${id}`);
                 if (statusEl) statusEl.textContent = 'Approving...';
-                const updated = await BackTrackDB.setItemStatus(id, 'found');
+                const updated = await BackTrackDB.setItemStatus(id, type);
                 if (!updated) {
                     if (statusEl) {
                         statusEl.textContent = 'Failed.';

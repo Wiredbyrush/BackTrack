@@ -19,6 +19,7 @@ CREATE TABLE items (
     date_lost DATE NOT NULL,
     image_url TEXT,
     status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'lost', 'found', 'claimed', 'bounty')),
+    is_bounty BOOLEAN DEFAULT FALSE,
     contact_email VARCHAR(255),
     contact_phone VARCHAR(20),
     finder_name VARCHAR(255),
