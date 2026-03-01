@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/leaderboard.css?v=3">
+    <link rel="stylesheet" href="css/leaderboard.css?v=4">
 
     <link rel="stylesheet" href="css/rewards.css">
 </head>
@@ -48,6 +48,12 @@
 
     <div class="page-wrap">
         <section class="hero">
+            <p class="hero-kicker">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8L12 3z"></path>
+                </svg>
+                Rewards Vault
+            </p>
             <h1>Good deeds pay off</h1>
             <p>Return items, earn points. Trade them for food, merch, and privileges. Your balance updates
                 automatically.</p>
@@ -88,6 +94,7 @@
         </section>
 
         <section class="filters" aria-label="Reward filters">
+            <span class="filters-label">Filter:</span>
             <button class="filter-btn active" type="button" data-filter="all">All</button>
             <button class="filter-btn" type="button" data-filter="food">Food</button>
             <button class="filter-btn" type="button" data-filter="merch">Merch</button>
@@ -96,6 +103,10 @@
         </section>
 
         <section class="rewards-section">
+            <div class="rewards-headline">
+                <h2>Reward catalog</h2>
+                <p>Use your balance on real school perks and weekly drops.</p>
+            </div>
             <div class="rewards-grid" id="rewardsGrid">
                 <!-- Food -->
                 <article class="reward-card" data-category="food" data-cost="55" data-name="$10 Chick-fil-A Gift Card">
@@ -338,6 +349,29 @@
                     <button class="lb-range-btn" type="button" data-range="all">All Time</button>
                 </div>
 
+                <div class="lb-insights" aria-label="Leaderboard insights">
+                    <div class="lb-insight">
+                        <p>Contributors</p>
+                        <strong id="lbContributors">0</strong>
+                    </div>
+                    <div class="lb-insight">
+                        <p>Items Found</p>
+                        <strong id="lbItemsFound">0</strong>
+                    </div>
+                    <div class="lb-insight">
+                        <p>Bounties</p>
+                        <strong id="lbBounties">0</strong>
+                    </div>
+                    <div class="lb-insight">
+                        <p>Top Score</p>
+                        <strong id="lbTopScore">0</strong>
+                    </div>
+                </div>
+
+                <div class="lb-spotlight" id="lbSpotlight">
+                    Log in to see your leaderboard position and movement.
+                </div>
+
                 <div class="lb-podium-wrap" id="lbPodium">
                     <!-- Populated by JS -->
                 </div>
@@ -351,11 +385,15 @@
                         <span>Found</span>
                         <span>Bounties</span>
                         <span>Score</span>
+                        <span>Trend</span>
                     </div>
                     <div class="lb-table" id="lbTableRows">
                         <!-- Populated by JS -->
                     </div>
                 </div>
+
+                <p class="lb-summary" id="lbSummary">Loading leaderboard…</p>
+                <p class="lb-note" id="lbNote">Scores = found items + (2 x bounty claims).</p>
 
 
             </div>
@@ -374,7 +412,7 @@
     <script src="js/nav-auth.js"></script>
     <script src="js/accessibility.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="js/leaderboard.js?v=3"></script>
+    <script src="js/leaderboard.js?v=4"></script>
     <script>
         const POINTS_PER_RETURN = 20;
         const POINTS_PER_APPROVED_CLAIM = 5;
@@ -477,51 +515,91 @@
             return category.charAt(0).toUpperCase() + category.slice(1);
         }
 
-        function rewardIconMarkup(category) {
+        function rewardCostIconMarkup() {
+            return `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8"></circle>
+                    <path d="M9 12h6"></path>
+                    <path d="M12 9v6"></path>
+                </svg>
+            `;
+        }
+
+        function rewardIconMarkup(category, rewardName = '') {
             const kind = normalizeRewardCategory(category);
+            const name = String(rewardName || '').toLowerCase();
 
             if (kind === 'food') {
+                if (name.includes('cafe') || name.includes('drink')) {
+                    return `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 8h9v9a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V8z"></path>
+                            <path d="M15 10h1.2a2.8 2.8 0 1 1 0 5.6H15"></path>
+                            <path d="M9 4.5v2.3M12 4v2.8"></path>
+                        </svg>
+                    `;
+                }
                 return `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 9h14v5a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6V9z"></path>
+                        <path d="M8.5 4.5v3M12 4v3.5M15.5 4.5v3"></path>
                     </svg>
                 `;
             }
 
             if (kind === 'merch') {
                 return `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4"></path>
-                        <path d="M17 9l-5 5-5-5"></path>
-                        <path d="M12 14V3"></path>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M8 8V6a4 4 0 0 1 8 0v2"></path>
+                        <rect x="6" y="8" width="12" height="12" rx="3"></rect>
+                        <path d="M10 13h4"></path>
                     </svg>
                 `;
             }
 
             if (kind === 'privilege') {
                 return `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3l7 3v5.5c0 4-2.7 7.5-7 8.7-4.3-1.2-7-4.7-7-8.7V6l7-3z"></path>
+                        <path d="M9.5 11.5l2 2 3-3"></path>
                     </svg>
                 `;
             }
 
             if (kind === 'events') {
                 return `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-                        <path d="M6 6v12"></path>
-                        <path d="M18 6v12"></path>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 8.5A2.5 2.5 0 0 0 6.5 6h11A2.5 2.5 0 0 0 20 8.5V10a2.5 2.5 0 0 0 0 4v1.5a2.5 2.5 0 0 0-2.5 2.5h-11A2.5 2.5 0 0 0 4 15.5V14a2.5 2.5 0 0 0 0-4V8.5z"></path>
+                        <path d="M12 7.5v9"></path>
                     </svg>
                 `;
             }
 
             return `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 3l2.2 4.46 4.92.72-3.56 3.46.84 4.89L12 14.2l-4.4 2.32.84-4.89L4.88 8.18l4.92-.72L12 3z"></path>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M9.2 4h5.6l-.8 3.6h-4z"></path>
+                    <circle cx="12" cy="14" r="4.2"></circle>
+                    <path d="M12 11.5v5"></path>
                 </svg>
             `;
+        }
+
+        function hydrateRewardVisuals() {
+            const cards = document.querySelectorAll('.reward-card');
+            cards.forEach((card) => {
+                const category = card.dataset.category || 'other';
+                const rewardName = card.dataset.name || '';
+                const iconNode = card.querySelector('.reward-mini-icon');
+                if (iconNode) {
+                    iconNode.innerHTML = rewardIconMarkup(category, rewardName);
+                }
+
+                const costNode = card.querySelector('.reward-cost');
+                const oldCostIcon = costNode?.querySelector('svg');
+                if (oldCostIcon) {
+                    oldCostIcon.outerHTML = rewardCostIconMarkup();
+                }
+            });
         }
 
         async function loadRewardCatalogFromBackend() {
@@ -542,24 +620,22 @@
                 })
                 .map((reward) => {
                     const category = normalizeRewardCategory(reward.category);
-                    const name = escapeHtml(reward.name || 'Reward');
+                    const rawName = String(reward.name || 'Reward');
+                    const name = escapeHtml(rawName);
                     const description = escapeHtml(reward.description || 'Redeem this reward from the BackTrack store.');
                     const cost = Number(reward.points_cost || 0);
                     return `
                         <article class="reward-card" data-category="${escapeHtml(category)}" data-cost="${cost}" data-name="${name}">
                             <div class="reward-body">
                                 <div class="reward-head">
-                                    <div class="reward-mini-icon">${rewardIconMarkup(category)}</div>
+                                    <div class="reward-mini-icon">${rewardIconMarkup(category, rawName)}</div>
                                     <h3 class="reward-title">${name}</h3>
                                     <span class="reward-chip-inline">${escapeHtml(rewardCategoryLabel(category))}</span>
                                 </div>
                                 <p class="reward-desc">${description}</p>
                                 <div class="reward-footer">
                                     <div class="reward-cost">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="9"></circle>
-                                            <path d="M12 7v5l3 3"></path>
-                                        </svg>
+                                        ${rewardCostIconMarkup()}
                                         ${cost} pts
                                     </div>
                                     <button class="redeem-btn" type="button">Redeem</button>
@@ -815,6 +891,7 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             await loadRewardCatalogFromBackend();
+            hydrateRewardVisuals();
             setupEvents();
             applyFilter('all');
             if (typeof BackTrackDB !== 'undefined' && BackTrackDB.onAuthStateChange) {

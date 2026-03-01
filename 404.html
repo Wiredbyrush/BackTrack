@@ -4,15 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050811">
     <title>Page Not Found - BackTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/theme.css">
     <style>
         body {
-            background-color: #000000;
-            color: #ffffff;
+            background:
+                radial-gradient(900px 500px at 8% -6%, rgba(37, 99, 235, 0.2) 0%, transparent 60%),
+                radial-gradient(800px 460px at 92% 0%, rgba(6, 182, 212, 0.14) 0%, transparent 56%),
+                linear-gradient(180deg, #060a14 0%, #050811 60%, #05070f 100%);
+            color: #e7eef9;
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -47,7 +52,7 @@
 
         .error-message {
             font-size: 16px;
-            color: #888;
+            color: #b2bfd2;
             max-width: 400px;
             margin-bottom: 40px;
             line-height: 1.6;
@@ -92,8 +97,8 @@
         .bg-grid {
             position: absolute;
             inset: 0;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
             background-size: 40px 40px;
             z-index: -1;
             mask-image: radial-gradient(circle at center, black 0%, transparent 70%);

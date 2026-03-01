@@ -10,17 +10,6 @@
    */
   const NAV_AUTH_LOADED = 'data-nav-auth-loaded';
 
-  // Colors for user avatars based on the first letter of their name/email
-  const avatarColors = {
-    'A': '#e91e63', 'B': '#9c27b0', 'C': '#673ab7', 'D': '#3f51b5',
-    'E': '#2196f3', 'F': '#03a9f4', 'G': '#00bcd4', 'H': '#009688',
-    'I': '#4caf50', 'J': '#8bc34a', 'K': '#cddc39', 'L': '#ffc107',
-    'M': '#ff9800', 'N': '#ff5722', 'O': '#795548', 'P': '#607d8b',
-    'Q': '#e91e63', 'R': '#9c27b0', 'S': '#673ab7', 'T': '#3f51b5',
-    'U': '#2196f3', 'V': '#03a9f4', 'W': '#00bcd4', 'X': '#009688',
-    'Y': '#4caf50', 'Z': '#8bc34a'
-  };
-
   function ensureNavRight(nav) {
     let navRight = nav.querySelector('.nav-right');
     if (!navRight) {
@@ -102,7 +91,6 @@
       currentUser = user;
       const name = user.user_metadata?.full_name || user.email || 'U';
       const initial = name.charAt(0).toUpperCase();
-      const bgColor = avatarColors[initial] || '#6366f1';
 
       const isAdmin = typeof BackTrackDB !== 'undefined'
         ? await BackTrackDB.isAdmin()
@@ -116,7 +104,6 @@
       avatar.type = 'button';
       avatar.className = 'user-avatar';
       avatar.textContent = initial;
-      avatar.style.backgroundColor = bgColor;
       avatar.setAttribute('aria-haspopup', 'true');
       avatar.setAttribute('aria-expanded', 'false');
       avatar.title = user.email || 'Account';
@@ -160,6 +147,7 @@
         const adminBadge = document.createElement('a');
         adminBadge.href = 'admin.html';
         adminBadge.className = 'admin-badge';
+        adminBadge.setAttribute('aria-label', 'Open admin panel');
         adminBadge.innerHTML = `
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -168,55 +156,6 @@
           </svg>
           <span>Admin</span>
         `;
-
-        // Add admin badge styles if not already added
-        if (!document.getElementById('admin-badge-styles')) {
-          const style = document.createElement('style');
-          style.id = 'admin-badge-styles';
-          style.textContent = `
-            .admin-badge {
-              display: flex;
-              align-items: center;
-              gap: 6px;
-              padding: 6px 12px;
-              background: rgba(6, 182, 212, 0.1);
-              border: 1px solid rgba(6, 182, 212, 0.3);
-              border-radius: 8px;
-              color: #06b6d4;
-              font-size: 13px;
-              font-weight: 600;
-              margin-right: 12px;
-              text-decoration: none;
-              transition: all 0.2s ease;
-            }
-
-            .admin-badge:hover {
-              background: rgba(6, 182, 212, 0.2);
-              border-color: rgba(6, 182, 212, 0.5);
-              transform: translateY(-1px);
-            }
-
-            .admin-badge svg {
-              animation: adminPulse 2s ease-in-out infinite;
-            }
-
-            @keyframes adminPulse {
-              0%, 100% { opacity: 1; }
-              50% { opacity: 0.6; }
-            }
-
-            @media (max-width: 768px) {
-              .admin-badge span {
-                display: none;
-              }
-              .admin-badge {
-                padding: 6px 8px;
-                margin-right: 8px;
-              }
-            }
-          `;
-          document.head.appendChild(style);
-        }
 
         navRight.appendChild(adminBadge);
       }

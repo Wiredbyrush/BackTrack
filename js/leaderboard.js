@@ -13,6 +13,8 @@
     var foundEl = document.getElementById('lbItemsFound');
     var bountiesEl = document.getElementById('lbBounties');
     var topScoreEl = document.getElementById('lbTopScore');
+    var summaryEl = document.getElementById('lbSummary');
+    var noteEl = document.getElementById('lbNote');
     var rangeButtons = Array.from(document.querySelectorAll('.lb-range-btn'));
 
     if (!podiumWrap || !tableRows || !rangeButtons.length) return;
@@ -206,10 +208,10 @@
         if (!contributorsEl || !foundEl || !bountiesEl || !topScoreEl) return;
 
         var totals = calcTotals(entries);
-        contributorsEl.textContent = fmt(entries.length);
-        foundEl.textContent = fmt(totals.found);
-        bountiesEl.textContent = fmt(totals.bounties);
-        topScoreEl.textContent = fmt(entries[0] ? entries[0].score : 0);
+        countUp(contributorsEl, entries.length);
+        countUp(foundEl, totals.found);
+        countUp(bountiesEl, totals.bounties);
+        countUp(topScoreEl, entries[0] ? entries[0].score : 0);
     }
 
     function setSpotlight(entries) {
@@ -228,10 +230,41 @@
             return;
         }
 
+        var movement = '';
+        if (state.range === 'month') {
+            var allEntries = state.usingFallback ? fallbackEntries : (state.byRange.all || []);
+            var allRank = allEntries.findIndex(function (entry) {
+                return entry.key === placement.entry.key;
+            });
+            if (allRank >= 0) {
+                var delta = (allRank + 1) - placement.rank;
+                if (delta > 0) movement = ' Up ' + delta + ' compared to all-time.';
+                if (delta < 0) movement = ' Down ' + Math.abs(delta) + ' compared to all-time.';
+                if (delta === 0) movement = ' Same placement as all-time.';
+            }
+        }
+
         spotlight.textContent = 'You are #' + placement.rank
             + ' with ' + fmt(placement.entry.score) + ' points '
             + '(' + fmt(placement.entry.found) + ' found, '
-            + fmt(placement.entry.bounties) + ' bounties).';
+            + fmt(placement.entry.bounties) + ' bounties).'
+            + movement;
+    }
+
+    function setSummary(entries) {
+        if (summaryEl) {
+            var rangeLabel = state.range === 'month'
+                ? 'Monthly (last ' + MONTH_WINDOW_DAYS + ' days)'
+                : 'All-time';
+            var leader = entries[0] ? ' • Leader: ' + entries[0].name : '';
+            summaryEl.textContent = rangeLabel + ' • ' + fmt(entries.length) + ' ranked contributors' + leader;
+        }
+
+        if (noteEl) {
+            noteEl.textContent = state.usingFallback
+                ? 'Showing demo data. Connect Supabase to enable live rankings.'
+                : 'Scores = found items + (' + BOUNTY_WEIGHT + ' x bounty claims).';
+        }
     }
 
     function countUp(el, end) {
@@ -255,21 +288,29 @@
         requestAnimationFrame(tick);
     }
 
-    function podiumCard(entry, rank, trend) {
+    function podiumCard(entry, rank, trend, isSelf) {
         var empty = !entry;
         var avatar = empty ? '?' : esc(initials(entry.name));
         var name = empty ? 'Open Spot' : esc(entry.name);
         var scoreAttr = empty ? '' : ' data-value="' + entry.score + '"';
         var score = empty ? '--' : '0';
+        var medal = empty ? '' : '<span class="lb-medal lb-medal-' + rank + '" aria-hidden="true">' + rank + '</span>';
+        var youBadge = isSelf && !empty ? '<span class="lb-you-badge lb-you-badge-card">You</span>' : '';
+        var meta = empty
+            ? 'Waiting for live data'
+            : fmt(entry.found) + ' found · ' + fmt(entry.bounties) + ' bounties';
         var trendClass = empty ? 'flat' : trend.cls;
         var trendLabel = empty ? '--' : trend.label;
 
-        return '<div class="lb-podium-place rank-' + rank + (empty ? ' empty' : '') + '">'
+        return '<div class="lb-podium-place rank-' + rank + (empty ? ' empty' : '') + (isSelf ? ' is-self' : '') + '">'
             + '<div class="lb-podium-card">'
+            + medal
+            + youBadge
             + '<div class="lb-avatar">' + avatar + '</div>'
             + '<div class="lb-card-name">' + name + '</div>'
             + '<div class="lb-card-score"' + scoreAttr + '>' + score + '</div>'
             + '<div class="lb-card-label">points</div>'
+            + '<div class="lb-card-meta">' + esc(meta) + '</div>'
             + '<span class="lb-card-trend ' + trendClass + '">' + esc(trendLabel) + '</span>'
             + '</div>'
             + '<div class="lb-podium-bar"><span class="lb-bar-rank">' + rank + '</span></div>'
@@ -280,10 +321,11 @@
         if (!entry) return '';
 
         var rowClass = 'lb-row' + (isSelf ? ' is-self' : '');
+        var youBadge = isSelf ? '<span class="lb-you-badge">You</span>' : '';
 
         return '<div class="' + rowClass + '">'
             + '<div class="lb-cell-rank">' + rank + '</div>'
-            + '<div class="lb-cell lb-cell-user"><div class="lb-row-name">' + esc(entry.name) + '</div></div>'
+            + '<div class="lb-cell lb-cell-user"><div class="lb-row-name">' + esc(entry.name) + '</div>' + youBadge + '</div>'
             + '<div class="lb-cell">' + fmt(entry.found) + '</div>'
             + '<div class="lb-cell">' + fmt(entry.bounties) + '</div>'
             + '<div class="lb-cell lb-cell-score">' + fmt(entry.score) + '</div>'
@@ -309,11 +351,15 @@
         var t1 = trendFor(entries[0], 1, allRankMap);
         var t2 = trendFor(entries[1], 2, allRankMap);
         var t3 = trendFor(entries[2], 3, allRankMap);
+        var userKeys = getUserKeys();
+        var top1Self = Boolean(entries[0] && userKeys.indexOf(entries[0].key) !== -1);
+        var top2Self = Boolean(entries[1] && userKeys.indexOf(entries[1].key) !== -1);
+        var top3Self = Boolean(entries[2] && userKeys.indexOf(entries[2].key) !== -1);
 
         podiumWrap.innerHTML = '<div class="lb-podium">'
-            + podiumCard(entries[1], 2, t2)
-            + podiumCard(entries[0], 1, t1)
-            + podiumCard(entries[2], 3, t3)
+            + podiumCard(entries[1], 2, t2, top2Self)
+            + podiumCard(entries[0], 1, t1, top1Self)
+            + podiumCard(entries[2], 3, t3, top3Self)
             + '</div>';
 
         var rest = entries.slice(3);
@@ -330,6 +376,7 @@
 
         setInsights(entries);
         setSpotlight(entries);
+        setSummary(entries);
 
         document.querySelectorAll('.lb-card-score[data-value]').forEach(function (el) {
             var value = parseInt(el.dataset.value, 10);

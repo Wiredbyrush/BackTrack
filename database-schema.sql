@@ -465,6 +465,7 @@ WITH CHECK (bucket_id = 'images' AND auth.role() = 'authenticated');
 
 -- Storage policy for public viewing
 CREATE POLICY "Anyone can view images"
+ON storage.objects FOR SELECT
 USING (bucket_id = 'images');
 
 -- ============================================

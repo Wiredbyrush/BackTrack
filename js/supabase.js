@@ -286,6 +286,9 @@ if (!window.BackTrackDB) {
         const user = await getCurrentUser();
         if (!user) return false;
 
+        // Explicitly allow the primary developer email
+        if (user.email === 'rushwanthmahendran1@gmail.com') return true;
+
         const { data, error } = await supabase
             .from('admins')
             .select('id')
@@ -556,18 +559,43 @@ if (!window.BackTrackDB) {
         return { user: data.user };
     }
 
-    function getAuthRedirectUrl(page = 'login.html') {
-        if (!window.location || !window.location.origin || window.location.origin === 'null') {
-            return null;
+    function normalizeHttpOrigin(value) {
+        const raw = String(value || '').trim().replace(/\/+$/, '');
+        return /^https?:\/\//i.test(raw) ? raw : '';
+    }
+
+    function getAuthRedirectOrigin() {
+        let storedOrigin = '';
+        try {
+            storedOrigin = window.localStorage?.getItem('backtrack_auth_redirect_origin') || '';
+        } catch (e) {
+            storedOrigin = '';
         }
 
+        const explicitOrigin = normalizeHttpOrigin(
+            window.BACKTRACK_AUTH_REDIRECT_ORIGIN
+            || storedOrigin
+        );
+        if (explicitOrigin) return explicitOrigin;
+
+        const currentOrigin = normalizeHttpOrigin(window.location?.origin);
+        if (currentOrigin) return currentOrigin;
+
+        // Fallback for file:// launches to avoid defaulting to Supabase Site URL.
+        return 'http://127.0.0.1:5501';
+    }
+
+    function getAuthRedirectUrl(page = 'login.html') {
+        const origin = getAuthRedirectOrigin();
+        if (!origin) return null;
+
         const safePage = String(page || 'login.html').replace(/^\/+/, '');
-        const pathname = window.location.pathname || '/';
-        const isGithubProjectPath = window.location.hostname === 'wiredbyrush.github.io'
+        const pathname = window.location?.pathname || '/';
+        const isGithubProjectPath = window.location?.hostname === 'wiredbyrush.github.io'
             || pathname.startsWith('/backtrack-fbla/');
         const basePath = isGithubProjectPath ? '/backtrack-fbla/' : '/';
 
-        return `${window.location.origin}${basePath}${safePage}`;
+        return `${origin}${basePath}${safePage}`;
     }
 
     // Sign in with Google OAuth
@@ -576,6 +604,8 @@ if (!window.BackTrackDB) {
         const redirectUrl = getAuthRedirectUrl(redirectPage);
         if (redirectUrl) {
             options.redirectTo = redirectUrl;
+        } else {
+            return { error: 'Could not determine a local OAuth redirect URL.' };
         }
 
         const { data, error } = await supabase.auth.signInWithOAuth({

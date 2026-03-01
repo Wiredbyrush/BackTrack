@@ -1397,6 +1397,174 @@
                 width: 280px;
             }
         }
+
+        .admin-delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 8px;
+            width: 38px;
+            height: 38px;
+            display: none;
+            /* hidden by default, shown when body has .admin-mode */
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        body.admin-mode .admin-delete-btn {
+            display: flex;
+        }
+
+        /* Admin Delete Modal */
+        .admin-delete-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .admin-delete-modal.active {
+            display: flex;
+        }
+
+        .admin-delete-modal-content {
+            background: #1a1a1c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: modalFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.light-theme .admin-delete-modal-content {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-delete-modal-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .admin-delete-modal h3 {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        body.light-theme .admin-delete-modal h3 {
+            color: #111827;
+        }
+
+        .admin-delete-modal p {
+            color: #9ca3af;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        body.light-theme .admin-delete-modal p {
+            color: #4b5563;
+        }
+
+        .admin-delete-modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .admin-delete-btn-cancel {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        body.light-theme .admin-delete-btn-cancel {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+
+        .admin-delete-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-theme .admin-delete-btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .admin-delete-btn-confirm {
+            flex: 1;
+            padding: 10px;
+            background: #ef4444;
+            border: 1px solid #ef4444;
+            color: #ffffff;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .admin-delete-btn-confirm:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .admin-delete-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #f87171;
+        }
+
+        body.light-theme .admin-delete-btn {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.15);
+        }
+
+        body.light-theme .admin-delete-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #dc2626;
+        }
     </style>
 
     <div class="chatbot-widget">
@@ -1524,10 +1692,57 @@
         const pageBody = document.body;
         let lastImageQuery = '';
         let lastImageKeywords = [];
+        let currentUserIsAdmin = false;
 
         function updateNavBorder() {
             pageBody.classList.toggle('nav-scrolled', window.scrollY > 4);
         }
+
+        let itemToDeleteId = null;
+
+        function deleteItemCard(id) {
+            itemToDeleteId = id;
+            document.getElementById('adminDeleteModal').classList.add('active');
+        }
+
+        function closeAdminDeleteModal() {
+            itemToDeleteId = null;
+            document.getElementById('adminDeleteModal').classList.remove('active');
+        }
+
+        document.getElementById('adminConfirmDeleteBtn').addEventListener('click', async () => {
+            if (!itemToDeleteId) return;
+            const btn = document.getElementById('adminConfirmDeleteBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Deleting...';
+            btn.disabled = true;
+
+            try {
+                const { error } = await window.BackTrackDB.deleteItem(itemToDeleteId);
+                if (error) throw error;
+
+                // Remove from DOM immediately
+                const card = document.querySelector(`.item-card[data-id="${itemToDeleteId}"]`);
+                if (card) {
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        card.remove();
+                        // Update counts
+                        const itemsLeft = itemsGrid.querySelectorAll('.item-card').length;
+                        updateResultsCount(itemsLeft);
+                    }, 300);
+                }
+                closeAdminDeleteModal();
+            } catch (err) {
+                console.error('Error deleting item:', err);
+                alert('Failed to delete item. You may not have permission.');
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
 
         // Current filters state
         let currentFilters = {
@@ -1665,6 +1880,14 @@
                 ? `<span class="ai-match-badge">${resolvedMatch}% AI MATCH</span>`
                 : '';
             const saved = isSavedItem(item.id);
+            // Delete button is always in DOM, purely shown/hidden by body.admin-mode CSS
+            const deleteBtn = `
+                   <button type="button" class="admin-delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteItemCard('${item.id}'); return false;" aria-label="Delete Item" title="Delete Item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                    </svg>
+                   </button>`;
+
             return `
                 <div class="item-card" data-id="${item.id}" data-saved="${saved}">
                     <div class="item-image">
@@ -1678,7 +1901,10 @@
                         <h3 class="item-name">${item.name}</h3>
                         <p class="item-date">${formatDate(item.date_lost)}</p>
                         <p class="item-location">${item.location}</p>
-                        <button type="button" class="claim-card-btn" onclick="event.stopPropagation(); window.location.href='claim.html?item=${item.id}'">Claim Item</button>
+                        <div style="display: flex; gap: 8px; align-items: center; margin-top: 12px;">
+                            <button type="button" class="claim-card-btn" style="flex: 1;" onclick="event.stopPropagation(); window.location.href='claim.html?item=${item.id}'">Claim Item</button>
+                            ${deleteBtn}
+                        </div>
                     </div>
                 </div>
             `;
@@ -1855,7 +2081,16 @@
                 renderDemoItems();
                 return;
             }
-            renderLoadingState();
+
+            if (!currentUserIsAdmin) {
+                currentUserIsAdmin = await window.BackTrackDB.isAdmin();
+            }
+
+            const hasExistingItems = itemsGrid.querySelectorAll('.item-card:not(.skeleton-card)').length > 0;
+            if (!hasExistingItems) {
+                renderLoadingState();
+            }
+
             const items = await window.BackTrackDB.getItems(currentFilters);
             renderItems(items);
         }
@@ -2028,7 +2263,7 @@
         });
 
         // Initialize - check if Supabase is configured
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             // Check for AI scan params
             const scanParams = new URLSearchParams(window.location.search);
             if (scanParams.get('ai_scan') === 'true') {
@@ -2065,8 +2300,34 @@
 
             // Check if Supabase is configured
             if (isSupabaseConfigured()) {
+                window.BackTrackDB.onAuthStateChange(async (event, session) => {
+                    const wasAdmin = currentUserIsAdmin;
+                    if (!currentUserIsAdmin) {
+                        currentUserIsAdmin = await window.BackTrackDB.isAdmin();
+                    }
+                    if (currentUserIsAdmin) {
+                        document.body.classList.add('admin-mode');
+                    }
+                    if (wasAdmin !== currentUserIsAdmin) {
+                        // no need to reload items just to show buttons! CSS handles it.
+                    }
+                });
+
+                if (!currentUserIsAdmin) {
+                    currentUserIsAdmin = await window.BackTrackDB.isAdmin();
+                    if (currentUserIsAdmin) {
+                        document.body.classList.add('admin-mode');
+                    }
+                }
                 loadItems();
-                setInterval(loadItems, 20000);
+
+                setInterval(() => {
+                    // Only auto-refresh if user is not actively typing or hovering a card
+                    const isHovering = document.querySelector('.item-card:hover');
+                    if (document.activeElement !== searchInput && !isHovering) {
+                        loadItems();
+                    }
+                }, 20000);
             } else {
                 console.log('Supabase not configured - showing demo items');
                 renderDemoItems();

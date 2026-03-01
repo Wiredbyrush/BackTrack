@@ -550,3 +550,431 @@ body.light-theme .footer-row {
         width: 100%;
     }
 }
+
+/* ==========================================================
+   Rewards Page Refresh
+   ========================================================== */
+
+body {
+    background:
+        radial-gradient(1200px 480px at 20% -80px, rgba(37, 99, 235, 0.18), transparent 68%),
+        radial-gradient(960px 420px at 88% -90px, rgba(236, 72, 153, 0.1), transparent 64%),
+        linear-gradient(180deg, #04070f 0%, #050a14 56%, #04080f 100%);
+}
+
+.page-wrap::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 68% 36%, rgba(59, 130, 246, 0.08) 0%, transparent 54%),
+        linear-gradient(180deg, rgba(4, 7, 15, 0) 0%, rgba(4, 7, 15, 0.42) 100%);
+    z-index: -1;
+}
+
+.hero {
+    padding: 118px 24px 24px;
+}
+
+.hero-kicker {
+    border: 1px solid rgba(96, 165, 250, 0.34);
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.36), rgba(15, 23, 42, 0.66));
+    color: #dbeafe;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 24px rgba(2, 6, 23, 0.26);
+}
+
+.hero-kicker svg {
+    width: 13px;
+    height: 13px;
+}
+
+.hero-kicker svg path {
+    fill: currentColor;
+}
+
+.hero h1 {
+    margin: 14px 0 12px;
+    font-size: clamp(36px, 6vw, 54px);
+    letter-spacing: -0.03em;
+}
+
+.hero p {
+    max-width: 760px;
+    font-size: 17px;
+    color: #9fb0c7;
+}
+
+.dashboard {
+    margin-top: 20px;
+}
+
+.vault-panel {
+    border-radius: 18px;
+    border-color: rgba(148, 163, 184, 0.24);
+    background: linear-gradient(145deg, rgba(10, 15, 27, 0.96), rgba(8, 12, 22, 0.96));
+    box-shadow: 0 22px 46px rgba(2, 6, 23, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.points-side {
+    padding: 26px 26px 24px;
+}
+
+.points-value {
+    margin-top: 10px;
+    margin-bottom: 12px;
+}
+
+.stats-side {
+    padding: 20px;
+    gap: 12px;
+}
+
+.stat {
+    border-radius: 12px;
+    padding: 14px 13px;
+}
+
+.filters {
+    margin-top: 24px;
+    align-items: center;
+    gap: 10px;
+}
+
+.filters-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9fb0c7;
+}
+
+.filter-btn {
+    padding: 9px 15px;
+    border-color: rgba(148, 163, 184, 0.26);
+    background: rgba(15, 23, 42, 0.58);
+    color: #b7c3d8;
+}
+
+.rewards-section {
+    margin-top: 24px;
+}
+
+.rewards-headline {
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.rewards-headline h2 {
+    margin: 0;
+    font-size: clamp(26px, 4.2vw, 34px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #eff6ff;
+}
+
+.rewards-headline p {
+    margin: 0;
+    color: #8fa0b7;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.rewards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(305px, 1fr));
+    gap: 16px;
+}
+
+.reward-card {
+    --cat: #60a5fa;
+    --cat-soft: rgba(96, 165, 250, 0.34);
+    --cat-soft-bg: rgba(96, 165, 250, 0.11);
+    border-radius: 16px;
+    border-color: rgba(148, 163, 184, 0.22);
+    background: linear-gradient(160deg, rgba(10, 15, 27, 0.97), rgba(7, 12, 22, 0.97));
+    box-shadow: 0 10px 26px rgba(2, 6, 23, 0.32);
+}
+
+.reward-card[data-category="food"] {
+    --cat: #f59e0b;
+    --cat-soft: rgba(245, 158, 11, 0.36);
+    --cat-soft-bg: rgba(245, 158, 11, 0.12);
+}
+
+.reward-card[data-category="merch"] {
+    --cat: #8b5cf6;
+    --cat-soft: rgba(139, 92, 246, 0.36);
+    --cat-soft-bg: rgba(139, 92, 246, 0.12);
+}
+
+.reward-card[data-category="privilege"] {
+    --cat: #22c55e;
+    --cat-soft: rgba(34, 197, 94, 0.36);
+    --cat-soft-bg: rgba(34, 197, 94, 0.11);
+}
+
+.reward-card[data-category="events"] {
+    --cat: #ec4899;
+    --cat-soft: rgba(236, 72, 153, 0.36);
+    --cat-soft-bg: rgba(236, 72, 153, 0.12);
+}
+
+.reward-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cat), rgba(255, 255, 255, 0.7));
+    opacity: 0.9;
+}
+
+.reward-card::after {
+    content: '';
+    position: absolute;
+    top: -48px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, var(--cat-soft-bg), transparent 68%);
+}
+
+.reward-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--cat-soft);
+    box-shadow: 0 18px 34px rgba(2, 6, 23, 0.45);
+}
+
+.reward-body {
+    padding: 18px 18px 16px;
+    gap: 14px;
+}
+
+.reward-head {
+    gap: 13px;
+    align-items: flex-start;
+}
+
+.reward-mini-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.82), var(--cat-soft-bg));
+    border-color: var(--cat-soft);
+    color: var(--cat);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 8px 18px rgba(2, 6, 23, 0.28);
+}
+
+.reward-mini-icon svg {
+    width: 23px;
+    height: 23px;
+    display: block;
+}
+
+.reward-chip-inline {
+    border-radius: 999px;
+    border: 1px solid var(--cat-soft);
+    background: var(--cat-soft-bg);
+    color: var(--cat);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 5px 9px;
+    margin-top: 2px;
+}
+
+.reward-title {
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.reward-desc {
+    color: #9caec4;
+    min-height: 62px;
+}
+
+.reward-cost {
+    color: #e2ecff;
+    font-size: 17px;
+}
+
+.reward-cost svg {
+    width: 17px;
+    height: 17px;
+    color: var(--cat);
+}
+
+.redeem-btn {
+    min-width: 112px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: linear-gradient(135deg, var(--cat), #2563eb);
+    font-size: 12px;
+}
+
+.redeem-btn:hover {
+    border-color: rgba(255, 255, 255, 0.34);
+    filter: brightness(1.06);
+}
+
+.redeem-btn:disabled {
+    background: rgba(30, 41, 59, 0.72) !important;
+    color: #96a6bb;
+    border-color: rgba(148, 163, 184, 0.3);
+}
+
+body.light-theme {
+    background:
+        radial-gradient(1200px 480px at 20% -80px, rgba(37, 99, 235, 0.15), transparent 68%),
+        radial-gradient(960px 420px at 88% -90px, rgba(236, 72, 153, 0.08), transparent 64%),
+        linear-gradient(180deg, #f8fafc 0%, #f1f5f9 60%, #f8fafc 100%);
+}
+
+body.light-theme .hero-kicker {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(148, 163, 184, 0.12));
+    border-color: rgba(59, 130, 246, 0.28);
+    color: #1d4ed8;
+}
+
+body.light-theme .hero p,
+body.light-theme .filters-label,
+body.light-theme .rewards-headline p {
+    color: #5b6b82;
+}
+
+body.light-theme .reward-card {
+    border-color: rgba(148, 163, 184, 0.28);
+    background: linear-gradient(160deg, #ffffff, #f8fafc);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+body.light-theme .reward-card:hover {
+    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.14);
+}
+
+body.light-theme .reward-title {
+    color: #0f172a;
+}
+
+body.light-theme .reward-desc {
+    color: #53637a;
+}
+
+body.light-theme .reward-cost {
+    color: #1e3a8a;
+}
+
+body.light-theme .reward-mini-icon {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 6px 14px rgba(37, 99, 235, 0.14);
+}
+
+@media (max-width: 980px) {
+    .rewards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .hero {
+        padding-top: 104px;
+    }
+
+    .filters-label {
+        width: 100%;
+        margin-bottom: -2px;
+    }
+
+    .rewards-headline h2 {
+        font-size: 28px;
+    }
+
+    .rewards-headline p {
+        font-size: 13px;
+    }
+
+    .rewards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reward-body {
+        padding: 16px 15px 14px;
+    }
+}
+
+/* Strong overrides against global theme.css utilities */
+body:not(.light-theme) .vault-panel {
+    background: linear-gradient(145deg, rgba(10, 15, 27, 0.96), rgba(8, 12, 22, 0.96)) !important;
+    border-color: rgba(148, 163, 184, 0.24) !important;
+    box-shadow: 0 22px 46px rgba(2, 6, 23, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+body:not(.light-theme) .reward-card {
+    background: linear-gradient(160deg, rgba(10, 15, 27, 0.97), rgba(7, 12, 22, 0.97)) !important;
+    border-color: rgba(148, 163, 184, 0.22) !important;
+    box-shadow: 0 10px 26px rgba(2, 6, 23, 0.32) !important;
+}
+
+body:not(.light-theme) .reward-card:hover {
+    border-color: var(--cat-soft) !important;
+    box-shadow: 0 18px 34px rgba(2, 6, 23, 0.45) !important;
+}
+
+body:not(.light-theme) .filter-btn {
+    background: rgba(15, 23, 42, 0.58) !important;
+    border-color: rgba(148, 163, 184, 0.26) !important;
+    color: #b7c3d8 !important;
+}
+
+body:not(.light-theme) .filter-btn:hover {
+    border-color: rgba(96, 165, 250, 0.6) !important;
+    color: #dbeafe !important;
+}
+
+body:not(.light-theme) .filter-btn.active {
+    background: var(--accent-soft) !important;
+    border-color: rgba(96, 165, 250, 0.7) !important;
+    color: #eff6ff !important;
+}
+
+body:not(.light-theme) .redeem-btn {
+    background: linear-gradient(135deg, var(--cat), #2563eb) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    color: #eff6ff !important;
+}
+
+body:not(.light-theme) .redeem-btn:hover {
+    background: linear-gradient(135deg, var(--cat), #1d4ed8) !important;
+    border-color: rgba(255, 255, 255, 0.34) !important;
+}
+
+body:not(.light-theme) .redeem-btn:disabled {
+    background: rgba(30, 41, 59, 0.72) !important;
+    color: #96a6bb !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+body:not(.light-theme) .hero-kicker {
+    border: 1px solid rgba(96, 165, 250, 0.34) !important;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.36), rgba(15, 23, 42, 0.66)) !important;
+    color: #dbeafe !important;
+}
+
+body:not(.light-theme) .hero p {
+    color: #9fb0c7 !important;
+}
+
+body:not(.light-theme) .rewards-headline p {
+    color: #8fa0b7 !important;
+}
+
+body:not(.light-theme) .reward-desc {
+    color: #9caec4 !important;
+}
