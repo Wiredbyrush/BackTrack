@@ -1,5 +1,10 @@
 // Avoid re-defining Supabase client if the script is loaded twice.
 if (!window.BackTrackDB) {
+    const ADMIN_OVERRIDE_EMAILS = new Set([
+        'rushwanthmahendran1@gmail.com',
+        'anithsascy09@gmail.com'
+    ]);
+
     // Supabase Configuration
     const SUPABASE_URL = 'https://imdumigrlvujbyvczbpm.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImltZHVtaWdybHZ1amJ5dmN6YnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NjcwMTQsImV4cCI6MjA4NDQ0MzAxNH0.cm68e3sGIolEqIl-H4vlJGhE7YISe1vKqAoQncKWYsE';
@@ -179,6 +184,12 @@ if (!window.BackTrackDB) {
 
     // Delete item
     async function deleteItem(id) {
+        const admin = await isAdmin();
+        if (!admin) {
+            console.warn('Blocked deleteItem: non-admin attempted to delete an item.');
+            return false;
+        }
+
         const { error } = await supabase
             .from('items')
             .delete()
@@ -303,14 +314,15 @@ if (!window.BackTrackDB) {
     async function isAdmin() {
         const user = await getCurrentUser();
         if (!user) return false;
+        const normalizedEmail = String(user.email || '').toLowerCase();
 
-        // Explicitly allow the primary developer email
-        if (user.email === 'rushwanthmahendran1@gmail.com') return true;
+        // Explicit override list for bootstrap admin access.
+        if (ADMIN_OVERRIDE_EMAILS.has(normalizedEmail)) return true;
 
         const { data, error } = await supabase
             .from('admins')
             .select('id')
-            .or(`user_id.eq.${user.id},email.eq.${user.email}`)
+            .or(`user_id.eq.${user.id},email.eq.${normalizedEmail}`)
             .limit(1);
 
         if (error) {

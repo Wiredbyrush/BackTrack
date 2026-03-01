@@ -272,13 +272,12 @@ CREATE POLICY "Admins can update items" ON items
     USING (auth.jwt()->>'email' IN (SELECT email FROM admins))
     WITH CHECK (auth.jwt()->>'email' IN (SELECT email FROM admins));
 
--- Allow users to delete their own items
-CREATE POLICY "Users can delete own items" ON items
-    FOR DELETE USING (auth.uid() = submitted_by);
-
 -- Allow admins to delete any items
 CREATE POLICY "Admins can delete items" ON items
-    FOR DELETE USING (auth.jwt()->>'email' IN (SELECT email FROM admins));
+    FOR DELETE USING (
+        auth.uid() IN (SELECT user_id FROM admins)
+        OR auth.jwt()->>'email' IN (SELECT email FROM admins WHERE email IS NOT NULL)
+    );
 
 -- Enable RLS on map tables
 ALTER TABLE map_rooms ENABLE ROW LEVEL SECURITY;

@@ -1451,9 +1451,8 @@
 
                 state.user = await BackTrackDB.getCurrentUser();
                 state.isAdmin = await BackTrackDB.isAdmin();
-                const isOwnerFallback = String(state.user?.email || '').toLowerCase() === 'rushwanthmahendran1@gmail.com';
 
-                if (!state.user || (!state.isAdmin && !isOwnerFallback)) {
+                if (!state.user || !state.isAdmin) {
                     showStatus('Admin access required. Log in with an admin account.');
                     return false;
                 }

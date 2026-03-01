@@ -142,8 +142,8 @@
 
       navRight.innerHTML = '';
 
-      // Add admin badge if user is rushwanthmahendran1@gmail.com
-      if (user.email === 'rushwanthmahendran1@gmail.com') {
+      // Add admin badge for admin users.
+      if (isAdmin) {
         const adminBadge = document.createElement('a');
         adminBadge.href = 'admin.html';
         adminBadge.className = 'admin-badge';
