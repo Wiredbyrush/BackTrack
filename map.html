@@ -1674,11 +1674,15 @@
                 } else {
                     ctxTitle.textContent = `${zone} (${items.length})`;
                     ctxBody.innerHTML = items.map(i => {
-                        const isBounty = i.status === 'lost'; // Assuming 'lost' implies a bounty/active search
+                        const isBounty = i.status === 'lost' || i.status === 'bounty' || Boolean(i.is_bounty);
+                        const urgencyRaw = String(i.urgency || '').toLowerCase();
+                        const urgencyBadge = (isBounty && urgencyRaw)
+                            ? `<span class="urgency-badge urgency-${urgencyRaw}" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); margin-left: 8px; vertical-align: middle; text-transform: capitalize;">${urgencyRaw}</span>`
+                            : '';
                         return `
                         <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}">
                             <div class="ctx-badge ${i.status}">${i.status}</div>
-                            <div class="ctx-name">${i.name || 'Unknown Item'}</div>
+                            <div class="ctx-name">${i.name || 'Unknown Item'}${urgencyBadge}</div>
                             <div class="ctx-meta">
                                 <span>${i.category || 'misc'}</span>
                             </div>
@@ -1793,11 +1797,15 @@
                 } else {
                     ctxTitle.textContent = `${room} (${roomItems.length})`;
                     ctxBody.innerHTML = roomItems.map(i => {
-                        const isBounty = i.status === 'lost';
+                        const isBounty = i.status === 'lost' || i.status === 'bounty' || Boolean(i.is_bounty);
+                        const urgencyRaw = String(i.urgency || '').toLowerCase();
+                        const urgencyBadge = (isBounty && urgencyRaw)
+                            ? `<span class="urgency-badge urgency-${urgencyRaw}" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); margin-left: 8px; vertical-align: middle; text-transform: capitalize;">${urgencyRaw}</span>`
+                            : '';
                         return `
                         <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}">
                             <div class="ctx-badge ${i.status}">${i.status}</div>
-                            <div class="ctx-name">${i.name || 'Unknown Item'}</div>
+                            <div class="ctx-name">${i.name || 'Unknown Item'}${urgencyBadge}</div>
                             <div class="ctx-meta">
                                 <span>${i.location || ''}</span>
                                 <span>${i.category || ''}</span>
@@ -1808,7 +1816,6 @@
                 ctxClose.style.display = 'block';
                 ctxPanel.classList.add('active');
             }
-
             /* ══════════════ EVENT HANDLERS ══════════════ */
 
             /* Campus zone clicks */

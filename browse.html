@@ -1064,8 +1064,8 @@
                 <div class="checkbox-group">
                     <label class="checkbox-item">
                         <input type="checkbox" checked>
-                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3"
-                                stroke-linecap="round" stroke-linejoin="round">
+                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+                                stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </span>
@@ -1073,8 +1073,8 @@
                     </label>
                     <label class="checkbox-item">
                         <input type="checkbox">
-                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3"
-                                stroke-linecap="round" stroke-linejoin="round">
+                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+                                stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </span>
@@ -1082,8 +1082,8 @@
                     </label>
                     <label class="checkbox-item">
                         <input type="checkbox">
-                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3"
-                                stroke-linecap="round" stroke-linejoin="round">
+                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+                                stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </span>
@@ -1091,8 +1091,8 @@
                     </label>
                     <label class="checkbox-item">
                         <input type="checkbox">
-                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3"
-                                stroke-linecap="round" stroke-linejoin="round">
+                        <span class="checkbox-box"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+                                stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </span>
@@ -1152,7 +1152,8 @@
                 <h3 class="filter-label">Saved</h3>
                 <label class="checkbox-item">
                     <input type="checkbox" id="savedToggle">
-                    <span class="checkbox-box"><svg aria-hidden="true" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round"
+                    <span class="checkbox-box"><svg aria-hidden="true" aria-hidden="true" viewBox="0 0 24 24"
+                            fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round"
                             stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
@@ -1166,8 +1167,8 @@
         <main class="content">
             <div class="search-container" data-voice-search="false">
                 <div class="search-bar">
-                    <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
@@ -2172,6 +2173,11 @@
             const pendingBadge = currentUserIsAdmin && String(item.status || '').toLowerCase() === 'pending'
                 ? '<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;border:1px solid rgba(234,179,8,0.45);background:rgba(234,179,8,0.16);color:#fde68a;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Pending</span>'
                 : '';
+            const isBounty = Boolean(item.is_bounty || item.isBounty) || String(item.status || '').toLowerCase() === 'bounty' || String(item.status || '').toLowerCase() === 'lost';
+            const urgencyRaw = String(item.urgency || '').toLowerCase();
+            const urgencyBadge = (isBounty && urgencyRaw)
+                ? `<span class="urgency-badge urgency-${urgencyRaw}" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); margin-left: 8px; vertical-align: middle; text-transform: capitalize;">${urgencyRaw}</span>`
+                : '';
             const deleteBtn = currentUserIsAdmin
                 ? `
                    <button type="button" class="admin-delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteItemCard('${item.id}'); return false;" aria-label="Delete Item" title="Delete Item">
@@ -2191,7 +2197,7 @@
                         </button>
                     </div>
                     <div class="item-info">
-                        <h3 class="item-name">${item.name}</h3>
+                        <h3 class="item-name">${item.name}${urgencyBadge}</h3>
                         ${pendingBadge}
                         <p class="item-date">${formatDate(item.date_lost)}</p>
                         <p class="item-location">${item.location}</p>

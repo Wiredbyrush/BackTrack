@@ -519,3 +519,4 @@ CREATE POLICY "Admins can insert admin messages" ON admin_messages
     FOR INSERT WITH CHECK (auth.uid() IN (SELECT user_id FROM admins));
 
 CREATE INDEX idx_admin_messages_created_at ON admin_messages(created_at DESC);
+ALTER TABLE items ADD COLUMN IF NOT EXISTS urgency VARCHAR(20) DEFAULT 'low' CHECK (urgency IN ('low', 'medium', 'high'));
