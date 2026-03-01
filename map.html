@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,167 +12,773 @@
     <script>window.__DISABLE_ANIMATIONS__ = true;</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#030712;color:#fff;min-height:100vh;overflow:hidden}
-        .nav-spacer{height:70px}
-        .map-page{display:flex;height:calc(100vh - 70px)}
-
-        /* ── Sidebar ── */
-        .sidebar{
-            width:280px;flex-shrink:0;overflow-y:auto;
-            background:rgba(3,7,18,0.96);border-right:1px solid rgba(148,163,184,0.1);padding:20px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
         }
-        .sidebar h2{font-size:17px;font-weight:700;color:#e2e8f0;margin-bottom:4px}
-        .sidebar .sub{font-size:12px;color:#64748b;line-height:1.5;margin-bottom:20px}
-        .legend-title{font-size:10px;font-weight:700;color:#475569;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:10px}
-        .legend{margin-bottom:16px}
-        .legend-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:12px;color:#94a3b8}
-        .dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-        .dot.bl{background:#3b82f6;box-shadow:0 0 6px #3b82f6}
-        .dot.gr{background:#22c55e;box-shadow:0 0 6px #22c55e}
-        .dot.rd{background:#ef4444;box-shadow:0 0 6px #ef4444}
-        .kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-        .kpi{background:rgba(15,23,42,0.5);border:1px solid rgba(148,163,184,0.1);border-radius:10px;padding:12px}
-        .kpi-val{font-size:20px;font-weight:700;color:#3b82f6}
-        .kpi-lbl{font-size:9px;font-weight:600;color:#475569;letter-spacing:.8px;text-transform:uppercase;margin-top:2px}
 
-        .loc-btn{
-            display:flex;align-items:center;justify-content:space-between;width:100%;
-            padding:9px 10px;margin-bottom:4px;border-radius:8px;cursor:pointer;
-            background:rgba(15,23,42,0.35);border:1px solid rgba(148,163,184,0.08);
-            color:#94a3b8;font-size:12px;font-family:inherit;transition:all .15s;
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #030712;
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden
         }
-        .loc-btn:hover{background:rgba(30,41,59,0.6);border-color:rgba(96,165,250,0.25);color:#e2e8f0}
-        .loc-btn.active{background:rgba(37,99,235,0.12);border-color:rgba(96,165,250,0.4);color:#e2e8f0}
-        .loc-btn .badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:rgba(148,163,184,0.08);color:#475569}
-        .loc-btn.has-items .badge{background:rgba(239,68,68,0.12);color:#f87171}
 
-        /* ── Back button (floor plan mode) ── */
-        .back-btn{
-            display:none;align-items:center;gap:6px;width:100%;padding:10px 12px;margin-bottom:12px;
-            border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;
-            background:rgba(37,99,235,0.1);border:1px solid rgba(96,165,250,0.25);color:#93c5fd;
-            transition:all .15s;
+        .nav-spacer {
+            height: 70px
         }
-        .back-btn:hover{background:rgba(37,99,235,0.18);border-color:rgba(96,165,250,0.4);color:#bfdbfe}
-        .back-btn svg{width:14px;height:14px;flex-shrink:0}
-        body.floor-mode .back-btn{display:flex}
 
-        /* ── Floor Tabs ── */
-        .floor-tabs{
-            display:none;gap:4px;margin-bottom:12px;
+        .map-page {
+            display: flex;
+            height: calc(100vh - 70px);
+            position: relative;
         }
-        body.floor-mode .floor-tabs{display:flex}
-        .floor-tab{
-            flex:1;padding:8px 0;text-align:center;border-radius:8px;cursor:pointer;
-            font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.5px;
-            background:rgba(15,23,42,0.4);border:1px solid rgba(148,163,184,0.1);color:#64748b;
-            transition:all .15s;
-        }
-        .floor-tab:hover{background:rgba(30,41,59,0.6);color:#94a3b8}
-        .floor-tab.active{background:rgba(37,99,235,0.15);border-color:rgba(96,165,250,0.4);color:#93c5fd}
 
-        /* ── Room list (floor plan sidebar) ── */
-        .room-list{display:none}
-        body.floor-mode .room-list{display:block}
-        body.floor-mode .campus-list{display:none}
+        /* ── Map Overlays & Floating Panels ── */
+        .map-overlay-left {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        /* Hide Hero Panel Entirely in Floor Mode */
+        body.floor-mode .hero-panel {
+            display: none !important;
+        }
+
+        .map-overlay-right {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 16px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .glass-panel {
+            background: rgba(3, 7, 18, 0.75);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            pointer-events: auto;
+            /* Re-enable clicks for the panel itself */
+        }
+
+        .panel h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .panel .sub {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        /* Typography */
+        .legend-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .text-neon-blue {
+            color: #38bdf8;
+            text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .text-neon-green {
+            color: #4ade80;
+            text-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+        }
+
+        .text-muted {
+            color: #64748b;
+        }
+
+        /* Context Sub-Panel (Replaces endless list) */
+        .context-panel {
+            width: 100%;
+            max-width: 360px;
+            max-height: calc(100vh - 300px);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-20px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .context-panel.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .context-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .context-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .context-body {
+            padding: 16px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Custom scrollbar for context body */
+        .context-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .context-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .context-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Item Cards inside Context Panel */
+        .ctx-item {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+        }
+
+        .ctx-item:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Bounties vs Normal */
+        .ctx-item.is-bounty {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .ctx-item.is-bounty:hover {
+            border-color: rgba(245, 158, 11, 0.6);
+        }
+
+        .ctx-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .ctx-meta {
+            font-size: 12px;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ctx-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .ctx-badge.bounty {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+
+        .ctx-badge.found {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+        }
+
+        /* Legend */
+        .sticky-legend {
+            width: 220px;
+            padding: 20px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot.bl {
+            background: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+        }
+
+        .dot.gr {
+            background: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+        }
+
+        .dot.pk {
+            background: #2dd4bf;
+            box-shadow: 0 0 10px rgba(45, 212, 191, 0.6);
+        }
+
+        .dot.rd {
+            background: #f87171;
+            box-shadow: 0 0 12px rgba(248, 113, 113, 0.8);
+        }
+
+        /* KPIs */
+        .kpi-row {
+            display: flex;
+            gap: 12px;
+            /* Tighter gap since width is smaller */
+        }
+
+        .kpi {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .kpi-val {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .kpi-lbl {
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        /* Controls Panel (Zoom) */
+        .ctrl-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+        }
+
+        .ctrl-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon-btn .icon {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        /* Floor Controls */
+        .floor-controls {
+            display: none;
+            /* Hidden by default, shown in floor mode */
+            width: 220px;
+            padding: 20px;
+        }
+
+        body.floor-mode .floor-controls {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floor-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .floor-tab {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* Hint for main building */
+        .enter-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px 16px;
+            color: #e2e8f0;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 50;
+        }
+
+        .enter-hint.show {
+            opacity: 1;
+        }
+
+        /* Map controls (zoom buttons) */
+        .ctrls {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .ctrl {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(3, 7, 18, 0.75);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.2s ease;
+        }
+
+        .ctrl:hover {
+            background: rgba(3, 7, 18, 0.9);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
 
         /* ── Map ── */
-        .map-wrap{flex:1;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 40% 40%,rgba(15,23,42,0.6),#030712)}
-        .map-inner{width:100%;height:100%;cursor:grab;user-select:none;transform-origin:0 0;transition:opacity .3s}
-        .map-inner:active{cursor:grabbing}
-        .map-inner svg{width:100%;height:100%}
-
-        /* ── Campus SVG ── */
-        .zone{cursor:pointer;transition:filter .2s,opacity .2s}
-        .zone:hover{filter:brightness(1.4) drop-shadow(0 0 12px currentColor)}
-        .zone.active-zone{filter:brightness(1.5) drop-shadow(0 0 16px currentColor)}
-        .zone-fill-b{fill:rgba(59,130,246,0.08);stroke:#3b82f6;stroke-width:2}
-        .zone-fill-g{fill:rgba(34,197,94,0.06);stroke:#22c55e;stroke-width:2}
-        .zone-fill-b:hover{fill:rgba(59,130,246,0.18)}
-        .zone-fill-g:hover{fill:rgba(34,197,94,0.16)}
-        .zone.has-items .zone-fill-b{fill:rgba(59,130,246,0.14);stroke-width:2.5}
-        .zone.has-items .zone-fill-g{fill:rgba(34,197,94,0.12);stroke-width:2.5}
-        .lbl{font-family:'Inter',sans-serif;pointer-events:none;text-anchor:middle;dominant-baseline:central}
-        .road-path{fill:none;stroke:#1e293b;stroke-linecap:round;stroke-linejoin:round}
-        .pk-line{stroke:rgba(148,163,184,0.06);stroke-width:0.5}
-        .field-line{stroke-width:1;opacity:0.2}
-
-        /* ── Floor Plan SVG ── */
-        #floorPlan{display:none;width:100%;height:100%}
-        body.floor-mode #floorPlan{display:block}
-        body.floor-mode #campusSvg{display:none}
-        .room{cursor:pointer;transition:fill .15s,filter .15s}
-        .room-shape{fill:rgba(59,130,246,0.05);stroke:#3b82f6;stroke-width:1.5;transition:fill .15s,stroke-width .15s}
-        .room:hover .room-shape{fill:rgba(59,130,246,0.15);stroke-width:2}
-        .room.has-items .room-shape{fill:rgba(239,68,68,0.1);stroke:#f87171;stroke-width:2}
-        .room.active-room .room-shape{fill:rgba(59,130,246,0.22);stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(59,130,246,0.4))}
-        .room-lbl{font-family:'Inter',sans-serif;pointer-events:none;text-anchor:middle;dominant-baseline:central;fill:#64748b;font-size:9px;font-weight:600}
-        .room.has-items .room-lbl{fill:#f87171}
-        .hallway{fill:rgba(30,41,59,0.15);stroke:none}
-        .wall{stroke:rgba(148,163,184,0.2);stroke-width:1;fill:none}
-        .floor-layer{transition:opacity .25s}
-
-        /* ── Item pins on floor plan ── */
-        .item-pin{cursor:pointer;transition:transform .15s}
-        .item-pin:hover{transform:scale(1.2)}
-        .pin-circle{fill:#ef4444;stroke:#fff;stroke-width:1.5;filter:drop-shadow(0 0 4px rgba(239,68,68,0.6))}
-        .pin-count{fill:#fff;font-family:'Inter',sans-serif;font-size:8px;font-weight:700;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-
-        /* ── Marker dots (campus view) ── */
-        .marker-dot{fill:#ef4444;stroke:#1e1e2e;stroke-width:2;cursor:pointer;filter:drop-shadow(0 0 4px #ef4444)}
-        .marker-dot:hover{fill:#fca5a5;filter:drop-shadow(0 0 8px #ef4444)}
-
-        /* ── Enter Building Hint ── */
-        .enter-hint{
-            position:absolute;bottom:70px;left:50%;transform:translateX(-50%);
-            padding:8px 16px;border-radius:99px;font-size:12px;font-weight:500;
-            background:rgba(37,99,235,0.15);border:1px solid rgba(96,165,250,0.3);
-            color:#93c5fd;backdrop-filter:blur(8px);pointer-events:none;
-            opacity:0;transition:opacity .3s;white-space:nowrap;
+        .map-wrap {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #000000;
+            /* Pure black background for neon contrast */
         }
-        .enter-hint.show{opacity:1}
 
-        /* ── Popup ── */
-        .popup{
-            position:absolute;display:none;z-index:1000;
-            background:rgba(3,7,18,0.97);border:1px solid rgba(148,163,184,0.15);
-            border-radius:12px;padding:16px;min-width:240px;max-width:320px;
-            box-shadow:0 20px 60px rgba(0,0,0,0.7);backdrop-filter:blur(20px);
+        .map-inner {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            user-select: none;
+            transform-origin: 0 0;
+            transition: opacity .3s
         }
-        .popup.open{display:block}
-        .popup-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-        .popup-head h3{font-size:14px;font-weight:700;color:#e2e8f0}
-        .popup-x{background:none;border:none;color:#475569;font-size:18px;cursor:pointer;padding:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:6px}
-        .popup-x:hover{background:rgba(255,255,255,0.06);color:#e2e8f0}
-        .popup-body{max-height:240px;overflow-y:auto}
-        .p-item{padding:8px 10px;background:rgba(15,23,42,0.4);border:1px solid rgba(148,163,184,0.08);border-radius:7px;margin-bottom:4px;font-size:12px;cursor:pointer;transition:border-color .15s}
-        .p-item:hover{border-color:rgba(96,165,250,0.3)}
-        .p-item-name{font-weight:600;color:#e2e8f0;margin-bottom:2px}
-        .p-item-meta{color:#64748b;font-size:11px}
-        .p-item-status{display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:600;margin-left:4px}
-        .p-item-status.found{background:rgba(34,197,94,0.12);color:#4ade80}
-        .p-item-status.claimed{background:rgba(251,191,36,0.12);color:#fbbf24}
-        .p-empty{text-align:center;padding:14px 6px;color:#475569;font-size:12px}
 
-        /* ── Controls ── */
-        .ctrls{position:absolute;bottom:20px;right:20px;display:flex;flex-direction:column;gap:4px;z-index:100}
-        .ctrl{
-            width:36px;height:36px;border-radius:8px;cursor:pointer;font-family:inherit;
-            background:rgba(3,7,18,0.9);border:1px solid rgba(148,163,184,0.12);
-            color:#94a3b8;font-size:16px;display:flex;align-items:center;justify-content:center;
-            backdrop-filter:blur(8px);transition:all .15s;
+        .map-inner:active {
+            cursor: grabbing
         }
-        .ctrl:hover{background:rgba(37,99,235,0.12);border-color:rgba(96,165,250,0.3);color:#e2e8f0}
 
-        @media(max-width:820px){.sidebar{display:none}}
+        .map-inner svg {
+            width: 100%;
+            height: 100%
+        }
+
+        /* ── Campus SVG (NEON AESTHETIC) ── */
+        .zone {
+            cursor: pointer;
+            transition: filter .3s ease, opacity .3s ease;
+        }
+
+        .zone:hover {
+            filter: brightness(1.5) drop-shadow(0 0 20px currentColor);
+        }
+
+        .zone.active-zone {
+            filter: brightness(1.8) drop-shadow(0 0 25px currentColor);
+        }
+
+        /* Blue Neon (Main Buildings) */
+        .zone-fill-b {
+            fill: rgba(56, 189, 248, 0.03);
+            stroke: #38bdf8;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+        }
+
+        /* Green Neon (Fields/Athletics) */
+        .zone-fill-g {
+            fill: rgba(74, 222, 128, 0.03);
+            stroke: #4ade80;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.6)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+        }
+
+        /* Cyan Neon (Parking/Aux) */
+        .zone-fill-p {
+            fill: rgba(45, 212, 191, 0.03);
+            stroke: #2dd4bf;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.6)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+        }
+
+        /* Hover Brightening */
+        .zone-fill-b:hover {
+            fill: rgba(56, 189, 248, 0.15);
+            stroke-width: 4;
+        }
+
+        .zone-fill-g:hover {
+            fill: rgba(74, 222, 128, 0.15);
+            stroke-width: 4;
+        }
+
+        .zone-fill-p:hover {
+            fill: rgba(45, 212, 191, 0.15);
+            stroke-width: 4;
+        }
+
+        /* If items present */
+        .zone.has-items .zone-fill-b,
+        .zone.has-items .zone-fill-g,
+        .zone.has-items .zone-fill-p {
+            fill: rgba(248, 113, 113, 0.1);
+            stroke: #f87171;
+            filter: drop-shadow(0 0 15px rgba(248, 113, 113, 0.6)) drop-shadow(0 0 2px #fff);
+        }
+
+        .lbl {
+            font-family: 'Inter', sans-serif;
+            pointer-events: none;
+            text-anchor: middle;
+            dominant-baseline: central;
+            opacity: 0.9;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.6);
+            letter-spacing: 0.5px;
+        }
+
+        .road-path {
+            fill: none;
+            stroke: #111827;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .pk-line {
+            stroke: rgba(45, 212, 191, 0.3);
+            stroke-width: 1;
+        }
+
+        .field-line {
+            stroke-width: 1.5;
+            opacity: 0.4;
+            stroke: #4ade80;
+            filter: drop-shadow(0 0 4px rgba(74, 222, 128, 0.4));
+        }
+
+        /* ── Floor Plan SVG (NEON) ── */
+        #floorPlan {
+            display: none;
+            width: 100%;
+            height: 100%
+        }
+
+        body.floor-mode #floorPlan {
+            display: block
+        }
+
+        body.floor-mode #campusSvg {
+            display: none
+        }
+
+        .room {
+            cursor: pointer;
+            transition: fill .2s, filter .2s
+        }
+
+        .room-shape {
+            fill: rgba(56, 189, 248, 0.02);
+            stroke: #38bdf8;
+            stroke-width: 2;
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+            transition: all 0.2s ease;
+        }
+
+        .room:hover .room-shape {
+            fill: rgba(56, 189, 248, 0.15);
+            stroke-width: 3;
+        }
+
+        .room.has-items .room-shape {
+            fill: rgba(248, 113, 113, 0.1);
+            stroke: #f87171;
+            stroke-width: 2.5;
+            filter: drop-shadow(0 0 12px rgba(248, 113, 113, 0.6));
+        }
+
+        .room.active-room .room-shape {
+            fill: rgba(56, 189, 248, 0.25);
+            stroke-width: 3.5;
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.8)) drop-shadow(0 0 2px #fff);
+        }
+
+        .room-lbl {
+            font-family: 'Inter', sans-serif;
+            pointer-events: none;
+            text-anchor: middle;
+            dominant-baseline: central;
+            fill: #94a3b8;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .room.has-items .room-lbl {
+            fill: #fca5a5;
+            text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+        }
+
+        .hallway {
+            fill: rgba(15, 23, 42, 0.3);
+            stroke: none
+        }
+
+        .wall {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 1.5;
+            fill: none
+        }
+
+        .floor-layer {
+            transition: opacity .25s
+        }
+
+        /* Item Pins */
+        .item-pin {
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .item-pin .pin-circle {
+            fill: #f87171;
+            filter: drop-shadow(0 0 8px rgba(248, 113, 113, 0.6));
+            transition: all 0.2s ease;
+        }
+
+        .item-pin:hover .pin-circle {
+            filter: drop-shadow(0 0 12px rgba(248, 113, 113, 0.8));
+            transform: scale(1.1);
+        }
+
+        .item-pin .pin-count {
+            font-family: 'Inter', sans-serif;
+            font-size: 9px;
+            font-weight: 800;
+            fill: #fff;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+
+        /* Floor Tabs */
+        .floor-tab:hover {
+            color: #e2e8f0;
+        }
+
+        .floor-tab.active {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.3);
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media(max-width:1100px) {
+            .map-overlay-left {
+                max-width: 300px;
+            }
+
+            .sticky-legend {
+                display: none;
+            }
+        }
+
+        @media(max-width:768px) {
+            .map-overlay-left {
+                top: auto;
+                bottom: 16px;
+                left: 16px;
+                right: 80px;
+                width: auto;
+                flex-direction: row;
+                height: 160px;
+            }
+
+            .hero-panel {
+                display: none;
+            }
+
+            .context-panel {
+                transform: translateY(10px);
+            }
+
+            .context-panel.active {
+                transform: translateY(0);
+            }
+
+            .map-overlay-right {
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .floor-controls {
+                position: fixed;
+                top: 90px;
+                left: 16px;
+                width: auto;
+                right: 16px;
+                display: flex !important;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px;
+            }
+
+            body:not(.floor-mode) .floor-controls {
+                display: none !important;
+            }
+
+            .floor-tabs {
+                margin: 0;
+            }
+
+            .floor-controls .legend-title {
+                display: none;
+            }
+
+            .back-btn {
+                margin-top: 0 !important;
+                width: auto !important;
+            }
+        }
     </style>
 </head>
+
 <body>
     <nav aria-label="Main navigation" role="navigation">
         <a href="index.html" class="nav-left" aria-label="BackTrack Home">
@@ -194,42 +801,88 @@
     <div class="nav-spacer"></div>
 
     <div class="map-page">
-        <div class="sidebar">
-            <h2 id="sidebarTitle">Denmark High School</h2>
-            <p class="sub" id="sidebarSub">Click any zone to see lost items. Click the main building to explore inside.</p>
-
-            <!-- Back to campus (only in floor mode) -->
-            <button class="back-btn" id="backBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-                Back to Campus
-            </button>
-
-            <!-- Floor tabs (only in floor mode) -->
-            <div class="floor-tabs" id="floorTabs">
-                <button class="floor-tab active" data-floor="1">Floor 1</button>
-                <button class="floor-tab" data-floor="2">Floor 2</button>
+        <!-- Dashboard/Map overlay panels -->
+        <div class="map-overlay-left">
+            <div class="panel glass-panel hero-panel">
+                <h2 id="sidebarTitle">Denmark High School</h2>
+                <p class="sub" id="sidebarSub">Click glowing zones to see lost items.</p>
+                <div class="kpi-row">
+                    <div class="kpi">
+                        <div class="kpi-val text-neon-blue" id="totalItems">0</div>
+                        <div class="kpi-lbl">LOST ITEMS</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-val text-neon-green" id="activeLocations">0</div>
+                        <div class="kpi-lbl">ACTIVE ZONES</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="legend">
-                <div class="legend-title">Legend</div>
-                <div class="legend-row"><span class="dot bl"></span>Academic / Indoor</div>
-                <div class="legend-row"><span class="dot gr"></span>Athletic / Outdoor</div>
-                <div class="legend-row"><span class="dot rd"></span>Lost Item Reported</div>
+            <!-- Context Panel (appears when a room with items is clicked) -->
+            <div class="panel glass-panel context-panel" id="contextPanel">
+                <div class="context-header">
+                    <h3 id="contextTitle">Select a Zone</h3>
+                    <button class="icon-btn" id="closeContextBtn" style="display:none;" aria-label="Close">
+                        <svg viewBox="0 0 24 24" fill="none" class="icon" aria-hidden="true">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="context-body" id="contextBody">
+                    <div class="text-muted" style="font-size: 13px; text-align: center; padding: 20px 0;">
+                        No active zone selected
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ControlsOverlay -->
+        <div class="map-overlay-right">
+            <!-- Floor Control Panel (Only visible in Floor Mode) -->
+            <div class="panel glass-panel floor-controls" id="floorControlsPanel">
+                <div class="legend-title" style="margin-bottom: 8px;">LEVEL</div>
+                <div class="floor-tabs" id="floorTabs">
+                    <button class="floor-tab active" data-floor="1">Floor 1</button>
+                    <button class="floor-tab" data-floor="2">Floor 2</button>
+                </div>
+                <button class="action-btn back-btn" id="backBtn" style="margin-top: 12px; width: 100%;">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon" aria-hidden="true">
+                        <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Campus View
+                </button>
             </div>
 
-            <div class="kpi-row">
-                <div class="kpi"><div class="kpi-val" id="totalItems">0</div><div class="kpi-lbl">Lost Items</div></div>
-                <div class="kpi"><div class="kpi-val" id="activeLocations">0</div><div class="kpi-lbl">Active Areas</div></div>
+            <div class="panel glass-panel sticky-legend">
+                <div class="legend-title">ZONES</div>
+                <div class="legend-row"><span class="dot bl"></span>Main Building</div>
+                <div class="legend-row"><span class="dot gr"></span>Athletics / Fields</div>
+                <div class="legend-row"><span class="dot pk"></span>Parking / Aux</div>
+                <div class="legend-row" style="margin-top:10px;"><span class="dot rd"></span><span
+                        style="color:#f87171; font-weight:600;">Lost Items Present</span></div>
             </div>
 
-            <div class="campus-list">
-                <div class="legend-title">Locations</div>
-                <div id="locList"></div>
-            </div>
-
-            <div class="room-list">
-                <div class="legend-title" id="roomListTitle">Floor 1 Rooms</div>
-                <div id="roomLocList"></div>
+            <div class="ctrl-group glass-panel">
+                <button class="icon-btn" id="zoomInBtn" aria-label="Zoom In">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="ctrl-divider"></div>
+                <button class="icon-btn" id="zoomOutBtn" aria-label="Zoom Out">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon" aria-hidden="true">
+                        <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="ctrl-divider"></div>
+                <button class="icon-btn" id="resetZoomBtn" aria-label="Reset View">
+                    <svg viewBox="0 0 24 24" fill="none" class="icon" aria-hidden="true">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -241,130 +894,240 @@
                      ════════════════════════════════════════════ -->
                 <svg id="campusSvg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid meet">
                     <defs>
-                        <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-                            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(148,163,184,0.03)" stroke-width="0.5"/>
+                        <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.03)"
+                                stroke-width="0.5" />
                         </pattern>
+
+                        <!-- Notification Glowing Dot -->
+                        <radialGradient id="glowRed" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#f87171" stop-opacity="1" />
+                            <stop offset="50%" stop-color="#ef4444" stop-opacity="0.8" />
+                            <stop offset="100%" stop-color="#b91c1c" stop-opacity="0" />
+                        </radialGradient>
                     </defs>
-                    <rect width="1200" height="900" fill="url(#grid)"/>
+                    <rect width="1200" height="900" fill="url(#grid)" />
 
                     <!-- Roads -->
-                    <path d="M 80,110 C 80,70 110,50 150,50 L 440,50 C 460,50 475,55 480,70 L 480,140 L 560,140 L 560,50 L 1100,50 C 1140,50 1160,80 1160,110 L 1160,760 C 1160,800 1130,830 1100,830 L 150,830 C 110,830 80,800 80,760 Z" class="road-path" stroke-width="28" opacity="0.2"/>
-                    <line x1="560" y1="50" x2="560" y2="830" class="road-path" stroke-width="20" opacity="0.15"/>
-                    <line x1="80" y1="520" x2="560" y2="520" class="road-path" stroke-width="16" opacity="0.12"/>
-                    <line x1="300" y1="830" x2="300" y2="720" class="road-path" stroke-width="12" opacity="0.1"/>
-
-                    <!-- Parking -->
-                    <g opacity="0.35">
-                        <rect x="475" y="80" width="90" height="360" rx="3" fill="rgba(30,41,59,0.3)" stroke="#1e293b" stroke-width="1"/>
-                        <line x1="480" y1="110" x2="560" y2="110" class="pk-line"/><line x1="480" y1="140" x2="560" y2="140" class="pk-line"/>
-                        <line x1="480" y1="170" x2="560" y2="170" class="pk-line"/><line x1="480" y1="200" x2="560" y2="200" class="pk-line"/>
-                        <line x1="480" y1="230" x2="560" y2="230" class="pk-line"/><line x1="480" y1="260" x2="560" y2="260" class="pk-line"/>
-                        <line x1="480" y1="290" x2="560" y2="290" class="pk-line"/><line x1="480" y1="320" x2="560" y2="320" class="pk-line"/>
-                        <line x1="480" y1="350" x2="560" y2="350" class="pk-line"/><line x1="480" y1="380" x2="560" y2="380" class="pk-line"/>
-                        <line x1="480" y1="410" x2="560" y2="410" class="pk-line"/>
-                    </g>
-                    <g opacity="0.3">
-                        <rect x="420" y="470" width="130" height="50" rx="2" fill="rgba(30,41,59,0.3)" stroke="#1e293b" stroke-width="0.8"/>
-                        <line x1="445" y1="472" x2="445" y2="518" class="pk-line"/><line x1="470" y1="472" x2="470" y2="518" class="pk-line"/>
-                        <line x1="495" y1="472" x2="495" y2="518" class="pk-line"/><line x1="520" y1="472" x2="520" y2="518" class="pk-line"/>
-                    </g>
+                    <path class="road-path" stroke-width="20" opacity="0.3"
+                        d="M 50,850 L 1150,850 M 580,50 L 580,850 M 760,50 L 760,850" />
 
                     <!-- Tennis Courts -->
                     <g class="zone" data-zone="Tennis Courts">
-                        <rect x="100" y="75" width="75" height="95" rx="3" class="zone-fill-b"/>
-                        <rect x="185" y="75" width="75" height="95" rx="3" class="zone-fill-b"/>
-                        <rect x="270" y="75" width="75" height="95" rx="3" class="zone-fill-b"/>
-                        <rect x="100" y="180" width="75" height="95" rx="3" class="zone-fill-b"/>
-                        <rect x="185" y="180" width="75" height="95" rx="3" class="zone-fill-b"/>
-                        <rect x="270" y="180" width="75" height="95" rx="3" class="zone-fill-b"/>
-                        <line x1="137" y1="78" x2="137" y2="167" stroke="#3b82f6" stroke-width="0.6" opacity="0.3"/>
-                        <line x1="222" y1="78" x2="222" y2="167" stroke="#3b82f6" stroke-width="0.6" opacity="0.3"/>
-                        <line x1="307" y1="78" x2="307" y2="167" stroke="#3b82f6" stroke-width="0.6" opacity="0.3"/>
-                        <line x1="137" y1="183" x2="137" y2="272" stroke="#3b82f6" stroke-width="0.6" opacity="0.3"/>
-                        <line x1="222" y1="183" x2="222" y2="272" stroke="#3b82f6" stroke-width="0.6" opacity="0.3"/>
-                        <line x1="307" y1="183" x2="307" y2="272" stroke="#3b82f6" stroke-width="0.6" opacity="0.3"/>
-                        <text x="222" y="155" class="lbl" fill="#3b82f6" font-size="11" font-weight="600">TENNIS COURTS</text>
+                        <rect x="60" y="60" width="40" height="80" rx="3" class="zone-fill-b" />
+                        <rect x="110" y="60" width="40" height="80" rx="3" class="zone-fill-b" />
+                        <rect x="160" y="60" width="40" height="80" rx="3" class="zone-fill-b" />
+                        <line x1="80" y1="60" x2="80" y2="140" stroke="#3b82f6" stroke-width="0.6" opacity="0.3" />
+                        <line x1="130" y1="60" x2="130" y2="140" stroke="#3b82f6" stroke-width="0.6" opacity="0.3" />
+                        <line x1="180" y1="60" x2="180" y2="140" stroke="#3b82f6" stroke-width="0.6" opacity="0.3" />
+                        <text x="110" y="160" class="lbl" fill="#60a5fa" font-size="9" font-weight="700">TENNIS
+                            COURTS</text>
                     </g>
 
-                    <!-- Main Building (clickable to enter floor plan) -->
+                    <!-- Bus Lot (Left side of Main Building) -->
+                    <g class="zone" data-zone="Bus Lot">
+                        <rect x="25" y="180" width="40" height="570" rx="3" class="zone-fill-p" />
+                        <g transform="translate(25, 180)">
+                            <line x1="0" y1="0" x2="40" y2="0" class="pk-line" />
+                            <line x1="0" y1="30" x2="40" y2="30" class="pk-line" />
+                            <line x1="0" y1="60" x2="40" y2="60" class="pk-line" />
+                            <line x1="0" y1="90" x2="40" y2="90" class="pk-line" />
+                            <line x1="0" y1="120" x2="40" y2="120" class="pk-line" />
+                            <line x1="0" y1="150" x2="40" y2="150" class="pk-line" />
+                            <line x1="0" y1="180" x2="40" y2="180" class="pk-line" />
+                            <line x1="0" y1="210" x2="40" y2="210" class="pk-line" />
+                            <line x1="0" y1="240" x2="40" y2="240" class="pk-line" />
+                            <line x1="0" y1="270" x2="40" y2="270" class="pk-line" />
+                            <line x1="0" y1="300" x2="40" y2="300" class="pk-line" />
+                            <line x1="0" y1="330" x2="40" y2="330" class="pk-line" />
+                            <line x1="0" y1="360" x2="40" y2="360" class="pk-line" />
+                            <line x1="0" y1="390" x2="40" y2="390" class="pk-line" />
+                            <line x1="0" y1="420" x2="40" y2="420" class="pk-line" />
+                            <line x1="0" y1="450" x2="40" y2="450" class="pk-line" />
+                            <line x1="0" y1="480" x2="40" y2="480" class="pk-line" />
+                            <line x1="0" y1="510" x2="40" y2="510" class="pk-line" />
+                            <line x1="0" y1="540" x2="40" y2="540" class="pk-line" />
+                            <line x1="0" y1="570" x2="40" y2="570" class="pk-line" />
+                        </g>
+                        <text x="45" y="465" class="lbl" fill="#2dd4bf" font-size="10" font-weight="700"
+                            transform="rotate(-90 45,465)">BUS LOT</text>
+                    </g>
+
+                    <!-- Senior / Extra Student Parking (Top Center) -->
+                    <g class="zone" data-zone="Student Parking">
+                        <rect x="250" y="70" width="160" height="70" rx="4" class="zone-fill-p" />
+                        <g transform="translate(260, 70)">
+                            <line x1="0" y1="0" x2="0" y2="35" class="pk-line" />
+                            <line x1="20" y1="0" x2="20" y2="35" class="pk-line" />
+                            <line x1="40" y1="0" x2="40" y2="35" class="pk-line" />
+                            <line x1="60" y1="0" x2="60" y2="35" class="pk-line" />
+                            <line x1="80" y1="0" x2="80" y2="35" class="pk-line" />
+                            <line x1="100" y1="0" x2="100" y2="35" class="pk-line" />
+                            <line x1="120" y1="0" x2="120" y2="35" class="pk-line" />
+                            <line x1="140" y1="0" x2="140" y2="35" class="pk-line" />
+                            <line x1="0" y1="70" x2="0" y2="35" class="pk-line" />
+                            <line x1="20" y1="70" x2="20" y2="35" class="pk-line" />
+                            <line x1="40" y1="70" x2="40" y2="35" class="pk-line" />
+                            <line x1="60" y1="70" x2="60" y2="35" class="pk-line" />
+                            <line x1="80" y1="70" x2="80" y2="35" class="pk-line" />
+                            <line x1="100" y1="70" x2="100" y2="35" class="pk-line" />
+                            <line x1="120" y1="70" x2="120" y2="35" class="pk-line" />
+                            <line x1="140" y1="70" x2="140" y2="35" class="pk-line" />
+                        </g>
+                        <text x="330" y="105" class="lbl" fill="#2dd4bf" font-size="10" font-weight="700">SENIOR
+                            PARKING</text>
+                    </g>
+
+                    <!-- Main Building (click to enter floor plan) -->
                     <g class="zone" data-zone="Main Building" id="mainBuildingZone">
-                        <path d="M 130,310 L 130,300 L 180,300 L 180,310 L 260,310 L 260,300 L 340,300 L 340,310 L 455,310 L 455,520 L 400,520 L 400,560 L 340,560 L 340,520 L 210,520 L 210,560 L 160,560 L 160,520 L 110,520 L 110,310 Z" class="zone-fill-b" stroke-width="2.5"/>
-                        <line x1="220" y1="315" x2="220" y2="515" stroke="#3b82f6" stroke-width="0.4" opacity="0.12"/>
-                        <line x1="340" y1="315" x2="340" y2="515" stroke="#3b82f6" stroke-width="0.4" opacity="0.12"/>
-                        <line x1="115" y1="400" x2="450" y2="400" stroke="#3b82f6" stroke-width="0.4" opacity="0.12"/>
-                        <text x="280" y="400" class="lbl" fill="#3b82f6" font-size="14" font-weight="700">MAIN BUILDING</text>
-                        <text x="280" y="420" class="lbl" fill="#3b82f6" font-size="9" font-weight="500" opacity="0.5">Click to explore floors</text>
+                        <path d="M 80,180 L 480,180 L 480,350 L 550,350 L 550,750 L 80,750 Z" class="zone-fill-b"
+                            stroke-width="3" />
+                        <text x="315" y="465" class="lbl" fill="#60a5fa" font-size="18" font-weight="800"
+                            letter-spacing="1">MAIN BUILDING</text>
+                        <text x="315" y="490" class="lbl" fill="#60a5fa" font-size="11" font-weight="500"
+                            opacity="0.8">Click to explore inside</text>
+                        <!-- Topographic details -->
+                        <line x1="80" y1="280" x2="480" y2="280" stroke="#3b82f6" stroke-width="0.75" opacity="0.2" />
+                        <line x1="300" y1="180" x2="300" y2="750" stroke="#3b82f6" stroke-width="0.75" opacity="0.2" />
+                        <rect x="120" y="210" width="120" height="40" fill="none" stroke="#3b82f6" stroke-width="0.75"
+                            opacity="0.2" />
+                        <rect x="330" y="210" width="120" height="40" fill="none" stroke="#3b82f6" stroke-width="0.75"
+                            opacity="0.2" />
+                        <rect x="120" y="600" width="120" height="80" fill="none" stroke="#3b82f6" stroke-width="0.75"
+                            opacity="0.2" />
+                        <rect x="330" y="600" width="160" height="120" fill="none" stroke="#3b82f6" stroke-width="0.75"
+                            opacity="0.2" />
                     </g>
 
-                    <!-- Cafeteria -->
-                    <g class="zone" data-zone="Cafeteria">
-                        <rect x="110" y="590" width="150" height="110" rx="4" class="zone-fill-b"/>
-                        <text x="185" y="650" class="lbl" fill="#3b82f6" font-size="11" font-weight="600">CAFETERIA</text>
+                    <!-- The Barn -->
+                    <g class="zone" data-zone="The Barn">
+                        <path d="M 430,830 L 500,790 L 570,830 L 570,880 L 430,880 Z" class="zone-fill-b" />
+                        <rect x="475" y="845" width="50" height="35" rx="3" fill="none" stroke="#38bdf8"
+                            stroke-width="1.5" opacity="0.3" />
+                        <line x1="475" y1="862" x2="525" y2="862" stroke="#38bdf8" stroke-width="0.75" opacity="0.3" />
+                        <line x1="500" y1="845" x2="500" y2="880" stroke="#38bdf8" stroke-width="0.75" opacity="0.3" />
+                        <text x="500" y="860" class="lbl" fill="#60a5fa" font-size="9" font-weight="700">THE BARN</text>
                     </g>
 
-                    <!-- Student Commons -->
-                    <g class="zone" data-zone="Student Commons">
-                        <rect x="280" y="600" width="110" height="85" rx="4" class="zone-fill-b"/>
-                        <text x="335" y="647" class="lbl" fill="#3b82f6" font-size="10" font-weight="600">COMMONS</text>
+                    <!-- Visitor Parking -->
+                    <g class="zone" data-zone="Visitor Parking">
+                        <rect x="610" y="80" width="120" height="200" rx="4" class="zone-fill-p" />
+                        <g transform="translate(615, 95)">
+                            <line x1="0" y1="0" x2="110" y2="0" class="pk-line" />
+                            <line x1="0" y1="20" x2="110" y2="20" class="pk-line" />
+                            <line x1="0" y1="40" x2="110" y2="40" class="pk-line" />
+                            <line x1="0" y1="60" x2="110" y2="60" class="pk-line" />
+                            <line x1="0" y1="80" x2="110" y2="80" class="pk-line" />
+                            <line x1="0" y1="100" x2="110" y2="100" class="pk-line" />
+                            <line x1="0" y1="120" x2="110" y2="120" class="pk-line" />
+                            <line x1="0" y1="140" x2="110" y2="140" class="pk-line" />
+                            <line x1="0" y1="160" x2="110" y2="160" class="pk-line" />
+                        </g>
+                        <text x="670" y="300" class="lbl" fill="#2dd4bf" font-size="10" font-weight="600">VISITOR
+                            PARKING</text>
                     </g>
 
-                    <!-- Portables -->
-                    <g class="zone" data-zone="Portables">
-                        <rect x="105" y="730" width="40" height="32" rx="2" class="zone-fill-b"/>
-                        <rect x="155" y="730" width="40" height="32" rx="2" class="zone-fill-b"/>
-                        <rect x="105" y="772" width="40" height="32" rx="2" class="zone-fill-b"/>
-                        <rect x="155" y="772" width="40" height="32" rx="2" class="zone-fill-b"/>
-                        <text x="150" y="822" class="lbl" fill="#3b82f6" font-size="9" font-weight="600" opacity="0.6">PORTABLES</text>
+                    <!-- Staff Parking -->
+                    <g class="zone" data-zone="Staff Parking">
+                        <rect x="610" y="330" width="120" height="150" rx="4" class="zone-fill-p" />
+                        <g transform="translate(615, 345)">
+                            <line x1="0" y1="0" x2="110" y2="0" class="pk-line" />
+                            <line x1="0" y1="20" x2="110" y2="20" class="pk-line" />
+                            <line x1="0" y1="40" x2="110" y2="40" class="pk-line" />
+                            <line x1="0" y1="60" x2="110" y2="60" class="pk-line" />
+                            <line x1="0" y1="80" x2="110" y2="80" class="pk-line" />
+                            <line x1="0" y1="100" x2="110" y2="100" class="pk-line" />
+                            <line x1="0" y1="120" x2="110" y2="120" class="pk-line" />
+                        </g>
+                        <text x="670" y="500" class="lbl" fill="#2dd4bf" font-size="10" font-weight="600">STAFF
+                            PARKING</text>
                     </g>
 
-                    <!-- Media Center -->
-                    <g class="zone" data-zone="Media Center">
-                        <rect x="320" y="740" width="120" height="60" rx="4" class="zone-fill-b"/>
-                        <text x="380" y="775" class="lbl" fill="#3b82f6" font-size="10" font-weight="600">MEDIA CENTER</text>
+                    <!-- Student Parking -->
+                    <g class="zone" data-zone="Student Parking">
+                        <rect x="610" y="530" width="120" height="280" rx="4" class="zone-fill-p" />
+                        <g transform="translate(615, 545)">
+                            <line x1="0" y1="0" x2="110" y2="0" class="pk-line" />
+                            <line x1="0" y1="20" x2="110" y2="20" class="pk-line" />
+                            <line x1="0" y1="40" x2="110" y2="40" class="pk-line" />
+                            <line x1="0" y1="60" x2="110" y2="60" class="pk-line" />
+                            <line x1="0" y1="80" x2="110" y2="80" class="pk-line" />
+                            <line x1="0" y1="100" x2="110" y2="100" class="pk-line" />
+                            <line x1="0" y1="120" x2="110" y2="120" class="pk-line" />
+                            <line x1="0" y1="140" x2="110" y2="140" class="pk-line" />
+                            <line x1="0" y1="160" x2="110" y2="160" class="pk-line" />
+                            <line x1="0" y1="180" x2="110" y2="180" class="pk-line" />
+                            <line x1="0" y1="200" x2="110" y2="200" class="pk-line" />
+                            <line x1="0" y1="220" x2="110" y2="220" class="pk-line" />
+                            <line x1="0" y1="240" x2="110" y2="240" class="pk-line" />
+                        </g>
+                        <text x="670" y="830" class="lbl" fill="#2dd4bf" font-size="10" font-weight="600">STUDENT
+                            PARKING</text>
                     </g>
 
                     <!-- Track & Stadium -->
                     <g class="zone" data-zone="Track & Stadium">
-                        <rect x="780" y="60" width="340" height="220" rx="100" class="zone-fill-g" stroke-width="3"/>
-                        <rect x="820" y="95" width="260" height="150" rx="70" fill="none" stroke="#22c55e" stroke-width="0.8" opacity="0.2"/>
-                        <line x1="870" y1="105" x2="870" y2="235" stroke="#22c55e" class="field-line"/>
-                        <line x1="910" y1="100" x2="910" y2="240" stroke="#22c55e" class="field-line"/>
-                        <line x1="950" y1="98" x2="950" y2="242" stroke="#22c55e" class="field-line"/>
-                        <line x1="990" y1="100" x2="990" y2="240" stroke="#22c55e" class="field-line"/>
-                        <line x1="1030" y1="105" x2="1030" y2="235" stroke="#22c55e" class="field-line"/>
-                        <text x="950" y="170" class="lbl" fill="#22c55e" font-size="13" font-weight="700">TRACK &amp; STADIUM</text>
+                        <rect x="790" y="60" width="340" height="200" rx="100" class="zone-fill-g" stroke-width="3" />
+                        <rect x="840" y="90" width="240" height="140" rx="70" fill="none" stroke="#4ade80"
+                            stroke-width="1.5" opacity="0.4" />
+                        <line x1="890" y1="100" x2="890" y2="220" stroke="#4ade80" class="field-line" />
+                        <line x1="930" y1="95" x2="930" y2="225" stroke="#4ade80" class="field-line" />
+                        <line x1="970" y1="90" x2="970" y2="230" stroke="#4ade80" class="field-line" />
+                        <line x1="1010" y1="95" x2="1010" y2="225" stroke="#4ade80" class="field-line" />
+                        <line x1="1050" y1="100" x2="1050" y2="220" stroke="#4ade80" class="field-line" />
+                        <text x="960" y="160" class="lbl" fill="#4ade80" font-size="14" font-weight="800">TRACK &amp;
+                            STADIUM</text>
                     </g>
 
                     <!-- Soccer Field -->
                     <g class="zone" data-zone="Soccer Field">
-                        <rect x="770" y="330" width="300" height="175" rx="4" class="zone-fill-g"/>
-                        <line x1="920" y1="334" x2="920" y2="501" stroke="#22c55e" class="field-line"/>
-                        <circle cx="920" cy="417" r="30" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.2"/>
-                        <rect x="774" y="390" width="45" height="55" fill="none" stroke="#22c55e" stroke-width="0.8" opacity="0.15"/>
-                        <rect x="1021" y="390" width="45" height="55" fill="none" stroke="#22c55e" stroke-width="0.8" opacity="0.15"/>
-                        <text x="920" y="422" class="lbl" fill="#22c55e" font-size="12" font-weight="700">SOCCER FIELD</text>
+                        <rect x="810" y="290" width="300" height="170" rx="4" class="zone-fill-g" />
+                        <line x1="960" y1="290" x2="960" y2="460" stroke="#4ade80" class="field-line" />
+                        <circle cx="960" cy="375" r="30" fill="none" stroke="#4ade80" stroke-width="1.5"
+                            opacity="0.3" />
+                        <rect x="810" y="340" width="50" height="70" fill="none" stroke="#4ade80" stroke-width="1.5"
+                            opacity="0.25" />
+                        <rect x="1060" y="340" width="50" height="70" fill="none" stroke="#4ade80" stroke-width="1.5"
+                            opacity="0.25" />
+                        <text x="960" y="375" class="lbl" fill="#4ade80" font-size="13" font-weight="800">SOCCER
+                            FIELD</text>
                     </g>
 
-                    <!-- Baseball Field 1 -->
-                    <g class="zone" data-zone="Baseball Field 1">
-                        <path d="M 750,680 L 750,590 Q 750,560 780,560 L 820,560 Q 850,560 850,590 L 850,680 Q 850,750 800,780 Q 750,750 750,680 Z" class="zone-fill-g"/>
-                        <path d="M 800,600 L 825,630 L 800,660 L 775,630 Z" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.3"/>
-                        <path d="M 755,590 Q 800,540 845,590" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.25"/>
-                        <text x="800" y="720" class="lbl" fill="#22c55e" font-size="10" font-weight="600">FIELD 1</text>
+                    <!-- Baseball Field -->
+                    <g class="zone" data-zone="Baseball Field">
+                        <path d="M 790,750 L 790,570 A 180 180 0 0 1 970,750 Z" class="zone-fill-g" />
+                        <path d="M 790,670 A 80 80 0 0 1 870,750" fill="none" stroke="#4ade80" stroke-width="2"
+                            opacity="0.4" />
+                        <g transform="translate(820, 720) rotate(-45)">
+                            <rect x="0" y="0" width="40" height="40" fill="none" stroke="#4ade80" stroke-width="2"
+                                opacity="0.8" />
+                            <rect x="-3" y="-3" width="6" height="6" fill="#fff" />
+                            <rect x="37" y="-3" width="6" height="6" fill="#fff" />
+                            <rect x="37" y="37" width="6" height="6" fill="#fff" />
+                            <rect x="-3" y="37" width="6" height="6" fill="#fff" />
+                        </g>
+                        <circle cx="790" cy="750" r="10" fill="none" stroke="#4ade80" stroke-width="1.5"
+                            opacity="0.6" />
+                        <text x="880" y="660" class="lbl" fill="#4ade80" font-size="11"
+                            font-weight="800">BASEBALL</text>
                     </g>
 
-                    <!-- Baseball Field 2 -->
-                    <g class="zone" data-zone="Baseball Field 2">
-                        <path d="M 920,680 L 920,590 Q 920,560 950,560 L 990,560 Q 1020,560 1020,590 L 1020,680 Q 1020,750 970,780 Q 920,750 920,680 Z" class="zone-fill-g"/>
-                        <path d="M 970,600 L 995,630 L 970,660 L 945,630 Z" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.3"/>
-                        <path d="M 925,590 Q 970,540 1015,590" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.25"/>
-                        <text x="970" y="720" class="lbl" fill="#22c55e" font-size="10" font-weight="600">FIELD 2</text>
-                    </g>
-
-                    <!-- Practice Field -->
-                    <g class="zone" data-zone="Practice Field">
-                        <rect x="600" y="540" width="120" height="80" rx="3" class="zone-fill-g" stroke-dasharray="6,3"/>
-                        <text x="660" y="585" class="lbl" fill="#22c55e" font-size="9" font-weight="600" opacity="0.6">PRACTICE</text>
+                    <!-- Softball Field -->
+                    <g class="zone" data-zone="Softball Field">
+                        <path d="M 990,750 L 990,600 A 150 150 0 0 1 1140,750 Z" class="zone-fill-g" />
+                        <path d="M 990,680 A 70 70 0 0 1 1060,750" fill="none" stroke="#4ade80" stroke-width="2"
+                            opacity="0.4" />
+                        <g transform="translate(1015, 725) rotate(-45)">
+                            <rect x="0" y="0" width="35" height="35" fill="none" stroke="#4ade80" stroke-width="2"
+                                opacity="0.8" />
+                            <rect x="-3" y="-3" width="6" height="6" fill="#fff" />
+                            <rect x="32" y="-3" width="6" height="6" fill="#fff" />
+                            <rect x="32" y="32" width="6" height="6" fill="#fff" />
+                            <rect x="-3" y="32" width="6" height="6" fill="#fff" />
+                        </g>
+                        <circle cx="990" cy="750" r="8" fill="none" stroke="#4ade80" stroke-width="1.5" opacity="0.6" />
+                        <text x="1070" y="670" class="lbl" fill="#4ade80" font-size="10"
+                            font-weight="800">SOFTBALL</text>
                     </g>
                 </svg>
 
@@ -374,689 +1137,771 @@
                 <svg id="floorPlan" viewBox="0 0 900 650" preserveAspectRatio="xMidYMid meet">
                     <defs>
                         <pattern id="fpGrid" width="30" height="30" patternUnits="userSpaceOnUse">
-                            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(148,163,184,0.04)" stroke-width="0.5"/>
+                            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(148,163,184,0.04)"
+                                stroke-width="0.5" />
                         </pattern>
                     </defs>
-                    <rect width="900" height="650" fill="url(#fpGrid)"/>
+                    <rect width="900" height="650" fill="url(#fpGrid)" />
 
                     <!-- Building outer wall -->
-                    <rect x="40" y="30" width="820" height="590" rx="6" class="wall" stroke-width="2.5" stroke="rgba(59,130,246,0.35)"/>
+                    <rect x="40" y="30" width="820" height="590" rx="6" class="wall" stroke-width="2.5"
+                        stroke="rgba(59,130,246,0.35)" />
 
                     <!-- ── FLOOR 1 ── -->
                     <g id="floor1" class="floor-layer">
                         <!-- Main Hallway (horizontal) -->
-                        <rect x="40" y="270" width="820" height="60" class="hallway"/>
+                        <rect x="40" y="270" width="820" height="60" class="hallway" />
                         <!-- Vertical connector hallway -->
-                        <rect x="420" y="30" width="55" height="590" class="hallway"/>
+                        <rect x="420" y="30" width="55" height="590" class="hallway" />
 
                         <!-- FRONT OFFICE / ADMIN -->
                         <g class="room" data-room="Front Office" data-floor="1">
-                            <rect x="50" y="40" width="180" height="100" rx="4" class="room-shape"/>
+                            <rect x="50" y="40" width="180" height="100" rx="4" class="room-shape" />
                             <text x="140" y="90" class="room-lbl" font-size="11">FRONT OFFICE</text>
                         </g>
 
                         <!-- GUIDANCE -->
                         <g class="room" data-room="Guidance" data-floor="1">
-                            <rect x="240" y="40" width="170" height="100" rx="4" class="room-shape"/>
+                            <rect x="240" y="40" width="170" height="100" rx="4" class="room-shape" />
                             <text x="325" y="90" class="room-lbl" font-size="11">GUIDANCE</text>
                         </g>
 
                         <!-- GYMNASIUM -->
                         <g class="room" data-room="Gymnasium" data-floor="1">
-                            <rect x="485" y="40" width="365" height="220" rx="4" class="room-shape"/>
+                            <rect x="485" y="40" width="365" height="220" rx="4" class="room-shape" />
                             <text x="668" y="140" class="room-lbl" font-size="14">GYMNASIUM</text>
-                            <text x="668" y="160" class="room-lbl" font-size="8" opacity="0.5">Basketball · Volleyball</text>
+                            <text x="668" y="160" class="room-lbl" font-size="8" opacity="0.5">Basketball ·
+                                Volleyball</text>
                             <!-- Court lines -->
-                            <rect x="540" y="70" width="255" height="160" rx="0" fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15"/>
-                            <circle cx="668" cy="150" r="30" fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.1"/>
-                            <line x1="668" y1="70" x2="668" y2="230" stroke="#3b82f6" stroke-width="0.5" opacity="0.1"/>
+                            <rect x="520" y="60" width="295" height="180" rx="0" fill="none" stroke="#3b82f6"
+                                stroke-width="0.75" opacity="0.2" />
+                            <circle cx="668" cy="150" r="30" fill="none" stroke="#3b82f6" stroke-width="0.75"
+                                opacity="0.2" />
+                            <line x1="668" y1="60" x2="668" y2="240" stroke="#3b82f6" stroke-width="0.75"
+                                opacity="0.2" />
+                            <!-- Basketball Key left -->
+                            <rect x="520" y="110" width="50" height="80" fill="none" stroke="#3b82f6"
+                                stroke-width="0.75" opacity="0.2" />
+                            <path d="M 570,110 A 40 40 0 0 1 570,190" fill="none" stroke="#3b82f6" stroke-width="0.75"
+                                opacity="0.2" />
+                            <!-- Basketball Key right -->
+                            <rect x="765" y="110" width="50" height="80" fill="none" stroke="#3b82f6"
+                                stroke-width="0.75" opacity="0.2" />
+                            <path d="M 765,110 A 40 40 0 0 0 765,190" fill="none" stroke="#3b82f6" stroke-width="0.75"
+                                opacity="0.2" />
                         </g>
 
                         <!-- ROOM 101 -->
                         <g class="room" data-room="Room 101" data-floor="1">
-                            <rect x="50" y="150" width="130" height="110" rx="4" class="room-shape"/>
+                            <rect x="50" y="150" width="130" height="110" rx="4" class="room-shape" />
                             <text x="115" y="205" class="room-lbl">RM 101</text>
+                            <!-- Desks -->
+                            <g fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.15">
+                                <rect x="65" y="165" width="20" height="10" />
+                                <rect x="95" y="165" width="20" height="10" />
+                                <rect x="65" y="185" width="20" height="10" />
+                                <rect x="95" y="185" width="20" height="10" />
+                                <rect x="65" y="225" width="20" height="10" />
+                                <rect x="95" y="225" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 102 -->
                         <g class="room" data-room="Room 102" data-floor="1">
-                            <rect x="190" y="150" width="120" height="110" rx="4" class="room-shape"/>
+                            <rect x="190" y="150" width="120" height="110" rx="4" class="room-shape" />
                             <text x="250" y="205" class="room-lbl">RM 102</text>
                         </g>
 
                         <!-- ROOM 103 -->
                         <g class="room" data-room="Room 103" data-floor="1">
-                            <rect x="320" y="150" width="90" height="110" rx="4" class="room-shape"/>
+                            <rect x="320" y="150" width="90" height="110" rx="4" class="room-shape" />
                             <text x="365" y="205" class="room-lbl">RM 103</text>
                         </g>
 
                         <!-- WEIGHT ROOM -->
                         <g class="room" data-room="Weight Room" data-floor="1">
-                            <rect x="485" y="270" width="180" height="100" rx="4" class="room-shape"/>
+                            <rect x="485" y="270" width="180" height="100" rx="4" class="room-shape" />
                             <text x="575" y="325" class="room-lbl" font-size="10">WEIGHT ROOM</text>
                         </g>
 
                         <!-- ROOM 104 -->
                         <g class="room" data-room="Room 104" data-floor="1">
-                            <rect x="675" y="270" width="175" height="100" rx="4" class="room-shape"/>
+                            <rect x="675" y="270" width="175" height="100" rx="4" class="room-shape" />
                             <text x="762" y="325" class="room-lbl">RM 104</text>
                         </g>
 
                         <!-- ROOM 105 -->
                         <g class="room" data-room="Room 105" data-floor="1">
-                            <rect x="50" y="340" width="170" height="110" rx="4" class="room-shape"/>
+                            <rect x="50" y="340" width="170" height="110" rx="4" class="room-shape" />
                             <text x="135" y="400" class="room-lbl">RM 105</text>
                         </g>
 
                         <!-- ROOM 106 -->
                         <g class="room" data-room="Room 106" data-floor="1">
-                            <rect x="230" y="340" width="180" height="110" rx="4" class="room-shape"/>
+                            <rect x="230" y="340" width="180" height="110" rx="4" class="room-shape" />
                             <text x="320" y="400" class="room-lbl">RM 106</text>
                         </g>
 
-                        <!-- LIBRARY -->
-                        <g class="room" data-room="Library" data-floor="1">
-                            <rect x="485" y="380" width="365" height="120" rx="4" class="room-shape"/>
-                            <text x="668" y="440" class="room-lbl" font-size="12">LIBRARY</text>
-                            <text x="668" y="458" class="room-lbl" font-size="8" opacity="0.5">Media Center · Study</text>
+                        <!-- MEDIA CENTER -->
+                        <g class="room" data-room="Media Center" data-floor="1">
+                            <rect x="485" y="380" width="365" height="120" rx="4" class="room-shape" />
+                            <text x="668" y="440" class="room-lbl" font-size="12">MEDIA CENTER</text>
+                            <text x="668" y="458" class="room-lbl" font-size="8" opacity="0.5">Library · Study</text>
+                            <!-- Bookshelves -->
+                            <g fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.2">
+                                <line x1="510" y1="400" x2="560" y2="400" />
+                                <line x1="510" y1="420" x2="560" y2="420" />
+                                <line x1="510" y1="480" x2="560" y2="480" />
+                                <line x1="770" y1="400" x2="820" y2="400" />
+                                <line x1="770" y1="420" x2="820" y2="420" />
+                                <line x1="770" y1="480" x2="820" y2="480" />
+                            </g>
+                            <!-- Reading Tables -->
+                            <circle cx="535" cy="450" r="12" fill="none" stroke="#3b82f6" stroke-width="1"
+                                opacity="0.2" />
+                            <circle cx="795" cy="450" r="12" fill="none" stroke="#3b82f6" stroke-width="1"
+                                opacity="0.2" />
                         </g>
 
                         <!-- ROOM 107 -->
                         <g class="room" data-room="Room 107" data-floor="1">
-                            <rect x="50" y="460" width="130" height="150" rx="4" class="room-shape"/>
+                            <rect x="50" y="460" width="130" height="150" rx="4" class="room-shape" />
                             <text x="115" y="540" class="room-lbl">RM 107</text>
                         </g>
 
                         <!-- ROOM 108 -->
                         <g class="room" data-room="Room 108" data-floor="1">
-                            <rect x="190" y="460" width="120" height="150" rx="4" class="room-shape"/>
+                            <rect x="190" y="460" width="120" height="150" rx="4" class="room-shape" />
                             <text x="250" y="540" class="room-lbl">RM 108</text>
                         </g>
 
                         <!-- ROOM 109 -->
                         <g class="room" data-room="Room 109" data-floor="1">
-                            <rect x="320" y="460" width="90" height="150" rx="4" class="room-shape"/>
+                            <rect x="320" y="460" width="90" height="150" rx="4" class="room-shape" />
                             <text x="365" y="540" class="room-lbl">RM 109</text>
                         </g>
 
                         <!-- RESTROOMS F1 -->
                         <g class="room" data-room="Restrooms" data-floor="1">
-                            <rect x="485" y="510" width="120" height="100" rx="4" class="room-shape" stroke-dasharray="4,2"/>
+                            <rect x="485" y="510" width="120" height="100" rx="4" class="room-shape"
+                                stroke-dasharray="4,2" />
                             <text x="545" y="565" class="room-lbl" font-size="9">RESTROOMS</text>
                         </g>
 
                         <!-- TEACHER LOUNGE -->
                         <g class="room" data-room="Teacher Lounge" data-floor="1">
-                            <rect x="615" y="510" width="120" height="100" rx="4" class="room-shape"/>
+                            <rect x="615" y="510" width="120" height="100" rx="4" class="room-shape" />
                             <text x="675" y="555" class="room-lbl" font-size="9">TEACHERS</text>
                             <text x="675" y="570" class="room-lbl" font-size="8" opacity="0.5">LOUNGE</text>
                         </g>
 
-                        <!-- STORAGE -->
-                        <g class="room" data-room="Storage" data-floor="1">
-                            <rect x="745" y="510" width="105" height="100" rx="4" class="room-shape" stroke-dasharray="4,2"/>
-                            <text x="798" y="565" class="room-lbl" font-size="9">STORAGE</text>
+                        <!-- CAFETERIA -->
+                        <g class="room" data-room="Cafeteria" data-floor="1">
+                            <rect x="745" y="510" width="105" height="100" rx="4" class="room-shape" />
+                            <text x="798" y="565" class="room-lbl" font-size="9">CAFETERIA</text>
+                            <!-- Dining Tables -->
+                            <g fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.2">
+                                <line x1="760" y1="525" x2="780" y2="525" />
+                                <line x1="815" y1="525" x2="835" y2="525" />
+                                <line x1="760" y1="585" x2="780" y2="585" />
+                                <line x1="815" y1="585" x2="835" y2="585" />
+                            </g>
                         </g>
                     </g>
 
                     <!-- ── FLOOR 2 ── -->
                     <g id="floor2" class="floor-layer" opacity="0" style="pointer-events:none">
                         <!-- Main Hallway -->
-                        <rect x="40" y="270" width="820" height="60" class="hallway"/>
-                        <rect x="420" y="30" width="55" height="590" class="hallway"/>
+                        <rect x="40" y="270" width="820" height="60" class="hallway" />
+                        <rect x="420" y="30" width="55" height="590" class="hallway" />
 
                         <!-- ROOM 201 -->
                         <g class="room" data-room="Room 201" data-floor="2">
-                            <rect x="50" y="40" width="170" height="110" rx="4" class="room-shape"/>
+                            <rect x="50" y="40" width="170" height="110" rx="4" class="room-shape" />
                             <text x="135" y="95" class="room-lbl">RM 201</text>
+                            <!-- Desks -->
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="70" y="55" width="20" height="10" />
+                                <rect x="100" y="55" width="20" height="10" />
+                                <rect x="130" y="55" width="20" height="10" />
+                                <rect x="70" y="75" width="20" height="10" />
+                                <rect x="100" y="75" width="20" height="10" />
+                                <rect x="130" y="75" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 202 -->
                         <g class="room" data-room="Room 202" data-floor="2">
-                            <rect x="230" y="40" width="180" height="110" rx="4" class="room-shape"/>
+                            <rect x="230" y="40" width="180" height="110" rx="4" class="room-shape" />
                             <text x="320" y="95" class="room-lbl">RM 202</text>
+                            <!-- Desks -->
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="250" y="55" width="20" height="10" />
+                                <rect x="280" y="55" width="20" height="10" />
+                                <rect x="310" y="55" width="20" height="10" />
+                                <rect x="340" y="55" width="20" height="10" />
+                                <rect x="250" y="75" width="20" height="10" />
+                                <rect x="280" y="75" width="20" height="10" />
+                                <rect x="310" y="75" width="20" height="10" />
+                                <rect x="340" y="75" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- SCIENCE LAB 1 -->
                         <g class="room" data-room="Science Lab 1" data-floor="2">
-                            <rect x="485" y="40" width="180" height="110" rx="4" class="room-shape"/>
+                            <rect x="485" y="40" width="180" height="110" rx="4" class="room-shape" />
                             <text x="575" y="90" class="room-lbl" font-size="10">SCIENCE LAB 1</text>
+                            <!-- Lab Benches -->
+                            <rect x="500" y="55" width="40" height="15" fill="none" class="field-line" />
+                            <rect x="550" y="55" width="40" height="15" fill="none" class="field-line" />
+                            <rect x="600" y="55" width="40" height="15" fill="none" class="field-line" />
                         </g>
 
                         <!-- SCIENCE LAB 2 -->
                         <g class="room" data-room="Science Lab 2" data-floor="2">
-                            <rect x="675" y="40" width="175" height="110" rx="4" class="room-shape"/>
+                            <rect x="675" y="40" width="175" height="110" rx="4" class="room-shape" />
                             <text x="762" y="90" class="room-lbl" font-size="10">SCIENCE LAB 2</text>
+                            <!-- Lab Benches -->
+                            <rect x="690" y="55" width="40" height="15" fill="none" class="field-line" />
+                            <rect x="740" y="55" width="40" height="15" fill="none" class="field-line" />
+                            <rect x="790" y="55" width="40" height="15" fill="none" class="field-line" />
                         </g>
 
                         <!-- ROOM 203 -->
                         <g class="room" data-room="Room 203" data-floor="2">
-                            <rect x="50" y="160" width="130" height="100" rx="4" class="room-shape"/>
+                            <rect x="50" y="160" width="130" height="100" rx="4" class="room-shape" />
                             <text x="115" y="210" class="room-lbl">RM 203</text>
+                            <!-- Desks -->
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="65" y="175" width="20" height="10" />
+                                <rect x="95" y="175" width="20" height="10" />
+                                <rect x="65" y="195" width="20" height="10" />
+                                <rect x="95" y="195" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 204 -->
                         <g class="room" data-room="Room 204" data-floor="2">
-                            <rect x="190" y="160" width="120" height="100" rx="4" class="room-shape"/>
+                            <rect x="190" y="160" width="120" height="100" rx="4" class="room-shape" />
                             <text x="250" y="210" class="room-lbl">RM 204</text>
+                            <!-- Desks -->
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="205" y="175" width="20" height="10" />
+                                <rect x="235" y="175" width="20" height="10" />
+                                <rect x="205" y="195" width="20" height="10" />
+                                <rect x="235" y="195" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 205 -->
                         <g class="room" data-room="Room 205" data-floor="2">
-                            <rect x="320" y="160" width="90" height="100" rx="4" class="room-shape"/>
+                            <rect x="320" y="160" width="90" height="100" rx="4" class="room-shape" />
                             <text x="365" y="210" class="room-lbl">RM 205</text>
                         </g>
 
                         <!-- COMPUTER LAB -->
                         <g class="room" data-room="Computer Lab" data-floor="2">
-                            <rect x="485" y="160" width="180" height="100" rx="4" class="room-shape"/>
+                            <rect x="485" y="160" width="180" height="100" rx="4" class="room-shape" />
                             <text x="575" y="210" class="room-lbl" font-size="10">COMPUTER LAB</text>
+                            <!-- Computer Rows -->
+                            <line x1="500" y1="180" x2="650" y2="180" class="field-line" stroke-dasharray="4,6" />
+                            <line x1="500" y1="195" x2="650" y2="195" class="field-line" stroke-dasharray="4,6" />
+                            <line x1="500" y1="230" x2="650" y2="230" class="field-line" stroke-dasharray="4,6" />
                         </g>
 
                         <!-- ART ROOM -->
                         <g class="room" data-room="Art Room" data-floor="2">
-                            <rect x="675" y="160" width="175" height="100" rx="4" class="room-shape"/>
+                            <rect x="675" y="160" width="175" height="100" rx="4" class="room-shape" />
                             <text x="762" y="210" class="room-lbl" font-size="10">ART ROOM</text>
+                            <!-- Work Tables -->
+                            <circle cx="710" cy="185" r="12" fill="none" class="field-line" />
+                            <circle cx="760" cy="185" r="12" fill="none" class="field-line" />
+                            <circle cx="810" cy="185" r="12" fill="none" class="field-line" />
                         </g>
 
                         <!-- ROOM 206 -->
                         <g class="room" data-room="Room 206" data-floor="2">
-                            <rect x="50" y="340" width="170" height="130" rx="4" class="room-shape"/>
+                            <rect x="50" y="340" width="170" height="130" rx="4" class="room-shape" />
                             <text x="135" y="410" class="room-lbl">RM 206</text>
                         </g>
 
                         <!-- ROOM 207 -->
                         <g class="room" data-room="Room 207" data-floor="2">
-                            <rect x="230" y="340" width="180" height="130" rx="4" class="room-shape"/>
+                            <rect x="230" y="340" width="180" height="130" rx="4" class="room-shape" />
                             <text x="320" y="410" class="room-lbl">RM 207</text>
                         </g>
 
                         <!-- MUSIC ROOM -->
                         <g class="room" data-room="Music Room" data-floor="2">
-                            <rect x="485" y="340" width="180" height="130" rx="4" class="room-shape"/>
+                            <rect x="485" y="340" width="180" height="130" rx="4" class="room-shape" />
                             <text x="575" y="410" class="room-lbl" font-size="10">MUSIC ROOM</text>
+                            <!-- Practice Risers -->
+                            <path d="M 515,360 Q 575,390 635,360" fill="none" class="field-line" />
+                            <path d="M 535,370 Q 575,395 615,370" fill="none" class="field-line" />
+                            <path d="M 555,380 Q 575,400 595,380" fill="none" class="field-line" />
                         </g>
 
                         <!-- ROOM 208 -->
                         <g class="room" data-room="Room 208" data-floor="2">
-                            <rect x="675" y="340" width="175" height="130" rx="4" class="room-shape"/>
+                            <rect x="675" y="340" width="175" height="130" rx="4" class="room-shape" />
                             <text x="762" y="410" class="room-lbl">RM 208</text>
                         </g>
 
                         <!-- ROOM 209 -->
                         <g class="room" data-room="Room 209" data-floor="2">
-                            <rect x="50" y="480" width="170" height="130" rx="4" class="room-shape"/>
+                            <rect x="50" y="480" width="170" height="130" rx="4" class="room-shape" />
                             <text x="135" y="550" class="room-lbl">RM 209</text>
                         </g>
 
                         <!-- ROOM 210 -->
                         <g class="room" data-room="Room 210" data-floor="2">
-                            <rect x="230" y="480" width="180" height="130" rx="4" class="room-shape"/>
+                            <rect x="230" y="480" width="180" height="130" rx="4" class="room-shape" />
                             <text x="320" y="550" class="room-lbl">RM 210</text>
                         </g>
 
                         <!-- RESTROOMS F2 -->
                         <g class="room" data-room="Restrooms" data-floor="2">
-                            <rect x="485" y="480" width="120" height="130" rx="4" class="room-shape" stroke-dasharray="4,2"/>
+                            <rect x="485" y="480" width="120" height="130" rx="4" class="room-shape"
+                                stroke-dasharray="4,2" />
                             <text x="545" y="550" class="room-lbl" font-size="9">RESTROOMS</text>
                         </g>
 
                         <!-- ROOM 211 -->
                         <g class="room" data-room="Room 211" data-floor="2">
-                            <rect x="615" y="480" width="120" height="130" rx="4" class="room-shape"/>
+                            <rect x="615" y="480" width="120" height="130" rx="4" class="room-shape" />
                             <text x="675" y="550" class="room-lbl">RM 211</text>
                         </g>
 
                         <!-- ROOM 212 -->
                         <g class="room" data-room="Room 212" data-floor="2">
-                            <rect x="745" y="480" width="105" height="130" rx="4" class="room-shape"/>
+                            <rect x="745" y="480" width="105" height="130" rx="4" class="room-shape" />
                             <text x="798" y="550" class="room-lbl">RM 212</text>
                         </g>
                     </g>
 
                     <!-- Floor label -->
-                    <text id="floorLabel" x="450" y="645" class="lbl" fill="rgba(148,163,184,0.3)" font-size="11" font-weight="600">FLOOR 1 — MAIN BUILDING</text>
+                    <text id="floorLabel" x="450" y="645" class="lbl" fill="rgba(148,163,184,0.3)" font-size="11"
+                        font-weight="600">FLOOR 1 — MAIN BUILDING</text>
                 </svg>
             </div>
 
             <!-- Hint for main building -->
-            <div class="enter-hint" id="enterHint">Double-click to explore inside</div>
-
-            <div class="ctrls">
-                <button class="ctrl" id="zIn" title="Zoom In">+</button>
-                <button class="ctrl" id="zOut" title="Zoom Out">&minus;</button>
-                <button class="ctrl" id="zReset" title="Reset">&#x21BA;</button>
-            </div>
-
-            <div class="popup" id="popup">
-                <div class="popup-head">
-                    <h3 id="popTitle">Location</h3>
-                    <button class="popup-x" id="popClose">&times;</button>
-                </div>
-                <div class="popup-body" id="popBody"></div>
-            </div>
+            <div class="enter-hint" id="enterHint">Click to explore inside</div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script>
-    (function(){
-        /* ══════════════ STATE ══════════════ */
-        let items = [];
-        let scale = 1, tx = 0, ty = 0, dragging = false, sx, sy;
-        let currentFloor = 1;
-        let inFloorMode = false;
+        (function () {
+            /* ══════════════ STATE ══════════════ */
+            let items = [];
+            let allItems = []; // Added to support the new openCampusPopup logic
+            let scale = 1, tx = 0, ty = 0, dragging = false, sx, sy;
+            let currentFloor = 1;
+            let inFloorMode = false;
 
-        const mapInner = document.getElementById('mapInner');
-        const popup = document.getElementById('popup');
-        const popTitle = document.getElementById('popTitle');
-        const popBody = document.getElementById('popBody');
-        const locList = document.getElementById('locList');
-        const roomLocList = document.getElementById('roomLocList');
-        const enterHint = document.getElementById('enterHint');
+            const mapInner = document.getElementById('mapInner');
+            const ctxPanel = document.getElementById('contextPanel');
+            const ctxTitle = document.getElementById('contextTitle');
+            const ctxBody = document.getElementById('contextBody');
+            const ctxClose = document.getElementById('closeContextBtn');
 
-        const CAMPUS_ZONES = [
-            'Main Building','Cafeteria','Student Commons','Tennis Courts',
-            'Media Center','Portables',
-            'Track & Stadium','Soccer Field','Baseball Field 1','Baseball Field 2','Practice Field'
-        ];
-
-        /* All rooms per floor */
-        const FLOOR_ROOMS = {
-            1: ['Front Office','Guidance','Gymnasium','Room 101','Room 102','Room 103',
-                'Weight Room','Room 104','Room 105','Room 106','Library',
-                'Room 107','Room 108','Room 109','Restrooms','Teacher Lounge','Storage'],
-            2: ['Room 201','Room 202','Science Lab 1','Science Lab 2','Room 203','Room 204',
-                'Room 205','Computer Lab','Art Room','Room 206','Room 207','Music Room',
-                'Room 208','Room 209','Room 210','Restrooms','Room 211','Room 212']
-        };
-
-        /* ══════════════ LOCATION MAPPING ══════════════ */
-
-        /* Campus-level zone mapping */
-        function zoneFor(loc) {
-            if (!loc) return 'Main Building';
-            const l = loc.toLowerCase();
-            if (l.includes('cafeteria') || l.includes('lunch')) return 'Cafeteria';
-            if (l.includes('soccer')) return 'Soccer Field';
-            if (l.includes('track') || l.includes('stadium') || l.includes('football')) return 'Track & Stadium';
-            if (l.includes('baseball') || l.includes('diamond') || l.includes('softball')) return 'Baseball Field 1';
-            if (l.includes('tennis') || l.includes('court')) return 'Tennis Courts';
-            if (l.includes('commons')) return 'Student Commons';
-            if (l.includes('portable') || l.includes('trailer')) return 'Portables';
-            if (l.includes('practice')) return 'Practice Field';
-            return 'Main Building';
-        }
-
-        /* Room-level mapping (for items inside Main Building) */
-        function roomFor(loc) {
-            if (!loc) return null;
-            const l = loc.toLowerCase();
-            /* Exact room numbers */
-            const rmMatch = l.match(/(?:room|rm)\s*(\d+)/);
-            if (rmMatch) return 'Room ' + rmMatch[1];
-            /* Named rooms */
-            if (l.includes('front office') || l.includes('admin') || l.includes('office')) return 'Front Office';
-            if (l.includes('guidance') || l.includes('counselor')) return 'Guidance';
-            if (l.includes('gym')) return 'Gymnasium';
-            if (l.includes('weight')) return 'Weight Room';
-            if (l.includes('library') || l.includes('media center')) return 'Library';
-            if (l.includes('science lab 2') || l.includes('chem')) return 'Science Lab 2';
-            if (l.includes('science') || l.includes('lab 1') || l.includes('bio')) return 'Science Lab 1';
-            if (l.includes('computer') || l.includes('tech')) return 'Computer Lab';
-            if (l.includes('art')) return 'Art Room';
-            if (l.includes('music') || l.includes('band')) return 'Music Room';
-            if (l.includes('teacher') || l.includes('lounge') || l.includes('staff')) return 'Teacher Lounge';
-            if (l.includes('restroom') || l.includes('bathroom')) return 'Restrooms';
-            if (l.includes('storage')) return 'Storage';
-            return null;
-        }
-
-        /* Which floor is a room on? */
-        function floorForRoom(roomName) {
-            if (FLOOR_ROOMS[1].includes(roomName)) return 1;
-            if (FLOOR_ROOMS[2].includes(roomName)) return 2;
-            return 1;
-        }
-
-        /* Items that belong inside the main building */
-        function mainBuildingItems() {
-            return items.filter(i => zoneFor(i.location) === 'Main Building');
-        }
-
-        /* ══════════════ DATA LOADING ══════════════ */
-        async function loadItems() {
-            if (typeof BackTrackDB === 'undefined') return;
-            try {
-                const data = await BackTrackDB.getItems({ status: ['found', 'claimed'] });
-                items = data || [];
-                refreshCampus();
-                if (inFloorMode) refreshFloorPlan();
-            } catch(e) { console.error('Map load error:', e); }
-        }
-
-        /* ══════════════ CAMPUS VIEW ══════════════ */
-        function refreshCampus() {
-            document.getElementById('totalItems').textContent = items.length;
-            document.getElementById('activeLocations').textContent =
-                new Set(items.map(i => i.location).filter(Boolean)).size;
-
-            const counts = {};
-            items.forEach(i => { const z = zoneFor(i.location); counts[z] = (counts[z]||0) + 1; });
-
-            document.querySelectorAll('.zone').forEach(g => {
-                g.classList.toggle('has-items', (counts[g.dataset.zone]||0) > 0);
+            ctxClose.addEventListener('click', () => {
+                ctxPanel.classList.remove('active');
+                document.querySelectorAll('.zone').forEach(z => z.classList.remove('active-zone'));
+                document.querySelectorAll('.room').forEach(r => r.classList.remove('active-room'));
+                ctxTitle.textContent = 'Select a Zone';
+                ctxBody.innerHTML = '<div class="text-muted" style="font-size: 13px; text-align: center; padding: 20px 0;">No active zone selected</div>';
+                ctxClose.style.display = 'none';
             });
 
-            /* Remove old campus markers */
-            document.querySelectorAll('#campusSvg .marker-dot, #campusSvg .marker-count').forEach(el => el.remove());
+            const enterHint = document.getElementById('enterHint');
 
-            const svg = document.getElementById('campusSvg');
-            Object.entries(counts).forEach(([zone, count]) => {
-                const el = svg.querySelector(`[data-zone="${zone}"]`);
-                if (!el) return;
-                const shape = el.querySelector('rect, path');
-                if (!shape) return;
-                const bb = shape.getBBox();
-                const cx = bb.x + bb.width / 2, cy = bb.y + 16;
+            const CAMPUS_ZONES = [
+                'Main Building', 'Visitor Parking', 'Student Parking', 'Staff Parking', 'Bus Lot',
+                'Tennis Courts', 'The Barn', 'Track & Stadium', 'Soccer Field',
+                'Baseball Field', 'Softball Field'
+            ];
 
-                const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-                dot.setAttribute('cx', cx); dot.setAttribute('cy', cy);
-                dot.setAttribute('r', Math.min(10, 5 + count));
-                dot.classList.add('marker-dot'); dot.dataset.zone = zone;
-                dot.addEventListener('click', e => { e.stopPropagation(); openCampusPopup(zone, e); });
-                svg.appendChild(dot);
+            /* All rooms per floor */
+            const FLOOR_ROOMS = {
+                1: ['Front Office', 'Guidance', 'Gymnasium', 'Room 101', 'Room 102', 'Room 103',
+                    'Weight Room', 'Room 104', 'Room 105', 'Room 106', 'Media Center',
+                    'Room 107', 'Room 108', 'Room 109', 'Restrooms', 'Teacher Lounge', 'Cafeteria'],
+                2: ['Room 201', 'Room 202', 'Science Lab 1', 'Science Lab 2', 'Room 203', 'Room 204',
+                    'Room 205', 'Computer Lab', 'Art Room', 'Room 206', 'Room 207', 'Music Room',
+                    'Room 208', 'Room 209', 'Room 210', 'Restrooms', 'Room 211', 'Room 212']
+            };
+            const INDOOR_BUILDING_ZONES = new Set(['Main Building', 'Media Center', 'Cafeteria']);
 
-                if (count > 1) {
-                    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
-                    txt.setAttribute('x', cx); txt.setAttribute('y', cy + 3.5);
-                    txt.setAttribute('text-anchor','middle'); txt.setAttribute('fill','#fff');
-                    txt.setAttribute('font-size','8'); txt.setAttribute('font-weight','700');
-                    txt.setAttribute('font-family','Inter,sans-serif'); txt.setAttribute('pointer-events','none');
-                    txt.classList.add('marker-count'); txt.textContent = count;
-                    svg.appendChild(txt);
+            /* ══════════════ LOCATION MAPPING ══════════════ */
+
+            /* Campus-level zone mapping */
+            function zoneFor(loc) {
+                if (!loc) return 'Main Building';
+                const l = loc.toLowerCase();
+                if (l.includes('visitor parking')) return 'Visitor Parking';
+                if (l.includes('staff parking') || l.includes('faculty parking')) return 'Staff Parking';
+                if (l.includes('student parking') || l.includes('senior parking') || l.includes('car rider')) return 'Student Parking';
+                if (l.includes('bus') || l.includes('bus lot')) return 'Bus Lot';
+                if (l.includes('media center') || l.includes('media commons') || l.includes('library')) return 'Media Center';
+                if (l.includes('cafeteria') || l.includes('lunch') || l.includes('kitchen')) return 'Cafeteria';
+                if (l.includes('barn') || l.includes('ag room') || l.includes('agriculture')) return 'The Barn';
+                if (l.includes('soccer')) return 'Soccer Field';
+                if (l.includes('track') || l.includes('stadium') || l.includes('football')) return 'Track & Stadium';
+                if (l.includes('softball')) return 'Softball Field';
+                if (l.includes('baseball') || l.includes('diamond')) return 'Baseball Field';
+                if (l.includes('tennis') || l.includes('court')) return 'Tennis Courts';
+                if (l.includes('practice')) return 'Track & Stadium';
+                return 'Main Building';
+            }
+
+            /* Room-level mapping (for items inside Main Building) */
+            function roomFor(loc) {
+                if (!loc) return null;
+                const l = loc.toLowerCase();
+                /* Exact room numbers */
+                const rmMatch = l.match(/(?:room|rm)\s*(\d+)/);
+                if (rmMatch) return 'Room ' + rmMatch[1];
+                /* Named rooms */
+                if (l.includes('front office') || l.includes('admin') || l.includes('office')) return 'Front Office';
+                if (l.includes('guidance') || l.includes('counselor')) return 'Guidance';
+                if (l.includes('gym')) return 'Gymnasium';
+                if (l.includes('weight')) return 'Weight Room';
+                if (l.includes('library') || l.includes('media center') || l.includes('media commons')) return 'Media Center';
+                if (l.includes('cafeteria') || l.includes('lunch') || l.includes('kitchen')) return 'Cafeteria';
+                if (l.includes('science lab 2') || l.includes('chem')) return 'Science Lab 2';
+                if (l.includes('science') || l.includes('lab 1') || l.includes('bio')) return 'Science Lab 1';
+                if (l.includes('computer') || l.includes('tech')) return 'Computer Lab';
+                if (l.includes('art')) return 'Art Room';
+                if (l.includes('music') || l.includes('band')) return 'Music Room';
+                if (l.includes('teacher') || l.includes('lounge') || l.includes('staff')) return 'Teacher Lounge';
+                if (l.includes('restroom') || l.includes('bathroom')) return 'Restrooms';
+                if (l.includes('storage')) return 'Cafeteria';
+                return null;
+            }
+
+            /* Which floor is a room on? */
+            function floorForRoom(roomName) {
+                if (FLOOR_ROOMS[1].includes(roomName)) return 1;
+                if (FLOOR_ROOMS[2].includes(roomName)) return 2;
+                return 1;
+            }
+
+            /* Items shown on the indoor floor plan */
+            function mainBuildingItems() {
+                return items.filter(i => INDOOR_BUILDING_ZONES.has(zoneFor(i.location)));
+            }
+
+            /* ══════════════ DATA LOADING ══════════════ */
+            async function loadItems() {
+                if (typeof BackTrackDB === 'undefined') return;
+                try {
+                    const data = await BackTrackDB.getItems({ status: ['found', 'claimed'] });
+                    items = data || [];
+                    allItems = data || []; // Initialize allItems
+                    refreshCampus();
+                    if (inFloorMode) refreshFloorPlan();
+                } catch (e) { console.error('Map load error:', e); }
+            }
+
+            /* ══════════════ CAMPUS VIEW ══════════════ */
+            function refreshCampus() {
+                document.getElementById('totalItems').textContent = items.length;
+                document.getElementById('activeLocations').textContent =
+                    new Set(items.map(i => i.location).filter(Boolean)).size;
+
+                const counts = {};
+                items.forEach(i => { const z = zoneFor(i.location); counts[z] = (counts[z] || 0) + 1; });
+
+                document.querySelectorAll('.zone').forEach(g => {
+                    g.classList.toggle('has-items', (counts[g.dataset.zone] || 0) > 0);
+                });
+
+                /* Remove old campus markers */
+                document.querySelectorAll('#campusSvg .marker-dot, #campusSvg .marker-count').forEach(el => el.remove());
+
+                const svg = document.getElementById('campusSvg');
+                Object.entries(counts).forEach(([zone, count]) => {
+                    const el = svg.querySelector(`[data-zone="${zone}"]`);
+                    if (!el) return;
+                    const shape = el.querySelector('rect, path');
+                    if (!shape) return;
+                    const bb = shape.getBBox();
+                    const cx = bb.x + bb.width / 2, cy = bb.y + 16;
+
+                    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    dot.setAttribute('cx', cx); dot.setAttribute('cy', cy);
+                    dot.setAttribute('r', Math.min(10, 5 + count));
+                    dot.classList.add('marker-dot'); dot.dataset.zone = zone;
+                    dot.addEventListener('click', e => {
+                        e.stopPropagation();
+                        if (zone === 'Main Building') {
+                            ctxClose.click(); // Close context panel
+                            enterFloorMode();
+                            return;
+                        }
+                        openCampusPopup(zone); // Removed event parameter
+                    });
+                    svg.appendChild(dot);
+
+                    if (count > 1) {
+                        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        txt.setAttribute('x', cx); txt.setAttribute('y', cy + 3.5);
+                        txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('fill', '#fff');
+                        txt.setAttribute('font-size', '8'); txt.setAttribute('font-weight', '700');
+                        txt.setAttribute('font-family', 'Inter,sans-serif'); txt.setAttribute('pointer-events', 'none');
+                        txt.classList.add('marker-count'); txt.textContent = count;
+                        svg.appendChild(txt);
+                    }
+                });
+
+                renderCampusList(counts);
+            }
+
+            function renderCampusList(counts) {
+                // The campus list is no longer rendered as an "endless list" in the sidebar
+                // The map itself is the primary interface.
+            }
+
+            /* ══════════════ CONTEXT PANEL (REPLACES POPUP) ══════════════ */
+            function openCampusPopup(zone) {
+                const items = allItems.filter(i => zoneFor(i.location) === zone); // Filter by zoneFor
+                if (items.length === 0) {
+                    ctxTitle.textContent = zone;
+                    ctxBody.innerHTML = '<div class="text-muted" style="text-align:center; padding: 24px 0; font-size: 13px;">No lost items reported here</div>';
+                } else {
+                    ctxTitle.textContent = `${zone} (${items.length})`;
+                    ctxBody.innerHTML = items.map(i => {
+                        const isBounty = i.status === 'lost'; // Assuming 'lost' implies a bounty/active search
+                        return `
+                        <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}">
+                            <div class="ctx-badge ${i.status}">${i.status}</div>
+                            <div class="ctx-name">${i.name || 'Unknown Item'}</div>
+                            <div class="ctx-meta">
+                                <span>${i.category || 'misc'}</span>
+                            </div>
+                        </a>
+                    `}).join('');
+                }
+                ctxClose.style.display = 'block';
+                ctxPanel.classList.add('active');
+            }
+
+            /* ══════════════ FLOOR PLAN VIEW ══════════════ */
+            function enterFloorMode() {
+                inFloorMode = true;
+                document.body.classList.add('floor-mode');
+                /* Remove active state from campus zones */
+                document.querySelectorAll('.zone.active-zone').forEach(el => el.classList.remove('active-zone'));
+
+                /* Shift view left so floor plan isn't hidden under context panel */
+                tx = 200;
+                ty = -50;
+                scale = 1.3;
+                setTransform();
+                document.getElementById('sidebarTitle').textContent = 'Main Building';
+                document.getElementById('sidebarSub').textContent = 'Floor plan overview.';
+
+                // Hide context panel when entering building initially
+                ctxClose.click();
+
+                refreshFloorPlan();
+            }
+
+            function exitFloorMode() {
+                inFloorMode = false;
+                document.body.classList.remove('floor-mode');
+                scale = 1; tx = 0; ty = 0; setTransform();
+                document.getElementById('sidebarTitle').textContent = 'Denmark High School';
+                document.getElementById('sidebarSub').textContent = 'Click glowing zones to see lost items.';
+
+                ctxClose.click();
+            }
+
+            function switchFloor(floor) {
+                currentFloor = floor;
+                document.querySelectorAll('.floor-tab').forEach(t => t.classList.toggle('active', +t.dataset.floor === floor));
+                document.getElementById('floor1').style.opacity = floor === 1 ? '1' : '0';
+                document.getElementById('floor1').style.pointerEvents = floor === 1 ? 'auto' : 'none';
+                document.getElementById('floor2').style.opacity = floor === 2 ? '1' : '0';
+                document.getElementById('floor2').style.pointerEvents = floor === 2 ? 'auto' : 'none';
+                document.getElementById('floorLabel').textContent = 'FLOOR ' + floor + ' — MAIN BUILDING';
+                ctxClose.click();
+                refreshFloorPlan();
+            }
+
+            function refreshFloorPlan() {
+                const mbItems = mainBuildingItems();
+
+                /* Count per room */
+                const roomCounts = {};
+                mbItems.forEach(i => {
+                    const r = roomFor(i.location);
+                    if (r) roomCounts[r] = (roomCounts[r] || 0) + 1;
+                });
+
+                /* Mark rooms with items */
+                document.querySelectorAll('.room').forEach(r => {
+                    r.classList.toggle('has-items', (roomCounts[r.dataset.room] || 0) > 0);
+                    r.classList.remove('active-room');
+                });
+
+                /* Remove old pins */
+                document.querySelectorAll('.item-pin').forEach(el => el.remove());
+
+                /* Add item pins to rooms on current floor */
+                const fpSvg = document.getElementById('floorPlan');
+                Object.entries(roomCounts).forEach(([room, count]) => {
+                    if (floorForRoom(room) !== currentFloor) return;
+                    const roomEl = fpSvg.querySelector(`[data-room="${room}"][data-floor="${currentFloor}"]`);
+                    if (!roomEl) return;
+                    const shape = roomEl.querySelector('.room-shape');
+                    if (!shape) return;
+                    const bb = shape.getBBox();
+                    const cx = bb.x + bb.width - 14, cy = bb.y + 14;
+
+                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    g.classList.add('item-pin'); g.dataset.room = room;
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', cx); circle.setAttribute('cy', cy);
+                    circle.setAttribute('r', Math.min(12, 7 + count));
+                    circle.classList.add('pin-circle');
+                    g.appendChild(circle);
+                    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    txt.setAttribute('x', cx); txt.setAttribute('y', cy);
+                    txt.classList.add('pin-count'); txt.textContent = count;
+                    g.appendChild(txt);
+                    g.addEventListener('click', e => { e.stopPropagation(); openRoomPopup(room, e); });
+                    fpSvg.appendChild(g);
+                });
+
+                /* Sidebar room list */
+                renderRoomList(roomCounts);
+            }
+
+            function renderRoomList(roomCounts) {
+                // Room list is not rendered in an endless list anymore.
+            }
+
+            function openRoomPopup(room) {
+                const roomItems = mainBuildingItems().filter(i => roomFor(i.location) === room);
+                if (roomItems.length === 0) {
+                    ctxTitle.textContent = room;
+                    ctxBody.innerHTML = '<div class="text-muted" style="text-align:center; padding: 24px 0; font-size: 13px;">No lost items in this room</div>';
+                } else {
+                    ctxTitle.textContent = `${room} (${roomItems.length})`;
+                    ctxBody.innerHTML = roomItems.map(i => {
+                        const isBounty = i.status === 'lost';
+                        return `
+                        <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}">
+                            <div class="ctx-badge ${i.status}">${i.status}</div>
+                            <div class="ctx-name">${i.name || 'Unknown Item'}</div>
+                            <div class="ctx-meta">
+                                <span>${i.location || ''}</span>
+                                <span>${i.category || ''}</span>
+                            </div>
+                        </a>
+                    `}).join('');
+                }
+                ctxClose.style.display = 'block';
+                ctxPanel.classList.add('active');
+            }
+
+            /* ══════════════ EVENT HANDLERS ══════════════ */
+
+            /* Campus zone clicks */
+            document.querySelectorAll('.zone').forEach(g => {
+                g.addEventListener('click', e => {
+                    e.stopPropagation();
+                    if (g.dataset.zone === 'Main Building') {
+                        enterFloorMode();
+                        return;
+                    }
+                    document.querySelectorAll('.zone').forEach(z => z.classList.remove('active-zone'));
+                    g.classList.add('active-zone');
+                    openCampusPopup(g.dataset.zone);
+                });
+            });
+
+            /* Show hint on hover over main building */
+            let hintTimer;
+            document.getElementById('mainBuildingZone').addEventListener('mouseenter', () => {
+                if (inFloorMode) return;
+                hintTimer = setTimeout(() => enterHint.classList.add('show'), 400);
+            });
+            document.getElementById('mainBuildingZone').addEventListener('mouseleave', () => {
+                clearTimeout(hintTimer);
+                enterHint.classList.remove('show');
+            });
+
+            /* Floor plan room clicks */
+            document.getElementById('floorPlan').addEventListener('click', e => {
+                const room = e.target.closest('.room');
+                if (room) {
+                    e.stopPropagation();
+                    document.querySelectorAll('.room').forEach(r => r.classList.remove('active-room'));
+                    room.classList.add('active-room');
+                    openRoomPopup(room.dataset.room);
                 }
             });
 
-            renderCampusList(counts);
-        }
+            /* Back button */
+            document.getElementById('backBtn').addEventListener('click', exitFloorMode);
 
-        function renderCampusList(counts) {
-            if (!counts) { counts = {}; items.forEach(i => { const z = zoneFor(i.location); counts[z] = (counts[z]||0) + 1; }); }
-            locList.innerHTML = CAMPUS_ZONES.map(z => {
-                const c = counts[z] || 0;
-                return `<button class="loc-btn${c ? ' has-items' : ''}" data-zone="${z}">
-                    <span>${z}</span><span class="badge">${c}</span>
-                </button>`;
-            }).join('');
-
-            locList.querySelectorAll('.loc-btn').forEach(btn => {
-                btn.addEventListener('click', e => {
-                    document.querySelectorAll('.zone').forEach(g => g.classList.remove('active-zone'));
-                    const zoneEl = document.querySelector(`[data-zone="${btn.dataset.zone}"]`);
-                    if (zoneEl) zoneEl.classList.add('active-zone');
-                    openCampusPopup(btn.dataset.zone, e);
-                });
+            /* Floor tabs */
+            document.querySelectorAll('.floor-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchFloor(+tab.dataset.floor));
             });
-        }
 
-        function openCampusPopup(zone, event) {
-            const zoneItems = items.filter(i => zoneFor(i.location) === zone);
-            if (zoneItems.length === 0) {
-                popTitle.textContent = zone;
-                popBody.innerHTML = '<div class="p-empty">No lost items reported here</div>';
-            } else {
-                popTitle.textContent = zone + ' (' + zoneItems.length + ')';
-                popBody.innerHTML = zoneItems.map(i => `
-                    <div class="p-item" onclick="window.open('claim.html?id=${i.id}','_self')">
-                        <div class="p-item-name">${i.name || 'Unknown Item'}
-                            <span class="p-item-status ${i.status||''}">${i.status||''}</span>
-                        </div>
-                        <div class="p-item-meta">${i.location || ''} &middot; ${i.category || ''}</div>
-                    </div>`).join('');
+            /* ══════════════ PAN & ZOOM ══════════════ */
+            function setTransform() {
+                mapInner.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
             }
-            positionPopup(event);
-        }
-
-        /* ══════════════ FLOOR PLAN VIEW ══════════════ */
-        function enterFloorMode() {
-            inFloorMode = true;
-            document.body.classList.add('floor-mode');
-            scale = 1; tx = 0; ty = 0; setTransform();
-            document.getElementById('sidebarTitle').textContent = 'Main Building';
-            document.getElementById('sidebarSub').textContent = 'Floor plan view — click any room to see items.';
-            document.getElementById('roomListTitle').textContent = 'Floor ' + currentFloor + ' Rooms';
-            closePopup();
-            refreshFloorPlan();
-        }
-
-        function exitFloorMode() {
-            inFloorMode = false;
-            document.body.classList.remove('floor-mode');
-            scale = 1; tx = 0; ty = 0; setTransform();
-            document.getElementById('sidebarTitle').textContent = 'Denmark High School';
-            document.getElementById('sidebarSub').textContent = 'Click any zone to see lost items. Click the main building to explore inside.';
-            closePopup();
-        }
-
-        function switchFloor(floor) {
-            currentFloor = floor;
-            document.querySelectorAll('.floor-tab').forEach(t => t.classList.toggle('active', +t.dataset.floor === floor));
-            document.getElementById('floor1').style.opacity = floor === 1 ? '1' : '0';
-            document.getElementById('floor1').style.pointerEvents = floor === 1 ? 'auto' : 'none';
-            document.getElementById('floor2').style.opacity = floor === 2 ? '1' : '0';
-            document.getElementById('floor2').style.pointerEvents = floor === 2 ? 'auto' : 'none';
-            document.getElementById('floorLabel').textContent = 'FLOOR ' + floor + ' — MAIN BUILDING';
-            document.getElementById('roomListTitle').textContent = 'Floor ' + floor + ' Rooms';
-            closePopup();
-            refreshFloorPlan();
-        }
-
-        function refreshFloorPlan() {
-            const mbItems = mainBuildingItems();
-
-            /* Count per room */
-            const roomCounts = {};
-            mbItems.forEach(i => {
-                const r = roomFor(i.location);
-                if (r) roomCounts[r] = (roomCounts[r] || 0) + 1;
+            mapInner.addEventListener('mousedown', e => {
+                if (e.target.closest('.zone,.marker-dot,.ctrl,.room,.item-pin,.icon-btn')) return;
+                dragging = true; sx = e.clientX - tx; sy = e.clientY - ty;
+                mapInner.style.cursor = 'grabbing';
             });
+            document.addEventListener('mousemove', e => { if (!dragging) return; tx = e.clientX - sx; ty = e.clientY - sy; setTransform(); });
+            document.addEventListener('mouseup', () => { dragging = false; mapInner.style.cursor = 'grab'; });
+            mapInner.addEventListener('wheel', e => {
+                e.preventDefault();
+                scale = Math.max(0.4, Math.min(4, scale * (e.deltaY > 0 ? 0.92 : 1.08)));
+                setTransform();
+            }, { passive: false });
+            document.getElementById('zoomInBtn').addEventListener('click', () => { scale = Math.min(4, scale * 1.25); setTransform(); });
+            document.getElementById('zoomOutBtn').addEventListener('click', () => { scale = Math.max(0.4, scale / 1.25); setTransform(); });
+            document.getElementById('resetZoomBtn').addEventListener('click', () => { scale = 1; tx = 0; ty = 0; setTransform(); });
 
-            /* Mark rooms with items */
-            document.querySelectorAll('.room').forEach(r => {
-                r.classList.toggle('has-items', (roomCounts[r.dataset.room] || 0) > 0);
-                r.classList.remove('active-room');
-            });
+            /* Touch */
+            let lastTouchDist = 0;
+            mapInner.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) { dragging = true; sx = e.touches[0].clientX - tx; sy = e.touches[0].clientY - ty; }
+                else if (e.touches.length === 2) { lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
+            }, { passive: true });
+            mapInner.addEventListener('touchmove', e => {
+                if (e.touches.length === 1 && dragging) { tx = e.touches[0].clientX - sx; ty = e.touches[0].clientY - sy; setTransform(); }
+                else if (e.touches.length === 2) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); if (lastTouchDist > 0) { scale = Math.max(0.4, Math.min(4, scale * (d / lastTouchDist))); setTransform(); } lastTouchDist = d; }
+            }, { passive: true });
+            mapInner.addEventListener('touchend', () => { dragging = false; lastTouchDist = 0; });
 
-            /* Remove old pins */
-            document.querySelectorAll('.item-pin').forEach(el => el.remove());
-
-            /* Add item pins to rooms on current floor */
-            const fpSvg = document.getElementById('floorPlan');
-            Object.entries(roomCounts).forEach(([room, count]) => {
-                if (floorForRoom(room) !== currentFloor) return;
-                const roomEl = fpSvg.querySelector(`[data-room="${room}"][data-floor="${currentFloor}"]`);
-                if (!roomEl) return;
-                const shape = roomEl.querySelector('.room-shape');
-                if (!shape) return;
-                const bb = shape.getBBox();
-                const cx = bb.x + bb.width - 14, cy = bb.y + 14;
-
-                const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-                g.classList.add('item-pin'); g.dataset.room = room;
-                const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-                circle.setAttribute('cx', cx); circle.setAttribute('cy', cy);
-                circle.setAttribute('r', Math.min(12, 7 + count));
-                circle.classList.add('pin-circle');
-                g.appendChild(circle);
-                const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
-                txt.setAttribute('x', cx); txt.setAttribute('y', cy);
-                txt.classList.add('pin-count'); txt.textContent = count;
-                g.appendChild(txt);
-                g.addEventListener('click', e => { e.stopPropagation(); openRoomPopup(room, e); });
-                fpSvg.appendChild(g);
-            });
-
-            /* Sidebar room list */
-            renderRoomList(roomCounts);
-        }
-
-        function renderRoomList(roomCounts) {
-            const rooms = FLOOR_ROOMS[currentFloor] || [];
-            roomLocList.innerHTML = rooms.map(r => {
-                const c = roomCounts[r] || 0;
-                return `<button class="loc-btn${c ? ' has-items' : ''}" data-room="${r}">
-                    <span>${r}</span><span class="badge">${c}</span>
-                </button>`;
-            }).join('');
-
-            roomLocList.querySelectorAll('.loc-btn').forEach(btn => {
-                btn.addEventListener('click', e => {
-                    document.querySelectorAll('.room').forEach(r => r.classList.remove('active-room'));
-                    const roomEl = document.querySelector(`[data-room="${btn.dataset.room}"][data-floor="${currentFloor}"]`);
-                    if (roomEl) roomEl.classList.add('active-room');
-                    openRoomPopup(btn.dataset.room, e);
-                });
-            });
-        }
-
-        function openRoomPopup(room, event) {
-            const roomItems = mainBuildingItems().filter(i => roomFor(i.location) === room);
-            if (roomItems.length === 0) {
-                popTitle.textContent = room;
-                popBody.innerHTML = '<div class="p-empty">No lost items in this room</div>';
-            } else {
-                popTitle.textContent = room + ' (' + roomItems.length + ')';
-                popBody.innerHTML = roomItems.map(i => `
-                    <div class="p-item" onclick="window.open('claim.html?id=${i.id}','_self')">
-                        <div class="p-item-name">${i.name || 'Unknown Item'}
-                            <span class="p-item-status ${i.status||''}">${i.status||''}</span>
-                        </div>
-                        <div class="p-item-meta">${i.location || ''} &middot; ${i.category || ''}</div>
-                    </div>`).join('');
+            /* ══════════════ INIT ══════════════ */
+            function init() {
+                if (typeof BackTrackDB === 'undefined') { setTimeout(init, 200); return; }
+                loadItems();
+                if (BackTrackDB.supabase) {
+                    BackTrackDB.supabase.channel('map_live')
+                        .on('postgres_changes', { event: '*', schema: 'public', table: 'items' }, () => loadItems())
+                        .subscribe();
+                }
             }
-            positionPopup(event);
-        }
-
-        /* ══════════════ SHARED POPUP ══════════════ */
-        function positionPopup(event) {
-            const wrap = document.querySelector('.map-wrap').getBoundingClientRect();
-            let left = event.clientX - wrap.left + 12;
-            let top = event.clientY - wrap.top - 8;
-            if (left + 280 > wrap.width) left = wrap.width - 290;
-            if (top + 200 > wrap.height) top = wrap.height - 210;
-            if (left < 8) left = 8; if (top < 8) top = 8;
-            popup.style.left = left + 'px'; popup.style.top = top + 'px';
-            popup.classList.add('open');
-        }
-
-        function closePopup() {
-            popup.classList.remove('open');
-            document.querySelectorAll('.zone').forEach(z => z.classList.remove('active-zone'));
-            document.querySelectorAll('.room').forEach(r => r.classList.remove('active-room'));
-        }
-
-        /* ══════════════ EVENT HANDLERS ══════════════ */
-
-        /* Campus zone clicks */
-        document.querySelectorAll('.zone').forEach(g => {
-            g.addEventListener('click', e => {
-                e.stopPropagation();
-                document.querySelectorAll('.zone').forEach(z => z.classList.remove('active-zone'));
-                g.classList.add('active-zone');
-                openCampusPopup(g.dataset.zone, e);
-            });
-        });
-
-        /* Double-click main building to enter floor plan */
-        document.getElementById('mainBuildingZone').addEventListener('dblclick', e => {
-            e.stopPropagation();
-            enterFloorMode();
-        });
-
-        /* Show hint on hover over main building */
-        let hintTimer;
-        document.getElementById('mainBuildingZone').addEventListener('mouseenter', () => {
-            if (inFloorMode) return;
-            hintTimer = setTimeout(() => enterHint.classList.add('show'), 400);
-        });
-        document.getElementById('mainBuildingZone').addEventListener('mouseleave', () => {
-            clearTimeout(hintTimer);
-            enterHint.classList.remove('show');
-        });
-
-        /* Floor plan room clicks */
-        document.getElementById('floorPlan').addEventListener('click', e => {
-            const room = e.target.closest('.room');
-            if (room) {
-                e.stopPropagation();
-                document.querySelectorAll('.room').forEach(r => r.classList.remove('active-room'));
-                room.classList.add('active-room');
-                openRoomPopup(room.dataset.room, e);
-            }
-        });
-
-        /* Back button */
-        document.getElementById('backBtn').addEventListener('click', exitFloorMode);
-
-        /* Floor tabs */
-        document.querySelectorAll('.floor-tab').forEach(tab => {
-            tab.addEventListener('click', () => switchFloor(+tab.dataset.floor));
-        });
-
-        /* Close popup */
-        document.getElementById('popClose').addEventListener('click', closePopup);
-        document.addEventListener('click', e => {
-            if (!popup.contains(e.target) && !e.target.closest('.zone,.loc-btn,.marker-dot,.room,.item-pin')) closePopup();
-        });
-
-        /* ══════════════ PAN & ZOOM ══════════════ */
-        function setTransform() {
-            mapInner.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
-        }
-        mapInner.addEventListener('mousedown', e => {
-            if (e.target.closest('.zone,.marker-dot,.ctrl,.room,.item-pin')) return;
-            dragging = true; sx = e.clientX - tx; sy = e.clientY - ty;
-            mapInner.style.cursor = 'grabbing';
-        });
-        document.addEventListener('mousemove', e => { if (!dragging) return; tx = e.clientX - sx; ty = e.clientY - sy; setTransform(); });
-        document.addEventListener('mouseup', () => { dragging = false; mapInner.style.cursor = 'grab'; });
-        mapInner.addEventListener('wheel', e => {
-            e.preventDefault();
-            scale = Math.max(0.4, Math.min(4, scale * (e.deltaY > 0 ? 0.92 : 1.08)));
-            setTransform();
-        }, { passive: false });
-        document.getElementById('zIn').addEventListener('click', () => { scale = Math.min(4, scale * 1.25); setTransform(); });
-        document.getElementById('zOut').addEventListener('click', () => { scale = Math.max(0.4, scale / 1.25); setTransform(); });
-        document.getElementById('zReset').addEventListener('click', () => { scale = 1; tx = 0; ty = 0; setTransform(); });
-
-        /* Touch */
-        let lastTouchDist = 0;
-        mapInner.addEventListener('touchstart', e => {
-            if (e.touches.length === 1) { dragging = true; sx = e.touches[0].clientX - tx; sy = e.touches[0].clientY - ty; }
-            else if (e.touches.length === 2) { lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
-        }, { passive: true });
-        mapInner.addEventListener('touchmove', e => {
-            if (e.touches.length === 1 && dragging) { tx = e.touches[0].clientX - sx; ty = e.touches[0].clientY - sy; setTransform(); }
-            else if (e.touches.length === 2) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); if (lastTouchDist > 0) { scale = Math.max(0.4, Math.min(4, scale * (d / lastTouchDist))); setTransform(); } lastTouchDist = d; }
-        }, { passive: true });
-        mapInner.addEventListener('touchend', () => { dragging = false; lastTouchDist = 0; });
-
-        /* ══════════════ INIT ══════════════ */
-        function init() {
-            if (typeof BackTrackDB === 'undefined') { setTimeout(init, 200); return; }
-            loadItems();
-            if (BackTrackDB.supabase) {
-                BackTrackDB.supabase.channel('map_live')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'items' }, () => loadItems())
-                    .subscribe();
-            }
-        }
-        renderCampusList({});
-        init();
-    })();
+            renderCampusList({});
+            init();
+        })();
     </script>
     <script src="js/nav-auth.js"></script>
 </body>
+
 </html>

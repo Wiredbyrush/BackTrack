@@ -7,6 +7,7 @@
     <title>AI Smart Scan - BackTrack</title>
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/nav-auth.css">
+    <link rel="stylesheet" href="css/base.css">
     <style>
         .scan-container {
             max-width: 640px;
@@ -149,10 +150,234 @@
             font-size: 14px;
             font-weight: 500;
         }
+
+        .preview-panel {
+            display: none;
+            margin-top: 24px;
+            text-align: left;
+            background: rgba(2, 6, 12, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .preview-row {
+            display: grid;
+            grid-template-columns: 92px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .preview-thumb {
+            width: 92px;
+            height: 92px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .preview-meta h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #e2e8f0;
+            font-weight: 700;
+        }
+
+        .preview-meta p {
+            margin: 6px 0 0;
+            font-size: 12px;
+            color: #93a4bd;
+            line-height: 1.45;
+        }
+
+        .scan-tags {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .scan-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #dbeafe;
+            background: rgba(37, 99, 235, 0.22);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+        }
+
+        .results-panel {
+            display: none;
+            margin-top: 18px;
+            text-align: left;
+            background: rgba(2, 6, 12, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .results-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .results-head h2 {
+            margin: 0;
+            font-size: 15px;
+            color: #f8fafc;
+            font-weight: 700;
+        }
+
+        .results-head p {
+            margin: 0;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            max-height: 430px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .match-card {
+            display: grid;
+            grid-template-columns: 66px 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.52);
+            text-decoration: none;
+            color: inherit;
+            transition: border-color .15s ease, background .15s ease;
+        }
+
+        .match-card:hover {
+            border-color: rgba(96, 165, 250, 0.55);
+            background: rgba(30, 41, 59, 0.62);
+        }
+
+        .match-thumb {
+            width: 66px;
+            height: 66px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.55);
+        }
+
+        .match-info {
+            min-width: 0;
+        }
+
+        .match-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #e2e8f0;
+            line-height: 1.25;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 3px;
+        }
+
+        .match-meta {
+            font-size: 11px;
+            color: #94a3b8;
+            line-height: 1.35;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .match-score {
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #bfdbfe;
+            border: 1px solid rgba(96, 165, 250, 0.38);
+            background: rgba(30, 64, 175, 0.2);
+        }
+
+        .result-actions {
+            display: none;
+            margin-top: 14px;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .result-btn {
+            border: none;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        .result-btn.primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .result-btn.secondary {
+            background: rgba(15, 23, 42, 0.9);
+            color: #dbeafe;
+            border: 1px solid rgba(96, 165, 250, 0.4);
+        }
+
+        .result-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .empty-results {
+            border: 1px dashed rgba(148, 163, 184, 0.35);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        @media (max-width: 720px) {
+            .scan-container {
+                margin: 36px 14px;
+                padding: 20px;
+            }
+
+            .preview-row {
+                grid-template-columns: 1fr;
+            }
+
+            .match-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
 <body class="dark-theme">
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <!-- Navigation -->
     <nav aria-label="Main navigation" role="navigation">
         <a href="index.html" class="nav-left" aria-label="BackTrack Home">
@@ -175,7 +400,7 @@
     </nav>
     <div class="nav-spacer"></div>
 
-    <main class="scan-container">
+    <main class="scan-container" id="main-content">
         <svg class="scan-icon" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -201,7 +426,7 @@
 
         <div class="loading-overlay" id="loadingState">
             <div class="loading-text">Extracting Semantic Features...</div>
-            <svg class="spinner" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            <svg class="spinner" aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="12" y1="2" x2="12" y2="6"></line>
                 <line x1="12" y1="18" x2="12" y2="22"></line>
@@ -214,6 +439,32 @@
             </svg>
         </div>
         <div id="errorMsg"></div>
+
+        <section class="preview-panel" id="previewPanel" aria-live="polite">
+            <div class="preview-row">
+                <img class="preview-thumb" id="previewThumb" alt="Uploaded item preview">
+                <div class="preview-meta">
+                    <h3 id="previewTitle">AI detected features</h3>
+                    <p id="previewQuery"></p>
+                </div>
+            </div>
+            <div class="scan-tags" id="scanTags"></div>
+        </section>
+
+        <section class="results-panel" id="resultsPanel" aria-live="polite">
+            <div class="results-head">
+                <div>
+                    <h2>Possible Matches</h2>
+                    <p id="resultsSummary">Scanning your database...</p>
+                </div>
+            </div>
+            <div class="match-grid" id="matchGrid"></div>
+        </section>
+
+        <div class="result-actions" id="resultActions">
+            <button class="result-btn primary" id="openBrowseBtn" type="button">Open Full Results</button>
+            <button class="result-btn secondary" id="scanAgainBtn" type="button">Scan Another Image</button>
+        </div>
     </main>
 
     <!-- Supabase SDK -->
@@ -224,6 +475,18 @@
         const fileInput = document.getElementById('fileInput');
         const loadingState = document.getElementById('loadingState');
         const errorMsg = document.getElementById('errorMsg');
+        const previewPanel = document.getElementById('previewPanel');
+        const previewThumb = document.getElementById('previewThumb');
+        const previewQuery = document.getElementById('previewQuery');
+        const scanTags = document.getElementById('scanTags');
+        const resultsPanel = document.getElementById('resultsPanel');
+        const resultsSummary = document.getElementById('resultsSummary');
+        const matchGrid = document.getElementById('matchGrid');
+        const resultActions = document.getElementById('resultActions');
+        const openBrowseBtn = document.getElementById('openBrowseBtn');
+        const scanAgainBtn = document.getElementById('scanAgainBtn');
+        let lastKeywords = [];
+        let lastQuery = '';
 
         // Allow clicking anywhere in dropzone to trigger input
         dropZone.addEventListener('click', () => fileInput.click());
@@ -255,6 +518,12 @@
         async function requestImageMatch(base64DataUrl) {
             const MATCH_SUPABASE_URL = window.BackTrackDB?.config?.url || 'YOUR_SUPABASE_PROJECT_URL';
             const MATCH_SUPABASE_ANON_KEY = window.BackTrackDB?.config?.anonKey || 'YOUR_SUPABASE_ANON_KEY';
+            if (!MATCH_SUPABASE_URL || MATCH_SUPABASE_URL.includes('YOUR_SUPABASE')) {
+                throw new Error('Supabase URL is missing. Set your project URL in js/supabase.js.');
+            }
+            if (!MATCH_SUPABASE_ANON_KEY || MATCH_SUPABASE_ANON_KEY.includes('YOUR_SUPABASE')) {
+                throw new Error('Supabase anon key is missing. Set it in js/supabase.js.');
+            }
 
             const response = await fetch(`${MATCH_SUPABASE_URL}/functions/v1/image-match`, {
                 method: 'POST',
@@ -273,48 +542,247 @@
             return payload;
         }
 
-        function handleFile(file) {
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatDate(value) {
+            if (!value) return 'Unknown date';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return 'Unknown date';
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function resetScanUi() {
+            errorMsg.style.display = 'none';
+            loadingState.style.display = 'none';
+            previewPanel.style.display = 'none';
+            resultsPanel.style.display = 'none';
+            resultActions.style.display = 'none';
+            scanTags.innerHTML = '';
+            matchGrid.innerHTML = '';
+            previewQuery.textContent = '';
+            dropZone.style.display = 'flex';
+            fileInput.value = '';
+        }
+
+        function setLoading(message) {
+            loadingState.querySelector('.loading-text').textContent = message || 'Extracting Semantic Features...';
+            loadingState.style.display = 'block';
+            errorMsg.style.display = 'none';
+            dropZone.style.display = 'none';
+        }
+
+        async function optimizeImage(file) {
+            const dataUrl = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read image from your device.'));
+                reader.readAsDataURL(file);
+            });
+
+            const image = await new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error('Could not decode image.'));
+                img.src = dataUrl;
+            });
+
+            const maxEdge = 1280;
+            const ratio = Math.min(1, maxEdge / Math.max(image.width, image.height));
+            const width = Math.max(1, Math.round(image.width * ratio));
+            const height = Math.max(1, Math.round(image.height * ratio));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return dataUrl;
+            ctx.drawImage(image, 0, 0, width, height);
+
+            const compressed = canvas.toDataURL('image/jpeg', 0.86);
+            return compressed;
+        }
+
+        function computeLocalScore(item, keywords, queryTokens = []) {
+            const haystack = [
+                item.name,
+                item.description,
+                item.category,
+                item.location,
+                Array.isArray(item.ai_tags) ? item.ai_tags.join(' ') : '',
+                item.ai_caption
+            ].filter(Boolean).join(' ').toLowerCase();
+
+            if (!haystack) return 0;
+
+            const keywordHits = keywords.filter((keyword) => haystack.includes(keyword.toLowerCase())).length;
+            const tokenHits = queryTokens.filter((token) => haystack.includes(token)).length;
+            const keywordScore = keywords.length ? (keywordHits / keywords.length) * 78 : 0;
+            const tokenScore = queryTokens.length ? (tokenHits / queryTokens.length) * 22 : 0;
+            const score = Math.round(keywordScore + tokenScore);
+            return Math.min(99, Math.max(score, keywordHits > 0 ? 35 : 0));
+        }
+
+        function buildImageCandidates(item) {
+            const url = (item.image_url || '').trim();
+            if (!url) return ['logo.png'];
+            if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('blob:')) return [url];
+            const cleanPath = url.replace(/^\/+/, '');
+            const baseUrl = window.BackTrackDB?.config?.url || '';
+            if (!baseUrl) return ['logo.png'];
+            const path = cleanPath.startsWith('items/') ? cleanPath : `items/${cleanPath}`;
+            return [`${baseUrl}/storage/v1/object/public/images/${encodeURI(path)}`, 'logo.png'];
+        }
+
+        async function fetchMatches(keywords, query) {
+            const db = window.BackTrackDB;
+            const normalizedKeywords = Array.from(new Set((keywords || []).map((k) => String(k || '').trim().toLowerCase()).filter(Boolean)));
+            const queryTokens = String(query || '')
+                .toLowerCase()
+                .split(/[^a-z0-9]+/)
+                .filter((token) => token.length >= 3);
+
+            let semanticItems = [];
+            if (query && db && typeof db.searchItems === 'function') {
+                try {
+                    semanticItems = await db.searchItems(query, { status: ['found', 'claimed'] });
+                } catch (err) {
+                    console.warn('Semantic search unavailable:', err);
+                }
+            }
+
+            if (Array.isArray(semanticItems) && semanticItems.length > 0) {
+                return semanticItems
+                    .map((item) => {
+                        const score = typeof item.similarity === 'number'
+                            ? Math.max(0, Math.min(99, Math.round(item.similarity * 100)))
+                            : computeLocalScore(item, normalizedKeywords, queryTokens);
+                        return { item, score };
+                    })
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 36);
+            }
+
+            if (!db || typeof db.getItems !== 'function') {
+                return [];
+            }
+
+            const allItems = await db.getItems({ status: ['found', 'claimed'] });
+            return (Array.isArray(allItems) ? allItems : [])
+                .map((item) => ({ item, score: computeLocalScore(item, normalizedKeywords, queryTokens) }))
+                .filter((row) => row.score >= 25)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 36);
+        }
+
+        function renderTags(keywords) {
+            scanTags.innerHTML = (keywords || [])
+                .map((keyword) => `<span class="scan-tag">${escapeHtml(keyword)}</span>`)
+                .join('');
+        }
+
+        function renderMatches(rows) {
+            if (!rows || rows.length === 0) {
+                matchGrid.innerHTML = '<div class="empty-results">No close matches yet. Try a clearer photo or a different angle.</div>';
+                return;
+            }
+
+            matchGrid.innerHTML = rows.map(({ item, score }) => {
+                const candidates = buildImageCandidates(item);
+                const initial = candidates[0] || 'logo.png';
+                const fallback = candidates[candidates.length - 1] || 'logo.png';
+                return `
+                    <a class="match-card" href="claim.html?item=${encodeURIComponent(item.id)}">
+                        <img class="match-thumb" src="${escapeHtml(initial)}" onerror="this.onerror=null;this.src='${escapeHtml(fallback)}';" alt="${escapeHtml(item.name || 'Matched item')}">
+                        <div class="match-info">
+                            <div class="match-name">${escapeHtml(item.name || 'Unknown item')}</div>
+                            <div class="match-meta">${escapeHtml(item.location || 'Unknown location')} · ${escapeHtml(formatDate(item.date_lost))}</div>
+                            <span class="match-score">${score}% match</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        async function handleFile(file) {
             if (!file || !file.type.startsWith('image/')) {
                 showError('Please select a valid image file. We accept JPG, PNG, and HEIC.');
                 return;
             }
+            if (file.size > 18 * 1024 * 1024) {
+                showError('Image is too large. Please use a file under 18 MB.');
+                return;
+            }
 
-            // Hide upload UI and show loading
-            errorMsg.style.display = 'none';
-            dropZone.style.display = 'none';
-            loadingState.style.display = 'block';
+            setLoading('Extracting Semantic Features...');
 
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                try {
-                    const result = await requestImageMatch(event.target.result);
-                    const keywords = Array.isArray(result.keywords) ? result.keywords : [];
+            try {
+                const optimizedImage = await optimizeImage(file);
+                previewThumb.src = optimizedImage;
 
-                    if (keywords.length === 0) {
-                        throw new Error("No identifying features could be matched.");
-                    }
+                const result = await requestImageMatch(optimizedImage);
+                const keywords = Array.isArray(result.keywords)
+                    ? result.keywords.map((k) => String(k || '').trim()).filter(Boolean)
+                    : [];
+                const query = String(result.query || result.description || '').trim();
+                const fallbackQuery = query || keywords.join(' ');
 
-                    // Store context for browse page to pick up via sessionStorage
-                    sessionStorage.setItem('ai_scan_keywords', JSON.stringify(keywords));
-                    sessionStorage.setItem('ai_scan_query', result.description || '');
-
-                    // Redirect to browse and instruct it to process scan
-                    window.location.href = 'browse.html?ai_scan=true';
-
-                } catch (err) {
-                    showError(err.message || 'AI matching failed. Please try a different image.');
+                if (keywords.length === 0 && !fallbackQuery) {
+                    throw new Error('No identifying features could be matched. Try a clearer photo.');
                 }
-            };
-            reader.onerror = () => showError('Failed to read the file from your device.');
-            reader.readAsDataURL(file);
+
+                lastKeywords = keywords;
+                lastQuery = fallbackQuery;
+                sessionStorage.setItem('ai_scan_keywords', JSON.stringify(keywords));
+                sessionStorage.setItem('ai_scan_query', fallbackQuery);
+
+                previewQuery.textContent = fallbackQuery || 'AI extracted matching features from your image.';
+                renderTags(keywords);
+                previewPanel.style.display = 'block';
+
+                loadingState.style.display = 'block';
+                loadingState.querySelector('.loading-text').textContent = 'Finding Similar Items...';
+                const matches = await fetchMatches(keywords, fallbackQuery);
+                loadingState.style.display = 'none';
+
+                resultsSummary.textContent = matches.length > 0
+                    ? `Found ${matches.length} possible matches. Highest scores are shown first.`
+                    : 'No close matches found yet.';
+                renderMatches(matches);
+                resultsPanel.style.display = 'block';
+                resultActions.style.display = 'flex';
+            } catch (err) {
+                showError(err.message || 'AI matching failed. Please try a different image.');
+            }
         }
 
         function showError(msg) {
             loadingState.style.display = 'none';
+            resultActions.style.display = 'none';
+            resultsPanel.style.display = 'none';
+            previewPanel.style.display = 'none';
             dropZone.style.display = 'flex';
             errorMsg.textContent = msg;
             errorMsg.style.display = 'block';
         }
+
+        openBrowseBtn.addEventListener('click', () => {
+            if (lastKeywords.length > 0) {
+                sessionStorage.setItem('ai_scan_keywords', JSON.stringify(lastKeywords));
+            }
+            if (lastQuery) {
+                sessionStorage.setItem('ai_scan_query', lastQuery);
+            }
+            window.location.href = 'browse.html?ai_scan=true';
+        });
+
+        scanAgainBtn.addEventListener('click', resetScanUi);
     </script>
 </body>
 

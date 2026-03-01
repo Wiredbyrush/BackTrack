@@ -24,51 +24,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/nav-auth.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            animation: pageLoadFadeIn 0.8s ease-out;
-        }
-
-        @keyframes pageLoadFadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Page transition overlay */
-        .page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .page-transition.active {
-            opacity: 1;
-            pointer-events: all;
-        }
+        body { display: flex; flex-direction: column; }
 
         a,
         button {
@@ -290,11 +249,11 @@
         }
 
         .form-input::placeholder {
-            color: #555555;
+            color: #888888;
         }
 
         .form-input:focus {
-            border-color: #555555;
+            border-color: #888888;
             background: #121212;
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
         }
@@ -439,15 +398,15 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
 </head>
 
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition"></div>
 
-    <nav data-nav-auth="false">
+    <nav aria-label="Main navigation" data-nav-auth="false">
         <a href="index.html" class="nav-left">
             <span class="brand-logo">
                 <img class="logo-dark" src="logo.png" alt="BackTrack">
@@ -466,14 +425,14 @@
     </nav>
     <div class="nav-spacer"></div>
 
-    <main class="login-container">
+    <main id="main-content" class="login-container">
         <div class="login-card">
             <h1 class="login-title">Welcome back</h1>
             <p class="login-subtitle">Log in to your account</p>
 
             <!-- Google Sign In -->
             <button class="google-btn" id="googleBtn">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                         fill="#4285F4" />
@@ -499,6 +458,8 @@
 
             <!-- Email/Password Form -->
             <form id="loginForm">
+                <fieldset class="form-fieldset">
+                    <legend class="sr-only">Login credentials</legend>
                 <div class="form-group">
                     <label class="form-label" for="email">Email</label>
                     <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
@@ -513,7 +474,7 @@
                         <input type="password" id="password" class="form-input" placeholder="Enter your password"
                             required>
                         <button type="button" class="password-toggle" id="togglePassword">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                 <circle cx="12" cy="12" r="3" />
@@ -522,6 +483,7 @@
                     </div>
                 </div>
 
+                </fieldset>
                 <button type="submit" class="submit-btn">Log in</button>
             </form>
 
@@ -539,12 +501,12 @@
 
     <footer
         style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-        <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp;
+        <div style="color: #888888; font-size: 13px;">&copy; 2025–2026 BackTrack. Built for FBLA Website Coding &amp;
             Development.</div>
         <div style="display: flex; gap: 24px;">
-            <a href="features.html" style="color: #555555; text-decoration: none; font-size: 13px;">Features</a>
-            <a href="sources.html" style="color: #555555; text-decoration: none; font-size: 13px;">Sources</a>
-            <a href="index.html" style="color: #555555; text-decoration: none; font-size: 13px;">Home</a>
+            <a href="features.html" style="color: #888888; text-decoration: none; font-size: 13px;">Features</a>
+            <a href="sources.html" style="color: #888888; text-decoration: none; font-size: 13px;">Sources</a>
+            <a href="index.html" style="color: #888888; text-decoration: none; font-size: 13px;">Home</a>
         </div>
     </footer>
 

@@ -20,7 +20,8 @@
 </head>
 
 <body>
-    <nav>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <nav aria-label="Main navigation">
         <a class="nav-left" href="index.html"><span class="brand-logo">
                 <img class="logo-dark" src="logo.png" alt="BackTrack">
                 <img class="logo-light" src="logo-white.png" alt="" aria-hidden="true">
@@ -47,7 +48,6 @@
         <button class="mobile-tab" data-panel="rewards">Rewards</button>
         <button class="mobile-tab" data-panel="map">Map</button>
         <button class="mobile-tab" data-panel="analytics">Analytics</button>
-        <button class="mobile-tab" data-panel="messages">Messages</button>
         <button class="mobile-tab" data-panel="users">Users</button>
         <button class="mobile-tab" data-panel="activity">Activity</button>
     </div>
@@ -58,7 +58,7 @@
             <div class="sidebar-label">Overview</div>
             <div class="sidebar-nav">
                 <button class="sidebar-link active" data-panel="dashboard">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <span class="link-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="7" height="7" />
                             <rect x="14" y="3" width="7" height="7" />
@@ -71,7 +71,7 @@
             <div class="sidebar-label">Manage</div>
             <div class="sidebar-nav">
                 <button class="sidebar-link" data-panel="submissions">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <span class="link-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
@@ -81,7 +81,7 @@
                     <span class="link-badge" id="sidebarItemsBadge">0</span>
                 </button>
                 <button class="sidebar-link" data-panel="claims">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <span class="link-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                             <circle cx="12" cy="7" r="4" />
@@ -90,7 +90,7 @@
                 </button>
                 <button class="sidebar-link" data-panel="bounties">
                     <span class="link-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
                             <path d="M21 21l-4.35-4.35" />
@@ -100,7 +100,7 @@
                 </button>
                 <button class="sidebar-link" data-panel="rewards">
                     <span class="link-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M12 3l2.2 4.46 4.92.72-3.56 3.46.84 4.89L12 14.2l-4.4 2.32.84-4.89L4.88 8.18l4.92-.72L12 3z" />
@@ -109,7 +109,7 @@
                     <span class="link-badge" id="sidebarRewardsBadge">0</span>
                 </button>
                 <button class="sidebar-link" data-panel="users">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <span class="link-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                             <circle cx="9" cy="7" r="4" />
@@ -122,7 +122,7 @@
             <div class="sidebar-label">Tools</div>
             <div class="sidebar-nav">
                 <button class="sidebar-link" data-panel="map">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <span class="link-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
                             <line x1="8" y1="2" x2="8" y2="18" />
@@ -131,21 +131,15 @@
                     <span class="link-badge" id="sidebarMapBadge">0</span>
                 </button>
                 <button class="sidebar-link" data-panel="analytics">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <span class="link-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="20" x2="18" y2="10" />
                             <line x1="12" y1="20" x2="12" y2="4" />
                             <line x1="6" y1="20" x2="6" y2="14" />
                         </svg></span> Analytics
                 </button>
-                <button class="sidebar-link" data-panel="messages">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                        </svg></span> Messages
-                </button>
                 <button class="sidebar-link" data-panel="activity">
-                    <span class="link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <span class="link-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
                             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                         </svg></span> Activity Log
@@ -154,7 +148,7 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="admin-main">
+        <main class="admin-main" id="main-content">
             <div class="admin-status" id="adminStatus"></div>
 
             <!-- Dashboard Panel -->
@@ -234,36 +228,37 @@
                         </div>
                         <div class="dash-qa-grid">
                             <button class="dash-qa" onclick="switchPanel('submissions')">
-                                <span class="qa-icon" style="color:#f59e0b">⬡</span>
+                                <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/></svg></span>
                                 <span class="qa-text">Review Submissions</span>
                                 <span class="qa-count" id="qaSubmissions">0</span>
                             </button>
                             <button class="dash-qa" onclick="switchPanel('claims')">
-                                <span class="qa-icon" style="color:#818cf8">⊙</span>
+                                <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg></span>
                                 <span class="qa-text">Verify Claims</span>
                                 <span class="qa-count" id="qaClaims">0</span>
                             </button>
                             <button class="dash-qa" onclick="switchPanel('bounties')">
-                                <span class="qa-icon" style="color:#ec4899">⊕</span>
+                                <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
                                 <span class="qa-text">Manage Bounties</span>
                                 <span class="qa-count" id="qaBounties">0</span>
                             </button>
                             <button class="dash-qa" onclick="switchPanel('rewards')">
-                                <span class="qa-icon" style="color:#f59e0b">✦</span>
+                                <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.2 4.46 4.92.72-3.56 3.46.84 4.89L12 14.2l-4.4 2.32.84-4.89L4.88 8.18l4.92-.72L12 3z"/></svg></span>
                                 <span class="qa-text">Rewards Catalog</span>
                                 <span class="qa-count" id="qaRewards">0</span>
                             </button>
                             <button class="dash-qa" onclick="switchPanel('map')">
-                                <span class="qa-icon" style="color:#22c55e">◈</span>
+                                <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></span>
                                 <span class="qa-text">Map Items</span>
                                 <span class="qa-count" id="qaMap">0</span>
                             </button>
-                            <button class="dash-qa" onclick="switchPanel('messages')">
-                                <span class="qa-icon" style="color:#60a5fa">▣</span>
-                                <span class="qa-text">Send Message</span>
+                            <button class="dash-qa" onclick="switchPanel('users')">
+                                <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                                <span class="qa-text">User Directory</span>
+                                <span class="qa-count" id="qaUsers">0</span>
                             </button>
                             <button class="dash-qa" onclick="switchPanel('analytics')">
-                                <span class="qa-icon" style="color:#a78bfa">◧</span>
+                                <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
                                 <span class="qa-text">View Analytics</span>
                             </button>
                         </div>
@@ -533,88 +528,6 @@
             </div>
 
 
-            <!-- Messages Panel -->
-            <div class="admin-panel" id="panel-messages">
-                <h1 class="admin-main-title">Messages</h1>
-                <p class="admin-main-desc">Send announcements and notifications to students</p>
-
-                <div class="messages-layout">
-                    <div class="compose-card">
-                        <h3 class="compose-title">Compose Message</h3>
-                        <div class="form-group">
-                            <label class="form-label">Recipient</label>
-                            <select class="form-select" id="msgRecipient">
-                                <option value="all">All Students</option>
-                                <option value="denmark">Denmark High School</option>
-                                <option value="alliance">Alliance Academy</option>
-                                <option value="south">South Forsyth</option>
-                                <option value="individual">Individual Student</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="individualEmailGroup" style="display:none">
-                            <label class="form-label">Student Email</label>
-                            <input type="email" class="form-input" id="msgEmail" placeholder="student@school.edu">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Subject</label>
-                            <input type="text" class="form-input" id="msgSubject" placeholder="Enter subject line...">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Message</label>
-                            <textarea class="form-textarea" id="msgBody" rows="5"
-                                placeholder="Write your message here..."></textarea>
-                        </div>
-                        <button class="send-btn" onclick="sendMessage()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <line x1="22" y1="2" x2="11" y2="13" />
-                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                            </svg>
-                            Send Message
-                        </button>
-                    </div>
-                    <div class="templates-card">
-                        <h3 class="compose-title">Quick Templates</h3>
-                        <button class="template-btn" onclick="useTemplate('new_items')">
-                            <span class="template-icon">📦</span>
-                            <div>
-                                <div class="template-name">New Items Found</div>
-                                <div class="template-desc">Notify about newly found items today</div>
-                            </div>
-                        </button>
-                        <button class="template-btn" onclick="useTemplate('claim_reminder')">
-                            <span class="template-icon">⏰</span>
-                            <div>
-                                <div class="template-name">Claim Reminder</div>
-                                <div class="template-desc">Remind students to check their claims</div>
-                            </div>
-                        </button>
-                        <button class="template-btn" onclick="useTemplate('office_hours')">
-                            <span class="template-icon">🏫</span>
-                            <div>
-                                <div class="template-name">Office Hours Update</div>
-                                <div class="template-desc">Share lost & found office hours</div>
-                            </div>
-                        </button>
-                        <button class="template-btn" onclick="useTemplate('weekly_digest')">
-                            <span class="template-icon">📊</span>
-                            <div>
-                                <div class="template-name">Weekly Digest</div>
-                                <div class="template-desc">Weekly summary of activity</div>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="section-header" style="margin-top:24px">
-                    <h2 class="section-title">Sent Messages</h2>
-                    <span class="section-count" id="sentMsgCount">0</span>
-                </div>
-                <div class="cards-list" id="sentMessagesList">
-                    <div class="empty-state">No messages sent yet</div>
-                </div>
-            </div>
-
             <!-- Users Panel -->
             <div class="admin-panel" id="panel-users">
                 <h1 class="admin-main-title">User Management</h1>
@@ -623,7 +536,7 @@
                 <div class="analytics-stats-row">
                     <div class="analytics-stat-card">
                         <div class="stat-card-icon" style="background:rgba(37,99,235,0.15);color:#60a5fa">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                 <circle cx="9" cy="7" r="4" />
@@ -636,7 +549,7 @@
                     </div>
                     <div class="analytics-stat-card">
                         <div class="stat-card-icon" style="background:rgba(34,197,94,0.15);color:#4ade80">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="M12 6v6l4 2" />
@@ -647,7 +560,7 @@
                     </div>
                     <div class="analytics-stat-card">
                         <div class="stat-card-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                 <circle cx="8.5" cy="7" r="4" />
@@ -691,7 +604,6 @@
                     <button class="filter-btn active" onclick="filterActivity('all', this)">All</button>
                     <button class="filter-btn" onclick="filterActivity('approval', this)">Approvals</button>
                     <button class="filter-btn" onclick="filterActivity('claim', this)">Claims</button>
-                    <button class="filter-btn" onclick="filterActivity('message', this)">Messages</button>
                     <button class="filter-btn" onclick="filterActivity('system', this)">System</button>
                 </div>
 
@@ -745,8 +657,7 @@
                 redemptions: [],
                 editingRewardId: null,
                 users: [],
-                activityData: [],
-                sentMessages: []
+                activityData: []
             };
 
             // ==========================================
@@ -995,7 +906,7 @@
                 });
             }
 
-            function buildActivityData(items, claims, messages) {
+            function buildActivityData(items, claims) {
                 const entries = [];
 
                 items.forEach((item) => {
@@ -1025,7 +936,7 @@
                             desc: `<strong>Item claimed</strong>: <strong>${itemName}</strong>`,
                             created_at: createdAt
                         });
-                    } else if (status === 'bounty') {
+                    } else if (status === 'bounty' || status === 'lost') {
                         entries.push({
                             type: 'system',
                             icon: '🎯',
@@ -1047,17 +958,6 @@
                         icon: status === 'approved' ? '✅' : status === 'rejected' ? '❌' : '🔑',
                         desc,
                         created_at: claim.updated_at || claim.created_at
-                    });
-                });
-
-                messages.forEach((msg) => {
-                    const recipient = escapeHtml(msg.recipient_label || msg.recipient_value || msg.recipient_type || 'Students');
-                    const subject = escapeHtml(msg.subject || 'Message');
-                    entries.push({
-                        type: 'message',
-                        icon: '💬',
-                        desc: `Message sent to <strong>${recipient}</strong>: "${subject}"`,
-                        created_at: msg.created_at
                     });
                 });
 
@@ -1197,6 +1097,7 @@
                 setText('qaBounties', summary.bountyCount);
                 setText('qaRewards', state.rewardCatalog.filter((reward) => reward.is_active !== false).length);
                 setText('qaMap', state.mapItems.length);
+                setText('qaUsers', state.users.length);
 
                 const recoveryRounded = Math.round(summary.recoveryRate);
                 setText('recoveryRateKpi', recoveryRounded);
@@ -1240,7 +1141,7 @@
                                     ${description}
                                 </div>
                                 <div class="card-actions">
-                                    <button class="btn btn-approve" onclick="approveItem('${item.id}', '${item.isBounty ? 'bounty' : 'found'}')">Approve</button>
+                                    <button class="btn btn-approve" onclick="approveItem('${item.id}', '${(item.is_bounty || item.isBounty) ? 'bounty' : 'found'}')">Approve</button>
                                     <button class="btn btn-reject" onclick="rejectItem('${item.id}')">Reject</button>
                                 </div>
                             </div>
@@ -1527,7 +1428,6 @@
                 const colorForType = {
                     approval: '#f59e0b',
                     claim: '#22c55e',
-                    message: '#60a5fa',
                     system: '#a78bfa'
                 };
 
@@ -1538,32 +1438,6 @@
                         <span class="dash-recent-time">${formatRelative(entry.created_at)}</span>
                     </div>
                 `).join('');
-            }
-
-            function renderSentMessages() {
-                const list = document.getElementById('sentMessagesList');
-                if (!list) return;
-
-                setText('sentMsgCount', state.sentMessages.length);
-                if (!state.sentMessages.length) {
-                    list.innerHTML = '<div class="empty-state">No messages sent yet</div>';
-                    return;
-                }
-
-                list.innerHTML = state.sentMessages.map((msg) => {
-                    const recipient = escapeHtml(msg.recipient_label || msg.recipient_value || msg.recipient_type || 'Students');
-                    const unsynced = msg.localOnly ? '<span style="color:#f59e0b;font-size:11px"> (local draft)</span>' : '';
-                    return `
-                        <div class="sent-msg-card">
-                            <div class="sent-msg-header">
-                                <div class="sent-msg-subject">${escapeHtml(msg.subject || 'Message')}${unsynced}</div>
-                                <div class="sent-msg-time">${formatDateTime(msg.created_at)}</div>
-                            </div>
-                            <div class="sent-msg-recipient">To: ${recipient}</div>
-                            <div class="sent-msg-body">${escapeHtml(msg.body || '').replace(/\n/g, '<br>')}</div>
-                        </div>
-                    `;
-                }).join('');
             }
 
             // ==========================================
@@ -1588,13 +1462,12 @@
                 if (dashStats) dashStats.style.display = 'grid';
 
                 const allStatuses = ['pending', 'found', 'claimed', 'lost', 'bounty'];
-                const [pendingItems, pendingClaims, allItems, allClaims, admins, messages, rewardCatalog, redemptions] = await Promise.all([
+                const [pendingItems, pendingClaims, allItems, allClaims, admins, rewardCatalog, redemptions] = await Promise.all([
                     BackTrackDB.getPendingItems(),
                     BackTrackDB.getPendingClaims(),
                     BackTrackDB.getItems({ status: allStatuses }),
                     typeof BackTrackDB.getClaims === 'function' ? BackTrackDB.getClaims() : BackTrackDB.getPendingClaims(),
                     typeof BackTrackDB.getAdmins === 'function' ? BackTrackDB.getAdmins() : Promise.resolve([]),
-                    typeof BackTrackDB.getAdminMessages === 'function' ? BackTrackDB.getAdminMessages(100) : Promise.resolve([]),
                     typeof BackTrackDB.getRewardCatalog === 'function' ? BackTrackDB.getRewardCatalog() : Promise.resolve([]),
                     typeof BackTrackDB.getRedemptions === 'function' ? BackTrackDB.getRedemptions({ limit: 200 }) : Promise.resolve([])
                 ]);
@@ -1604,13 +1477,16 @@
                 state.allItems = Array.isArray(allItems) ? allItems : [];
                 state.allClaims = Array.isArray(allClaims) ? allClaims : [];
                 state.admins = Array.isArray(admins) ? admins : [];
-                state.sentMessages = Array.isArray(messages) ? messages : [];
                 state.rewardCatalog = Array.isArray(rewardCatalog) ? rewardCatalog : [];
                 state.redemptions = Array.isArray(redemptions) ? redemptions : [];
-                state.bounties = state.allItems.filter((item) => item.status === 'bounty');
-                state.mapItems = toMapItems(state.allItems.filter((item) => ['pending', 'found', 'claimed', 'bounty'].includes(String(item.status || ''))));
+                state.bounties = state.allItems.filter((item) => {
+                    const status = String(item.status || '').toLowerCase();
+                    if (status === 'bounty' || status === 'lost') return true;
+                    return Boolean(item.is_bounty) && status !== 'pending';
+                });
+                state.mapItems = toMapItems(state.allItems.filter((item) => ['pending', 'found', 'claimed', 'bounty', 'lost'].includes(String(item.status || ''))));
                 state.users = buildUsers(state.allItems, state.allClaims, state.admins);
-                state.activityData = buildActivityData(state.allItems, state.allClaims, state.sentMessages);
+                state.activityData = buildActivityData(state.allItems, state.allClaims);
 
                 return true;
             }
@@ -1629,7 +1505,6 @@
                 renderUsersTable();
                 renderActivity();
                 renderDashRecent();
-                renderSentMessages();
 
                 drawDashboardSparklines();
                 drawDashTrend();
@@ -1884,107 +1759,6 @@
             window.filterActivity = filterActivity;
 
             // ==========================================
-            // MESSAGES
-            // ==========================================
-            const templates = {
-                new_items: {
-                    subject: 'New Items Found Today!',
-                    body: 'Hello! New lost items have been turned in today. Please check BackTrack for details.'
-                },
-                claim_reminder: {
-                    subject: 'Reminder: Check Your Pending Claims',
-                    body: 'This is a reminder to verify your pending claims with the front office.'
-                },
-                office_hours: {
-                    subject: 'Lost & Found Office Hours Update',
-                    body: 'Office hours:\n- Monday-Friday: 7:30 AM - 3:30 PM\n- Main Office'
-                },
-                weekly_digest: {
-                    subject: 'Weekly Lost & Found Digest',
-                    body: 'Weekly summary:\n- New items\n- Claims approved\n- Recovery rate'
-                }
-            };
-
-            document.getElementById('msgRecipient')?.addEventListener('change', function () {
-                const emailGroup = document.getElementById('individualEmailGroup');
-                if (emailGroup) emailGroup.style.display = this.value === 'individual' ? 'block' : 'none';
-            });
-
-            function useTemplate(type) {
-                const template = templates[type];
-                if (!template) return;
-                const subjectEl = document.getElementById('msgSubject');
-                const bodyEl = document.getElementById('msgBody');
-                if (subjectEl) subjectEl.value = template.subject;
-                if (bodyEl) bodyEl.value = template.body;
-            }
-
-            async function sendMessage() {
-                const recipientEl = document.getElementById('msgRecipient');
-                const subjectEl = document.getElementById('msgSubject');
-                const bodyEl = document.getElementById('msgBody');
-                const emailEl = document.getElementById('msgEmail');
-
-                const recipientType = recipientEl ? recipientEl.value : 'all';
-                const subject = subjectEl ? subjectEl.value.trim() : '';
-                const body = bodyEl ? bodyEl.value.trim() : '';
-                const email = emailEl ? emailEl.value.trim() : '';
-
-                if (!subject || !body) {
-                    alert('Please fill in subject and message.');
-                    return;
-                }
-                if (recipientType === 'individual' && !email) {
-                    alert('Please enter the student email.');
-                    return;
-                }
-
-                const recipientLabelMap = {
-                    all: 'All Students',
-                    denmark: 'Denmark High School',
-                    alliance: 'Alliance Academy',
-                    south: 'South Forsyth',
-                    individual: email
-                };
-
-                const payload = {
-                    sender_id: state.user?.id || null,
-                    sender_email: state.user?.email || null,
-                    recipient_type: recipientType,
-                    recipient_value: recipientType === 'individual' ? email : recipientType,
-                    subject,
-                    body
-                };
-
-                let saved = null;
-                if (typeof BackTrackDB.addAdminMessage === 'function') {
-                    saved = await BackTrackDB.addAdminMessage(payload);
-                }
-
-                if (saved) {
-                    await refreshDashboard();
-                    showStatus('Message sent.');
-                    setTimeout(() => showStatus(''), 1600);
-                } else {
-                    state.sentMessages.unshift({
-                        ...payload,
-                        recipient_label: recipientLabelMap[recipientType] || recipientType,
-                        created_at: new Date().toISOString(),
-                        localOnly: true
-                    });
-                    renderSentMessages();
-                    showStatus('Message saved locally only. Run SQL migration for admin_messages table.');
-                }
-
-                if (subjectEl) subjectEl.value = '';
-                if (bodyEl) bodyEl.value = '';
-                if (emailEl) emailEl.value = '';
-            }
-
-            window.useTemplate = useTemplate;
-            window.sendMessage = sendMessage;
-
-            // ==========================================
             // CHART DATA HELPERS
             // ==========================================
             function buildDailySeries(records, days, predicate, dateField = 'created_at') {
@@ -2074,7 +1848,10 @@
             function drawDashboardSparklines() {
                 const pendingSeries = buildDailySeries(state.allItems, 10, (item) => item.status === 'pending');
                 const claimsSeries = buildDailySeries(state.allClaims, 10, (claim) => claim.status === 'pending');
-                const bountySeries = buildDailySeries(state.allItems, 10, (item) => item.status === 'bounty');
+                const bountySeries = buildDailySeries(state.allItems, 10, (item) => {
+                    const status = String(item.status || '').toLowerCase();
+                    return status === 'bounty' || status === 'lost' || Boolean(item.is_bounty);
+                });
                 drawSparkline('sparkPending', pendingSeries, '#f59e0b');
                 drawSparkline('sparkClaims', claimsSeries, '#818cf8');
                 drawSparkline('sparkBounties', bountySeries, '#ec4899');

@@ -15,6 +15,9 @@ const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 function shouldFallbackToGemini(error: string) {
   const message = error.toLowerCase();
   return (
+    message.includes('missing openai_api_key') ||
+    message.includes('invalid api key') ||
+    message.includes('unauthorized') ||
     message.includes('insufficient_quota') ||
     message.includes('quota') ||
     message.includes('rate limit') ||

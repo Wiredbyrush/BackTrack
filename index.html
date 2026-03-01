@@ -29,53 +29,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/base.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
-            animation: pageLoadFadeIn 0.8s ease-out;
-            position: relative;
-        }
-
-
-        @keyframes pageLoadFadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Page transition overlay */
-        .page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .page-transition.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
         /* Focus styles for keyboard navigation (Accessibility) */
         *:focus-visible {
             outline: 2px solid rgba(255, 255, 255, 0.8);
@@ -2741,10 +2696,7 @@
 </head>
 
 <body>
-    <!-- Skip to Content (Accessibility) -->
-    <a href="#main-content"
-        style="position: absolute; top: -100px; left: 0; background: #ffffff; color: #000000; padding: 12px 24px; z-index: 10000; font-weight: 600; font-size: 14px; transition: top 0.2s;"
-        onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Skip to main content</a>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition"></div>
@@ -2769,7 +2721,7 @@
 
         <div class="nav-right">
             <a class="sign-in-btn" href="login.html" aria-label="Log in to your account">Log In</a>
-            <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+            <div class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" role="button" tabindex="0">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -3370,13 +3322,13 @@
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;">
             <div>
                 <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
-                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">The official
+                <p style="color: #888888; font-size: 14px; line-height: 1.6; max-width: 280px;">The official
                     lost-and-found system for Forsyth County high schools. Built for FBLA Website Coding & Development.
                 </p>
             </div>
             <div>
                 <div
-                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888888; margin-bottom: 16px;">
                     Product</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse
@@ -3389,7 +3341,7 @@
             </div>
             <div>
                 <div
-                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888888; margin-bottom: 16px;">
                     Resources</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="features.html" style="color: #777777; text-decoration: none; font-size: 14px;">Features</a>
@@ -3398,7 +3350,7 @@
             </div>
             <div>
                 <div
-                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888888; margin-bottom: 16px;">
                     Account</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="login.html" style="color: #777777; text-decoration: none; font-size: 14px;">Log In</a>
@@ -3409,9 +3361,9 @@
         </div>
         <div
             style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
-            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Website Coding &amp;
+            <div style="color: #888888; font-size: 13px;">&copy; 2025–2026 BackTrack. Built for FBLA Website Coding &amp;
                 Development.</div>
-            <div style="color: #444444; font-size: 13px;">Made by BackTrack Team</div>
+            <div style="color: #888888; font-size: 13px;">Made by BackTrack Team</div>
         </div>
     </footer>
 
@@ -3426,7 +3378,9 @@
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             mobileMenu.classList.toggle('open');
-            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+            const isOpen = mobileMenu.classList.contains('open');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            document.body.style.overflow = isOpen ? 'hidden' : '';
         });
 
         hamburger.addEventListener('keydown', (e) => {

@@ -22,13 +22,6 @@ if (!window.BackTrackDB) {
 
     // Get all items (with optional filters)
     async function getItems(filters = {}) {
-        if (filters.search && filters.search.trim().length > 0) {
-            if (!filters.status) {
-                filters.status = ['found', 'claimed'];
-            }
-            return searchItems(filters.search, filters);
-        }
-
         let query = supabase
             .from('items')
             .select('*')
@@ -47,12 +40,28 @@ if (!window.BackTrackDB) {
 
         // Apply category filter
         if (filters.category && filters.category.length > 0) {
-            query = query.in('category', filters.category);
+            const categoryValues = Array.from(new Set(
+                filters.category
+                    .map((value) => String(value || '').trim())
+                    .filter(Boolean)
+                    .flatMap((value) => {
+                        const lower = value.toLowerCase();
+                        return [value, lower, lower.toUpperCase(), lower.charAt(0).toUpperCase() + lower.slice(1)];
+                    })
+            ));
+            if (categoryValues.length > 0) {
+                query = query.in('category', categoryValues);
+            }
         }
 
         // Apply location filter
         if (filters.location && filters.location !== 'All Locations') {
-            query = query.eq('location', filters.location);
+            if (Array.isArray(filters.location)) {
+                // If it's an array, query matching any of the locations
+                query = query.in('location', filters.location);
+            } else {
+                query = query.eq('location', filters.location);
+            }
         }
 
         // Apply date range filter
@@ -64,8 +73,17 @@ if (!window.BackTrackDB) {
         }
 
         // Apply search filter
-        if (filters.search) {
-            query = query.ilike('name', `%${filters.search}%`);
+        if (filters.search && String(filters.search).trim().length > 0) {
+            const safeSearch = String(filters.search)
+                .trim()
+                .replace(/[%_,'"]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+            if (safeSearch) {
+                query = query.or(
+                    `name.ilike.%${safeSearch}%,description.ilike.%${safeSearch}%,location.ilike.%${safeSearch}%,category.ilike.%${safeSearch}%`
+                );
+            }
         }
 
         const { data, error } = await query;

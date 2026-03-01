@@ -25,52 +25,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/nav-auth.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            min-height: 100vh;
-            animation: pageLoadFadeIn 0.8s ease-out;
-            position: relative;
-        }
-
-
-        @keyframes pageLoadFadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Page transition overlay */
-        .page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .page-transition.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
         a,
         button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -497,6 +454,21 @@
             }
         }
 
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 12px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .submit-tab {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+        }
+
         /* Tab Navigation */
         .submit-tabs {
             display: flex;
@@ -593,16 +565,17 @@
             color: #fbbf24;
         }
     </style>
-    <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
 </head>
 
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition"></div>
 
     <!-- Navigation -->
-    <nav>
+    <nav aria-label="Main navigation">
         <a href="index.html" class="nav-left">
             <span class="brand-logo">
                 <img class="logo-dark" src="logo.png" alt="BackTrack">
@@ -625,14 +598,15 @@
     </nav>
     <div class="nav-spacer"></div>
 
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <h1 class="page-title">Submit</h1>
         <p class="page-description">Found something? Report it. Lost something? Post a bounty so others can help.</p>
 
         <!-- Tab Navigation -->
-        <div class="submit-tabs">
-            <button class="submit-tab active" data-tab="found" id="tabFound">
-                <span class="tab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        <div class="submit-tabs" role="tablist">
+            <button class="submit-tab active" data-tab="found" id="tabFound" role="tab" aria-selected="true"
+                aria-controls="panelFound">
+                <span class="tab-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path
                             d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
@@ -640,8 +614,9 @@
                         <line x1="12" y1="22.08" x2="12" y2="12" />
                     </svg></span> Report Found Item
             </button>
-            <button class="submit-tab" data-tab="bounty" id="tabBounty">
-                <span class="tab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            <button class="submit-tab" data-tab="bounty" id="tabBounty" role="tab" aria-selected="false"
+                aria-controls="panelBounty">
+                <span class="tab-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2">
                         <circle cx="11" cy="11" r="8" />
                         <path d="M21 21l-4.35-4.35" />
@@ -662,13 +637,15 @@
         </div>
 
         <!-- Found Item Tab -->
-        <div class="tab-panel active" id="panelFound">
+        <div class="tab-panel active" id="panelFound" role="tabpanel">
             <form class="submit-form" id="submitForm">
+                <fieldset class="form-fieldset">
+                    <legend class="sr-only">Item Details</legend>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="imageInput">Upload Photos</label>
                         <div class="upload-area" id="uploadArea">
-                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            <svg class="upload-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -680,7 +657,7 @@
                         <div class="image-preview" id="imagePreview">
                             <img src="" alt="Preview" id="previewImg">
                             <button type="button" class="remove-image" id="removeImage">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -720,18 +697,22 @@
                     <div class="form-group">
                         <label class="form-label" for="itemLocation">Location Found</label>
                         <select class="form-select" id="itemLocation" required>
-                            <option value="">Select Location</option>
-                            <option value="Main Office">Main Office / Admin</option>
+                            <option value="">Select Category</option>
+                            <option value="Front Office / Admin">Front Office / Admin</option>
                             <option value="Cafeteria">Cafeteria</option>
                             <option value="Media Center">Media Center</option>
-                            <option value="Gym">Gym / Athletics</option>
-                            <option value="Auditorium">Auditorium</option>
-                            <option value="Stadium">Stadium / Fields</option>
-                            <option value="Parking Lot">Parking Lot</option>
+                            <option value="Gymnasium">Gymnasium</option>
+                            <option value="Classrooms">Classrooms</option>
+                            <option value="Computer / Science Labs">Computer / Science Labs</option>
+                            <option value="Art / Music Rooms">Art / Music Rooms</option>
+                            <option value="Restrooms">Restrooms</option>
+                            <option value="Athletic Fields / Track">Athletic Fields / Track</option>
+                            <option value="Parking Lots / Bus Lot">Parking Lots / Bus Lot</option>
                             <option value="The Barn">The Barn</option>
-                            <option value="Hallway">Hallway / Common Area</option>
-                            <option value="Classroom">Classroom</option>
-                            <option value="Restroom">Restroom</option>
+                        </select>
+                        <select class="form-select" id="itemLocationSpecific" style="display: none; margin-top: 12px;"
+                            required>
+                            <option value="">Select Specific Location</option>
                         </select>
                     </div>
                 </div>
@@ -762,19 +743,22 @@
                     </div>
                 </div>
 
+                </fieldset>
                 <button type="submit" class="submit-btn" id="submitBtn">Submit for Review</button>
             </form>
         </div>
 
         <!-- Bounty Tab -->
-        <div class="tab-panel" id="panelBounty">
+        <div class="tab-panel" id="panelBounty" role="tabpanel">
             <form class="submit-form" id="bountyForm">
+                <fieldset class="form-fieldset">
+                    <legend class="sr-only">Bounty Details</legend>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="bountyImage">Photo of Similar Item <span
                                 class="optional">(Optional)</span></label>
                         <div class="upload-area" id="bountyUploadArea">
-                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            <svg class="upload-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -786,7 +770,7 @@
                         <div class="image-preview" id="bountyImagePreview">
                             <img src="" alt="Preview" id="bountyPreviewImg">
                             <button type="button" class="remove-image" id="bountyRemoveImage">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -828,18 +812,22 @@
                     <div class="form-group">
                         <label class="form-label" for="bountyLocation">Where did you last have it?</label>
                         <select class="form-select" id="bountyLocation" required>
-                            <option value="">Select Location</option>
-                            <option value="Main Office">Main Office / Admin</option>
+                            <option value="">Select Category</option>
+                            <option value="Front Office / Admin">Front Office / Admin</option>
                             <option value="Cafeteria">Cafeteria</option>
                             <option value="Media Center">Media Center</option>
-                            <option value="Gym">Gym / Athletics</option>
-                            <option value="Auditorium">Auditorium</option>
-                            <option value="Stadium">Stadium / Fields</option>
-                            <option value="Parking Lot">Parking Lot</option>
+                            <option value="Gymnasium">Gymnasium</option>
+                            <option value="Classrooms">Classrooms</option>
+                            <option value="Computer / Science Labs">Computer / Science Labs</option>
+                            <option value="Art / Music Rooms">Art / Music Rooms</option>
+                            <option value="Restrooms">Restrooms</option>
+                            <option value="Athletic Fields / Track">Athletic Fields / Track</option>
+                            <option value="Parking Lots / Bus Lot">Parking Lots / Bus Lot</option>
                             <option value="The Barn">The Barn</option>
-                            <option value="Hallway">Hallway / Common Area</option>
-                            <option value="Classroom">Classroom</option>
-                            <option value="Restroom">Restroom</option>
+                        </select>
+                        <select class="form-select" id="bountyLocationSpecific" style="display: none; margin-top: 12px;"
+                            required>
+                            <option value="">Select Specific Location</option>
                         </select>
                     </div>
                 </div>
@@ -873,6 +861,7 @@
                     </div>
                 </div>
 
+                </fieldset>
                 <button type="submit" class="submit-btn" id="bountySubmitBtn">Post Bounty</button>
             </form>
         </div>
@@ -1133,12 +1122,12 @@
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;">
             <div>
                 <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
-                <p style="color: #555555; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized
+                <p style="color: #888888; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized
                     lost-and-found system for students and staff. Built for FBLA Coding & Programming.</p>
             </div>
             <div>
                 <div
-                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888888; margin-bottom: 16px;">
                     Product</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="browse.html" style="color: #777777; text-decoration: none; font-size: 14px;">Browse
@@ -1151,7 +1140,7 @@
             </div>
             <div>
                 <div
-                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888888; margin-bottom: 16px;">
                     Resources</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="features.html" style="color: #777777; text-decoration: none; font-size: 14px;">Features</a>
@@ -1160,7 +1149,7 @@
             </div>
             <div>
                 <div
-                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; margin-bottom: 16px;">
+                    style="font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888888; margin-bottom: 16px;">
                     Account</div>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <a href="login.html" style="color: #777777; text-decoration: none; font-size: 14px;">Log In</a>
@@ -1171,9 +1160,9 @@
         </div>
         <div
             style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
-            <div style="color: #444444; font-size: 13px;">&copy; 2025 BackTrack. Built for FBLA Coding &amp;
+            <div style="color: #888888; font-size: 13px;">&copy; 2025–2026 BackTrack. Built for FBLA Coding &amp;
                 Programming.</div>
-            <div style="color: #444444; font-size: 13px;">Made by BackTrack Team</div>
+            <div style="color: #888888; font-size: 13px;">Made by BackTrack Team</div>
         </div>
     </footer>
 
@@ -1268,6 +1257,65 @@
             });
         }
 
+        // ==========================================
+        // DYNAMIC LOCATION MAPPING
+        // ==========================================
+        const locationMapping = {
+            'Front Office / Admin': ['Front Office', 'Guidance'],
+            'Cafeteria': ['Cafeteria'],
+            'Media Center': ['Media Center'],
+            'Gymnasium': ['Gymnasium', 'Weight Room'],
+            'Classrooms': [
+                'Room 101', 'Room 102', 'Room 103', 'Room 104', 'Room 105',
+                'Room 106', 'Room 107', 'Room 108', 'Room 109', 'Room 201',
+                'Room 202', 'Room 203', 'Room 204', 'Room 205', 'Room 206',
+                'Room 207', 'Room 208', 'Room 209', 'Room 210', 'Room 211', 'Room 212'
+            ],
+            'Computer / Science Labs': ['Computer Lab', 'Science Lab 1', 'Science Lab 2'],
+            'Art / Music Rooms': ['Art Room', 'Music Room'],
+            'Restrooms': ['Restrooms'],
+            'Athletic Fields / Track': ['Track & Stadium', 'Soccer Field', 'Baseball Field', 'Softball Field', 'Tennis Courts'],
+            'Parking Lots / Bus Lot': ['Student Parking', 'Visitor Parking', 'Staff Parking', 'Bus Lot'],
+            'The Barn': ['The Barn']
+        };
+
+        function setupLocationDependent(primaryId, specificId) {
+            const primary = document.getElementById(primaryId);
+            const specific = document.getElementById(specificId);
+
+            primary.addEventListener('change', () => {
+                const cat = primary.value;
+                specific.innerHTML = '<option value="">Select Specific Location</option>';
+                if (cat && locationMapping[cat] && locationMapping[cat].length > 1) {
+                    specific.style.display = 'block';
+                    specific.required = true;
+                    locationMapping[cat].forEach(room => {
+                        const opt = document.createElement('option');
+                        opt.value = room;
+                        opt.textContent = room;
+                        specific.appendChild(opt);
+                    });
+                } else {
+                    specific.style.display = 'none';
+                    specific.required = false;
+                }
+            });
+        }
+
+        setupLocationDependent('itemLocation', 'itemLocationSpecific');
+        setupLocationDependent('bountyLocation', 'bountyLocationSpecific');
+
+        function getFinalLocation(primaryId, specificId) {
+            const primary = document.getElementById(primaryId).value;
+            const specific = document.getElementById(specificId);
+            if (specific.style.display !== 'none' && specific.value) {
+                return specific.value;
+            } else if (primary && locationMapping[primary] && locationMapping[primary].length === 1) {
+                return locationMapping[primary][0];
+            }
+            return primary;
+        }
+
         // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1311,7 +1359,7 @@
                     name: document.getElementById('itemName').value,
                     description: document.getElementById('itemDescription').value,
                     category: document.getElementById('itemCategory').value,
-                    location: document.getElementById('itemLocation').value,
+                    location: getFinalLocation('itemLocation', 'itemLocationSpecific'),
                     date_lost: document.getElementById('itemDate').value,
                     image_url: imageUrl,
                     finder_name: document.getElementById('finderName').value,
@@ -1360,6 +1408,8 @@
         tabFound.addEventListener('click', () => {
             tabFound.classList.add('active');
             tabBounty.classList.remove('active');
+            tabFound.setAttribute('aria-selected', 'true');
+            tabBounty.setAttribute('aria-selected', 'false');
             panelFound.classList.add('active');
             panelBounty.classList.remove('active');
         });
@@ -1367,6 +1417,8 @@
         tabBounty.addEventListener('click', () => {
             tabBounty.classList.add('active');
             tabFound.classList.remove('active');
+            tabBounty.setAttribute('aria-selected', 'true');
+            tabFound.setAttribute('aria-selected', 'false');
             panelBounty.classList.add('active');
             panelFound.classList.remove('active');
         });
@@ -1456,7 +1508,7 @@
                     name: document.getElementById('bountyName').value,
                     description: document.getElementById('bountyDescription').value,
                     category: document.getElementById('bountyCategory').value,
-                    location: document.getElementById('bountyLocation').value,
+                    location: getFinalLocation('bountyLocation', 'bountyLocationSpecific'),
                     date_lost: document.getElementById('bountyDate').value,
                     image_url: imageUrl,
                     contact_email: document.getElementById('bountyEmail').value,

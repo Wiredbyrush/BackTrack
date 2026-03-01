@@ -66,9 +66,13 @@ BackTrack is built primarily as a static HTML/CSS/JS website hosted at the repos
 ├── sources.html
 ├── offline.html
 ├── css/
-│   ├── design-system.css
-│   ├── nav-auth.css
-│   └── theme.css
+│   ├── base.css            # Shared resets, page transitions, skip-to-content
+│   ├── design-system.css   # Design tokens, buttons, typography scale
+│   ├── nav-auth.css        # Navigation bar, user menu, auth UI
+│   ├── theme.css           # Dark/light mode overrides
+│   ├── admin.css           # Admin panel layout and components
+│   ├── rewards.css         # Rewards page styles
+│   └── leaderboard.css     # Leaderboard component styles
 ├── js/
 │   ├── supabase.js
 │   ├── nav-auth.js
@@ -158,11 +162,26 @@ Row-level security policies are included to protect user data.
 - `manifest.json` defines the app install experience
 - `sw.js` pre-caches core pages and serves `offline.html` on failed navigation
 
+## CSS Architecture
+
+The project uses a layered CSS approach to eliminate duplication:
+
+1. **`css/base.css`** — Global resets, body defaults, page transitions, skip-to-content link
+2. **`css/design-system.css`** — Design tokens (colors, spacing, typography), button styles, responsive breakpoints, WCAG-compliant touch targets
+3. **`css/nav-auth.css`** — Shared navigation bar, user avatar/dropdown, sign-in button
+4. **`css/theme.css`** — Dark/light mode variable overrides for all components
+5. **Page-specific CSS** — Inline `<style>` or dedicated files (admin.css, rewards.css) for page-unique styles
+
 ## Accessibility
-`js/accessibility.js` provides:
-- High contrast, text size, and reduced motion toggles
-- Keyboard shortcuts + help overlay
-- Toast notifications and screen reader announcements
+
+- Skip-to-content links on every page
+- ARIA labels on navigation, tabs, and interactive elements
+- Keyboard navigation with focus-visible styles
+- Minimum 44px touch targets (WCAG / Apple HIG compliant)
+- `js/accessibility.js` provides:
+  - High contrast, text size, and reduced motion toggles
+  - Keyboard shortcuts + help overlay
+  - Toast notifications and screen reader announcements
 
 ## Deployment
 - Deploy the root files as a static site (any static host works).

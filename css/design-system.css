@@ -38,7 +38,7 @@
     --text-primary: #ffffff;
     --text-secondary: #a0a0a0;
     --text-tertiary: #666666;
-    --text-muted: #444444;
+    --text-muted: #888888;
 
     --border-subtle: rgba(255, 255, 255, 0.06);
     --border-default: rgba(255, 255, 255, 0.1);
@@ -422,7 +422,7 @@ textarea::placeholder {
 }
 
 .search-bar .search-icon,
-.search-bar svg {
+.search-bar>svg {
     position: absolute;
     left: 16px;
     top: 50%;
@@ -1137,9 +1137,22 @@ body.light-theme .shortcut-item span {
     .btn,
     .submit-btn,
     button[type="submit"] {
-        padding: 10px 20px;
+        padding: 12px 20px;
+        min-height: 44px;
         font-size: var(--text-sm);
     }
+}
+
+/* Touch target minimum sizes (WCAG / Apple HIG) */
+.btn,
+.submit-btn,
+.sign-in-btn,
+.primary-btn,
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+button[type="submit"] {
+    min-height: 44px;
 }
 
 /* ============================================
