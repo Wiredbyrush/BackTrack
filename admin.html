@@ -1250,8 +1250,6 @@
                         actionBtn = `<button class="btn btn-approve" style="background:rgba(16,185,129,0.15);color:#34d399;border-color:rgba(16,185,129,0.3);" onclick="verifyFoundBounty('${item.id}')">Verify in Office</button>`;
                     } else if (isClaimed) {
                         actionBtn = `<button class="btn btn-approve" style="background:rgba(59,130,246,0.15);color:#60a5fa;border-color:rgba(59,130,246,0.3);" onclick="returnBounty('${item.id}')">Mark as Returned</button>`;
-                    } else {
-                        actionBtn = `<button class="btn btn-approve" onclick="approveBounty('${item.id}')">Approve</button>`;
                     }
 
                     return `
@@ -1636,23 +1634,6 @@
                 await refreshDashboard();
             }
 
-            async function approveBounty(id) {
-                if (!confirm('Approve this bounty to be shown on the public map?')) return;
-                const statusEl = document.getElementById(`bounty-status-${id}`);
-                if (statusEl) statusEl.textContent = 'Approving...';
-
-                // Set status to pending so it appears on the map as a regular item
-                const ok = await BackTrackDB.setItemStatus(id, 'pending');
-                if (!ok) {
-                    if (statusEl) {
-                        statusEl.textContent = 'Failed.';
-                        statusEl.className = 'card-status error';
-                    }
-                    return;
-                }
-                await refreshDashboard();
-            }
-
             async function verifyFoundBounty(id) {
                 if (!confirm('Verify that this bounty was turned into the office? This will mark it as Verified in Office.')) return;
                 const statusEl = document.getElementById(`bounty-status-${id}`);
@@ -1838,7 +1819,6 @@
             window.rejectItem = rejectItem;
             window.approveClaim = approveClaim;
             window.rejectClaim = rejectClaim;
-            window.approveBounty = approveBounty;
             window.verifyFoundBounty = verifyFoundBounty;
             window.returnBounty = returnBounty;
             window.removeBounty = removeBounty;
