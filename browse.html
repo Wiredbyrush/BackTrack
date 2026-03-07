@@ -1603,7 +1603,157 @@
             border-color: rgba(239, 68, 68, 0.3);
             color: #dc2626;
         }
+
+        /* Bounty Claim Modal Styles */
+        .bounty-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bounty-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .bounty-modal {
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .bounty-modal-overlay.active .bounty-modal {
+            transform: scale(1);
+        }
+
+        body.light-theme .bounty-modal {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
+        }
+
+        .bounty-modal-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .bounty-modal h3 {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        body.light-theme .bounty-modal h3 {
+            color: #111827;
+        }
+
+        .bounty-modal p {
+            color: #9ca3af;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        body.light-theme .bounty-modal p {
+            color: #4b5563;
+        }
+
+        .bounty-modal-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .bounty-modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bounty-btn-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        body.light-theme .bounty-btn-cancel {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        .bounty-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-theme .bounty-btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .bounty-btn-confirm {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .bounty-btn-confirm:hover {
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+            transform: translateY(-1px);
+        }
     </style>
+
+    <!-- Custom Bounty Claim Modal Instead of Native Alert -->
+    <div id="bountyClaimModal" class="bounty-modal-overlay" role="dialog" aria-modal="true"
+        aria-labelledby="bountyModalTitle" aria-describedby="bountyModalDesc">
+        <div class="bounty-modal">
+            <div class="bounty-modal-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h3 id="bountyModalTitle">Turn In Found Item</h3>
+            <p id="bountyModalDesc">To claim this bounty, please turn the item in to the Main Office or Lost and Found
+                room.</p>
+            <p style="color: #6ee7b7; font-size: 14px; margin-top: -20px; margin-bottom: 28px; font-weight: 500;">Click
+                'I Have Turned It In' only if you are doing so now.</p>
+            <div class="bounty-modal-actions">
+                <button id="bountyModalCancel" class="bounty-btn-cancel">Cancel</button>
+                <button id="bountyModalConfirm" class="bounty-btn-confirm">I Have Turned It In</button>
+            </div>
+        </div>
+    </div>
 
     <div class="chatbot-widget">
         <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat assistant">
@@ -2081,7 +2231,33 @@
                 return;
             }
 
-            const confirmed = confirm("To claim this bounty, please turn the item in to the Main Office or Lost and Found room.\\n\\nClick 'OK' only if you have turned it in or are doing so now.");
+            // Show custom modal instead of native confirm
+            const modal = document.getElementById('bountyClaimModal');
+            const cancelBtn = document.getElementById('bountyModalCancel');
+            const confirmBtn = document.getElementById('bountyModalConfirm');
+
+            // Set up a promise to wait for user choice
+            const confirmed = await new Promise((resolve) => {
+                const closeAndResolve = (result) => {
+                    modal.classList.remove('active');
+                    setTimeout(() => { modal.style.display = 'none'; }, 300); // Wait for fade out
+                    cancelBtn.onclick = null;
+                    confirmBtn.onclick = null;
+                    resolve(result);
+                };
+
+                modal.style.display = 'flex';
+                // Small delay to allow display:flex to apply before adding specific opacity transition class
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        modal.classList.add('active');
+                    });
+                });
+
+                cancelBtn.onclick = () => closeAndResolve(false);
+                confirmBtn.onclick = () => closeAndResolve(true);
+            });
+
             if (!confirmed) return;
 
             try {
@@ -2099,10 +2275,21 @@
 
                 if (error) throw error;
 
-                alert('Thank you! The person who created this bounty has been notified that their item was found.');
+                // Inform the user
+                const title = document.getElementById('bountyModalTitle');
+                const desc = document.getElementById('bountyModalDesc');
+                const actions = document.querySelector('.bounty-modal-actions');
+                const instructions = document.querySelector('.bounty-modal p:nth-of-type(2)');
 
-                // Refresh the list
-                await loadItems();
+                // Temporarily re-purpose modal for success message
+                title.textContent = 'Awesome, thank you!';
+                desc.textContent = 'The person who created this bounty has been notified that their item was found. Please head to the office now!';
+                instructions.style.display = 'none';
+                actions.innerHTML = '<button class="bounty-btn-confirm" style="width:100%" onclick="document.getElementById(\'bountyClaimModal\').classList.remove(\'active\');setTimeout(()=>{document.getElementById(\'bountyClaimModal\').style.display=\'none\'; location.reload();}, 300);">Sounds good</button>';
+
+                modal.style.display = 'flex';
+                requestAnimationFrame(() => modal.classList.add('active'));
+
             } catch (err) {
                 console.error('Error claiming bounty:', err);
                 alert('We had trouble updating the bounty. Please try again.');
