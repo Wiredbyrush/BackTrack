@@ -233,6 +233,22 @@
             color: #a78bfa;
         }
 
+        .item-status.found {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .item-status.bounty {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .item-status.lost {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -790,7 +806,10 @@
                 'pending': 'Pending',
                 'claimed': 'Claimed',
                 'approved': 'Returned',
-                'rejected': 'Rejected'
+                'rejected': 'Rejected',
+                'found': 'Found (Head to Office)',
+                'bounty': 'Active Bounty',
+                'lost': 'Lost Item'
             };
 
             const imageHtml = item.image_url
@@ -805,7 +824,7 @@
                 <div class="item-card">
                     <div class="item-image">${imageHtml}</div>
                     <div class="item-content">
-                        <h3 class="item-title">${item.title || 'Untitled Item'}</h3>
+                        <h3 class="item-title">${item.title || item.name || 'Untitled Item'}</h3>
                         <div class="item-meta">
                             <span>${date}</span>
                             <span class="item-status ${status}">${statusLabels[status] || status}</span>

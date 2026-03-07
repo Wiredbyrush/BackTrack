@@ -2040,6 +2040,10 @@
                    </button>`
                 : '';
 
+            const actionBtn = isBounty
+                ? `<button type="button" class="claim-card-btn found-bounty-btn" style="flex: 1; background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);" onclick="event.stopPropagation(); window.claimBountyPrompt('${item.id}')">I Found This!</button>`
+                : `<button type="button" class="claim-card-btn" style="flex: 1;" onclick="event.stopPropagation(); window.location.href='claim.html?item=${item.id}'">Claim Item</button>`;
+
             return `
                 <div class="item-card" data-id="${item.id}" data-saved="${saved}">
                     <div class="item-image">
@@ -2055,13 +2059,55 @@
                         <p class="item-date">${formatDate(item.date_lost)}</p>
                         <p class="item-location">${item.location}</p>
                         <div style="display: flex; gap: 8px; align-items: center; margin-top: 12px;">
-                            <button type="button" class="claim-card-btn" style="flex: 1;" onclick="event.stopPropagation(); window.location.href='claim.html?item=${item.id}'">Claim Item</button>
+                            ${actionBtn}
                             ${deleteBtn}
                         </div>
                     </div>
                 </div>
             `;
         }
+
+        // Global function for handling bounty claims from cards
+        window.claimBountyPrompt = async function (itemId) {
+            if (!isSupabaseConfigured() || !window.BackTrackDB) {
+                alert('Database not connected.');
+                return;
+            }
+
+            const user = await window.BackTrackDB.getCurrentUser();
+            if (!user) {
+                alert('You must be logged in to claim a bounty. Please log in first.');
+                window.location.href = 'login.html?redirect=browse.html';
+                return;
+            }
+
+            const confirmed = confirm("To claim this bounty, please turn the item in to the Main Office or Lost and Found room.\\n\\nClick 'OK' only if you have turned it in or are doing so now.");
+            if (!confirmed) return;
+
+            try {
+                // Determine user's name
+                const metadata = user.user_metadata || {};
+                const name = metadata.full_name || metadata.name || user.email;
+
+                const { error } = await window.BackTrackDB.supabase
+                    .from('items')
+                    .update({
+                        status: 'found',
+                        finder_name: name
+                    })
+                    .eq('id', itemId);
+
+                if (error) throw error;
+
+                alert('Thank you! The person who created this bounty has been notified that their item was found.');
+
+                // Refresh the list
+                await loadItems();
+            } catch (err) {
+                console.error('Error claiming bounty:', err);
+                alert('We had trouble updating the bounty. Please try again.');
+            }
+        };
 
         // Render items to grid
         function hydrateItemImages() {
