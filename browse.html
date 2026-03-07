@@ -2455,10 +2455,18 @@
 
         function getFetchFilters() {
             const filters = { ...currentFilters };
-            if (currentUserIsAdmin && Array.isArray(filters.status)) {
-                const statuses = new Set(filters.status.map((status) => normalizeStatus(status)));
-                statuses.add('pending');
-                filters.status = Array.from(statuses);
+
+            if (currentUserIsAdmin) {
+                if (Array.isArray(filters.status)) {
+                    const statuses = new Set(filters.status.map((status) => normalizeStatus(status)));
+                    statuses.add('pending');
+                    filters.status = Array.from(statuses);
+                }
+            } else {
+                // If not an admin, default to only showing active items (not claimed, found, etc)
+                if (!Array.isArray(filters.status) || filters.status.length === 0) {
+                    filters.status = ['active', 'bounty', 'lost'];
+                }
             }
             if (filters.location && filters.location !== 'All Locations') {
                 const mappedLocs = locationMapping[filters.location] || [];
@@ -2468,10 +2476,19 @@
         }
 
         function applyAdminStatusVisibility(items) {
-            if (!currentUserIsAdmin) return items;
+            const validItems = Array.isArray(items) ? items : [];
+
+            // If not admin, strictly enforce hiding 'claimed' or 'found' items
+            // Just in case they bypass the fetch filter
+            if (!currentUserIsAdmin) {
+                return validItems.filter((item) => {
+                    const status = normalizeStatus(item.status);
+                    return status !== 'claimed' && status !== 'found' && status !== 'approved';
+                });
+            }
 
             const isLostView = currentFilters.view === 'lost';
-            return (Array.isArray(items) ? items : []).filter((item) => {
+            return validItems.filter((item) => {
                 const status = normalizeStatus(item.status);
                 if (status !== 'pending') return true;
                 const isBounty = Boolean(item.is_bounty || item.isBounty);
