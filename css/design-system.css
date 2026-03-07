@@ -316,12 +316,7 @@ button:disabled {
     font-weight: 700;
 }
 
-/* Feature Tags - Blue hover */
-.feature-tag:hover {
-    background: var(--accent-primary-light) !important;
-    border-color: var(--accent-primary) !important;
-    color: var(--accent-primary) !important;
-}
+
 
 /* ============================================
    SECTION HEADINGS
@@ -735,7 +730,6 @@ body.light-theme select:focus {
 body.light-theme .filter-option,
 body.light-theme .tag,
 body.light-theme .badge,
-body.light-theme .feature-tag,
 body.light-theme .checkbox-item {
     background: var(--bg-secondary) !important;
     border-color: var(--border-subtle) !important;
@@ -743,8 +737,7 @@ body.light-theme .checkbox-item {
 }
 
 body.light-theme .filter-option:hover,
-body.light-theme .tag:hover,
-body.light-theme .feature-tag:hover {
+body.light-theme .tag:hover {
     background: var(--bg-tertiary) !important;
     color: var(--text-primary) !important;
 }

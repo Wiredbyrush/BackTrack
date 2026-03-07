@@ -92,14 +92,17 @@ nav {
 }
 
 .sign-in-btn {
-    background: linear-gradient(180deg, #2e2e2e 0%, #1a1a1a 100%);
-    color: #f3f4f6;
-    border: 1px solid #3f3f3f;
-    padding: 8px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0 20px;
+    height: 36px;
     border-radius: 999px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 /* Admin Layout */

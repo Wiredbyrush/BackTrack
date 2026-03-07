@@ -23,6 +23,9 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <title>Sign Up - BackTrack</title>
+    <meta name="description"
+        content="Create a BackTrack account to report found items, claim lost belongings, and earn rewards.">
+    <link rel="icon" type="image/png" href="logo.png">
     <script>
         // Disable pulsing/flashing animations site-wide
         window.__DISABLE_ANIMATIONS__ = true;
@@ -41,103 +44,17 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/nav-auth.css">
     <style>
-        body { display: flex; flex-direction: column; }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
 
         a,
         button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            background-color: transparent;
-            height: 70px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
-        }
 
-        nav::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        body.nav-scrolled nav {
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        body.nav-scrolled nav::after {
-            opacity: 1;
-        }
-
-        .nav-spacer {
-            height: 70px;
-            flex-shrink: 0;
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            height: 100%;
-        }
-
-        .nav-left img {
-            height: 70px;
-            width: auto;
-        }
-
-        .nav-center {
-            display: flex;
-            gap: 48px;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-link:hover {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .sign-in-btn {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
-            color: #f3f4f6;
-            border: 1px solid #3f3f3f;
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .sign-in-btn:hover {
-            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
-            color: #1a1a1a;
-        }
 
         .signup-container {
             flex: 1;
@@ -511,69 +428,69 @@
             <form id="signupForm">
                 <fieldset class="form-fieldset">
                     <legend class="sr-only">Account details</legend>
-                <div class="form-row">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="firstName">First name</label>
+                            <input type="text" id="firstName" class="form-input" placeholder="John" required
+                                aria-required="true" maxlength="50">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="lastName">Last name</label>
+                            <input type="text" id="lastName" class="form-input" placeholder="Doe" required
+                                aria-required="true" maxlength="50">
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label class="form-label" for="firstName">First name</label>
-                        <input type="text" id="firstName" class="form-input" placeholder="John" required
-                            aria-required="true" maxlength="50">
+                        <label class="form-label" for="email">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="you@example.com" required
+                            aria-required="true" maxlength="254">
                     </div>
+
                     <div class="form-group">
-                        <label class="form-label" for="lastName">Last name</label>
-                        <input type="text" id="lastName" class="form-input" placeholder="Doe" required
-                            aria-required="true" maxlength="50">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" class="form-input" placeholder="Create a password"
+                                required minlength="8" aria-required="true" aria-describedby="passwordHint">
+                            <button type="button" class="password-toggle" id="togglePassword"
+                                aria-label="Toggle password visibility">
+                                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-bar" id="bar1"></div>
+                            <div class="strength-bar" id="bar2"></div>
+                            <div class="strength-bar" id="bar3"></div>
+                            <div class="strength-bar" id="bar4"></div>
+                        </div>
+                        <p class="password-hint" id="passwordHint">Must be at least 8 characters</p>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required
-                        aria-required="true" maxlength="254">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="password" class="form-input" placeholder="Create a password" required
-                            minlength="8" aria-required="true" aria-describedby="passwordHint">
-                        <button type="button" class="password-toggle" id="togglePassword"
-                            aria-label="Toggle password visibility">
-                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                <circle cx="12" cy="12" r="3" />
-                            </svg>
-                        </button>
+                    <div class="form-group">
+                        <label class="form-label" for="confirmPassword">Confirm password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmPassword" class="form-input"
+                                placeholder="Confirm your password" required aria-required="true">
+                            <button type="button" class="password-toggle" id="toggleConfirmPassword"
+                                aria-label="Toggle confirm password visibility">
+                                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <div class="password-strength" id="passwordStrength">
-                        <div class="strength-bar" id="bar1"></div>
-                        <div class="strength-bar" id="bar2"></div>
-                        <div class="strength-bar" id="bar3"></div>
-                        <div class="strength-bar" id="bar4"></div>
-                    </div>
-                    <p class="password-hint" id="passwordHint">Must be at least 8 characters</p>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="confirmPassword">Confirm password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="confirmPassword" class="form-input"
-                            placeholder="Confirm your password" required aria-required="true">
-                        <button type="button" class="password-toggle" id="toggleConfirmPassword"
-                            aria-label="Toggle confirm password visibility">
-                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                <circle cx="12" cy="12" r="3" />
-                            </svg>
-                        </button>
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="terms" required aria-required="true">
+                        <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a
+                                href="#" id="privacyLink">Privacy Policy</a></label>
                     </div>
-                </div>
-
-                <div class="terms-checkbox">
-                    <input type="checkbox" id="terms" required aria-required="true">
-                    <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a href="#"
-                            id="privacyLink">Privacy Policy</a></label>
-                </div>
 
                 </fieldset>
                 <button type="submit" class="submit-btn" id="submitBtn">Create account</button>

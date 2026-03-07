@@ -343,16 +343,14 @@ body.light-theme .checkbox-label {
 }
 
 body.light-theme .filter-option,
-body.light-theme .tag,
-body.light-theme .feature-tag {
+body.light-theme .tag {
     background: #f1f5f9 !important;
     color: #475569 !important;
     border-color: #e2e8f0 !important;
 }
 
 body.light-theme .filter-option:hover,
-body.light-theme .tag:hover,
-body.light-theme .feature-tag:hover {
+body.light-theme .tag:hover {
     background: #e2e8f0 !important;
     color: #0f172a !important;
 }
@@ -1516,5 +1514,811 @@ body:not(.light-theme) .lb-row:hover {
     .review-card,
     .reward-card {
         border-radius: 14px !important;
+    }
+}
+
+/* ============================================
+   NAVBAR POLISH (Global)
+   ============================================ */
+nav {
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.9) 0%, rgba(2, 6, 23, 0.78) 100%) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+    box-shadow: 0 12px 34px rgba(2, 6, 23, 0.36) !important;
+    backdrop-filter: blur(14px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(130%) !important;
+}
+
+nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(191, 219, 254, 0.56), transparent);
+    opacity: 0.78;
+    pointer-events: none;
+}
+
+nav::after {
+    opacity: 1 !important;
+    background: linear-gradient(90deg,
+            rgba(59, 130, 246, 0),
+            rgba(96, 165, 250, 0.62),
+            rgba(14, 165, 233, 0.56),
+            rgba(59, 130, 246, 0)) !important;
+}
+
+body.nav-scrolled nav {
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.97) 0%, rgba(2, 6, 23, 0.9) 100%) !important;
+    border-bottom-color: rgba(148, 163, 184, 0.3) !important;
+    box-shadow: 0 18px 44px rgba(2, 6, 23, 0.52) !important;
+}
+
+.nav-left {
+    transition: transform 0.24s ease;
+}
+
+.nav-left:hover {
+    transform: translateY(-1px);
+}
+
+.nav-center {
+    align-items: center;
+    gap: clamp(18px, 3vw, 44px) !important;
+}
+
+.nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 0 2px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: rgba(226, 232, 240, 0.88) !important;
+    transition: color 0.25s ease, transform 0.25s ease;
+    z-index: 0;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    inset: 7px -10px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.28), rgba(14, 116, 144, 0.2));
+    opacity: 0;
+    transform: scale(0.96);
+    transition: opacity 0.24s ease, transform 0.24s ease, border-color 0.24s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 7px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #60a5fa, #22d3ee);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.24s ease;
+}
+
+.nav-link:hover,
+.nav-link.active,
+.nav-link[aria-current="page"] {
+    color: #f8fbff !important;
+    transform: translateY(-1px);
+}
+
+.nav-link:hover::before,
+.nav-link.active::before,
+.nav-link[aria-current="page"]::before {
+    opacity: 1;
+    transform: scale(1);
+    border-color: rgba(125, 211, 252, 0.42);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after,
+.nav-link[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+
+.nav-right {
+    gap: 12px !important;
+}
+
+.sign-in-btn {
+    height: 40px !important;
+    padding: 0 20px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(147, 197, 253, 0.46) !important;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.95) 0%, rgba(14, 165, 233, 0.84) 100%) !important;
+    color: #eff6ff !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: 0 10px 24px rgba(30, 64, 175, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+}
+
+.sign-in-btn:hover {
+    transform: translateY(-1px) !important;
+    background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%) !important;
+    box-shadow: 0 14px 30px rgba(30, 64, 175, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.sign-in-btn:active {
+    transform: translateY(0) !important;
+}
+
+body.light-theme nav {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.92) 100%) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24) !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-theme nav::before {
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.45), transparent);
+    opacity: 0.65;
+}
+
+body.light-theme nav::after {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0), rgba(37, 99, 235, 0.48), rgba(6, 182, 212, 0.42), rgba(37, 99, 235, 0)) !important;
+}
+
+body.light-theme .nav-link {
+    color: #334155 !important;
+}
+
+body.light-theme .nav-link::before {
+    border-color: rgba(37, 99, 235, 0.18);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(6, 182, 212, 0.08));
+}
+
+body.light-theme .nav-link:hover,
+body.light-theme .nav-link.active,
+body.light-theme .nav-link[aria-current="page"] {
+    color: #0f172a !important;
+}
+
+body.light-theme .nav-link::after {
+    background: linear-gradient(90deg, #2563eb, #06b6d4);
+}
+
+body.light-theme .sign-in-btn {
+    border-color: rgba(37, 99, 235, 0.4) !important;
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%) !important;
+    color: #f8fbff !important;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+}
+
+@media (max-width: 820px) {
+    nav {
+        padding: 0 14px !important;
+    }
+
+    .nav-right {
+        gap: 8px !important;
+    }
+
+    .sign-in-btn {
+        height: 38px !important;
+        padding: 0 16px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* ============================================
+   BLUE-BLACK GLOBAL REFRESH
+   ============================================ */
+:root {
+    --refresh-ink: #040814;
+    --refresh-ink-2: #071126;
+    --refresh-surface: rgba(9, 16, 36, 0.78);
+    --refresh-surface-2: rgba(6, 12, 28, 0.9);
+    --refresh-border: rgba(96, 165, 250, 0.22);
+    --refresh-border-strong: rgba(96, 165, 250, 0.42);
+    --refresh-text: #e6eefc;
+    --refresh-muted: #9db1cc;
+    --refresh-accent: #3b82f6;
+    --refresh-accent-2: #0ea5e9;
+    --refresh-shadow: rgba(2, 6, 20, 0.52);
+}
+
+body:not(.light-theme) {
+    background:
+        radial-gradient(900px 420px at 15% 10%, rgba(37, 99, 235, 0.12) 0%, transparent 60%),
+        radial-gradient(980px 460px at 85% 85%, rgba(14, 165, 233, 0.08) 0%, transparent 64%),
+        linear-gradient(180deg, var(--refresh-ink) 0%, var(--refresh-ink-2) 60%, #030712 100%) !important;
+    color: var(--refresh-text) !important;
+}
+
+body:not(.light-theme) nav {
+    background: linear-gradient(90deg, rgba(4, 10, 28, 0.96) 0%, rgba(5, 16, 40, 0.93) 52%, rgba(4, 10, 26, 0.96) 100%) !important;
+    border-bottom-color: var(--refresh-border) !important;
+}
+
+body:not(.light-theme) nav::before {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0), rgba(96, 165, 250, 0.58), rgba(14, 165, 233, 0.5), rgba(59, 130, 246, 0)) !important;
+    opacity: 0.78 !important;
+}
+
+body:not(.light-theme) nav::after {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0), rgba(96, 165, 250, 0.54), rgba(14, 165, 233, 0.48), rgba(59, 130, 246, 0)) !important;
+}
+
+body:not(.light-theme).nav-scrolled nav {
+    background: linear-gradient(90deg, rgba(3, 8, 22, 0.98) 0%, rgba(4, 12, 30, 0.96) 52%, rgba(3, 8, 20, 0.98) 100%) !important;
+    border-bottom-color: rgba(96, 165, 250, 0.32) !important;
+}
+
+body:not(.light-theme) .nav-link {
+    color: rgba(230, 238, 252, 0.88) !important;
+}
+
+body:not(.light-theme) .nav-link::before {
+    border-color: rgba(96, 165, 250, 0.24);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.24), rgba(14, 165, 233, 0.18));
+}
+
+body:not(.light-theme) .nav-link::after {
+    background: linear-gradient(90deg, #60a5fa, #38bdf8);
+}
+
+body:not(.light-theme) .nav-link:hover,
+body:not(.light-theme) .nav-link.active,
+body:not(.light-theme) .nav-link[aria-current="page"] {
+    color: #f8fbff !important;
+}
+
+body:not(.light-theme) .sign-in-btn {
+    border-color: rgba(147, 197, 253, 0.52) !important;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.96) 0%, rgba(14, 165, 233, 0.88) 100%) !important;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+body:not(.light-theme) .sign-in-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%) !important;
+    box-shadow: 0 16px 34px rgba(37, 99, 235, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+}
+
+body:not(.light-theme) .admin-badge {
+    border-color: rgba(96, 165, 250, 0.32) !important;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.82), rgba(8, 22, 46, 0.84)) !important;
+}
+
+body:not(.light-theme) .card,
+body:not(.light-theme) .item-card,
+body:not(.light-theme) .form-card,
+body:not(.light-theme) .feature-card,
+body:not(.light-theme) .stat-card,
+body:not(.light-theme) .source-card,
+body:not(.light-theme) .reward-card,
+body:not(.light-theme) .login-card,
+body:not(.light-theme) .signup-card,
+body:not(.light-theme) .scan-container,
+body:not(.light-theme) .chart-card,
+body:not(.light-theme) .review-card {
+    background: linear-gradient(160deg, var(--refresh-surface) 0%, var(--refresh-surface-2) 100%) !important;
+    border: 1px solid var(--refresh-border) !important;
+    box-shadow: 0 16px 42px var(--refresh-shadow) !important;
+    border-radius: 16px !important;
+}
+
+body:not(.light-theme) .card:hover,
+body:not(.light-theme) .item-card:hover,
+body:not(.light-theme) .feature-card:hover,
+body:not(.light-theme) .stat-card:hover,
+body:not(.light-theme) .source-card:hover,
+body:not(.light-theme) .reward-card:hover {
+    border-color: var(--refresh-border-strong) !important;
+    box-shadow: 0 22px 52px rgba(2, 8, 23, 0.56) !important;
+}
+
+body:not(.light-theme) .btn-primary,
+body:not(.light-theme) .primary-btn,
+body:not(.light-theme) .submit-btn,
+body:not(.light-theme) .claim-card-btn,
+body:not(.light-theme) .chatbot-send {
+    background: linear-gradient(135deg, #3b82f6 0%, #0284c7 100%) !important;
+    border: 1px solid rgba(147, 197, 253, 0.4) !important;
+    color: #eff6ff !important;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.34) !important;
+}
+
+body:not(.light-theme) .btn-primary:hover,
+body:not(.light-theme) .primary-btn:hover,
+body:not(.light-theme) .submit-btn:hover,
+body:not(.light-theme) .claim-card-btn:hover,
+body:not(.light-theme) .chatbot-send:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #0369a1 100%) !important;
+    box-shadow: 0 16px 34px rgba(37, 99, 235, 0.42) !important;
+}
+
+body:not(.light-theme) .btn-secondary,
+body:not(.light-theme) .secondary-btn {
+    background: rgba(15, 23, 42, 0.74) !important;
+    border: 1px solid rgba(148, 163, 184, 0.34) !important;
+    color: #dbe7f7 !important;
+}
+
+body:not(.light-theme) .btn-secondary:hover,
+body:not(.light-theme) .secondary-btn:hover {
+    background: rgba(30, 41, 59, 0.86) !important;
+    border-color: rgba(96, 165, 250, 0.55) !important;
+}
+
+body:not(.light-theme) input,
+body:not(.light-theme) textarea,
+body:not(.light-theme) select,
+body:not(.light-theme) .form-input,
+body:not(.light-theme) .chatbot-input,
+body:not(.light-theme) .search-input,
+body:not(.light-theme) .search-box {
+    background: rgba(7, 16, 34, 0.68) !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+    color: #e6f0ff !important;
+}
+
+body:not(.light-theme) input::placeholder,
+body:not(.light-theme) textarea::placeholder,
+body:not(.light-theme) .form-input::placeholder,
+body:not(.light-theme) .chatbot-input::placeholder {
+    color: #90a4c2 !important;
+}
+
+body:not(.light-theme) input:focus,
+body:not(.light-theme) textarea:focus,
+body:not(.light-theme) select:focus,
+body:not(.light-theme) .form-input:focus,
+body:not(.light-theme) .chatbot-input:focus {
+    border-color: rgba(96, 165, 250, 0.68) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+}
+
+body:not(.light-theme) .hero-description,
+body:not(.light-theme) .features-subtitle,
+body:not(.light-theme) .stats-subtitle,
+body:not(.light-theme) .feature-description,
+body:not(.light-theme) p {
+    color: var(--refresh-muted) !important;
+}
+
+body:not(.light-theme) footer a {
+    color: #b7c8df !important;
+}
+
+body:not(.light-theme) footer a:hover {
+    color: #e5f0ff !important;
+}
+
+body.light-theme nav {
+    background: linear-gradient(90deg, rgba(244, 248, 255, 0.98) 0%, rgba(240, 247, 255, 0.95) 56%, rgba(246, 250, 255, 0.97) 100%) !important;
+    border-bottom-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+body.light-theme nav::before {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.44), rgba(14, 165, 233, 0.36), rgba(59, 130, 246, 0)) !important;
+}
+
+body.light-theme .nav-link {
+    color: #1f3653 !important;
+}
+
+body.light-theme .nav-link::before {
+    border-color: rgba(59, 130, 246, 0.2);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(14, 165, 233, 0.08));
+}
+
+body.light-theme .nav-link:hover,
+body.light-theme .nav-link.active,
+body.light-theme .nav-link[aria-current="page"] {
+    color: #0e223d !important;
+}
+
+body.light-theme .sign-in-btn {
+    border-color: rgba(37, 99, 235, 0.36) !important;
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%) !important;
+}
+
+body.light-theme .card,
+body.light-theme .item-card,
+body.light-theme .form-card,
+body.light-theme .feature-card,
+body.light-theme .stat-card,
+body.light-theme .source-card,
+body.light-theme .reward-card,
+body.light-theme .login-card,
+body.light-theme .signup-card,
+body.light-theme .scan-container,
+body.light-theme .chart-card,
+body.light-theme .review-card {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 248, 255, 0.92) 100%) !important;
+    border-color: rgba(59, 130, 246, 0.16) !important;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-theme .btn-primary,
+body.light-theme .primary-btn,
+body.light-theme .submit-btn,
+body.light-theme .claim-card-btn,
+body.light-theme .chatbot-send {
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%) !important;
+    border-color: rgba(59, 130, 246, 0.36) !important;
+    color: #f8fafc !important;
+}
+
+body.light-theme .btn-secondary,
+body.light-theme .secondary-btn {
+    background: rgba(37, 99, 235, 0.07) !important;
+    border-color: rgba(59, 130, 246, 0.22) !important;
+    color: #1e40af !important;
+}
+
+body.light-theme input,
+body.light-theme textarea,
+body.light-theme select,
+body.light-theme .form-input,
+body.light-theme .chatbot-input,
+body.light-theme .search-input,
+body.light-theme .search-box {
+    background: rgba(241, 245, 255, 0.82) !important;
+    border-color: rgba(59, 130, 246, 0.22) !important;
+    color: #0f172a !important;
+}
+
+/* ============================================
+   PREMIUM BLUE-BLACK REFINEMENT
+   ============================================ */
+:root {
+    --premium-bg-0: #000000;
+    --premium-bg-1: #000000;
+    --premium-surface: rgba(255, 255, 255, 0.02);
+    --premium-surface-strong: rgba(255, 255, 255, 0.04);
+    --premium-border: rgba(255, 255, 255, 0.08);
+    --premium-border-strong: rgba(255, 255, 255, 0.15);
+    --premium-text: #ffffff;
+    --premium-muted: #a3a3a3;
+    --premium-accent: #ffffff;
+    --premium-accent-2: #e5e5e5;
+    --premium-shadow: none;
+}
+
+body:not(.light-theme) {
+    background: #000000 !important;
+    color: var(--premium-text) !important;
+}
+
+body:not(.light-theme) nav {
+    background: linear-gradient(180deg, rgba(7, 11, 24, 0.9) 0%, rgba(7, 11, 24, 0.78) 100%) !important;
+    border-bottom: 1px solid var(--premium-border) !important;
+    box-shadow: 0 12px 30px rgba(2, 6, 23, 0.44) !important;
+}
+
+body:not(.light-theme) nav::before {
+    background: linear-gradient(90deg, transparent, rgba(191, 219, 254, 0.38), transparent) !important;
+    opacity: 0.7 !important;
+}
+
+body:not(.light-theme) nav::after {
+    background: linear-gradient(90deg, rgba(96, 165, 250, 0), rgba(96, 165, 250, 0.52), rgba(56, 189, 248, 0.44), rgba(96, 165, 250, 0)) !important;
+}
+
+body:not(.light-theme).nav-scrolled nav {
+    background: linear-gradient(180deg, rgba(4, 8, 18, 0.96) 0%, rgba(4, 8, 18, 0.88) 100%) !important;
+    border-bottom-color: rgba(148, 163, 184, 0.3) !important;
+    box-shadow: 0 16px 40px rgba(2, 6, 23, 0.56) !important;
+}
+
+body:not(.light-theme) .nav-link {
+    color: rgba(231, 237, 248, 0.82) !important;
+}
+
+body:not(.light-theme) .nav-link::before {
+    border-color: rgba(148, 163, 184, 0.18);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.44), rgba(15, 23, 42, 0.2));
+}
+
+body:not(.light-theme) .nav-link::after {
+    background: linear-gradient(90deg, var(--premium-accent), var(--premium-accent-2));
+}
+
+body:not(.light-theme) .nav-link:hover,
+body:not(.light-theme) .nav-link.active,
+body:not(.light-theme) .nav-link[aria-current="page"] {
+    color: #f8fbff !important;
+}
+
+body:not(.light-theme) .nav-link:hover::before,
+body:not(.light-theme) .nav-link.active::before,
+body:not(.light-theme) .nav-link[aria-current="page"]::before {
+    border-color: var(--premium-border-strong);
+}
+
+body:not(.light-theme) .sign-in-btn {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+}
+
+body:not(.light-theme) .sign-in-btn:hover {
+    background: #e5e5e5 !important;
+    box-shadow: none !important;
+}
+
+body:not(.light-theme) .card,
+body:not(.light-theme) .item-card,
+body:not(.light-theme) .form-card,
+body:not(.light-theme) .feature-card,
+body:not(.light-theme) .stat-card,
+body:not(.light-theme) .source-card,
+body:not(.light-theme) .reward-card,
+body:not(.light-theme) .login-card,
+body:not(.light-theme) .signup-card,
+body:not(.light-theme) .scan-container,
+body:not(.light-theme) .chart-card,
+body:not(.light-theme) .review-card {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+}
+
+body:not(.light-theme) .card:hover,
+body:not(.light-theme) .item-card:hover,
+body:not(.light-theme) .feature-card:hover,
+body:not(.light-theme) .stat-card:hover,
+body:not(.light-theme) .source-card:hover,
+body:not(.light-theme) .reward-card:hover {
+    border-color: var(--premium-border-strong) !important;
+    box-shadow: 0 24px 52px rgba(2, 6, 23, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+
+body:not(.light-theme) .btn-primary,
+body:not(.light-theme) .primary-btn,
+body:not(.light-theme) .submit-btn,
+body:not(.light-theme) .claim-card-btn,
+body:not(.light-theme) .chatbot-send {
+    background: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+}
+
+body:not(.light-theme) .btn-primary:hover,
+body:not(.light-theme) .primary-btn:hover,
+body:not(.light-theme) .submit-btn:hover,
+body:not(.light-theme) .claim-card-btn:hover,
+body:not(.light-theme) .chatbot-send:hover {
+    background: #e5e5e5 !important;
+    box-shadow: none !important;
+}
+
+body:not(.light-theme) .btn-secondary,
+body:not(.light-theme) .secondary-btn {
+    background: rgba(15, 23, 42, 0.78) !important;
+    border: 1px solid rgba(148, 163, 184, 0.32) !important;
+    color: #d7e4f7 !important;
+}
+
+body:not(.light-theme) .btn-secondary:hover,
+body:not(.light-theme) .secondary-btn:hover {
+    background: rgba(30, 41, 59, 0.88) !important;
+    border-color: rgba(96, 165, 250, 0.55) !important;
+}
+
+body:not(.light-theme) input,
+body:not(.light-theme) textarea,
+body:not(.light-theme) select,
+body:not(.light-theme) .form-input,
+body:not(.light-theme) .chatbot-input,
+body:not(.light-theme) .search-input,
+body:not(.light-theme) .search-box {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+}
+
+body:not(.light-theme) input:focus,
+body:not(.light-theme) textarea:focus,
+body:not(.light-theme) select:focus,
+body:not(.light-theme) .form-input:focus,
+body:not(.light-theme) .chatbot-input:focus {
+    border-color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+body:not(.light-theme) .hero-description,
+body:not(.light-theme) .features-subtitle,
+body:not(.light-theme) .stats-subtitle,
+body:not(.light-theme) .feature-description,
+body:not(.light-theme) p {
+    color: var(--premium-muted) !important;
+}
+
+body.light-theme nav {
+    background: linear-gradient(180deg, rgba(248, 251, 255, 0.96) 0%, rgba(243, 248, 255, 0.92) 100%) !important;
+    border-bottom-color: rgba(148, 163, 184, 0.24) !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-theme nav::before {
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.42), transparent) !important;
+}
+
+body.light-theme .nav-link {
+    color: #334155 !important;
+}
+
+body.light-theme .nav-link::before {
+    border-color: rgba(59, 130, 246, 0.18);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(14, 165, 233, 0.08));
+}
+
+body.light-theme .nav-link:hover,
+body.light-theme .nav-link.active,
+body.light-theme .nav-link[aria-current="page"] {
+    color: #0f172a !important;
+}
+
+body.light-theme .sign-in-btn {
+    border-color: rgba(59, 130, 246, 0.34) !important;
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%) !important;
+}
+
+/* ============================================
+   FINAL USER TUNING
+   ============================================ */
+:root {
+    --global-nav-height: 72px;
+}
+
+nav {
+    height: var(--global-nav-height) !important;
+}
+
+.nav-spacer {
+    height: var(--global-nav-height) !important;
+}
+
+.nav-right {
+    min-height: var(--global-nav-height) !important;
+}
+
+.nav-left img {
+    height: 76px !important;
+    width: auto !important;
+}
+
+/* Non-home pages keep a stronger glass nav even at the top. */
+body:not(.light-theme):not(.home-page):not(.nav-scrolled) nav {
+    background: linear-gradient(180deg, rgba(5, 9, 19, 0.95) 0%, rgba(5, 9, 19, 0.86) 100%) !important;
+    border-bottom-color: rgba(148, 163, 184, 0.22) !important;
+    box-shadow: 0 12px 26px rgba(2, 6, 23, 0.4) !important;
+    backdrop-filter: blur(12px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+}
+
+body:not(.light-theme):not(.home-page):not(.nav-scrolled) nav::before,
+body:not(.light-theme):not(.home-page):not(.nav-scrolled) nav::after {
+    opacity: 0.45 !important;
+}
+
+body:not(.light-theme):not(.home-page):not(.nav-scrolled) .nav-link {
+    color: rgba(231, 237, 248, 0.84) !important;
+}
+
+/* Home page: blend with hero while user is at the top. */
+body.home-page:not(.light-theme):not(.nav-scrolled) nav {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body.home-page:not(.light-theme):not(.nav-scrolled) nav::before,
+body.home-page:not(.light-theme):not(.nav-scrolled) nav::after {
+    opacity: 0 !important;
+}
+
+body.home-page:not(.light-theme):not(.nav-scrolled) .nav-link {
+    color: rgba(231, 237, 248, 0.82) !important;
+}
+
+body.home-page:not(.light-theme):not(.nav-scrolled) .nav-link::before,
+body.home-page:not(.light-theme):not(.nav-scrolled) .nav-link::after {
+    opacity: 0 !important;
+}
+
+body.home-page:not(.light-theme):not(.nav-scrolled) .sign-in-btn {
+    background: rgba(8, 17, 36, 0.48) !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+    box-shadow: none !important;
+}
+
+body:not(.light-theme).nav-scrolled nav {
+    background: linear-gradient(180deg, rgba(5, 9, 19, 0.96) 0%, rgba(5, 9, 19, 0.88) 100%) !important;
+    border-bottom-color: rgba(148, 163, 184, 0.26) !important;
+    box-shadow: 0 14px 32px rgba(2, 6, 23, 0.46) !important;
+    backdrop-filter: blur(14px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(120%) !important;
+}
+
+/* Minimal sign-in button (smaller, neutral) */
+body:not(.light-theme) .sign-in-btn {
+    height: 34px !important;
+    min-width: 80px !important;
+    padding: 0 14px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(148, 163, 184, 0.36) !important;
+    background: rgba(15, 23, 42, 0.56) !important;
+    color: #dbe7f7 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+    box-shadow: 0 4px 14px rgba(2, 6, 23, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+body:not(.light-theme) .sign-in-btn::before {
+    display: none !important;
+}
+
+body:not(.light-theme) .sign-in-btn:hover {
+    background: rgba(30, 41, 59, 0.78) !important;
+    border-color: rgba(148, 163, 184, 0.52) !important;
+    color: #eff6ff !important;
+    box-shadow: 0 6px 16px rgba(2, 6, 23, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+body:not(.light-theme) .sign-in-btn:active {
+    transform: translateY(0) !important;
+}
+
+body.light-theme .sign-in-btn {
+    height: 34px !important;
+    min-width: 80px !important;
+    padding: 0 14px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(148, 163, 184, 0.4) !important;
+    background: rgba(255, 255, 255, 0.66) !important;
+    color: #334155 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+body.light-theme .sign-in-btn:hover {
+    background: rgba(255, 255, 255, 0.88) !important;
+    border-color: rgba(100, 116, 139, 0.46) !important;
+    color: #0f172a !important;
+}
+
+@media (max-width: 900px) {
+    :root {
+        --global-nav-height: 68px;
+    }
+
+    .nav-left img {
+        height: 72px !important;
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --global-nav-height: 64px;
+    }
+
+    .nav-left img {
+        height: 66px !important;
     }
 }

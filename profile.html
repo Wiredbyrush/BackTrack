@@ -9,6 +9,8 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <title>Profile - BackTrack</title>
+    <meta name="description" content="View and manage your submitted items, claims, and account settings on BackTrack.">
+    <link rel="icon" type="image/png" href="logo.png">
     <script>
         // Disable pulsing/flashing animations site-wide
         window.__DISABLE_ANIMATIONS__ = true;
@@ -32,101 +34,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            background-color: transparent;
-            height: 70px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            transition: background-color 0.3s ease;
-        }
 
-        nav::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        body.nav-scrolled nav {
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-        }
-
-        body.nav-scrolled nav::after {
-            opacity: 1;
-        }
-
-        .nav-spacer {
-            height: 70px;
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            height: 100%;
-        }
-
-        .nav-left img {
-            height: 70px;
-            width: auto;
-        }
-
-        .nav-center {
-            display: flex;
-            gap: 48px;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.4s;
-        }
-
-        .nav-link:hover {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .nav-link.active {
-            color: #ffffff;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .sign-out-btn {
-            background: transparent;
-            color: #888888;
-            border: 1px solid #333333;
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .sign-out-btn:hover {
-            color: #ffffff;
-            border-color: #888888;
-        }
 
         .profile-container {
             max-width: 1000px;

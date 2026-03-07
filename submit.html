@@ -9,6 +9,9 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <title>Submit Item - BackTrack</title>
+    <meta name="description"
+        content="Report a found item or post a lost item bounty on BackTrack, the school lost-and-found system.">
+    <link rel="icon" type="image/png" href="logo.png">
     <script>
         // Disable pulsing/flashing animations site-wide
         window.__DISABLE_ANIMATIONS__ = true;
@@ -33,153 +36,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-            background-color: transparent;
-            height: 70px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
 
-        nav::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        body.nav-scrolled nav {
-            background-color: #000000;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        body.nav-scrolled nav::after {
-            opacity: 1;
-        }
-
-        .nav-spacer {
-            height: 70px;
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            height: 100%;
-        }
-
-        .nav-left img {
-            height: 70px;
-            width: auto;
-        }
-
-        .nav-center {
-            display: flex;
-            gap: 48px;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-link:hover {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .nav-link.active {
-            color: #ffffff;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-        }
-
-        .sign-in-btn {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(180deg, #2e2e2e 0%, #1f1f1f 100%);
-            color: #f3f4f6;
-            border: 1px solid #3f3f3f;
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.35s ease, background 0.6s ease;
-            letter-spacing: 0.4px;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .sign-in-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -120%;
-            width: 60%;
-            height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-            transform: skewX(-20deg);
-            opacity: 0;
-            transition: left 0.8s ease, opacity 0.4s ease;
-        }
-
-        .sign-in-btn:hover {
-            transform: translateY(-1px);
-            background: linear-gradient(180deg, #f5f5f5 0%, #d9d9d9 100%);
-            color: #1a1a1a;
-            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-        }
-
-        .sign-in-btn:hover::before {
-            left: 120%;
-            opacity: 1;
-        }
-
-        .sign-in-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-        }
-
-        /* User Avatar */
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            text-decoration: none;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
 
         /* Main Content */
         .main-content {
@@ -606,8 +463,8 @@
         <div class="submit-tabs" role="tablist">
             <button class="submit-tab active" data-tab="found" id="tabFound" role="tab" aria-selected="true"
                 aria-controls="panelFound">
-                <span class="tab-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <span class="tab-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path
                             d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                         <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
@@ -616,8 +473,8 @@
             </button>
             <button class="submit-tab" data-tab="bounty" id="tabBounty" role="tab" aria-selected="false"
                 aria-controls="panelBounty">
-                <span class="tab-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
+                <span class="tab-icon"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8" />
                         <path d="M21 21l-4.35-4.35" />
                     </svg></span> Post a Bounty
@@ -641,107 +498,110 @@
             <form class="submit-form" id="submitForm">
                 <fieldset class="form-fieldset">
                     <legend class="sr-only">Item Details</legend>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="imageInput">Upload Photos</label>
-                        <div class="upload-area" id="uploadArea">
-                            <svg class="upload-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p class="upload-text">Drag-and-drop in an image you<br>want photos here.</p>
-                        </div>
-                        <input type="file" class="upload-input" id="imageInput" accept="image/*">
-                        <div class="image-preview" id="imagePreview">
-                            <img src="" alt="Preview" id="previewImg">
-                            <button type="button" class="remove-image" id="removeImage">
-                                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="imageInput">Upload Photos</label>
+                            <div class="upload-area" id="uploadArea">
+                                <svg class="upload-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
                                 </svg>
-                            </button>
+                                <p class="upload-text">Drag-and-drop in an image you<br>want photos here.</p>
+                            </div>
+                            <input type="file" class="upload-input" id="imageInput" accept="image/*">
+                            <div class="image-preview" id="imagePreview">
+                                <img src="" alt="Preview" id="previewImg">
+                                <button type="button" class="remove-image" id="removeImage">
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" for="itemName">Item Name</label>
+                                <input type="text" class="form-input" id="itemName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="itemDescription">Description</label>
+                                <textarea class="form-textarea" id="itemDescription" required></textarea>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="itemName">Item Name</label>
-                            <input type="text" class="form-input" id="itemName" required>
+                            <label class="form-label" for="itemCategory">Category</label>
+                            <select class="form-select" id="itemCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Bottles">Bottles</option>
+                                <option value="Books">Books</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Bags">Bags</option>
+                                <option value="Keys">Keys</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label" for="itemDescription">Description</label>
-                            <textarea class="form-textarea" id="itemDescription"></textarea>
+                            <label class="form-label" for="itemLocation">Location Found</label>
+                            <select class="form-select" id="itemLocation" required>
+                                <option value="">Select Location</option>
+                                <option value="Front Office / Admin">Front Office / Admin</option>
+                                <option value="Cafeteria">Cafeteria</option>
+                                <option value="Media Center">Media Center</option>
+                                <option value="Gymnasium">Gymnasium</option>
+                                <option value="Classrooms">Classrooms</option>
+                                <option value="Computer / Science Labs">Computer / Science Labs</option>
+                                <option value="Art / Music Rooms">Art / Music Rooms</option>
+                                <option value="Restrooms">Restrooms</option>
+                                <option value="Athletic Fields / Track">Athletic Fields / Track</option>
+                                <option value="Parking Lots / Bus Lot">Parking Lots / Bus Lot</option>
+                                <option value="The Barn">The Barn</option>
+                            </select>
+                            <select class="form-select" id="itemLocationSpecific"
+                                style="display: none; margin-top: 12px;" required>
+                                <option value="">Select Specific Location</option>
+                            </select>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="itemCategory">Category</label>
-                        <select class="form-select" id="itemCategory" required>
-                            <option value="">Select Category</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Clothing">Clothing</option>
-                            <option value="Bottles">Bottles</option>
-                            <option value="Books">Books</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Bags">Bags</option>
-                            <option value="Keys">Keys</option>
-                            <option value="Other">Other</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="itemDate">Date & Time Found</label>
+                            <input type="date" class="form-input" id="itemDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="finderName">Finder's Name/ID <span
+                                    class="optional">(Optional)</span></label>
+                            <input type="text" class="form-input" id="finderName">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="itemLocation">Location Found</label>
-                        <select class="form-select" id="itemLocation" required>
-                            <option value="">Select Category</option>
-                            <option value="Front Office / Admin">Front Office / Admin</option>
-                            <option value="Cafeteria">Cafeteria</option>
-                            <option value="Media Center">Media Center</option>
-                            <option value="Gymnasium">Gymnasium</option>
-                            <option value="Classrooms">Classrooms</option>
-                            <option value="Computer / Science Labs">Computer / Science Labs</option>
-                            <option value="Art / Music Rooms">Art / Music Rooms</option>
-                            <option value="Restrooms">Restrooms</option>
-                            <option value="Athletic Fields / Track">Athletic Fields / Track</option>
-                            <option value="Parking Lots / Bus Lot">Parking Lots / Bus Lot</option>
-                            <option value="The Barn">The Barn</option>
-                        </select>
-                        <select class="form-select" id="itemLocationSpecific" style="display: none; margin-top: 12px;"
-                            required>
-                            <option value="">Select Specific Location</option>
-                        </select>
-                    </div>
-                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="contactEmail">Contact Email</label>
+                            <input type="email" class="form-input" id="contactEmail" placeholder="you@school.edu"
+                                required>
+                        </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="itemDate">Date & Time Found</label>
-                        <input type="date" class="form-input" id="itemDate" required>
+                        <div class="form-group">
+                            <label class="form-label" for="contactPhone">Contact Phone <span
+                                    class="optional">(Optional)</span></label>
+                            <input type="tel" class="form-input" id="contactPhone" placeholder="(555) 123-4567">
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="finderName">Finder's Name/ID <span
-                                class="optional">(Optional)</span></label>
-                        <input type="text" class="form-input" id="finderName">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="contactEmail">Contact Email</label>
-                        <input type="email" class="form-input" id="contactEmail" placeholder="you@school.edu" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="contactPhone">Contact Phone <span
-                                class="optional">(Optional)</span></label>
-                        <input type="tel" class="form-input" id="contactPhone" placeholder="(555) 123-4567">
-                    </div>
-                </div>
 
                 </fieldset>
                 <button type="submit" class="submit-btn" id="submitBtn">Submit for Review</button>
@@ -753,113 +613,117 @@
             <form class="submit-form" id="bountyForm">
                 <fieldset class="form-fieldset">
                     <legend class="sr-only">Bounty Details</legend>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="bountyImage">Photo of Similar Item <span
-                                class="optional">(Optional)</span></label>
-                        <div class="upload-area" id="bountyUploadArea">
-                            <svg class="upload-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p class="upload-text">Upload a photo of what<br>your item looks like</p>
-                        </div>
-                        <input type="file" class="upload-input" id="bountyImageInput" accept="image/*">
-                        <div class="image-preview" id="bountyImagePreview">
-                            <img src="" alt="Preview" id="bountyPreviewImg">
-                            <button type="button" class="remove-image" id="bountyRemoveImage">
-                                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="bountyImage">Photo of Similar Item <span
+                                    class="optional">(Optional)</span></label>
+                            <div class="upload-area" id="bountyUploadArea">
+                                <svg class="upload-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
                                 </svg>
-                            </button>
+                                <p class="upload-text">Upload a photo of what<br>your item looks like</p>
+                            </div>
+                            <input type="file" class="upload-input" id="bountyImageInput" accept="image/*">
+                            <div class="image-preview" id="bountyImagePreview">
+                                <img src="" alt="Preview" id="bountyPreviewImg">
+                                <button type="button" class="remove-image" id="bountyRemoveImage">
+                                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" for="bountyName">What did you lose?</label>
+                                <input type="text" class="form-input" id="bountyName"
+                                    placeholder="e.g. Blue Nike Backpack" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="bountyDescription">Description</label>
+                                <textarea class="form-textarea" id="bountyDescription"
+                                    placeholder="Describe your item in detail — color, brand, distinguishing marks..."
+                                    required></textarea>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="bountyName">What did you lose?</label>
-                            <input type="text" class="form-input" id="bountyName" placeholder="e.g. Blue Nike Backpack"
+                            <label class="form-label" for="bountyCategory">Category</label>
+                            <select class="form-select" id="bountyCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Bottles">Bottles</option>
+                                <option value="Books">Books</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Bags">Bags</option>
+                                <option value="Keys">Keys</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="bountyLocation">Where did you last have it?</label>
+                            <select class="form-select" id="bountyLocation" required>
+                                <option value="">Select Location</option>
+                                <option value="Front Office / Admin">Front Office / Admin</option>
+                                <option value="Cafeteria">Cafeteria</option>
+                                <option value="Media Center">Media Center</option>
+                                <option value="Gymnasium">Gymnasium</option>
+                                <option value="Classrooms">Classrooms</option>
+                                <option value="Computer / Science Labs">Computer / Science Labs</option>
+                                <option value="Art / Music Rooms">Art / Music Rooms</option>
+                                <option value="Restrooms">Restrooms</option>
+                                <option value="Athletic Fields / Track">Athletic Fields / Track</option>
+                                <option value="Parking Lots / Bus Lot">Parking Lots / Bus Lot</option>
+                                <option value="The Barn">The Barn</option>
+                            </select>
+                            <select class="form-select" id="bountyLocationSpecific"
+                                style="display: none; margin-top: 12px;" required>
+                                <option value="">Select Specific Location</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="bountyDate">Date Lost</label>
+                            <input type="date" class="form-input" id="bountyDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Urgency</label>
+                            <div class="urgency-group">
+                                <button type="button" class="urgency-option selected" data-value="low">Low</button>
+                                <button type="button" class="urgency-option" data-value="medium">🟡 Medium</button>
+                                <button type="button" class="urgency-option" data-value="high">🔴 High</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="bountyEmail">Your Email</label>
+                            <input type="email" class="form-input" id="bountyEmail" placeholder="you@school.edu"
                                 required>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label" for="bountyDescription">Description</label>
-                            <textarea class="form-textarea" id="bountyDescription"
-                                placeholder="Describe your item in detail — color, brand, distinguishing marks..."></textarea>
+                            <label class="form-label" for="bountyPhone">Phone <span
+                                    class="optional">(Optional)</span></label>
+                            <input type="tel" class="form-input" id="bountyPhone" placeholder="(555) 123-4567">
                         </div>
                     </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="bountyCategory">Category</label>
-                        <select class="form-select" id="bountyCategory" required>
-                            <option value="">Select Category</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Clothing">Clothing</option>
-                            <option value="Bottles">Bottles</option>
-                            <option value="Books">Books</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Bags">Bags</option>
-                            <option value="Keys">Keys</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="bountyLocation">Where did you last have it?</label>
-                        <select class="form-select" id="bountyLocation" required>
-                            <option value="">Select Category</option>
-                            <option value="Front Office / Admin">Front Office / Admin</option>
-                            <option value="Cafeteria">Cafeteria</option>
-                            <option value="Media Center">Media Center</option>
-                            <option value="Gymnasium">Gymnasium</option>
-                            <option value="Classrooms">Classrooms</option>
-                            <option value="Computer / Science Labs">Computer / Science Labs</option>
-                            <option value="Art / Music Rooms">Art / Music Rooms</option>
-                            <option value="Restrooms">Restrooms</option>
-                            <option value="Athletic Fields / Track">Athletic Fields / Track</option>
-                            <option value="Parking Lots / Bus Lot">Parking Lots / Bus Lot</option>
-                            <option value="The Barn">The Barn</option>
-                        </select>
-                        <select class="form-select" id="bountyLocationSpecific" style="display: none; margin-top: 12px;"
-                            required>
-                            <option value="">Select Specific Location</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="bountyDate">Date Lost</label>
-                        <input type="date" class="form-input" id="bountyDate" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Urgency</label>
-                        <div class="urgency-group">
-                            <button type="button" class="urgency-option selected" data-value="low">Low</button>
-                            <button type="button" class="urgency-option" data-value="medium">🟡 Medium</button>
-                            <button type="button" class="urgency-option" data-value="high">🔴 High</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="bountyEmail">Your Email</label>
-                        <input type="email" class="form-input" id="bountyEmail" placeholder="you@school.edu" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="bountyPhone">Phone <span
-                                class="optional">(Optional)</span></label>
-                        <input type="tel" class="form-input" id="bountyPhone" placeholder="(555) 123-4567">
-                    </div>
-                </div>
 
                 </fieldset>
                 <button type="submit" class="submit-btn" id="bountySubmitBtn">Post Bounty</button>
@@ -1123,7 +987,7 @@
             <div>
                 <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">BackTrack</div>
                 <p style="color: #888888; font-size: 14px; line-height: 1.6; max-width: 280px;">A centralized
-                    lost-and-found system for students and staff. Built for FBLA Coding & Programming.</p>
+                    lost-and-found system for students and staff. Built for FBLA Website Coding & Development.</p>
             </div>
             <div>
                 <div
@@ -1160,8 +1024,9 @@
         </div>
         <div
             style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
-            <div style="color: #888888; font-size: 13px;">&copy; 2025–2026 BackTrack. Built for FBLA Coding &amp;
-                Programming.</div>
+            <div style="color: #888888; font-size: 13px;">&copy; 2025&ndash;2026 BackTrack. Built for FBLA Website
+                Coding &amp;
+                Development.</div>
             <div style="color: #888888; font-size: 13px;">Made by BackTrack Team</div>
         </div>
     </footer>

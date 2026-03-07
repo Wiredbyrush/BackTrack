@@ -9,6 +9,9 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <title>Campus Map - BackTrack | Denmark High School</title>
+    <meta name="description"
+        content="Interactive campus map showing lost and found item locations at Denmark High School.">
+    <link rel="icon" type="image/png" href="logo.png">
     <script>window.__DISABLE_ANIMATIONS__ = true;</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,15 +79,29 @@
         }
 
         .glass-panel {
-            background: rgba(3, 7, 18, 0.75);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid transparent;
             border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
             pointer-events: auto;
-            /* Re-enable clicks for the panel itself */
+            background-image:
+                linear-gradient(rgba(3, 7, 18, 0.8), rgba(3, 7, 18, 0.8)),
+                conic-gradient(from var(--border-angle),
+                    rgba(56, 189, 248, 0.3),
+                    rgba(74, 222, 128, 0.1),
+                    rgba(45, 212, 191, 0.3),
+                    rgba(248, 113, 113, 0.1),
+                    rgba(56, 189, 248, 0.3));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow:
+                0 16px 48px rgba(0, 0, 0, 0.6),
+                0 4px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                inset 0 0 30px rgba(56, 189, 248, 0.03);
+            animation: borderRotate 8s linear infinite;
         }
 
         .panel h2 {
@@ -180,32 +197,67 @@
 
         /* Item Cards inside Context Panel */
         .ctx-item {
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0.2) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-left: 3px solid #38bdf8;
             border-radius: 12px;
-            padding: 14px;
+            padding: 14px 14px 14px 16px;
             margin-bottom: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
             text-decoration: none;
             display: block;
         }
 
+        .ctx-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background: radial-gradient(ellipse at top left, rgba(56, 189, 248, 0.08), transparent 70%);
+        }
+
         .ctx-item:hover {
-            background: rgba(30, 41, 59, 0.6);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(30, 41, 59, 0.3) 100%);
             border-color: rgba(56, 189, 248, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-left-color: #38bdf8;
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+
+        .ctx-item:hover::before {
+            opacity: 1;
         }
 
         /* Bounties vs Normal */
         .ctx-item.is-bounty {
-            border-color: rgba(245, 158, 11, 0.3);
+            border-left-color: #fbbf24;
         }
 
         .ctx-item.is-bounty:hover {
-            border-color: rgba(245, 158, 11, 0.6);
+            border-color: rgba(245, 158, 11, 0.4);
+            border-left-color: #fbbf24;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 15px rgba(245, 158, 11, 0.1);
+        }
+
+        /* Status-based left border colors */
+        .ctx-item[data-status="found"] {
+            border-left-color: #38bdf8;
+        }
+
+        .ctx-item[data-status="claimed"] {
+            border-left-color: #4ade80;
+        }
+
+        .ctx-item[data-status="lost"] {
+            border-left-color: #fbbf24;
+        }
+
+        .ctx-item[data-status="bounty"] {
+            border-left-color: #f59e0b;
         }
 
         .ctx-name {
@@ -247,6 +299,23 @@
         .sticky-legend {
             width: 220px;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sticky-legend::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(56, 189, 248, 0.4),
+                    rgba(74, 222, 128, 0.4),
+                    rgba(45, 212, 191, 0.4),
+                    transparent);
         }
 
         .legend-row {
@@ -264,6 +333,7 @@
             height: 12px;
             border-radius: 50%;
             flex-shrink: 0;
+            animation: markerPulse 3s ease-in-out infinite;
         }
 
         .dot.bl {
@@ -318,8 +388,9 @@
         .ctrl-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            padding: 12px;
+            gap: 6px;
+            padding: 10px;
+            border-radius: 16px;
         }
 
         .ctrl-divider {
@@ -329,23 +400,45 @@
         }
 
         .icon-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #e2e8f0;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.15), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .icon-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.05);
+            transform: scale(1.05);
+        }
+
+        .icon-btn:hover::after {
+            opacity: 1;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
         }
 
         .icon-btn .icon {
@@ -453,8 +546,42 @@
             flex: 1;
             position: relative;
             overflow: hidden;
-            background: #000000;
-            /* Pure black background for neon contrast */
+            background: #030712;
+            /* Deep space black */
+            perspective: 1000px;
+        }
+
+        /* 3D Holographic Perspective Grid */
+        .map-wrap::before {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -50%;
+            width: 200%;
+            height: 150%;
+            background-image:
+                linear-gradient(rgba(56, 189, 248, 0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.4) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center bottom;
+            transform-origin: center top;
+            transform: rotateX(75deg);
+            opacity: 0.15;
+            mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+            z-index: 0;
+            pointer-events: none;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: rotateX(75deg) translateY(0);
+            }
+
+            100% {
+                transform: rotateX(75deg) translateY(60px);
+            }
         }
 
         .map-inner {
@@ -463,7 +590,9 @@
             cursor: grab;
             user-select: none;
             transform-origin: 0 0;
-            transition: opacity .3s
+            transition: opacity .3s;
+            position: relative;
+            z-index: 10;
         }
 
         .map-inner:active {
@@ -472,45 +601,50 @@
 
         .map-inner svg {
             width: 100%;
-            height: 100%
+            height: 100%;
+            /* Make the entire map float above the grid */
+            filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.8));
         }
 
         /* ── Campus SVG (NEON AESTHETIC) ── */
         .zone {
             cursor: pointer;
-            transition: filter .3s ease, opacity .3s ease;
+            transition: filter 0.4s ease, opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center center;
         }
 
         .zone:hover {
-            filter: brightness(1.5) drop-shadow(0 0 20px currentColor);
+            filter: brightness(1.6) drop-shadow(0 0 35px currentColor);
+            transform: scale(1.02);
         }
 
         .zone.active-zone {
-            filter: brightness(1.8) drop-shadow(0 0 25px currentColor);
+            filter: brightness(1.8) drop-shadow(0 0 45px currentColor);
+            transform: scale(1.03);
         }
 
-        /* Blue Neon (Main Buildings) */
+        /* Blue Neon (Main Buildings) — with extreme 3D depth shadow */
         .zone-fill-b {
-            fill: rgba(56, 189, 248, 0.03);
+            fill: rgba(56, 189, 248, 0.05);
             stroke: #38bdf8;
             stroke-width: 3;
-            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 1)) drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
         }
 
-        /* Green Neon (Fields/Athletics) */
+        /* Green Neon (Fields/Athletics) — with extreme 3D depth shadow */
         .zone-fill-g {
-            fill: rgba(74, 222, 128, 0.03);
+            fill: rgba(74, 222, 128, 0.05);
             stroke: #4ade80;
             stroke-width: 3;
-            filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.6)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+            filter: drop-shadow(0 0 15px rgba(74, 222, 128, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 1)) drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
         }
 
-        /* Cyan Neon (Parking/Aux) */
+        /* Cyan Neon (Parking/Aux) — with extreme 3D depth shadow */
         .zone-fill-p {
-            fill: rgba(45, 212, 191, 0.03);
+            fill: rgba(45, 212, 191, 0.05);
             stroke: #2dd4bf;
             stroke-width: 3;
-            filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.6)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+            filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 1)) drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
         }
 
         /* Hover Brightening */
@@ -591,7 +725,7 @@
             fill: rgba(56, 189, 248, 0.02);
             stroke: #38bdf8;
             stroke-width: 2;
-            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
             transition: all 0.2s ease;
         }
 
@@ -708,6 +842,96 @@
             height: 16px;
         }
 
+        /* ── ELEVATED NEON KEYFRAMES ── */
+        @property --border-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes markerPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes gridDrift {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(60px, 60px);
+            }
+        }
+
+        @keyframes borderRotate {
+            0% {
+                --border-angle: 0deg;
+            }
+
+            100% {
+                --border-angle: 360deg;
+            }
+        }
+
+        @keyframes zoneEntrance {
+            0% {
+                opacity: 0;
+                filter: brightness(0.3);
+            }
+
+            60% {
+                opacity: 1;
+                filter: brightness(2);
+            }
+
+            100% {
+                opacity: 1;
+                filter: brightness(1);
+            }
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Animated grid background */
+        .animated-grid {
+            animation: gridDrift 30s linear infinite;
+        }
+
+        /* Pulse rings (added dynamically) */
+        .pulse-ring {
+            pointer-events: none;
+        }
+
         @media(max-width:1100px) {
             .map-overlay-left {
                 max-width: 300px;
@@ -776,6 +1000,12 @@
                 width: auto !important;
             }
         }
+
+        @media(max-width:480px) {
+            #particleCanvas {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -791,6 +1021,7 @@
             <a href="browse.html" class="nav-link" role="menuitem">Browse</a>
             <a href="map.html" class="nav-link active" role="menuitem" aria-current="page">Map</a>
             <a href="submit.html" class="nav-link" role="menuitem">Submit</a>
+            <a href="rewards.html" class="nav-link" role="menuitem">Rewards</a>
             <a href="features.html" class="nav-link" role="menuitem">Features</a>
             <a href="sources.html" class="nav-link" role="menuitem">Sources</a>
         </div>
@@ -887,6 +1118,8 @@
         </div>
 
         <div class="map-wrap">
+            <canvas id="particleCanvas"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.4;"></canvas>
             <div class="map-inner" id="mapInner">
 
                 <!-- ════════════════════════════════════════════
@@ -905,8 +1138,36 @@
                             <stop offset="50%" stop-color="#ef4444" stop-opacity="0.8" />
                             <stop offset="100%" stop-color="#b91c1c" stop-opacity="0" />
                         </radialGradient>
+
+                        <!-- Heat-map intensity gradients -->
+                        <radialGradient id="heatLow" cx="50%" cy="50%" r="60%">
+                            <stop offset="0%" stop-color="#f87171" stop-opacity="0.12" />
+                            <stop offset="60%" stop-color="#ef4444" stop-opacity="0.05" />
+                            <stop offset="100%" stop-color="transparent" stop-opacity="0" />
+                        </radialGradient>
+                        <radialGradient id="heatMid" cx="50%" cy="50%" r="55%">
+                            <stop offset="0%" stop-color="#f87171" stop-opacity="0.28" />
+                            <stop offset="50%" stop-color="#ef4444" stop-opacity="0.12" />
+                            <stop offset="100%" stop-color="transparent" stop-opacity="0" />
+                        </radialGradient>
+                        <radialGradient id="heatHigh" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#ff4444" stop-opacity="0.45" />
+                            <stop offset="35%" stop-color="#f87171" stop-opacity="0.25" />
+                            <stop offset="100%" stop-color="transparent" stop-opacity="0" />
+                        </radialGradient>
+
+                        <!-- Marker glow filter -->
+                        <filter id="markerGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
                     </defs>
-                    <rect width="1200" height="900" fill="url(#grid)" />
+                    <g class="animated-grid">
+                        <rect width="2400" height="1800" x="-600" y="-450" fill="url(#grid)" />
+                    </g>
 
                     <!-- Roads -->
                     <path class="road-path" stroke-width="20" opacity="0.3"
@@ -1158,12 +1419,22 @@
                         <g class="room" data-room="Front Office" data-floor="1">
                             <rect x="50" y="40" width="180" height="100" rx="4" class="room-shape" />
                             <text x="140" y="90" class="room-lbl" font-size="11">FRONT OFFICE</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.15">
+                                <rect x="70" y="55" width="50" height="20" rx="2" />
+                                <rect x="140" y="55" width="50" height="20" rx="2" />
+                                <line x1="70" y1="110" x2="200" y2="110" />
+                            </g>
                         </g>
 
                         <!-- GUIDANCE -->
                         <g class="room" data-room="Guidance" data-floor="1">
                             <rect x="240" y="40" width="170" height="100" rx="4" class="room-shape" />
                             <text x="325" y="90" class="room-lbl" font-size="11">GUIDANCE</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.15">
+                                <rect x="260" y="55" width="30" height="18" rx="2" />
+                                <rect x="300" y="55" width="30" height="18" rx="2" />
+                                <rect x="340" y="55" width="30" height="18" rx="2" />
+                            </g>
                         </g>
 
                         <!-- GYMNASIUM -->
@@ -1210,36 +1481,82 @@
                         <g class="room" data-room="Room 102" data-floor="1">
                             <rect x="190" y="150" width="120" height="110" rx="4" class="room-shape" />
                             <text x="250" y="205" class="room-lbl">RM 102</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="205" y="165" width="20" height="10" />
+                                <rect x="235" y="165" width="20" height="10" />
+                                <rect x="265" y="165" width="20" height="10" />
+                                <rect x="205" y="185" width="20" height="10" />
+                                <rect x="235" y="185" width="20" height="10" />
+                                <rect x="265" y="185" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 103 -->
                         <g class="room" data-room="Room 103" data-floor="1">
                             <rect x="320" y="150" width="90" height="110" rx="4" class="room-shape" />
                             <text x="365" y="205" class="room-lbl">RM 103</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="335" y="165" width="20" height="10" />
+                                <rect x="365" y="165" width="20" height="10" />
+                                <rect x="335" y="185" width="20" height="10" />
+                                <rect x="365" y="185" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- WEIGHT ROOM -->
                         <g class="room" data-room="Weight Room" data-floor="1">
                             <rect x="485" y="270" width="180" height="100" rx="4" class="room-shape" />
                             <text x="575" y="325" class="room-lbl" font-size="10">WEIGHT ROOM</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.15">
+                                <rect x="500" y="285" width="30" height="8" />
+                                <rect x="540" y="285" width="30" height="8" />
+                                <rect x="580" y="285" width="30" height="8" />
+                                <circle cx="510" cy="340" r="8" />
+                                <circle cx="550" cy="340" r="8" />
+                                <rect x="600" y="310" width="50" height="15" rx="2" />
+                            </g>
                         </g>
 
                         <!-- ROOM 104 -->
                         <g class="room" data-room="Room 104" data-floor="1">
                             <rect x="675" y="270" width="175" height="100" rx="4" class="room-shape" />
                             <text x="762" y="325" class="room-lbl">RM 104</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="695" y="285" width="20" height="10" />
+                                <rect x="725" y="285" width="20" height="10" />
+                                <rect x="755" y="285" width="20" height="10" />
+                                <rect x="695" y="305" width="20" height="10" />
+                                <rect x="725" y="305" width="20" height="10" />
+                                <rect x="755" y="305" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 105 -->
                         <g class="room" data-room="Room 105" data-floor="1">
                             <rect x="50" y="340" width="170" height="110" rx="4" class="room-shape" />
                             <text x="135" y="400" class="room-lbl">RM 105</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="65" y="355" width="20" height="10" />
+                                <rect x="95" y="355" width="20" height="10" />
+                                <rect x="125" y="355" width="20" height="10" />
+                                <rect x="65" y="375" width="20" height="10" />
+                                <rect x="95" y="375" width="20" height="10" />
+                                <rect x="125" y="375" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 106 -->
                         <g class="room" data-room="Room 106" data-floor="1">
                             <rect x="230" y="340" width="180" height="110" rx="4" class="room-shape" />
                             <text x="320" y="400" class="room-lbl">RM 106</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="250" y="355" width="20" height="10" />
+                                <rect x="280" y="355" width="20" height="10" />
+                                <rect x="310" y="355" width="20" height="10" />
+                                <rect x="250" y="375" width="20" height="10" />
+                                <rect x="280" y="375" width="20" height="10" />
+                                <rect x="310" y="375" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- MEDIA CENTER -->
@@ -1267,18 +1584,40 @@
                         <g class="room" data-room="Room 107" data-floor="1">
                             <rect x="50" y="460" width="130" height="150" rx="4" class="room-shape" />
                             <text x="115" y="540" class="room-lbl">RM 107</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="65" y="475" width="20" height="10" />
+                                <rect x="95" y="475" width="20" height="10" />
+                                <rect x="65" y="495" width="20" height="10" />
+                                <rect x="95" y="495" width="20" height="10" />
+                                <rect x="65" y="555" width="20" height="10" />
+                                <rect x="95" y="555" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 108 -->
                         <g class="room" data-room="Room 108" data-floor="1">
                             <rect x="190" y="460" width="120" height="150" rx="4" class="room-shape" />
                             <text x="250" y="540" class="room-lbl">RM 108</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="205" y="475" width="20" height="10" />
+                                <rect x="235" y="475" width="20" height="10" />
+                                <rect x="265" y="475" width="20" height="10" />
+                                <rect x="205" y="495" width="20" height="10" />
+                                <rect x="235" y="495" width="20" height="10" />
+                                <rect x="265" y="495" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 109 -->
                         <g class="room" data-room="Room 109" data-floor="1">
                             <rect x="320" y="460" width="90" height="150" rx="4" class="room-shape" />
                             <text x="365" y="540" class="room-lbl">RM 109</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0.15">
+                                <rect x="335" y="475" width="20" height="10" />
+                                <rect x="365" y="475" width="20" height="10" />
+                                <rect x="335" y="495" width="20" height="10" />
+                                <rect x="365" y="495" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- RESTROOMS F1 -->
@@ -1286,6 +1625,12 @@
                             <rect x="485" y="510" width="120" height="100" rx="4" class="room-shape"
                                 stroke-dasharray="4,2" />
                             <text x="545" y="565" class="room-lbl" font-size="9">RESTROOMS</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.75" opacity="0.12">
+                                <line x1="510" y1="520" x2="510" y2="600" />
+                                <line x1="535" y1="520" x2="535" y2="600" />
+                                <line x1="560" y1="520" x2="560" y2="600" />
+                                <line x1="585" y1="520" x2="585" y2="600" />
+                            </g>
                         </g>
 
                         <!-- TEACHER LOUNGE -->
@@ -1293,6 +1638,11 @@
                             <rect x="615" y="510" width="120" height="100" rx="4" class="room-shape" />
                             <text x="675" y="555" class="room-lbl" font-size="9">TEACHERS</text>
                             <text x="675" y="570" class="room-lbl" font-size="8" opacity="0.5">LOUNGE</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.15">
+                                <rect x="635" y="525" width="35" height="20" rx="2" />
+                                <line x1="630" y1="580" x2="670" y2="580" />
+                                <line x1="690" y1="580" x2="720" y2="580" />
+                            </g>
                         </g>
 
                         <!-- CAFETERIA -->
@@ -1397,6 +1747,12 @@
                         <g class="room" data-room="Room 205" data-floor="2">
                             <rect x="320" y="160" width="90" height="100" rx="4" class="room-shape" />
                             <text x="365" y="210" class="room-lbl">RM 205</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="335" y="175" width="20" height="10" />
+                                <rect x="365" y="175" width="20" height="10" />
+                                <rect x="335" y="195" width="20" height="10" />
+                                <rect x="365" y="195" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- COMPUTER LAB -->
@@ -1423,12 +1779,28 @@
                         <g class="room" data-room="Room 206" data-floor="2">
                             <rect x="50" y="340" width="170" height="130" rx="4" class="room-shape" />
                             <text x="135" y="410" class="room-lbl">RM 206</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="70" y="355" width="20" height="10" />
+                                <rect x="100" y="355" width="20" height="10" />
+                                <rect x="130" y="355" width="20" height="10" />
+                                <rect x="70" y="375" width="20" height="10" />
+                                <rect x="100" y="375" width="20" height="10" />
+                                <rect x="130" y="375" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 207 -->
                         <g class="room" data-room="Room 207" data-floor="2">
                             <rect x="230" y="340" width="180" height="130" rx="4" class="room-shape" />
                             <text x="320" y="410" class="room-lbl">RM 207</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="250" y="355" width="20" height="10" />
+                                <rect x="280" y="355" width="20" height="10" />
+                                <rect x="310" y="355" width="20" height="10" />
+                                <rect x="250" y="375" width="20" height="10" />
+                                <rect x="280" y="375" width="20" height="10" />
+                                <rect x="310" y="375" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- MUSIC ROOM -->
@@ -1445,18 +1817,42 @@
                         <g class="room" data-room="Room 208" data-floor="2">
                             <rect x="675" y="340" width="175" height="130" rx="4" class="room-shape" />
                             <text x="762" y="410" class="room-lbl">RM 208</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="695" y="355" width="20" height="10" />
+                                <rect x="725" y="355" width="20" height="10" />
+                                <rect x="755" y="355" width="20" height="10" />
+                                <rect x="695" y="375" width="20" height="10" />
+                                <rect x="725" y="375" width="20" height="10" />
+                                <rect x="755" y="375" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 209 -->
                         <g class="room" data-room="Room 209" data-floor="2">
                             <rect x="50" y="480" width="170" height="130" rx="4" class="room-shape" />
                             <text x="135" y="550" class="room-lbl">RM 209</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="70" y="495" width="20" height="10" />
+                                <rect x="100" y="495" width="20" height="10" />
+                                <rect x="130" y="495" width="20" height="10" />
+                                <rect x="70" y="515" width="20" height="10" />
+                                <rect x="100" y="515" width="20" height="10" />
+                                <rect x="130" y="515" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 210 -->
                         <g class="room" data-room="Room 210" data-floor="2">
                             <rect x="230" y="480" width="180" height="130" rx="4" class="room-shape" />
                             <text x="320" y="550" class="room-lbl">RM 210</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="250" y="495" width="20" height="10" />
+                                <rect x="280" y="495" width="20" height="10" />
+                                <rect x="310" y="495" width="20" height="10" />
+                                <rect x="250" y="515" width="20" height="10" />
+                                <rect x="280" y="515" width="20" height="10" />
+                                <rect x="310" y="515" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- RESTROOMS F2 -->
@@ -1464,18 +1860,38 @@
                             <rect x="485" y="480" width="120" height="130" rx="4" class="room-shape"
                                 stroke-dasharray="4,2" />
                             <text x="545" y="550" class="room-lbl" font-size="9">RESTROOMS</text>
+                            <g fill="none" stroke="#3b82f6" stroke-width="0.75" opacity="0.12">
+                                <line x1="510" y1="490" x2="510" y2="600" />
+                                <line x1="535" y1="490" x2="535" y2="600" />
+                                <line x1="560" y1="490" x2="560" y2="600" />
+                                <line x1="585" y1="490" x2="585" y2="600" />
+                            </g>
                         </g>
 
                         <!-- ROOM 211 -->
                         <g class="room" data-room="Room 211" data-floor="2">
                             <rect x="615" y="480" width="120" height="130" rx="4" class="room-shape" />
                             <text x="675" y="550" class="room-lbl">RM 211</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="630" y="495" width="20" height="10" />
+                                <rect x="660" y="495" width="20" height="10" />
+                                <rect x="690" y="495" width="20" height="10" />
+                                <rect x="630" y="515" width="20" height="10" />
+                                <rect x="660" y="515" width="20" height="10" />
+                                <rect x="690" y="515" width="20" height="10" />
+                            </g>
                         </g>
 
                         <!-- ROOM 212 -->
                         <g class="room" data-room="Room 212" data-floor="2">
                             <rect x="745" y="480" width="105" height="130" rx="4" class="room-shape" />
                             <text x="798" y="550" class="room-lbl">RM 212</text>
+                            <g fill="none" class="field-line" stroke-width="0.5" opacity="0.3">
+                                <rect x="760" y="495" width="20" height="10" />
+                                <rect x="790" y="495" width="20" height="10" />
+                                <rect x="760" y="515" width="20" height="10" />
+                                <rect x="790" y="515" width="20" height="10" />
+                            </g>
                         </g>
                     </g>
 
@@ -1616,7 +2032,15 @@
                 items.forEach(i => { const z = zoneFor(i.location); counts[z] = (counts[z] || 0) + 1; });
 
                 document.querySelectorAll('.zone').forEach(g => {
-                    g.classList.toggle('has-items', (counts[g.dataset.zone] || 0) > 0);
+                    var zoneCount = counts[g.dataset.zone] || 0;
+                    g.classList.toggle('has-items', zoneCount > 0);
+                    /* Heat-map gradient fill */
+                    var shapes = g.querySelectorAll('.zone-fill-b, .zone-fill-g, .zone-fill-p');
+                    shapes.forEach(function (shape) {
+                        if (zoneCount === 0) { shape.removeAttribute('data-heat'); return; }
+                        var heatLevel = zoneCount <= 2 ? 'Low' : zoneCount <= 5 ? 'Mid' : 'High';
+                        shape.style.fill = 'url(#heat' + heatLevel + ')';
+                    });
                 });
 
                 /* Remove old campus markers */
@@ -1630,31 +2054,80 @@
                     if (!shape) return;
                     const bb = shape.getBBox();
                     const cx = bb.x + bb.width / 2, cy = bb.y + 16;
+                    const r = Math.min(10, 5 + count);
 
-                    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    dot.setAttribute('cx', cx); dot.setAttribute('cy', cy);
-                    dot.setAttribute('r', Math.min(10, 5 + count));
-                    dot.classList.add('marker-dot'); dot.dataset.zone = zone;
-                    dot.addEventListener('click', e => {
+                    /* Pulse rings (radar ping effect) */
+                    for (var ringIdx = 0; ringIdx < 3; ringIdx++) {
+                        var ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        ring.setAttribute('cx', cx);
+                        ring.setAttribute('cy', cy);
+                        ring.setAttribute('r', r);
+                        ring.setAttribute('fill', 'none');
+                        ring.setAttribute('stroke', '#f87171');
+                        ring.setAttribute('stroke-width', '1.5');
+                        ring.setAttribute('opacity', '0');
+                        ring.classList.add('pulse-ring', 'marker-dot');
+                        ring.style.transformOrigin = cx + 'px ' + cy + 'px';
+                        ring.style.animation = 'pulseRing 3s ease-out ' + ringIdx + 's infinite';
+                        svg.appendChild(ring);
+                    }
+
+                    /* Enhanced marker group */
+                    const markerG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    markerG.classList.add('marker-dot');
+                    markerG.dataset.zone = zone;
+                    markerG.style.cursor = 'pointer';
+
+                    /* Outer glow ring (pulsing) */
+                    const outerRing = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    outerRing.setAttribute('cx', cx);
+                    outerRing.setAttribute('cy', cy);
+                    outerRing.setAttribute('r', r + 4);
+                    outerRing.setAttribute('fill', 'none');
+                    outerRing.setAttribute('stroke', '#f87171');
+                    outerRing.setAttribute('stroke-width', '1');
+                    outerRing.setAttribute('opacity', '0.5');
+                    outerRing.style.transformOrigin = cx + 'px ' + cy + 'px';
+                    outerRing.style.animation = 'markerPulse 2s ease-in-out infinite';
+                    markerG.appendChild(outerRing);
+
+                    /* Inner filled circle */
+                    const innerDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    innerDot.setAttribute('cx', cx);
+                    innerDot.setAttribute('cy', cy);
+                    innerDot.setAttribute('r', r);
+                    innerDot.setAttribute('fill', 'url(#glowRed)');
+                    innerDot.setAttribute('stroke', '#f87171');
+                    innerDot.setAttribute('stroke-width', '1.5');
+                    innerDot.setAttribute('filter', 'url(#markerGlow)');
+                    markerG.appendChild(innerDot);
+
+                    /* Count badge text (always visible) */
+                    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    txt.setAttribute('x', cx);
+                    txt.setAttribute('y', cy + 3.5);
+                    txt.setAttribute('text-anchor', 'middle');
+                    txt.setAttribute('fill', '#fff');
+                    txt.setAttribute('font-size', '9');
+                    txt.setAttribute('font-weight', '800');
+                    txt.setAttribute('font-family', 'Inter,sans-serif');
+                    txt.setAttribute('pointer-events', 'none');
+                    txt.classList.add('marker-count');
+                    txt.textContent = count;
+                    markerG.appendChild(txt);
+
+                    /* Click handler */
+                    markerG.addEventListener('click', e => {
                         e.stopPropagation();
                         if (zone === 'Main Building') {
-                            ctxClose.click(); // Close context panel
+                            ctxClose.click();
                             enterFloorMode();
                             return;
                         }
-                        openCampusPopup(zone); // Removed event parameter
+                        openCampusPopup(zone);
                     });
-                    svg.appendChild(dot);
 
-                    if (count > 1) {
-                        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                        txt.setAttribute('x', cx); txt.setAttribute('y', cy + 3.5);
-                        txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('fill', '#fff');
-                        txt.setAttribute('font-size', '8'); txt.setAttribute('font-weight', '700');
-                        txt.setAttribute('font-family', 'Inter,sans-serif'); txt.setAttribute('pointer-events', 'none');
-                        txt.classList.add('marker-count'); txt.textContent = count;
-                        svg.appendChild(txt);
-                    }
+                    svg.appendChild(markerG);
                 });
 
                 renderCampusList(counts);
@@ -1680,7 +2153,7 @@
                             ? `<span class="urgency-badge urgency-${urgencyRaw}" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); margin-left: 8px; vertical-align: middle; text-transform: capitalize;">${urgencyRaw}</span>`
                             : '';
                         return `
-                        <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}">
+                        <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}" data-status="${i.status}">
                             <div class="ctx-badge ${i.status}">${i.status}</div>
                             <div class="ctx-name">${i.name || 'Unknown Item'}${urgencyBadge}</div>
                             <div class="ctx-meta">
@@ -1803,7 +2276,7 @@
                             ? `<span class="urgency-badge urgency-${urgencyRaw}" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); margin-left: 8px; vertical-align: middle; text-transform: capitalize;">${urgencyRaw}</span>`
                             : '';
                         return `
-                        <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}">
+                        <a href="claim.html?id=${i.id}" class="ctx-item ${isBounty ? 'is-bounty' : ''}" data-status="${i.status}">
                             <div class="ctx-badge ${i.status}">${i.status}</div>
                             <div class="ctx-name">${i.name || 'Unknown Item'}${urgencyBadge}</div>
                             <div class="ctx-meta">
@@ -1904,11 +2377,118 @@
                         .subscribe();
                 }
             }
+            /* ══════════════ SCAN LINE HOVER EFFECT ══════════════ */
+            document.querySelectorAll('.zone').forEach(function (g) {
+                g.addEventListener('mouseenter', function () {
+                    var shape = g.querySelector('rect, path');
+                    if (!shape) return;
+                    var bb = shape.getBBox();
+                    var svg = shape.closest('svg');
+                    var scanLine = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    scanLine.setAttribute('x', bb.x);
+                    scanLine.setAttribute('y', bb.y);
+                    scanLine.setAttribute('width', '4');
+                    scanLine.setAttribute('height', bb.height);
+                    scanLine.setAttribute('fill', 'rgba(255,255,255,0.12)');
+                    scanLine.setAttribute('pointer-events', 'none');
+                    scanLine.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
+                    svg.appendChild(scanLine);
+                    requestAnimationFrame(function () {
+                        scanLine.style.transform = 'translateX(' + bb.width + 'px)';
+                        scanLine.style.opacity = '0';
+                    });
+                    setTimeout(function () { scanLine.remove(); }, 700);
+                });
+            });
+
+            /* ══════════════ ENTRY ANIMATION ══════════════ */
+            var origRefreshCampus = refreshCampus;
+            refreshCampus = function () {
+                origRefreshCampus();
+                if (!window.__zonesAnimated) {
+                    window.__zonesAnimated = true;
+                    document.querySelectorAll('.zone').forEach(function (g, i) {
+                        g.style.opacity = '0';
+                        g.style.animation = 'zoneEntrance 0.6s ease-out ' + (i * 0.08) + 's forwards';
+                    });
+                }
+            };
+
             renderCampusList({});
             init();
         })();
+
+        /* ══════════════ AMBIENT PARTICLES ══════════════ */
+        (function initParticles() {
+            var canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+            var particles = [];
+            var PARTICLE_COUNT = 40;
+
+            function resize() {
+                canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+                canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+                ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            var colors = ['#38bdf8', '#4ade80', '#2dd4bf', '#f87171'];
+            for (var i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * canvas.offsetWidth,
+                    y: Math.random() * canvas.offsetHeight,
+                    r: Math.random() * 1.5 + 0.5,
+                    dx: (Math.random() - 0.5) * 0.3,
+                    dy: (Math.random() - 0.5) * 0.2 - 0.1,
+                    alpha: Math.random() * 0.5 + 0.1,
+                    color: colors[Math.floor(Math.random() * 4)]
+                });
+            }
+
+            function animate() {
+                var w = canvas.offsetWidth, h = canvas.offsetHeight;
+                ctx.clearRect(0, 0, w, h);
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0) p.x = w;
+                    if (p.x > w) p.x = 0;
+                    if (p.y < 0) p.y = h;
+                    if (p.y > h) p.y = 0;
+
+                    ctx.globalAlpha = p.alpha * 0.15;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+
+                    ctx.globalAlpha = p.alpha;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
     </script>
     <script src="js/nav-auth.js"></script>
+
+    <footer
+        style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="color: #888888; font-size: 13px;">&copy; 2025&ndash;2026 BackTrack. Built for FBLA Website Coding
+            &amp; Development.</div>
+        <div style="display: flex; gap: 24px;">
+            <a href="features.html" style="color: #888888; text-decoration: none; font-size: 13px;">Features</a>
+            <a href="sources.html" style="color: #888888; text-decoration: none; font-size: 13px;">Sources</a>
+            <a href="index.html" style="color: #888888; text-decoration: none; font-size: 13px;">Home</a>
+        </div>
+    </footer>
 </body>
 
 </html>

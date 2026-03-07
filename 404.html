@@ -6,11 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050811">
     <title>Page Not Found - BackTrack</title>
+    <meta name="description" content="Page not found. Return to BackTrack, the school lost-and-found system.">
+    <link rel="icon" type="image/png" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
     <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/nav-auth.css">
     <style>
         body {
             background:
@@ -93,6 +99,8 @@
             }
         }
 
+        .nav-spacer { height: 70px; }
+
         /* Background grid effect */
         .bg-grid {
             position: absolute;
@@ -108,9 +116,30 @@
 </head>
 
 <body>
+    <nav aria-label="Main navigation" role="navigation">
+        <a href="index.html" class="nav-left" aria-label="BackTrack Home">
+            <span class="brand-logo">
+                <img class="logo-dark" src="logo.png" alt="BackTrack">
+                <img class="logo-light" src="logo-white.png" alt="" aria-hidden="true">
+            </span>
+        </a>
+        <div class="nav-center" role="menubar">
+            <a href="browse.html" class="nav-link" role="menuitem">Browse</a>
+            <a href="map.html" class="nav-link" role="menuitem">Map</a>
+            <a href="submit.html" class="nav-link" role="menuitem">Submit</a>
+            <a href="rewards.html" class="nav-link" role="menuitem">Rewards</a>
+            <a href="features.html" class="nav-link" role="menuitem">Features</a>
+            <a href="sources.html" class="nav-link" role="menuitem">Sources</a>
+        </div>
+        <div class="nav-right">
+            <a class="sign-in-btn" href="login.html" aria-label="Log in to your account">Log In</a>
+        </div>
+    </nav>
+    <div class="nav-spacer"></div>
+
     <div class="bg-grid"></div>
     <div class="error-code">404</div>
-    <h1 class="error-title">Look like you're lost</h1>
+    <h1 class="error-title">Looks like you're lost</h1>
     <p class="error-message">The page you are looking for doesn't exist or has been moved. Let's get you back on track.
     </p>
     <a href="index.html" class="home-btn">
@@ -121,6 +150,20 @@
         </svg>
         Back to Home
     </a>
+
+    <footer style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="color: #888888; font-size: 13px;">&copy; 2025&ndash;2026 BackTrack. Built for FBLA Website Coding &amp; Development.</div>
+        <div style="display: flex; gap: 24px;">
+            <a href="features.html" style="color: #888888; text-decoration: none; font-size: 13px;">Features</a>
+            <a href="sources.html" style="color: #888888; text-decoration: none; font-size: 13px;">Sources</a>
+            <a href="index.html" style="color: #888888; text-decoration: none; font-size: 13px;">Home</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/nav-auth.js"></script>
+    <script src="js/accessibility.js"></script>
 </body>
 
 </html>

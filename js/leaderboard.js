@@ -4,10 +4,16 @@
 (function () {
     var BOUNTY_WEIGHT = 2;
     var MONTH_WINDOW_DAYS = 30;
+    var RANGE_ORDER = ['month', 'all'];
+    var RANGE_LABELS = {
+        month: 'Monthly',
+        all: 'All Time'
+    };
 
     var podiumWrap = document.getElementById('lbPodium');
     var tableRows = document.getElementById('lbTableRows');
     var tableWrap = tableRows ? tableRows.closest('.lb-table-wrap') : null;
+    var sectionEl = document.querySelector('.lb-section');
     var spotlight = document.getElementById('lbSpotlight');
     var contributorsEl = document.getElementById('lbContributors');
     var foundEl = document.getElementById('lbItemsFound');
@@ -16,6 +22,9 @@
     var summaryEl = document.getElementById('lbSummary');
     var noteEl = document.getElementById('lbNote');
     var rangeButtons = Array.from(document.querySelectorAll('.lb-range-btn'));
+    var prefersReducedMotion = Boolean(
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
 
     if (!podiumWrap || !tableRows || !rangeButtons.length) return;
 
@@ -159,8 +168,8 @@
 
     function getUserKeys() {
         if (!state.currentUser) return [];
-        var keys = [];
 
+        var keys = [];
         var userId = String(state.currentUser.id || '').trim();
         if (userId) keys.push('uid:' + userId);
 
@@ -254,10 +263,10 @@
     function setSummary(entries) {
         if (summaryEl) {
             var rangeLabel = state.range === 'month'
-                ? 'Monthly (last ' + MONTH_WINDOW_DAYS + ' days)'
-                : 'All-time';
-            var leader = entries[0] ? ' • Leader: ' + entries[0].name : '';
-            summaryEl.textContent = rangeLabel + ' • ' + fmt(entries.length) + ' ranked contributors' + leader;
+                ? RANGE_LABELS.month + ' (last ' + MONTH_WINDOW_DAYS + ' days)'
+                : RANGE_LABELS.all;
+            var leader = entries[0] ? ' - Leader: ' + entries[0].name : '';
+            summaryEl.textContent = rangeLabel + ' - ' + fmt(entries.length) + ' ranked contributors' + leader;
         }
 
         if (noteEl) {
@@ -270,27 +279,44 @@
     function countUp(el, end) {
         if (!el) return;
 
+        var targetValue = Math.max(0, Number(end) || 0);
+        if (el.dataset.lbValue === String(targetValue)) return;
+        el.dataset.lbValue = String(targetValue);
+
+        if (prefersReducedMotion) {
+            el.textContent = fmt(targetValue);
+            return;
+        }
+
+        var startValue = Number(el.textContent.replace(/[^0-9.-]/g, '')) || 0;
         var startAt = null;
 
         function tick(now) {
             if (!startAt) startAt = now;
-            var progress = Math.min((now - startAt) / 900, 1);
+            var progress = Math.min((now - startAt) / 650, 1);
             var eased = 1 - Math.pow(1 - progress, 3);
-            var value = Math.floor(eased * end);
+            var value = Math.floor(startValue + (targetValue - startValue) * eased);
             el.textContent = fmt(value);
             if (progress < 1) {
                 requestAnimationFrame(tick);
             } else {
-                el.textContent = fmt(end);
+                el.textContent = fmt(targetValue);
             }
         }
 
         requestAnimationFrame(tick);
     }
 
+    function rankLabel(rank) {
+        if (rank === 1) return '1st';
+        if (rank === 2) return '2nd';
+        if (rank === 3) return '3rd';
+        return String(rank);
+    }
+
     function podiumCard(entry, rank, trend, isSelf) {
         var empty = !entry;
-        var avatar = empty ? '?' : esc(initials(entry.name));
+        var avatar = empty ? '--' : esc(initials(entry.name));
         var name = empty ? 'Open Spot' : esc(entry.name);
         var scoreAttr = empty ? '' : ' data-value="' + entry.score + '"';
         var score = empty ? '--' : '0';
@@ -298,23 +324,28 @@
         var youBadge = isSelf && !empty ? '<span class="lb-you-badge lb-you-badge-card">You</span>' : '';
         var meta = empty
             ? 'Waiting for live data'
-            : fmt(entry.found) + ' found · ' + fmt(entry.bounties) + ' bounties';
+            : fmt(entry.found) + ' found / ' + fmt(entry.bounties) + ' bounties';
         var trendClass = empty ? 'flat' : trend.cls;
         var trendLabel = empty ? '--' : trend.label;
 
-        return '<div class="lb-podium-place rank-' + rank + (empty ? ' empty' : '') + (isSelf ? ' is-self' : '') + '">'
+        return '<article class="lb-podium-place rank-' + rank + (empty ? ' empty' : '') + (isSelf ? ' is-self' : '') + '">'
             + '<div class="lb-podium-card">'
+            + '<div class="lb-card-header">'
             + medal
+            + '<span class="lb-card-rank-text">' + rankLabel(rank) + ' place</span>'
             + youBadge
+            + '</div>'
             + '<div class="lb-avatar">' + avatar + '</div>'
             + '<div class="lb-card-name">' + name + '</div>'
-            + '<div class="lb-card-score"' + scoreAttr + '>' + score + '</div>'
-            + '<div class="lb-card-label">points</div>'
             + '<div class="lb-card-meta">' + esc(meta) + '</div>'
+            + '<div class="lb-card-score-wrap">'
+            + '<div class="lb-card-score"' + scoreAttr + '>' + score + '</div>'
+            + '<div class="lb-card-label">score</div>'
+            + '</div>'
             + '<span class="lb-card-trend ' + trendClass + '">' + esc(trendLabel) + '</span>'
             + '</div>'
-            + '<div class="lb-podium-bar"><span class="lb-bar-rank">' + rank + '</span></div>'
-            + '</div>';
+            + '<div class="lb-podium-bar"><span class="lb-bar-rank">#' + rank + '</span></div>'
+            + '</article>';
     }
 
     function tableRow(entry, rank, trend, isSelf) {
@@ -322,15 +353,23 @@
 
         var rowClass = 'lb-row' + (isSelf ? ' is-self' : '');
         var youBadge = isSelf ? '<span class="lb-you-badge">You</span>' : '';
+        var rowSub = fmt(entry.found) + ' found / ' + fmt(entry.bounties) + ' bounties';
 
-        return '<div class="' + rowClass + '">'
+        return '<article class="' + rowClass + '">'
             + '<div class="lb-cell-rank">' + rank + '</div>'
-            + '<div class="lb-cell lb-cell-user"><div class="lb-row-name">' + esc(entry.name) + '</div>' + youBadge + '</div>'
-            + '<div class="lb-cell">' + fmt(entry.found) + '</div>'
-            + '<div class="lb-cell">' + fmt(entry.bounties) + '</div>'
-            + '<div class="lb-cell lb-cell-score">' + fmt(entry.score) + '</div>'
+            + '<div class="lb-cell lb-cell-user">'
+            + '<span class="lb-row-avatar" aria-hidden="true">' + esc(initials(entry.name)) + '</span>'
+            + '<div class="lb-row-user-meta">'
+            + '<div class="lb-row-name">' + esc(entry.name) + '</div>'
+            + '<div class="lb-row-sub">' + esc(rowSub) + '</div>'
+            + '</div>'
+            + youBadge
+            + '</div>'
+            + '<div class="lb-cell lb-cell-found" data-label="Found">' + fmt(entry.found) + '</div>'
+            + '<div class="lb-cell lb-cell-bounties" data-label="Bounties">' + fmt(entry.bounties) + '</div>'
+            + '<div class="lb-cell lb-cell-score" data-label="Score">' + fmt(entry.score) + '</div>'
             + '<div class="lb-cell lb-cell-trend"><span class="lb-table-trend ' + trend.cls + '">' + esc(trend.label) + '</span></div>'
-            + '</div>';
+            + '</article>';
     }
 
     function doRender() {
@@ -351,6 +390,7 @@
         var t1 = trendFor(entries[0], 1, allRankMap);
         var t2 = trendFor(entries[1], 2, allRankMap);
         var t3 = trendFor(entries[2], 3, allRankMap);
+
         var userKeys = getUserKeys();
         var top1Self = Boolean(entries[0] && userKeys.indexOf(entries[0].key) !== -1);
         var top2Self = Boolean(entries[1] && userKeys.indexOf(entries[1].key) !== -1);
@@ -385,7 +425,7 @@
     }
 
     function render(isSwitch) {
-        if (!isSwitch) {
+        if (!isSwitch || prefersReducedMotion) {
             doRender();
             return;
         }
@@ -397,18 +437,80 @@
             doRender();
             podiumWrap.classList.remove('lb-exit');
             if (tableWrap) tableWrap.classList.remove('lb-exit');
-        }, 200);
+        }, 180);
+    }
+
+    function syncRangeButtons() {
+        rangeButtons.forEach(function (button) {
+            var isActive = button.dataset.range === state.range;
+            button.classList.toggle('active', isActive);
+            button.setAttribute('role', 'tab');
+            button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            button.setAttribute('tabindex', isActive ? '0' : '-1');
+        });
     }
 
     function setRange(range) {
+        if (RANGE_ORDER.indexOf(range) === -1) return;
         if (range === state.range) return;
         state.range = range;
+        syncRangeButtons();
+        render(true);
+    }
+
+    function moveRange(direction) {
+        var currentIndex = RANGE_ORDER.indexOf(state.range);
+        if (currentIndex === -1) currentIndex = 0;
+
+        var nextIndex = currentIndex + direction;
+        if (nextIndex < 0) nextIndex = RANGE_ORDER.length - 1;
+        if (nextIndex >= RANGE_ORDER.length) nextIndex = 0;
+
+        var nextRange = RANGE_ORDER[nextIndex];
+        setRange(nextRange);
+
+        var targetButton = rangeButtons.find(function (button) {
+            return button.dataset.range === nextRange;
+        });
+        if (targetButton) targetButton.focus();
+    }
+
+    function setupRangeButtons() {
+        syncRangeButtons();
 
         rangeButtons.forEach(function (button) {
-            button.classList.toggle('active', button.dataset.range === range);
-        });
+            button.addEventListener('click', function () {
+                setRange(button.dataset.range);
+            });
 
-        render(true);
+            button.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    moveRange(1);
+                    return;
+                }
+
+                if (event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    moveRange(-1);
+                    return;
+                }
+
+                if (event.key === 'Home') {
+                    event.preventDefault();
+                    setRange(RANGE_ORDER[0]);
+                    rangeButtons[0].focus();
+                    return;
+                }
+
+                if (event.key === 'End') {
+                    event.preventDefault();
+                    var lastIndex = RANGE_ORDER.length - 1;
+                    setRange(RANGE_ORDER[lastIndex]);
+                    rangeButtons[lastIndex].focus();
+                }
+            });
+        });
     }
 
     function buildRanges() {
@@ -451,8 +553,10 @@
     }
 
     function triggerConfetti() {
+        if (prefersReducedMotion) return;
         if (typeof confetti !== 'function') return;
-        var duration = 2500;
+
+        var duration = 2200;
         var animationEnd = Date.now() + duration;
         var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
 
@@ -462,45 +566,45 @@
 
         var interval = setInterval(function () {
             var timeLeft = animationEnd - Date.now();
-
             if (timeLeft <= 0) {
-                return clearInterval(interval);
+                clearInterval(interval);
+                return;
             }
 
-            var particleCount = 50 * (timeLeft / duration);
-            // Fire from left and right edges
-            confetti(Object.assign({}, defaults, { particleCount: particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-            confetti(Object.assign({}, defaults, { particleCount: particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            var particleCount = 42 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, {
+                particleCount: particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+            }));
+            confetti(Object.assign({}, defaults, {
+                particleCount: particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+            }));
         }, 250);
     }
 
     function initScrollAnimations() {
-        var lbSection = document.querySelector('.lb-section');
-        if (!lbSection) return;
+        if (!sectionEl) return;
+
+        if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
+            sectionEl.classList.add('animated');
+            return;
+        }
 
         var observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
-                    lbSection.classList.add('animated');
-
-                    // Trigger confetti once the podium rises
-                    setTimeout(triggerConfetti, 500);
-
-                    // Only animate once
-                    observer.unobserve(lbSection);
+                    sectionEl.classList.add('animated');
+                    setTimeout(triggerConfetti, 380);
+                    observer.unobserve(sectionEl);
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.25 });
 
-        observer.observe(lbSection);
+        observer.observe(sectionEl);
     }
 
-    rangeButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            setRange(button.dataset.range);
-        });
-    });
-
+    setupRangeButtons();
     initScrollAnimations();
     load();
 })();

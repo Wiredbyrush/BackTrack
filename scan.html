@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Smart Scan - BackTrack</title>
+    <meta name="description" content="Upload a photo to find matching lost items using AI-powered image recognition on BackTrack.">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/base.css">
@@ -391,7 +395,9 @@
             <a href="browse.html" class="nav-link" role="menuitem">Browse</a>
             <a href="map.html" class="nav-link" role="menuitem">Map</a>
             <a href="submit.html" class="nav-link" role="menuitem">Submit</a>
+            <a href="rewards.html" class="nav-link" role="menuitem">Rewards</a>
             <a href="features.html" class="nav-link" role="menuitem">Features</a>
+            <a href="sources.html" class="nav-link" role="menuitem">Sources</a>
         </div>
 
         <div class="nav-right">
@@ -784,6 +790,20 @@
 
         scanAgainBtn.addEventListener('click', resetScanUi);
     </script>
+
+    <footer style="padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="color: #888888; font-size: 13px;">&copy; 2025&ndash;2026 BackTrack. Built for FBLA Website Coding &amp; Development.</div>
+        <div style="display: flex; gap: 24px;">
+            <a href="features.html" style="color: #888888; text-decoration: none; font-size: 13px;">Features</a>
+            <a href="sources.html" style="color: #888888; text-decoration: none; font-size: 13px;">Sources</a>
+            <a href="index.html" style="color: #888888; text-decoration: none; font-size: 13px;">Home</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/nav-auth.js"></script>
+    <script src="js/accessibility.js"></script>
 </body>
 
 </html>
