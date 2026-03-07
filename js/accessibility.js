@@ -1325,8 +1325,8 @@
         styles.textContent = `
             #scroll-to-top {
                 position: fixed;
-                right: 24px;
-                bottom: 100px;
+                left: 24px;
+                bottom: 24px;
                 width: 44px;
                 height: 44px;
                 border-radius: 50%;
@@ -1360,8 +1360,8 @@
             }
             @media (max-width: 768px) {
                 #scroll-to-top {
-                    right: 16px;
-                    bottom: 160px;
+                    left: 16px;
+                    bottom: 24px;
                     width: 40px;
                     height: 40px;
                 }
