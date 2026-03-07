@@ -165,7 +165,7 @@ button[type="submit"] {
 .submit-btn,
 button[type="submit"]:not(.secondary):not(.btn-ghost):not(.share-btn):not(.a11y-switch):not(.chatbot-close):not(.chatbot-send):not(.a11y-text-btn):not(.a11y-shortcuts-btn):not(.toast-close):not(.voice-search-btn) {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    color: #fff !important;
+    color: #fff;
     box-shadow: var(--shadow-blue);
 }
 
