@@ -269,14 +269,21 @@ CREATE POLICY "Users can update own items" ON items
 -- Allow admins to update any items
 CREATE POLICY "Admins can update items" ON items
     FOR UPDATE 
-    USING (auth.jwt()->>'email' IN (SELECT email FROM admins))
-    WITH CHECK (auth.jwt()->>'email' IN (SELECT email FROM admins));
+    USING (
+        auth.jwt()->>'email' IN (SELECT email FROM admins)
+        OR auth.jwt()->>'email' IN ('rushwanthmahendran1@gmail.com', 'anithsascy09@gmail.com')
+    )
+    WITH CHECK (
+        auth.jwt()->>'email' IN (SELECT email FROM admins)
+        OR auth.jwt()->>'email' IN ('rushwanthmahendran1@gmail.com', 'anithsascy09@gmail.com')
+    );
 
 -- Allow admins to delete any items
 CREATE POLICY "Admins can delete items" ON items
     FOR DELETE USING (
         auth.uid() IN (SELECT user_id FROM admins)
         OR auth.jwt()->>'email' IN (SELECT email FROM admins WHERE email IS NOT NULL)
+        OR auth.jwt()->>'email' IN ('rushwanthmahendran1@gmail.com', 'anithsascy09@gmail.com')
     );
 
 -- Enable RLS on map tables
