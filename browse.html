@@ -2484,9 +2484,8 @@
                 const isBounty = Boolean(item.is_bounty || item.isBounty);
 
                 if (currentUserIsAdmin) {
-                    // Admins see everything relevant to the view
-                    if (status !== 'pending') return isLostView ? isBounty : !isBounty;
-                    return true;
+                    // Admins see everything relevant to the view, including 'pending' statuses
+                    return isLostView ? isBounty : !isBounty;
                 } else {
                     // Regular user visibility rules:
                     if (isBounty) {
