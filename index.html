@@ -199,7 +199,7 @@
         .chatbot-widget {
             position: fixed;
             right: 24px;
-            bottom: 90px;
+            bottom: 24px;
             z-index: 200;
             font-family: inherit;
         }
@@ -3390,7 +3390,7 @@
             chatbotPanel.classList.toggle('open', open);
         }
 
-        chatbotToggle.addEventListener('click', () => toggleChat(true));
+        chatbotToggle.addEventListener('click', () => toggleChat(!chatbotPanel.classList.contains('open')));
         chatbotClose.addEventListener('click', () => toggleChat(false));
 
         // Uses credentials from supabase.js

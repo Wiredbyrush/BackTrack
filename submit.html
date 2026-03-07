@@ -736,7 +736,7 @@
         .chatbot-widget {
             position: fixed;
             right: 24px;
-            bottom: 90px;
+            bottom: 24px;
             z-index: 200;
             font-family: inherit;
         }
@@ -1432,7 +1432,7 @@
 
         function toggleChat(open) { chatbotPanel.classList.toggle('open', open); }
 
-        chatbotToggle.addEventListener('click', () => toggleChat(true));
+        chatbotToggle.addEventListener('click', () => toggleChat(!chatbotPanel.classList.contains('open')));
         chatbotClose.addEventListener('click', () => toggleChat(false));
 
         const CHAT_SUPABASE_URL = window.BackTrackDB?.config?.url || 'YOUR_SUPABASE_PROJECT_URL';
