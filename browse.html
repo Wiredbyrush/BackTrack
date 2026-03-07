@@ -2359,18 +2359,10 @@
         function getFetchFilters() {
             const filters = { ...currentFilters };
 
-            if (currentUserIsAdmin) {
-                if (Array.isArray(filters.status)) {
-                    const statuses = new Set(filters.status.map((status) => normalizeStatus(status)));
-                    statuses.add('pending');
-                    filters.status = Array.from(statuses);
-                }
-            } else {
-                // Default to found items view if no status is specified
-                if (!Array.isArray(filters.status) || filters.status.length === 0) {
-                    filters.status = ['found', 'claimed'];
-                }
+            if (!Array.isArray(filters.status) || filters.status.length === 0) {
+                filters.status = ['found', 'claimed'];
             }
+
             if (filters.location && filters.location !== 'All Locations') {
                 const mappedLocs = locationMapping[filters.location] || [];
                 filters.location = [filters.location, ...mappedLocs];
@@ -2386,21 +2378,12 @@
                 const status = normalizeStatus(item.status);
                 const isBounty = Boolean(item.is_bounty || item.isBounty);
 
-                if (currentUserIsAdmin) {
-                    // Admins see everything relevant to the view, including 'pending' statuses
-                    return isLostView ? isBounty : !isBounty;
+                if (isBounty) {
+                    if (status === 'found' || status === 'claimed' || status === 'approved' || status === 'pending') return false;
+                    return isLostView;
                 } else {
-                    // Regular user visibility rules:
-                    if (isBounty) {
-                        // Bounties: only show if they are active ('bounty' or 'lost')
-                        // Hide resolved bounties from public view
-                        if (status === 'found' || status === 'claimed' || status === 'approved') return false;
-                        return isLostView;
-                    } else {
-                        // Regular Found Items: show if 'found' or 'claimed'. Hide 'approved' or 'pending'
-                        if (status === 'approved' || status === 'pending') return false;
-                        return !isLostView;
-                    }
+                    if (status === 'approved' || status === 'pending') return false;
+                    return !isLostView;
                 }
             });
         }
