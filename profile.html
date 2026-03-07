@@ -233,9 +233,16 @@
             color: #a78bfa;
         }
 
-        .item-status.found {
+        .item-status.found,
+        .item-status.bounty-found {
             background: rgba(16, 185, 129, 0.15);
             color: #10b981;
+            font-weight: 700;
+        }
+
+        .item-status.bounty-claimed {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
             font-weight: 700;
         }
 
@@ -801,6 +808,8 @@
 
         function createItemCard(item, claimStatus) {
             const status = claimStatus || item.status || 'active';
+            const isBounty = Boolean(item.is_bounty || item.isBounty);
+
             const statusLabels = {
                 'active': 'Active',
                 'pending': 'Pending',
@@ -811,6 +820,22 @@
                 'bounty': 'Active Bounty',
                 'lost': 'Lost Item'
             };
+
+            let statusLabel = statusLabels[status] || status;
+            let displayStatusClass = status;
+
+            // Differentiate claimed items from bounties
+            if (isBounty) {
+                if (status === 'claimed') {
+                    statusLabel = 'Verified in Office';
+                    displayStatusClass = 'bounty-claimed'; // Need to add CSS for this!
+                } else if (status === 'found') {
+                    statusLabel = 'Reported Found';
+                    displayStatusClass = 'bounty-found';
+                } else if (status === 'approved') {
+                    statusLabel = 'Returned to You';
+                }
+            }
 
             const imageHtml = item.image_url
                 ? `<img src="${item.image_url}" alt="${item.title}">`
@@ -827,7 +852,7 @@
                         <h3 class="item-title">${item.title || item.name || 'Untitled Item'}</h3>
                         <div class="item-meta">
                             <span>${date}</span>
-                            <span class="item-status ${status}">${statusLabels[status] || status}</span>
+                            <span class="item-status ${displayStatusClass}">${statusLabel}</span>
                         </div>
                     </div>
                 </div>

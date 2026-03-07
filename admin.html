@@ -1234,17 +1234,31 @@
                     const urgencyRaw = String(item.urgency || '').toLowerCase();
                     const urgency = urgencyRaw ? `<span class="urgency-badge urgency-${escapeHtml(urgencyRaw)}">${escapeHtml(urgencyRaw)}</span>` : '';
                     const isFound = String(item.status || '').toLowerCase() === 'found';
-                    const foundBadge = isFound ? '<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;border:1px solid rgba(16,185,129,0.45);background:rgba(16,185,129,0.16);color:#34d399;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-left:8px;">Found - Needs Verification</span>' : '';
-                    const finderInfo = isFound && item.finder_name ? `<div style="margin-top:8px;padding:8px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:6px;color:#a7f3d0;font-size:13px;">Found by: <strong>${escapeHtml(item.finder_name)}</strong></div>` : '';
-                    const actionBtn = isFound
-                        ? `<button class="btn btn-approve" style="background:rgba(16,185,129,0.15);color:#34d399;border-color:rgba(16,185,129,0.3);" onclick="verifyFoundBounty('${item.id}')">Verify in Office</button>`
-                        : `<button class="btn btn-approve" onclick="approveBounty('${item.id}')">Approve</button>`;
+                    const isClaimed = String(item.status || '').toLowerCase() === 'claimed';
+
+                    let statusBadge = '';
+                    if (isFound) {
+                        statusBadge = '<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;border:1px solid rgba(16,185,129,0.45);background:rgba(16,185,129,0.16);color:#34d399;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-left:8px;">Found - Needs Verification</span>';
+                    } else if (isClaimed) {
+                        statusBadge = '<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;border:1px solid rgba(59,130,246,0.45);background:rgba(59,130,246,0.16);color:#60a5fa;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-left:8px;">Verified in Office</span>';
+                    }
+
+                    const finderInfo = (isFound || isClaimed) && item.finder_name ? `<div style="margin-top:8px;padding:8px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:6px;color:#a7f3d0;font-size:13px;">Found by: <strong>${escapeHtml(item.finder_name)}</strong></div>` : '';
+
+                    let actionBtn = '';
+                    if (isFound) {
+                        actionBtn = `<button class="btn btn-approve" style="background:rgba(16,185,129,0.15);color:#34d399;border-color:rgba(16,185,129,0.3);" onclick="verifyFoundBounty('${item.id}')">Verify in Office</button>`;
+                    } else if (isClaimed) {
+                        actionBtn = `<button class="btn btn-approve" style="background:rgba(59,130,246,0.15);color:#60a5fa;border-color:rgba(59,130,246,0.3);" onclick="returnBounty('${item.id}')">Mark as Returned</button>`;
+                    } else {
+                        actionBtn = `<button class="btn btn-approve" onclick="approveBounty('${item.id}')">Approve</button>`;
+                    }
 
                     return `
                         <div class="review-card" id="bounty-card-${item.id}">
                             <div class="card-top">
                                 <div class="card-info">
-                                    <div class="card-title">${escapeHtml(item.name || 'Untitled')} ${urgency}${foundBadge}</div>
+                                    <div class="card-title">${escapeHtml(item.name || 'Untitled')} ${urgency}${statusBadge}</div>
                                     <div class="card-meta">${escapeHtml(item.category || 'N/A')} &middot; Last seen: ${escapeHtml(item.location || 'N/A')} &middot; ${escapeHtml(item.date_lost || 'No date')}</div>
                                     <div class="card-meta">Posted by: ${escapeHtml(item.contact_email || 'N/A')}${item.contact_phone ? ` &middot; ${escapeHtml(item.contact_phone)}` : ''}</div>
                                     ${item.description ? `<div class="card-proof">${escapeHtml(item.description)}</div>` : ''}
@@ -1529,6 +1543,7 @@
                 state.redemptions = Array.isArray(redemptions) ? redemptions : [];
                 state.bounties = state.allItems.filter((item) => {
                     const status = String(item.status || '').toLowerCase();
+                    if (status === 'approved' || status === 'rejected') return false;
                     if (status === 'bounty' || status === 'lost') return true;
                     return Boolean(item.is_bounty) && status !== 'pending';
                 });
@@ -1639,10 +1654,25 @@
             }
 
             async function verifyFoundBounty(id) {
-                if (!confirm('Verify that this bounty was turned into the office? This will mark it as resolved.')) return;
+                if (!confirm('Verify that this bounty was turned into the office? This will mark it as Verified in Office.')) return;
                 const statusEl = document.getElementById(`bounty-status-${id}`);
                 if (statusEl) statusEl.textContent = 'Verifying...';
                 const ok = await BackTrackDB.setItemStatus(id, 'claimed');
+                if (!ok) {
+                    if (statusEl) {
+                        statusEl.textContent = 'Failed.';
+                        statusEl.className = 'card-status error';
+                    }
+                    return;
+                }
+                await refreshDashboard();
+            }
+
+            async function returnBounty(id) {
+                if (!confirm('Mark this bounty as returned to its owner? It will be removed from the active bounties list.')) return;
+                const statusEl = document.getElementById(`bounty-status-${id}`);
+                if (statusEl) statusEl.textContent = 'Marking as Returned...';
+                const ok = await BackTrackDB.setItemStatus(id, 'approved');
                 if (!ok) {
                     if (statusEl) {
                         statusEl.textContent = 'Failed.';
@@ -1810,6 +1840,7 @@
             window.rejectClaim = rejectClaim;
             window.approveBounty = approveBounty;
             window.verifyFoundBounty = verifyFoundBounty;
+            window.returnBounty = returnBounty;
             window.removeBounty = removeBounty;
             window.removeMapItem = removeMapItem;
             window.editReward = editReward;
