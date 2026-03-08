@@ -2,3 +2,4 @@
 supabase/.temp/
 .venv/
 .DS_Store
+node_modules/

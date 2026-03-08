@@ -2158,13 +2158,23 @@
         }
 
         @media (max-width: 768px) {
+            #main-content {
+                padding-top: 130px !important;
+            }
+
             .hero-container {
-                padding: 30px 20px;
+                padding: 0 20px 40px !important;
+                margin-top: 0 !important;
+                min-height: auto;
             }
 
             .hero-title {
-                font-size: 42px;
-                letter-spacing: -2px;
+                font-size: 34px !important;
+                font-size: 34px;
+                /* Significantly reduced to stop wrapping 4 times and overlapping */
+                letter-spacing: -1px;
+                line-height: 1.1;
+                margin-bottom: 24px;
             }
 
             .hero-description {
@@ -2395,6 +2405,25 @@
     <link rel="stylesheet" href="css/nav-auth.css">
     <link rel="stylesheet" href="css/theme.css">
     <script type="module" src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"></script>
+    <style>
+        /* Force hero alignment on mobile to prevent navbar collision */
+        @media (max-width: 768px) {
+            main.hero-container {
+                padding-top: 140px !important;
+                margin-top: 0 !important;
+            }
+
+            main.hero-container .hero-title {
+                margin-top: 40px !important;
+                font-size: 32px !important;
+            }
+
+            .button-group {
+                margin-top: 60px !important;
+                /* Push buttons further down from text */
+            }
+        }
+    </style>
 </head>
 
 <body class="home-page">

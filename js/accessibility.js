@@ -445,31 +445,54 @@
             }
 
             /* High Contrast Mode */
-            body.high-contrast {
-                --bg-primary: #000 !important;
-                --bg-secondary: #111 !important;
-                --text-primary: #fff !important;
-                --text-secondary: #ddd !important;
-                --border-color: #fff !important;
+            body.high-contrast,
+            body.high-contrast .hero-container,
+            body.high-contrast .features-showcase,
+            body.high-contrast .card,
+            body.high-contrast .step-card,
+            body.high-contrast .sidebar,
+            body.high-contrast footer,
+            body.high-contrast nav,
+            body.high-contrast .auth-container,
+            body.high-contrast .form-container,
+            body.high-contrast .admin-header {
+                background: #000 !important;
+                background-image: none !important;
+                background-color: #000 !important;
             }
             body.high-contrast * {
-                border-color: #fff !important;
+                box-shadow: none !important;
+            }
+            body.high-contrast h1, body.high-contrast h2, body.high-contrast h3,
+            body.high-contrast h4, body.high-contrast h5, body.high-contrast h6,
+            body.high-contrast p, body.high-contrast span:not(.switch-thumb):not(.switch-track) {
+                color: #fff !important;
+                -webkit-text-fill-color: #fff !important;
+                background: none !important;
             }
             body.high-contrast a,
-            body.high-contrast button {
-                outline-color: #ff0 !important;
-            }
-            body.high-contrast .nav-link,
-            body.high-contrast a {
-                color: #fff !important;
+            body.high-contrast .nav-link {
+                color: #ff0 !important;
                 text-decoration: underline !important;
+                -webkit-text-fill-color: #ff0 !important;
             }
+            body.high-contrast button:not(.a11y-toggle):not(.a11y-switch):not(.a11y-close):not(.toast-close),
+            body.high-contrast .btn,
             body.high-contrast .btn-primary,
             body.high-contrast .submit-btn,
             body.high-contrast .sign-in-btn {
-                background: #fff !important;
+                background: #000 !important;
+                color: #ff0 !important;
+                border: 2px solid #ff0 !important;
+                border-radius: 4px !important;
+                outline-color: #ff0 !important;
+            }
+            body.high-contrast button:not(.a11y-toggle):not(.a11y-switch):not(.a11y-close):not(.toast-close):hover,
+            body.high-contrast a:hover {
+                background: #ff0 !important;
                 color: #000 !important;
-                border: 2px solid #fff !important;
+                text-decoration: none !important;
+                -webkit-text-fill-color: #000 !important;
             }
 
             /* Reduced Motion */
@@ -479,6 +502,9 @@
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
+            }
+            body.reduced-motion spline-viewer {
+                display: none !important;
             }
 
             /* Text Size Adjustments */
@@ -513,11 +539,20 @@
 
             @media (max-width: 768px) {
                 #a11y-toolbar {
-                    left: 16px;
-                    bottom: 90px;
+                    left: 20px;
+                    bottom: 24px;
+                    z-index: 10001; 
                 }
                 .a11y-panel {
-                    width: 260px;
+                    width: calc(100vw - 40px);
+                    max-width: 380px;
+                    bottom: 80px;
+                    left: 20px;
+                    transform-origin: bottom left;
+                }
+                .a11y-panel.open {
+                    max-height: 40vh;
+                    overflow-y: auto;
                 }
             }
         `;
