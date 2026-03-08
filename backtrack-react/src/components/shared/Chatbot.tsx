@@ -5,15 +5,14 @@ import styles from './Chatbot.module.css';
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
-    { text: "Ask me about BackTrack's features, how to submit items, or how browsing works.", role: 'bot' }
-  ]);
+  const [messages, setMessages] = useState<{ text: string; role: string }[]>([]);
   const [status, setStatus] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const sendMessage = async () => {
     const text = message.trim();
@@ -22,8 +21,7 @@ export default function Chatbot() {
     setMessage('');
     setMessages(prev => [...prev, { text, role: 'user' }]);
     setStatus('');
-
-    setMessages(prev => [...prev, { text: 'Thinking...', role: 'bot' }]);
+    setIsTyping(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('chatbot', {
@@ -33,12 +31,14 @@ export default function Chatbot() {
       if (error) throw error;
 
       const reply = data?.reply || 'No response received.';
-      setMessages(prev => [...prev.slice(0, -1), { text: reply, role: 'bot' }]);
+      setIsTyping(false);
+      setMessages(prev => [...prev, { text: reply, role: 'bot' }]);
       setStatus('');
     } catch (error) {
+      setIsTyping(false);
       setStatus(`Chatbot error: ${String(error)}`);
       setMessages(prev => [
-        ...prev.slice(0, -1),
+        ...prev,
         { text: 'Sorry, something went wrong. Please try again.', role: 'bot' }
       ]);
     }
@@ -66,27 +66,59 @@ export default function Chatbot() {
       </button>
 
       <div className={`${styles.chatbotPanel} ${isOpen ? styles.open : ''}`}>
+        <div className={styles.chatbotAccent} />
+
         <div className={styles.chatbotHeader}>
-          <div className={styles.chatbotTitle}>BackTrack Assistant</div>
+          <div className={styles.chatbotAvatar}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+          </div>
+          <div className={styles.chatbotHeaderInfo}>
+            <div className={styles.chatbotTitle}>BackTrack Assistant</div>
+            <div className={styles.chatbotSubtitle}>
+              <span className={styles.chatbotOnlineDot}></span>
+              AI-powered help
+            </div>
+          </div>
           <button
             className={styles.chatbotClose}
             onClick={() => setIsOpen(false)}
+            aria-label="Close chat"
           >
             &times;
           </button>
         </div>
 
         <div className={styles.chatbotMessages}>
+          {messages.length === 0 && (
+            <div className={styles.welcomeMessage}>
+              <span className={styles.welcomeEmoji}>&#x1F44B;</span>
+              <p className={styles.welcomeText}>
+                Ask me about submitting items, browsing, claims, or any BackTrack features.
+              </p>
+            </div>
+          )}
+
           {messages.map((msg, idx) => (
             <div key={idx} className={`${styles.chatbotMessage} ${msg.role === 'user' ? styles.user : ''}`}>
               {msg.text}
             </div>
           ))}
+
+          {isTyping && (
+            <div className={styles.typingIndicator}>
+              <span className={styles.typingDot}></span>
+              <span className={styles.typingDot}></span>
+              <span className={styles.typingDot}></span>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
 
         <div className={styles.chatbotHint}>
-          Questions outside the website won't be answered.
+          Only answers BackTrack-related questions.
         </div>
 
         {status && (
@@ -104,8 +136,11 @@ export default function Chatbot() {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button className={styles.chatbotSend} onClick={sendMessage}>
-            Send
+          <button className={styles.chatbotSend} onClick={sendMessage} aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
           </button>
         </div>
       </div>
