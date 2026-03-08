@@ -2867,7 +2867,22 @@
             if (welcome) welcome.remove();
             const message = document.createElement('div');
             message.className = `chatbot-message ${role || ''}`.trim();
-            message.textContent = text;
+
+            if (role === 'user') {
+                message.textContent = text;
+            } else {
+                let formatted = text
+                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                formatted = formatted.replace(/(\r\n|\n|\r)/g, '<br>');
+                formatted = formatted.replace(/(?:^|<br>)(?:[0-9]+\.|-|\*)\s+(.*?)(?=<br>|$)/g, '<li>$1</li>');
+                formatted = formatted.replace(/(<li>.*?<\/li>)+/g, match => `<ul style="margin: 8px 0; padding-left: 20px;">${match}</ul>`);
+
+                message.innerHTML = formatted;
+            }
+
             chatbotMessages.appendChild(message);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
         }

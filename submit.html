@@ -768,8 +768,15 @@
         }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .chatbot-toggle:hover {
@@ -821,8 +828,15 @@
         }
 
         @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .chatbot-header {
@@ -852,7 +866,10 @@
             box-shadow: inset 0 0 0 1px rgba(191, 219, 254, 0.06);
         }
 
-        .chatbot-header-info { flex: 1; min-width: 0; }
+        .chatbot-header-info {
+            flex: 1;
+            min-width: 0;
+        }
 
         .chatbot-title {
             font-size: 14px;
@@ -912,14 +929,39 @@
             scroll-behavior: smooth;
         }
 
-        .chatbot-messages::-webkit-scrollbar { width: 5px; }
-        .chatbot-messages::-webkit-scrollbar-track { background: transparent; }
-        .chatbot-messages::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        .chatbot-messages::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+        .chatbot-messages::-webkit-scrollbar {
+            width: 5px;
+        }
 
-        .chatbot-welcome { text-align: center; padding: 8px 0 4px; }
-        .chatbot-welcome-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
-        .chatbot-welcome-text { font-size: 13px; line-height: 1.5; color: #999; }
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbot-welcome {
+            text-align: center;
+            padding: 8px 0 4px;
+        }
+
+        .chatbot-welcome-emoji {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .chatbot-welcome-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #999;
+        }
 
         .chatbot-message {
             font-size: 13px;
@@ -936,8 +978,15 @@
         }
 
         @keyframes msgIn {
-            from { opacity: 0; transform: translateY(8px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .chatbot-message.user {
@@ -969,12 +1018,27 @@
             animation: typingBounce 1.4s ease-in-out infinite;
         }
 
-        .chatbot-typing-dot:nth-child(2) { animation-delay: 0.15s; }
-        .chatbot-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+        .chatbot-typing-dot:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .chatbot-typing-dot:nth-child(3) {
+            animation-delay: 0.3s;
+        }
 
         @keyframes typingBounce {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-            30% { transform: translateY(-6px); opacity: 1; }
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-6px);
+                opacity: 1;
+            }
         }
 
         .chatbot-hint {
@@ -1016,7 +1080,9 @@
             transition: all 0.25s ease;
         }
 
-        .chatbot-input::placeholder { color: #8190ab; }
+        .chatbot-input::placeholder {
+            color: #8190ab;
+        }
 
         .chatbot-input:focus {
             outline: none;
@@ -1050,7 +1116,10 @@
             transform: scale(0.95);
         }
 
-        .chatbot-send svg { width: 18px; height: 18px; }
+        .chatbot-send svg {
+            width: 18px;
+            height: 18px;
+        }
 
         @media (max-width: 768px) {
             .chatbot-widget {
@@ -1091,7 +1160,8 @@
             <div class="chatbot-messages" id="chatbotMessages">
                 <div class="chatbot-welcome">
                     <span class="chatbot-welcome-emoji">&#x1F44B;</span>
-                    <p class="chatbot-welcome-text">Ask me about submitting items, browsing, claims, or any BackTrack features.</p>
+                    <p class="chatbot-welcome-text">Ask me about submitting items, browsing, claims, or any BackTrack
+                        features.</p>
                 </div>
             </div>
             <div class="chatbot-hint">Only answers BackTrack-related questions.</div>
@@ -1099,9 +1169,10 @@
             <div class="chatbot-footer">
                 <input class="chatbot-input" id="chatbotInput" type="text" placeholder="Ask about BackTrack..." />
                 <button class="chatbot-send" id="chatbotSend" aria-label="Send message">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="22" y1="2" x2="11" y2="13"/>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
                     </svg>
                 </button>
             </div>
@@ -1552,9 +1623,25 @@
         function addChatMessage(text, role) {
             const welcome = chatbotMessages.querySelector('.chatbot-welcome');
             if (welcome) welcome.remove();
+
             const message = document.createElement('div');
             message.className = `chatbot-message ${role || ''}`.trim();
-            message.textContent = text;
+
+            if (role === 'user') {
+                message.textContent = text;
+            } else {
+                let formatted = text
+                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                formatted = formatted.replace(/(\r\n|\n|\r)/g, '<br>');
+                formatted = formatted.replace(/(?:^|<br>)(?:[0-9]+\.|-|\*)\s+(.*?)(?=<br>|$)/g, '<li>$1</li>');
+                formatted = formatted.replace(/(<li>.*?<\/li>)+/g, match => `<ul style="margin: 8px 0; padding-left: 20px;">${match}</ul>`);
+
+                message.innerHTML = formatted;
+            }
+
             chatbotMessages.appendChild(message);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
         }

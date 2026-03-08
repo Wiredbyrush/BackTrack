@@ -231,8 +231,15 @@
         }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .chatbot-toggle:hover {
@@ -284,8 +291,15 @@
         }
 
         @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .chatbot-header {
@@ -378,10 +392,22 @@
             scroll-behavior: smooth;
         }
 
-        .chatbot-messages::-webkit-scrollbar { width: 5px; }
-        .chatbot-messages::-webkit-scrollbar-track { background: transparent; }
-        .chatbot-messages::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        .chatbot-messages::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+        .chatbot-messages::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
         .chatbot-welcome {
             text-align: center;
@@ -415,8 +441,15 @@
         }
 
         @keyframes msgIn {
-            from { opacity: 0; transform: translateY(8px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .chatbot-message.user {
@@ -448,12 +481,27 @@
             animation: typingBounce 1.4s ease-in-out infinite;
         }
 
-        .chatbot-typing-dot:nth-child(2) { animation-delay: 0.15s; }
-        .chatbot-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+        .chatbot-typing-dot:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .chatbot-typing-dot:nth-child(3) {
+            animation-delay: 0.3s;
+        }
 
         @keyframes typingBounce {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-            30% { transform: translateY(-6px); opacity: 1; }
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-6px);
+                opacity: 1;
+            }
         }
 
         .chatbot-hint {
@@ -3424,7 +3472,8 @@
             <div class="chatbot-messages" id="chatbotMessages">
                 <div class="chatbot-welcome">
                     <span class="chatbot-welcome-emoji">&#x1F44B;</span>
-                    <p class="chatbot-welcome-text">Ask me about submitting items, browsing, claims, or any BackTrack features.</p>
+                    <p class="chatbot-welcome-text">Ask me about submitting items, browsing, claims, or any BackTrack
+                        features.</p>
                 </div>
             </div>
             <div class="chatbot-hint">Only answers BackTrack-related questions.</div>
@@ -3432,9 +3481,10 @@
             <div class="chatbot-footer">
                 <input class="chatbot-input" id="chatbotInput" type="text" placeholder="Ask about BackTrack..." />
                 <button class="chatbot-send" id="chatbotSend" aria-label="Send message">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="22" y1="2" x2="11" y2="13"/>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
                     </svg>
                 </button>
             </div>
@@ -3541,7 +3591,32 @@
 
             const message = document.createElement('div');
             message.className = `chatbot-message ${role || ''}`.trim();
-            message.textContent = text;
+
+            if (role === 'user') {
+                message.textContent = text;
+            } else {
+                // A better markdown parser for the bot's responses
+                let formatted = text
+                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); // basic escaping
+
+                // Parse bold and italic first
+                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+                // Convert \n to <br>
+                formatted = formatted.replace(/(\r\n|\n|\r)/g, '<br>');
+
+                // Handle lists (e.g. `1. **Item**` or `- **Item**` or `* **Item**`)
+                // Since `*` was parsed to `<em>` above if it had a closing `*`, a rogue `* ` at the beginning of a line is a list item.
+                // We'll look for `<br>X. ` or `<br>- ` or `<br>* `
+                formatted = formatted.replace(/(?:^|<br>)(?:[0-9]+\.|-|\*)\s+(.*?)(?=<br>|$)/g, '<li>$1</li>');
+
+                // Wrap consecutive <li> into a <ul>
+                formatted = formatted.replace(/(<li>.*?<\/li>)+/g, match => `<ul style="margin: 8px 0; padding-left: 20px;">${match}</ul>`);
+
+                message.innerHTML = formatted;
+            }
+
             chatbotMessages.appendChild(message);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
         }
